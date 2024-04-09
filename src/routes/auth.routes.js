@@ -1,3 +1,5 @@
+const express = require("express");
+const logger = require("../../logger/logger");
 const express = require('express');
 const logger = require('../../logger/logger');
 const { loginHandler } = require('../controller/auth.controller');
@@ -9,8 +11,15 @@ const { verify_user_byemail } = require('../controller/verify_user_byemail');
 const { get_registration,get_password } = require('../controller/registration');
 
 router.get("/", (req, res) => {
-    res.render('pages/index');
-})
+  logger.info("information");
+  res.render("pages/index");
+});
+
+router.get("/login", (req, res) => {
+  logger.info("in login page");
+  res.render("pages/login");
+});
+
 
 router.post('/login', loginHandler);
 
