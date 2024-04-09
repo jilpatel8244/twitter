@@ -1,7 +1,12 @@
 const express = require('express');
-const {get_registration,post_registration} = require('../controller/registration');
-const registration_router = express.Router();
+// const logger = require('../../logger/logger');
+const registration = express.Router();
 
-registration_router.route("/registration").get(get_registration).post(post_registration);
+const { get_registration,get_password } = require('../controller/registration');
 
-module.exports = registration_router;
+  registration.route("/registration").get(get_registration);
+  registration.route("/password").get(get_password);
+
+
+
+module.exports = registration;
