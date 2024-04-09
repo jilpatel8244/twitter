@@ -59,3 +59,8 @@ exports.loginHandler = async (req, res) => {
         })
     }
 }
+
+exports.forgotpassword = (req, res) => {
+
+    res.render("pages/forgot_password");
+}

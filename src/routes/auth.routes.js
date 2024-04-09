@@ -4,6 +4,13 @@ const { loginHandler } = require('../controller/auth.controller');
 const passport = require('passport');
 require('../middleware/passport');
 const router = express.Router();
+const { forgotpassword } = require('../controller/auth.controller');
+const { verify_user_byemail } = require('../controller/verify_user_byemail');
+const { get_registration,get_password } = require('../controller/registration');
+
+router.get("/", (req, res) => {
+    res.render('pages/index');
+})
 
 router.post('/login', loginHandler);
 
@@ -12,6 +19,19 @@ router.get('/home', passport.authenticate('jwt', {session: false } ), (req, res)
         success: true,
         message: "on home page"
     })
-})
+});
+
+
+
+
+//roter for the forgot password
+
+router.get("/forgotpassword", forgotpassword)
+router.post("/verify_email", verify_user_byemail)
+router.post("/resetpasswordl", resetpassword)
+
+
+router.get("/registration", get_registration)
+router.get("/password", get_password)
 
 module.exports = router;
