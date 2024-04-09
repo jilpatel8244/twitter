@@ -1,5 +1,6 @@
 const express = require('express');
 const authRouter = require('./src/routes/auth.routes');
+const registration = require('./src/routes/registration');
 
 const app = express();
 
@@ -9,6 +10,7 @@ app.use(express.urlencoded({extended: true}));
 app.use(express.static("public"));
 
 app.use(authRouter);
+app.use(registration);
 
 app.set('view engine', 'ejs');
 
