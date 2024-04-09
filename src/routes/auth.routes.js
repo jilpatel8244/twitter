@@ -8,7 +8,7 @@ router.get("/", (req, res) => {
     logger.info("information");
     logger.debug("debug");
     logger.warn("warning");
-    res.render('pages/demo');
+    res.render('pages/index');
 })
 
 
