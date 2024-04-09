@@ -6,6 +6,15 @@ const { loginHandler } = require('../controller/auth.controller');
 const passport = require('passport');
 require('../middleware/passport');
 const router = express.Router();
+const {SET_USER_NAME_PAGE} = require('../controller/auth.controller')
+
+router.get("/", (req, res) => {
+    logger.info("information");
+    logger.debug("debug");
+    logger.warn("warning");
+    res.render('pages/demo');
+})
+router.get("/setUserName",SET_USER_NAME_PAGE)
 const { forgotpassword } = require('../controller/auth.controller');
 const { verify_user_byemail } = require('../controller/verify_user_byemail');
 const { get_registration,get_password } = require('../controller/registration');
