@@ -5,5 +5,11 @@ module.exports = {
     extend: {},
   },
   plugins: [],
+<<<<<<< HEAD
+};
+=======
 }
 
+
+
+>>>>>>> development

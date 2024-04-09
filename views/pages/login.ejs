@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="./css/output.css" rel="stylesheet" />
+    <title>Twitter Login</title>
+  </head>
+  <body>
+    <div
+      class="flex mx-auto max-w-md mt-10 rounded-lg bg-gray-100 flex-col flex justify-center px-6 py-12 lg:px-8"
+    >
+      <div class="sm:mx-auto justify-center sm:w-full sm:max-w-sm">
+        <div class="sm:mx-auto flex justify-center sm:w-full sm:max-w-sm">
+          <img
+            class="rounded-full w-14 h-10"
+            src="/assets/x-logo.png"
+            alt="x logo"
+          />
+        </div>
+        <h2
+          class="mt-10 text-center text-3xl font-medium leading-9 tracking-tight text-gray-900"
+        >
+          Sign in to X
+        </h2>
+      </div>
+      <div
+        class="flex justify-center mt-2 border rounded-full border-slate-300 w-full hover:bg-gray-100"
+      >
+        <div id="signup-google" class="flex items-center px-10 py-2">
+          <img class="size-4 mr-2" src="./assets/google-logo.png" alt="" /><span
+            class="text-sm"
+            >Sign up with Google</span
+          >
+        </div>
+      </div>
+
+      <div
+        class="flex justify-center mt-2 border rounded-full border-slate-300 w-full hover:bg-gray-100"
+      >
+        <div id="signup-google" class="flex items-center px-10 py-2">
+          <img class="size-4 mr-2" src="./assets/apple-logo.png" alt="" /><span
+            class="text-sm"
+            >Sign up with Apple</span
+          >
+        </div>
+      </div>
+      <div id="login-or" class="mt-2 flex items-center justify-center w-full">
+        <div id="or-line1">
+          <hr class="w-[100px] h-[1px] bg-slate-200 border-0 rounded" />
+        </div>
+
+        <span class="px-3">or</span>
+        <div id="or-line2">
+          <hr class="w-[100px] h-[1px] bg-slate-200 border-0 rounded" />
+        </div>
+      </div>
+
+      <form name="login" class="space-y-6" action="" method="POST">
+        <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+          <div>
+            <label
+              for="email"
+              class="block text-sm font-medium leading-6 text-gray-900"
+              >Email address</label
+            >
+            <div class="mt-2">
+              <input
+                id="email"
+                name="email"
+                type="email"
+                autocomplete="email"
+                class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:outline-none sm:text-sm sm:leading-6"
+              /><span class="bg-indigo-500" id="checkmail"></span>
+            </div>
+          </div>
+
+          <div>
+            <div class="flex items-center justify-between">
+              <label
+                for="password"
+                class="block text-sm font-medium leading-6 text-gray-900"
+                >Password</label
+              >
+            </div>
+            <div class="mt-2">
+              <input
+                id="password"
+                name="password"
+                type="password"
+                autocomplete="current-password"
+                class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:outline-none sm:text-sm sm:leading-6"
+              /><span class="bg-indigo-500" id="checkpassword"></span>
+            </div>
+            <div class="text-sm mt-2">
+              <a
+                href="/forgotpass"
+                class="font-semibold text-indigo-600 hover:text-indigo-500"
+                >Forgot password?</a
+              >
+            </div>
+          </div>
+
+          <div>
+            <input
+              name="signin"
+              id="signin"
+              type="button"
+              class="mt-2 flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              value="Sign in"
+              onclick="return loginPost()"
+            />
+          </div>
+        </div>
+      </form>
+    </div>
+  </body>
+  <script>
+    loginPost = async () => {
+      if (!validateForm()) {
+        return false;
+      } else {
+        let obj = new URLSearchParams(new FormData(login));
+        let result = await fetch("http://localhost:8000/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: obj,
+        });
+        result = await result.json();
+        // for chagning window.loaction
+
+        if (result.msg === "login") {
+          window.location.replace("http://localhost:8000/home");
+        } else if (result.msg === "invalid") {
+          window.location.replace("http://localhost:8000/fail");
+        }
+      }
+    };
+
+    forgotpass = async () => {
+      let data = await result.json();
+    };
+
+    validateForm = () => {
+      let email = document.getElementById("email").value;
+      let password = document.getElementById("password").value;
+      if (email == null || email == "") {
+        let emailerr = document.getElementById("checkmail");
+        emailerr.innerHTML = "*Email required";
+        return false;
+      }
+      if (password == null || password == "") {
+        let passworderr = document.getElementById("checkpassword");
+        passworderr.innerHTML = "*Password required";
+        return false;
+      }
+    };
+  </script>
+</html>

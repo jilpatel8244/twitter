@@ -16,8 +16,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "dev": "nodemon index.js"
+    "start": "node index.js & npm run style",
+    "dev": "nodemon index.js & npm run style",
+    "style": "tailwindcss build -o ./public/css/output.css --watch" 
   },
   "keywords": [],
   "author": "",
