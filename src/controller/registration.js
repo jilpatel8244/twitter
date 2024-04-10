@@ -9,11 +9,12 @@ const db = require('../../config/connection');
 // }
 
 const get_registration = async (req,res)=>{  
-  res.render('filename');
+  res.render('pages/registration');
 }
 
 const post_registration = async (req,res)=>{
   let {name, email, dob} = req.body;
+  console.log(req.body);
 
   //shor id genratt
   const arr = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
@@ -26,7 +27,7 @@ const post_registration = async (req,res)=>{
       activation_code += arr[Math.floor(Math.random() * 62)];
   }
 
-  let check_registration_query = `SELECT count(*) as count  FROM user where email = ${email};`
+  let check_registration_query = `SELECT count(*) as count  FROM users where email = ${email};`
   let [check_registration_data] = await db.query(check_registration_query);
 
   if(  check_registration_data[0].count == 1){
