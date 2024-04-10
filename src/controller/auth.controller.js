@@ -2,9 +2,7 @@ const conn=require('../../config/connection.js')
 const LOGGER = require('../../logger/logger.js')
 
 
-const SET_USER_NAME_PAGE = (req,res) =>{
-  res.render("pages/setUserName");
-}
+
 // const getData = (sql,data)=>{
 //   return new Promise((resolve,reject)=>{
 //     conn.query(sql,data,(err,result)=>{
@@ -36,7 +34,7 @@ const USER_NAME_EXIST = async (req,res) =>{
   }
 }
 
-module.exports= {SET_USER_NAME_PAGE,USER_NAME_EXIST}
+module.exports= {USER_NAME_EXIST}
 const logger = require("../../logger/logger");
 const connection = require("../../config/connection");
 require('dotenv').config();
