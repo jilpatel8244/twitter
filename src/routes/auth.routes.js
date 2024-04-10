@@ -18,7 +18,20 @@ router.get("/registration", (req, res) => {
   res.render("pages/registration");
 });
 
-// router.post("/registration", post_registration);
+router.post("/registration", post_registration);
+router.post("/userExist",USER_NAME_EXIST)
+// router.get("/login", (req, res) => {
+//   res.render("pages/login");
+// });
+
+// router.post('/login', loginHandler);
+
+// router.get('/home', passport.authenticate('jwt', {session: false } ), (req, res) => {
+//     res.status(200).json({
+//         success: true,
+//         message: "on home page"
+//     })
+// });
 
 router.get("/login", login);
 
