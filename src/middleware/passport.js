@@ -1,13 +1,19 @@
 const passport = require('passport');
 const connection = require('../../config/connection');
+const logger = require('../../logger/logger');
 require('dotenv').config();
 
-var JwtStrategy = require('passport-jwt').Strategy,
-    ExtractJwt = require('passport-jwt').ExtractJwt;
+let JwtStrategy = require('passport-jwt').Strategy;
+// let ExtractJwt = require('passport-jwt').ExtractJwt;
 
-var opts = {}
+const getToken = (req) => {
+    return req.cookies.token;
+}
 
-opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
+let opts = {}
+
+// opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
+opts.jwtFromRequest = getToken;
 opts.secretOrKey = process.env.JWT_SECRET;
 
 passport.use(new JwtStrategy(opts, async function(jwt_payload, done) {

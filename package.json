@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "cookie-parser": "^1.4.6",
     "dotenv": "^16.4.5",
     "ejs": "^3.1.9",
     "express": "^4.19.2",
@@ -18,7 +19,7 @@
   "scripts": {
     "start": "node index.js & npm run style",
     "dev": "nodemon index.js & npm run style",
-    "style": "tailwindcss build -o ./public/css/output.css --watch" 
+    "style": "tailwindcss build -o ./public/css/output.css --watch"
   },
   "keywords": [],
   "author": "",
