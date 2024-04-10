@@ -8,7 +8,8 @@ const logger = require("../../logger/logger");
 // const { verify_user_byemail } = require('../controller/verify_user_byemail');
 // const { get_registration,get_password } = require('../controller/registration');
 // const { resetpassword } = require('../controller/resetpassword');
-const {post_registration} = require('../controller/registration');
+const {USER_NAME_EXIST}=require('../controller/auth.controller')
+const {post_registration,get_password} = require('../controller/registration');
 
 router.get("/", (req, res) => {
   res.render("pages/index");
@@ -19,7 +20,7 @@ router.get("/registration", (req, res) => {
 });
 
 router.post("/registration", post_registration);
-
+router.post("/userExist",USER_NAME_EXIST)
 // router.get("/login", (req, res) => {
 //   res.render("pages/login");
 // });
@@ -43,6 +44,6 @@ router.post("/registration", post_registration);
 // router.post("/resetpasswordl", resetpassword)
 
 
-// router.get("/password", get_password)
+router.get("/password", get_password)
 
 module.exports = router;

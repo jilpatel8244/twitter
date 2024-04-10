@@ -20,6 +20,7 @@ const SET_USER_NAME_PAGE = (req,res) =>{
 // }
 const USER_NAME_EXIST = async (req,res) =>{
   let {username}=req.body;
+  console.log(username);
   if(username.trim() == "" || (username.trim()).length < 3){
     res.status(422).json({'error':'Please enter Username more than 3 letters'})
   }

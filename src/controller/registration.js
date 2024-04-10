@@ -22,15 +22,18 @@ exports.post_registration = async (req,res)=>{
       activation_code += arr[Math.floor(Math.random() * 62)];
   }
 
-  let check_registration_query = `SELECT count(*) as count  FROM user where email = ${email};`
+  let check_registration_query = `SELECT count(*) as count  FROM users where email = '${email}';`
   let [check_registration_data] = await db.query(check_registration_query);
 
   if(  check_registration_data[0].count == 1){
      return res.json({isvalidate:false})
   }else{
-    let registration_query = `INSERT INTO users(name, email, date_of_birth, activation_code) VALUES(?,?,?,?,?);`
+    let registration_query = `INSERT INTO users(name, email, date_of_birth, activation_code,salt) VALUES(?,?,?,?,?);`
     let registration_data = await db.query(registration_query,[name,email,dob,activation_code,salt]);
     return res.json({isvalidate : true})
   }
 
+}
+exports.get_password = async (req,res)=>{
+  res.render("pages/password");
 }
