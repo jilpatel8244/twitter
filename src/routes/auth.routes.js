@@ -1,24 +1,25 @@
 const express = require("express");
 const router = express.Router();
 const logger = require("../../logger/logger");
-const { loginHandler, login } = require("../controller/auth.controller");
-const passport = require('passport');
-require('../middleware/passport');
-const { forgotpassword } = require('../controller/auth.controller');
-const { verify_user_byemail } = require('../controller/verify_user_byemail');
-const { get_registration,get_password } = require('../controller/registration');
-const { resetpassword } = require('../controller/resetpassword');
-const { post_registration } = require("../controller/registration");
+// const { loginHandler } = require('../controller/auth.controller');
+// const passport = require('passport');
+// require('../middleware/passport');
+// const { forgotpassword } = require('../controller/auth.controller');
+// const { verify_user_byemail } = require('../controller/verify_user_byemail');
+// const { get_registration,get_password } = require('../controller/registration');
+// const { resetpassword } = require('../controller/resetpassword');
+const {post_registration} = require('../controller/registration');
 
 router.get("/", (req, res) => {
   res.render("pages/index");
 });
 
-router.get("/registration", (req, res) => {
-  res.render("pages/registration");
-});
-
+router.get("/registration", get_registration);
 router.post("/registration", post_registration);
+router.get('/password', getPassword);
+router.post('/password', postPassword);
+
+
 
 router.get("/login", login);
 

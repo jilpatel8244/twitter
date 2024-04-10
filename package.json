@@ -9,6 +9,7 @@
     "nodemon": "^3.1.0",
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
+    "short-unique-id": "^5.0.3",
     "tailwindcss": "^3.4.3",
     "winston": "^3.13.0"
   },
@@ -18,7 +19,7 @@
   "scripts": {
     "start": "node index.js & npm run style",
     "dev": "nodemon index.js & npm run style",
-    "style": "tailwindcss build -o ./public/css/output.css --watch" 
+    "style": "tailwindcss build -o ./public/css/output.css --watch"
   },
   "keywords": [],
   "author": "",
