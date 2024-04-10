@@ -175,6 +175,59 @@
           return false;
         } else {
 
+<<<<<<< HEAD
+                <button  onclick="registration()"
+                  class="px-6 py-2 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform
+                   bg-black rounded-lg hover:bg-gray-900 focus:outline-none focus:ring focus:ring-gray-300 focus:ring-opacity-50">
+                  Sign In
+                </button>
+              
+              </div>
+            </form>
+          </div>
+
+          <!-- <div class="flex items-center justify-center py-4 text-center bg-gray-50 dark:bg-gray-700">
+            <span class="text-sm text-gray-600 dark:text-gray-200">Don't have an account? </span>
+
+            <a href="#" class="mx-2 text-sm font-bold text-blue-500 dark:text-blue-400 hover:underline">Register</a>
+          </div> -->
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+async function registration() {
+    try {
+        const response = await fetch("/registration", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({}), // Add your data here
+        });
+
+        if (response.ok) {
+            const result = await response.json();
+            console.log("Success:", result);
+        } else {
+            console.error("HTTP Error:", response.status, response.statusText);
+        }
+    } catch (error) {
+        console.error("Network Error:", error);
+    }
+}
+
+// Example usage:
+registration();
+
+// Example usage:
+// const myData = { name: "Alice", age: 30 };
+// postJSON(myData);
+
+  </script>
+</body>
+=======
           let formdata = document.getElementById("registerForm");
           let data = new FormData(formdata);
           const param = new URLSearchParams(data);
@@ -188,6 +241,7 @@
             },
             body: dataform,
           });
+>>>>>>> f620cfbe5c013aa276d3587050ec9a8830c5f05e
 
           console.log(await response.json());
         }
