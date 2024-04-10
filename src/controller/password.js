@@ -10,8 +10,6 @@ exports.getPassword = async (req,res)=>{
   let difference = new Date().valueOf() - activationInfo[0].created_at.valueOf();
   let hours = Math.floor(difference / (1000 * 60 * 60));
 
-  
-
   res.render('../views/pages/password',{email,activationCode});
 }
 
