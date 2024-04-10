@@ -71,7 +71,7 @@
                 type="email"
                 autocomplete="email"
                 class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:outline-none sm:text-sm sm:leading-6"
-              /><span class="bg-indigo-500" id="checkmail"></span>
+              /><span class="text-red-500" id="checkmail"></span>
             </div>
           </div>
 
@@ -90,7 +90,7 @@
                 type="password"
                 autocomplete="current-password"
                 class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:outline-none sm:text-sm sm:leading-6"
-              /><span class="bg-indigo-500" id="checkpassword"></span>
+              /><span class="text-red-500" id="checkpassword"></span>
             </div>
             <div class="text-sm mt-2">
               <a
@@ -108,54 +108,68 @@
               type="button"
               class="mt-2 flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               value="Sign in"
-              onclick="return loginPost()"
+              onclick="return validateAndSubmit()"
             />
           </div>
         </div>
+        <span
+          id="errorMessage"
+          class="text-red-500 text-sm block text-center"
+        ></span>
       </form>
     </div>
   </body>
   <script>
-    loginPost = async () => {
-      if (!validateForm()) {
-        return false;
-      } else {
-        let obj = new URLSearchParams(new FormData(login));
-        let result = await fetch("http://localhost:8000/login", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-          },
-          body: obj,
-        });
-        result = await result.json();
-        // for chagning window.loaction
+   const validateAndSubmit = async () => {
+          const email = document.getElementById("email").value;
+          const password = document.getElementById("password").value;
+          const emailErrorElement = document.getElementById("checkmail");
+          const passwordErrorElement = document.getElementById("checkpassword");
+          const errorMessageElement = document.getElementById("errorMessage");
 
-        if (result.msg === "login") {
-          window.location.replace("http://localhost:8000/home");
-        } else if (result.msg === "invalid") {
-          window.location.replace("http://localhost:8000/fail");
-        }
-      }
-    };
+          emailErrorElement.textContent = "";
+          passwordErrorElement.textContent = "";
+          errorMessageElement.textContent = "";
 
-    forgotpass = async () => {
-      let data = await result.json();
-    };
+ 
+          if (!email) {
+            emailErrorElement.textContent = "Please enter your email.";
+            return;
+          }
 
-    validateForm = () => {
-      let email = document.getElementById("email").value;
-      let password = document.getElementById("password").value;
-      if (email == null || email == "") {
-        let emailerr = document.getElementById("checkmail");
-        emailerr.innerHTML = "*Email required";
-        return false;
-      }
-      if (password == null || password == "") {
-        let passworderr = document.getElementById("checkpassword");
-        passworderr.innerHTML = "*Password required";
-        return false;
-      }
-    };
+          if (!password) {
+            passwordErrorElement.textContent = "Please enter your password.";
+            return;
+          }
+
+          try {
+            var url = window.location.origin + "/login";
+            let login_data = {
+              email,password
+            }
+            let login_response = await fetch(url, {
+              method: "POST",
+              body: JSON.stringify(login_data),
+              headers: {
+                "Content-Type": "application/json",
+              },
+            });
+
+            login_response = await login_response.json();
+            console.log(login_response);
+
+            if (login_response.ok) {
+              window.location =window.location.origin + "/home"; // Redirect to home page upon successful login
+            } else {
+              const errorMessage = await login_response.message();
+              errorMessageElement.textContent = errorMessage;  
+            }
+          } catch (error) {
+            console.error("Login error:", error);
+            errorMessageElement.textContent =
+              "An error occurred. Please try again.";
+          }
+        };
+      </script>
   </script>
 </html>
