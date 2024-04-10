@@ -1,25 +1,10 @@
 const conn=require('../../config/connection.js')
 const LOGGER = require('../../logger/logger.js')
 
-
-
-// const getData = (sql,data)=>{
-//   return new Promise((resolve,reject)=>{
-//     conn.query(sql,data,(err,result)=>{
-//       if(err){
-//         reject(err);
-//         LOGGER.error(err)
-//       }
-//       else{
-//         resolve(result)
-//       }
-//     })
-//   })
-// }
 const USER_NAME_EXIST = async (req,res) =>{
   let {username}=req.body;
   if(username.trim() == "" || (username.trim()).length < 3){
-    res.status(422).json({'error':'Please enter Username more than 3 letters'})
+    return res.status(422).json({'error':'Please enter Username more than 3 letters'})
   }
   else{
     let sql = "select count(*) as count from users where username = ?";
@@ -27,14 +12,14 @@ const USER_NAME_EXIST = async (req,res) =>{
 
     LOGGER.info(findUser[0].count);
     if(findUser[0].count > 0){
-      res.status(422).json({isValid:false})
+      return res.status(422).json({isValid:false})
     }else{
-      res.status(200).json({isValid:true})
+      return res.status(200).json({isValid:true})
     }
   }
 }
-
 module.exports= {USER_NAME_EXIST}
+
 const logger = require("../../logger/logger");
 const connection = require("../../config/connection");
 require('dotenv').config();
