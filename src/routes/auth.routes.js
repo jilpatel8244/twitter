@@ -1,8 +1,15 @@
 const express = require("express");
 const logger = require("../../logger/logger");
-const express = require('express');
-const logger = require('../../logger/logger');
-const { loginHandler } = require('../controller/auth.controller');
+
+// const { loginHandler } = require('../controller/auth.controller');
+// const passport = require('passport');
+// require('../middleware/passport');
+// const { forgotpassword } = require('../controller/auth.controller');
+// const { verify_user_byemail } = require('../controller/verify_user_byemail');
+// const { get_registration,get_password } = require('../controller/registration');
+// const { resetpassword } = require('../controller/resetpassword');
+const {post_registration,get_registration} = require('../controller/registration');
+const {getPassword,postPassword} = require('../controller/password');
 const passport = require('passport');
 require('../middleware/passport');
 const router = express.Router();
@@ -17,18 +24,30 @@ const { forgotpassword } = require('../controller/auth.controller');
 const { verify_user_byemail } = require('../controller/verify_user_byemail');
 const { get_registration,get_password } = require('../controller/registration');
 
+const { resetpassword } = require('../controller/resetpassword');
+const { post_registration } = require("../controller/registration");
+
+const {post_registration} = require('../controller/registration');
+
+
 router.get("/", (req, res) => {
   logger.info("information");
   res.render("pages/index");
 });
 
+router.get("/registration", get_registration);
 router.get("/login", (req, res) => {
   logger.info("in login page");
   res.render("pages/login");
 });
 
 router.post("/registration", post_registration);
-router.post("/userExist",USER_NAME_EXIST)
+
+router.get('/password', getPassword);
+router.post('/password', postPassword);
+
+
+
 // router.get("/login", (req, res) => {
 //   res.render("pages/login");
 // });
@@ -41,6 +60,7 @@ router.post("/userExist",USER_NAME_EXIST)
 //         message: "on home page"
 //     })
 // });
+
 
 router.get("/login", login);
 
