@@ -1,11 +1,11 @@
-const mysql = require('mysql2');
-require('dotenv').config();
+const mysql = require("mysql2");
+require("dotenv").config();
 
 var connection = mysql.createConnection({
     host : "localhost",
     user : "root",
-    password : process.env.DB_PASS,
-    database : process.env.DB_NAME
+    password : process.env.PASSWORD,
+    database : process.env.DB_NAME || 'temp_twitter'
 }).promise();
 
 module.exports = connection;
