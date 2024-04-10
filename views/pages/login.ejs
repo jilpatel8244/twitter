@@ -69,8 +69,9 @@
                 id="email"
                 name="email"
                 type="email"
+                placeholder=" Email"
                 autocomplete="email"
-                class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:outline-none sm:text-sm sm:leading-6"
+                class="block w-full rounded-md border-0 px-3 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:outline-none focus:ring sm:text-sm sm:leading-6"
               /><span class="text-red-500" id="checkmail"></span>
             </div>
           </div>
@@ -88,14 +89,15 @@
                 id="password"
                 name="password"
                 type="password"
+                placeholder=" Password"
                 autocomplete="current-password"
-                class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:outline-none sm:text-sm sm:leading-6"
+                class="block w-full rounded-md border-0 px-3 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:outline-none focus:ring sm:text-sm sm:leading-6"
               /><span class="text-red-500" id="checkpassword"></span>
             </div>
             <div class="text-sm mt-2">
               <a
-                href="/forgotpass"
-                class="font-semibold text-indigo-600 hover:text-indigo-500"
+                href="/forgot_password  "
+                class="font-semibold text-sky-600 hover:text-sky-500"
                 >Forgot password?</a
               >
             </div>
@@ -106,10 +108,19 @@
               name="signin"
               id="signin"
               type="button"
-              class="mt-2 flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              class="mt-2 flex w-full justify-center cursor-pointer rounded-full bg-sky-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-sky-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600"
               value="Sign in"
               onclick="return validateAndSubmit()"
             />
+          </div>
+          <div class="text-sm mt-2">
+            Don't have an account?
+            <a
+              href="/registration"
+              class="font-semibold text-sky-600 hover:text-sky-500"
+            >
+              Sign up</a
+            >
           </div>
         </div>
         <span
@@ -156,13 +167,14 @@
         });
 
         login_response = await login_response.json();
-        console.log(login_response);
 
-        if (login_response.ok) {
-          url = window.location.origin + "/home"; // Redirect to home page upon successful login
+        if (login_response.success === true) {
+          url = window.location.replace(window.location.origin);
+          // Redirect to home page upon successful login
+          // url = window.location.origin + "/home";
         } else {
-          const errorMessage = await login_response.status();
-          errorMessageElement.textContent = errorMessage;
+          const errorMessage = await login_response;
+          errorMessageElement.textContent = errorMessage.message;
         }
       } catch (error) {
         console.error("Login error:", error);
