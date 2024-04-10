@@ -1,9 +1,9 @@
-const conn=require('../../config/connection.js')
+const conn = require('../../config/connection.js')
 const LOGGER = require('../../logger/logger.js')
 
 
-const SET_USER_NAME_PAGE = (req,res) =>{
-  res.render("pages/setUserName");
+const SET_USER_NAME_PAGE = (req, res) => {
+    res.render("pages/setUserName");
 }
 // const getData = (sql,data)=>{
 //   return new Promise((resolve,reject)=>{
@@ -18,34 +18,34 @@ const SET_USER_NAME_PAGE = (req,res) =>{
 //     })
 //   })
 // }
-const USER_NAME_EXIST = async (req,res) =>{
-  let {username}=req.body;
-  if(username.trim() == "" || (username.trim()).length < 3){
-    res.status(422).json({'error':'Please enter Username more than 3 letters'})
-  }
-  else{
-    let sql = "select count(*) as count from users where username = ?";
-    let [findUser] = await conn.query(sql,username)
-
-    LOGGER.info(findUser[0].count);
-    if(findUser[0].count > 0){
-      res.status(422).json({isValid:false})
-    }else{
-      res.status(200).json({isValid:true})
+const USER_NAME_EXIST = async (req, res) => {
+    let { username } = req.body;
+    if (username.trim() == "" || (username.trim()).length < 3) {
+        res.status(422).json({ 'error': 'Please enter Username more than 3 letters' })
     }
-  }
+    else {
+        let sql = "select count(*) as count from users where username = ?";
+        let [findUser] = await conn.query(sql, username)
+
+        LOGGER.info(findUser[0].count);
+        if (findUser[0].count > 0) {
+            res.status(422).json({ isValid: false })
+        } else {
+            res.status(200).json({ isValid: true })
+        }
+    }
 }
 
-module.exports= {SET_USER_NAME_PAGE,USER_NAME_EXIST}
+module.exports = { SET_USER_NAME_PAGE, USER_NAME_EXIST }
 const logger = require("../../logger/logger");
 const connection = require("../../config/connection");
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
 const md5 = require("md5");
 
-exports.loginHandler = async (req, res) => {
+module.exports.loginHandler = async (req, res) => {
 
-    let {email, password} = req.body;
+    let { email, password } = req.body;
     // console.log(md5(password));
 
     try {
@@ -79,7 +79,7 @@ exports.loginHandler = async (req, res) => {
             roleId: userExist[0].role_id
         }
 
-        const TOKEN = jwt.sign(payload, process.env.JWT_SECRET, {expiresIn: '1d'});
+        const TOKEN = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1d' });
 
         let options = {
             httpOnly: true,
@@ -99,7 +99,7 @@ exports.loginHandler = async (req, res) => {
     }
 }
 
-exports.forgotpassword = (req, res) => {
+module.exports.forgotpassword = (req, res) => {
 
     res.render("pages/forgot_password");
 }

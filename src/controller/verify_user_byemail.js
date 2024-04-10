@@ -2,35 +2,36 @@ const connection = require("../../config/connection")
 
 
 
-// exports.verify_user_byemail = async (req, res) => {
+exports.verify_user_byemail = async (req, res) => {
 
-//     if (!req.body.email) {
-//         return res.json({ isvalidate_user: false })
-//     }
+    if (!req.body.email) {
+        return res.json({ isvalidate_user: false })
+    }
+
+    let input_email = req.body.email
+    console.log(input_email);
+
+    async function email_verify(input_email) {
 
 
-//     let input_email = req.body.email
+        let sql = ` select count(*)  as count from users  WHERE email = '${input_email}'`
 
-//     async function email_verify(input_email) {
+        let [result] = await connection.query(sql);
+        // console.log(result);
 
+        // console.log(result);
+        // alert("hello1")
+        return result;
 
-//         let sql = ` select count(*)  as count from users  WHERE email = '${input_email}'`
+    }
 
-//         let [result] = await connection.query(sql);
-//         // console.log(result);
+    let result = await email_verify(input_email)
 
-//         // console.log(result);
-//         // alert("hello1")
-//         return result;
-//     }
+    console.log(result[0].count);
+    if (result[0].count == 0) {
+        return res.json({ isvalidate_user: false })
+    }
 
-//     let result = await email_verify(input_email)
+    return res.json({ isvalidate_user: true })
 
-//     console.log(result[0].count);
-//     if (result[0].count == 0) {
-//         return res.json({ isvalidate_user: false })
-//     }
-
-//     return res.json({ isvalidate_user: true })
-
-// }
+}
