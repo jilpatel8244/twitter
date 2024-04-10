@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 const conn=require('../../config/connection.js')
 const LOGGER = require('../../logger/logger.js')
 
@@ -24,6 +25,52 @@ const connection = require("../../config/connection");
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
 const md5 = require("md5");
+=======
+const logger = require("../../logger/logger");
+const connection = require("../../config/connection");
+require("dotenv").config();
+const jwt = require("jsonwebtoken");
+const md5 = require("md5");
+// const conn = require("../../config/connection.js");
+// const LOGGER = require("../../logger/logger.js");
+
+// const SET_USER_NAME_PAGE = (req, res) => {
+//   res.render("pages/setUserName");
+// };
+// const getData = (sql,data)=>{
+//   return new Promise((resolve,reject)=>{
+//     conn.query(sql,data,(err,result)=>{
+//       if(err){
+//         reject(err);
+//         LOGGER.error(err)
+//       }
+//       else{
+//         resolve(result)
+//       }
+//     })
+//   })
+// }
+// const USER_NAME_EXIST = async (req, res) => {
+//   let { username } = req.body;
+//   if (username.trim() == "" || username.trim().length < 3) {
+//     res
+//       .status(422)
+//       .json({ error: "Please enter Username more than 3 letters" });
+//   } else {
+//     let sql = "select count(*) as count from users where username = ?";
+//     let [findUser] = await conn.query(sql, username);
+
+//     LOGGER.info(findUser[0].count);
+//     if (findUser[0].count > 0) {
+//       res.status(422).json({ isValid: false });
+//     } else {
+//       res.status(200).json({ isValid: true });
+//     }
+//   }
+// };
+
+// module.exports = { SET_USER_NAME_PAGE, USER_NAME_EXIST };
+>>>>>>> 9658252e20e6a69f093e67c38c61ead90c2f077e
 
 
 
@@ -47,6 +94,7 @@ exports.loginHandler = async (req, res) => {
         success: false,
         message: "user not activated",
       });
+<<<<<<< HEAD
     }
 
     console.log(md5(password));
@@ -59,6 +107,20 @@ exports.loginHandler = async (req, res) => {
       });
     }
 
+=======
+    }
+
+    console.log(md5(password));
+    console.log(userExist[0].password);
+
+    if (userExist[0].password !== md5(password)) {
+      return res.status(401).json({
+        success: false,
+        message: "password not match",
+      });
+    }
+
+>>>>>>> 9658252e20e6a69f093e67c38c61ead90c2f077e
     let payload = {
       id: userExist[0].id,
       email: userExist[0].email,
