@@ -1,18 +1,14 @@
 const db = require('../../config/connection');
 
-// function randomValue(length){
-//  let salt;
-//   for (let i = 0; i < length; i++){
-//     salt += arr[Math.floor(Math.random() * 62)];
-// }
-// return salt;
-// }
-
-const get_registration = async (req,res)=>{  
-  res.render('pages/registration');
+function randomValue(length){
+ let salt;
+  for (let i = 0; i < length; i++){
+    salt += arr[Math.floor(Math.random() * 62)];
+}
+return salt;
 }
 
-const post_registration = async (req,res)=>{
+exports.post_registration = async (req,res)=>{
   let {name, email, dob} = req.body;
   console.log(req.body);
 
@@ -39,5 +35,3 @@ const post_registration = async (req,res)=>{
   }
 
 }
-
-module.exports = {get_registration,post_registration};

@@ -12,3 +12,4 @@ const { get_registration,get_password,post_registration } = require('../controll
 
 
 module.exports = registration;
+
