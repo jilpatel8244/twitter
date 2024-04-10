@@ -13,9 +13,9 @@ exports.verify_user_byemail = async (req, res) => {
 
     async function email_verify(input_email) {
 
-
         let sql = ` select count(*)  as count from users  WHERE email = '${input_email}'`
 
+     
         let [result] = await connection.query(sql);
         // console.log(result);
 

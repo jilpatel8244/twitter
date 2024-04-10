@@ -22,26 +22,32 @@ const md5 = require("md5");
 //     })
 //   })
 // }
-// const USER_NAME_EXIST = async (req, res) => {
-//   let { username } = req.body;
-//   if (username.trim() == "" || username.trim().length < 3) {
-//     res
-//       .status(422)
-//       .json({ error: "Please enter Username more than 3 letters" });
-//   } else {
-//     let sql = "select count(*) as count from users where username = ?";
-//     let [findUser] = await conn.query(sql, username);
+const USER_NAME_EXIST = async (req, res) => {
+    let { username } = req.body;
+    if (username.trim() == "" || (username.trim()).length < 3) {
+        res.status(422).json({ 'error': 'Please enter Username more than 3 letters' })
+    }
+    else {
+        let sql = "select count(*) as count from users where username = ?";
+        let [findUser] = await conn.query(sql, username)
 
-//     LOGGER.info(findUser[0].count);
-//     if (findUser[0].count > 0) {
-//       res.status(422).json({ isValid: false });
-//     } else {
-//       res.status(200).json({ isValid: true });
-//     }
-//   }
-// };
+        LOGGER.info(findUser[0].count);
+        if (findUser[0].count > 0) {
+            res.status(422).json({ isValid: false })
+        } else {
+            res.status(200).json({ isValid: true })
+        }
+    }
+}
 
-// module.exports = { SET_USER_NAME_PAGE, USER_NAME_EXIST };
+module.exports = { SET_USER_NAME_PAGE, USER_NAME_EXIST }
+const logger = require("../../logger/logger");
+const connection = require("../../config/connection");
+require('dotenv').config();
+const jwt = require('jsonwebtoken');
+const md5 = require("md5");
+
+
 
 exports.loginHandler = async (req, res) => {
   let { email, password } = req.body;

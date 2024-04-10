@@ -18,7 +18,7 @@ router.get("/registration", (req, res) => {
   res.render("pages/registration");
 });
 
-router.post("/registration", post_registration);
+// router.post("/registration", post_registration);
 
 router.get("/login", login);
 
@@ -33,8 +33,13 @@ router.get('/home', passport.authenticate('jwt', {session: false } ), (req, res)
 
 // //roter for the forgot password
 
-// router.get("/forgotpassword", forgotpassword)
-// router.post("/verify_email", verify_user_byemail)
+router.get("/forgotpassword", forgotpassword)
+router.post("/verify_email", verify_user_byemail)
+router.post("/activeCode", getActivecode)
+router.get("/resetPassword", resetPassword)
+router.post("/setPassword", set_password)
+
+
 // router.post("/resetpasswordl", resetpassword)
 // router.get("/password", get_password)
 
