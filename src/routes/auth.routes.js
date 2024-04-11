@@ -1,7 +1,7 @@
 const express = require("express");
 const logger = require("../../logger/logger");
 
-// const { loginHandler } = require('../controller/auth.controller');
+const { loginHandler, login } = require("../controller/auth.controller");
 // const passport = require('passport');
 // require('../middleware/passport');
 // const { forgotpassword } = require('../controller/auth.controller');
@@ -58,6 +58,7 @@ router.use("/explore", exploreroute)
 
 
 
+// const { resetpassword } = require("../controller/resetpassword");
 
 // router.get("/", (req, res) => {
 //   logger.info("information");
@@ -76,11 +77,10 @@ router.use("/explore", exploreroute)
 // router.get('/password', getPassword);
 // router.post('/password', postPassword);
 
+// router.post("/registration", post_registration);
 
-
-// router.get("/login", (req, res) => {
-//   res.render("pages/login");
-// });
+router.get("/password", getPassword);
+router.post("/password", postPassword);
 
 // router.post('/login', loginHandler);
 
