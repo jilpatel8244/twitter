@@ -1,12 +1,4 @@
 .env
-<<<<<<< HEAD
-<<<<<<< HEAD
 **/node_modules/
 **/output.css
-=======
-**/node_modules
-**/output.css
->>>>>>> development
-=======
-**/node_modules/
->>>>>>> 9658252e20e6a69f093e67c38c61ead90c2f077e
+

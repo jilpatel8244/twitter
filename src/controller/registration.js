@@ -28,8 +28,6 @@ exports.post_registration = async (req,res)=>{
   }
 }
 
-
-
 exports.get_password = async (req,res)=>{
   res.render("pages/password");
 }
