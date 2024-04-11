@@ -1,13 +1,17 @@
 const db = require('../../config/connection');
+const ShortUniqueId = require('short-unique-id');
 
-function randomValue(length) {
-  let salt;
-  for (let i = 0; i < length; i++) {
-    salt += arr[Math.floor(Math.random() * 62)];
-  }
-  return salt;
+function randomCode(l){
+  let randomString = new ShortUniqueId({ length: l });
+  let randomStringOutput = randomString.rnd();
+  return randomStringOutput;
 }
 
+exports.get_registration = async (req,res)=>{
+  res.render('../views/pages/registration');
+}
+
+<<<<<<< HEAD
 exports.post_registration = async (req, res) => {
   let { name, email, dob } = req.body;
 
@@ -20,7 +24,26 @@ exports.post_registration = async (req, res) => {
   }
   for (let i = 0; i < 12; i++) {
     activation_code += arr[Math.floor(Math.random() * 62)];
+=======
+exports.post_registration = async (req,res)=>{
+  let {name, email, dob} = req.body;
+  
+  let activationCode = randomCode(12);  
+  let salt = randomCode(4);
+  
+  let check_registration_query = `SELECT count(*) as count  FROM users where email = ?;`
+  let [check_registration_data] = await db.query(check_registration_query,[email]);
+  if(check_registration_data[0].count == 1){
+     return res.json({isvalidate:false});
+  }else{
+    let registration_query = `INSERT INTO users(name, email, date_of_birth, activation_code, salt) VALUES(?,?,?,?,?);`
+    let [registration_data] = await db.query(registration_query,[name,email,dob,activationCode,salt]);
+    return res.json({isValidate:true, "activationCode": activationCode});
+>>>>>>> development
   }
+}
+
+
 
   let check_registration_query = `SELECT count(*) as count  FROM users where email = '${email}';`
   let [check_registration_data] = await db.query(check_registration_query);
@@ -33,7 +56,7 @@ exports.post_registration = async (req, res) => {
     return res.json({ isvalidate: true })
   }
 
-}
+
 exports.get_password = async (req,res)=>{
   res.render("pages/password");
 }
