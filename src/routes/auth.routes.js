@@ -31,6 +31,19 @@ router.get("/editprofile", get_editprofile);
 
 const exploreroute = require("../routes/explore.routes")
 
+const post = require('./post.routes.js');
+
+router.use('/tweetPost',post)
+
+// router.get("/", (req, res) => {
+//     logger.info("information");
+//     logger.debug("debug");
+//     logger.warn("warning");
+//     res.render('pages/demo');
+// })
+// const { forgotpassword } = require('../controller/auth.controller');
+// const { verify_user_byemail } = require('../controller/verify_user_byemail');
+// const { get_registration,get_password } = require('../controller/registration');
 
 
 //change by mihir date : 11 - 04 
@@ -52,6 +65,8 @@ router.use("/explore", exploreroute)
 // const { post_registration } = require('../controller/registration');
 
 
+// const { resetpassword } = require('../controller/resetpassword');
+// const { post_registration } = require("../controller/registration");
 
 // const { resetpassword } = require('../controller/resetpassword');
 
