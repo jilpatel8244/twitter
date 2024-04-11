@@ -1,0 +1,77 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+        integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>X</title>
+</head>
+
+<body>
+    <div class="p-relative h-screen" style="background-color: white">
+        <div class="flex justify-center">
+            <header class=" h-12 py-4 h-auto">
+                <!-- Side Navbar (left side) -->
+                <%- include('../partials/sidebar.ejs') %>
+            </header>
+            <main role="main">
+                <div class="flex" style="width: 990px;">
+
+                    <%- include('../partials/home')%>
+
+                        <!-- right sidebar -->
+                        <%- include('../partials/aside.ejs')%>
+                </div>
+            </main>
+        </div>
+    </div>
+
+
+
+
+    <!-- <style>
+        .overflow-y-auto::-webkit-scrollbar,
+        .overflow-y-scroll::-webkit-scrollbar,
+        .overflow-x-auto::-webkit-scrollbar,
+        .overflow-x::-webkit-scrollbar,
+        .overflow-x-scroll::-webkit-scrollbar,
+        .overflow-y::-webkit-scrollbar,
+        body::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Hide scrollbar for IE, Edge and Firefox */
+        .overflow-y-auto,
+        .overflow-y-scroll,
+        .overflow-x-auto,
+        .overflow-x,
+        .overflow-x-scroll,
+        .overflow-y,
+        body {
+            -ms-overflow-style: none;
+            /* IE and Edge */
+            scrollbar-width: none;
+            /* Firefox */
+        }
+
+        .bg-dim-700 {
+            --bg-opacity: 1;
+            background-color: white;
+        }
+
+        html,
+        body {
+            margin: 0;
+            background-color: white;
+        }
+
+        svg.paint-icon {
+            fill: currentcolor;
+        }
+    </style> -->
+</body>
+
+</html>
