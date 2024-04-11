@@ -1,5 +1,4 @@
 const express = require('express');
-const body_parser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const GetProfileRouter = require('./src/routes/profile.routes');
 
