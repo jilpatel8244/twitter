@@ -40,7 +40,7 @@ exports.post_registration = async (req,res)=>{
     let registration_data = await db.query(registration_query, [name, email, dob, activation_code, salt]);
     return res.json({ isvalidate: true })
   }
-}
+
 
 exports.get_password = async (req,res)=>{
   res.render("pages/password");
