@@ -1,4 +1,9 @@
 .env
+<<<<<<< HEAD
 **/node_modules/
 **/output.css
 
+=======
+**/output.css
+**/node_modules
+>>>>>>> development
