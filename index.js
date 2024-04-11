@@ -1,6 +1,10 @@
-const express = require("express");
-const body_parser = require("body-parser");
-const cookieParser = require("cookie-parser");
+const express = require('express');
+const body_parser = require('body-parser');
+const cookieParser = require('cookie-parser');
+const GetProfileRouter = require('./src/routes/profile.routes');
+
+
+const authRouter = require('./src/routes/auth.routes');
 
 const authRouter = require("./src/routes/auth.routes");
 const app = express();
@@ -13,6 +17,7 @@ app.use(cookieParser());
 app.use(express.static("public"));
 
 app.use(authRouter);
+app.use(GetProfileRouter);
 
 app.set("view engine", "ejs");
 
