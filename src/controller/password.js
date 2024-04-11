@@ -7,8 +7,10 @@ exports.getPassword = async (req,res)=>{
   let activationCodeQuery = `SELECT created_at FROM users WHERE email = ?`;
   let [activationInfo] = await db.query(activationCodeQuery,[email]);
 
+  if(activationInfo[0]){
   let difference = new Date().valueOf() - activationInfo[0].created_at.valueOf();
   let hours = Math.floor(difference / (1000 * 60 * 60));
+  }   
 
   res.render('../views/pages/password',{email,activationCode});
 }
