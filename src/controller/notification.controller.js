@@ -1,9 +1,14 @@
 const connection = require("../../config/connection");
+const logger = require("../../logger/logger");
 
 exports.notification = (req, res) => {
   res.render("pages/notification");
 };
 exports.getNotifications = async (req, res) => {
+  let logged_user = `select * from users where users.id = ${req.user[0][0].id}`;
+  let [result_user] = await connection.query(logged_user);
+  let logged_id = result_user[0].id;
+
   let sql = `select notifications.id as notification_id,notifications.type as notification_type, users.name, 
   users.username, users.is_active as logged_in, followers.following_id, tweets.id as tweet_id, tweets.content, tweet_likes.status as likes, tweets.created_at from notifications 
     left join users 
@@ -15,7 +20,7 @@ exports.getNotifications = async (req, res) => {
     left join tweet_likes
     on notifications.user_id = tweet_likes.user_id
     where users.id = ? and users.is_active = ?`;
-  let [all_tweets] = await connection.query(sql, [1, 1]);
+  let [all_tweets] = await connection.query(sql, [logged_id, 1]);
   // console.log(all_tweets);
 
   // logins notification
@@ -23,7 +28,7 @@ exports.getNotifications = async (req, res) => {
   left join users 
   on notifications.user_id = users.id 
   where users.id = ? `;
-  let [logged_in] = await connection.query(login_notification, [2]);
+  let [logged_in] = await connection.query(login_notification, [logged_id]);
   // console.log(logged_in);
 
   let date = new Date(all_tweets[0].created_at);
@@ -60,19 +65,42 @@ exports.getNotifications = async (req, res) => {
   on notifications.user_id = tweets.user_id
   left join tweet_likes
   on notifications.user_id = tweet_likes.user_id
-  where users.id = 2 and tweets.id = 2 and related_user_id = 1 and tweet_likes.status = 1`;
+  where tweets.id = 2 and related_user_id = 2 and tweet_likes.status = 1 and  users.id = 2`;
+  let [all_likes] = await connection.query(like_notification, [logged_id]);
+  // console.log(all_likes);
+  let who_liked = `select distinct(username) from notifications 
+  left join users 
+  on notifications.related_user_id = users.id 
+  left join tweets
+  on notifications.user_id = tweets.user_id 
+  left join tweet_likes
+   on notifications.user_id = tweet_likes.user_id
+  where related_user_id = 1 and tweets.id = 2 and users.id = 1 and tweet_likes.status = 1 and notifications.type = "Like";`;
 
-  
-  let [all_likes] = await connection.query(like_notification);
-  console.log(all_likes);
+  let [like_result] = await connection.query(who_liked, [logged_id]);
+  console.log(like_result[0].username + " liked your tweet");
+  // console.log(like_result[0].username);
+
+  // console.log(all_likes);
   let like;
   if (all_likes[0].likes === 1) {
-    like = `${all_likes[0].other_user} like your tweet. \n`;
+    like = `${like_result[0].username} like your tweet. \n`;
     like += all_likes[0].content;
   }
+
+  let follow_notification = `select notifications.related_user_id from notifications 
+  left join users 
+  on notifications.user_id = users.id 
+  left join followers
+  on notifications.user_id = followers.follower_id  where users.id = 2 and users.is_active = 1 and notifications.type = "Follow"`;
+  let [follow_result] = await connection.query(follow_notification);
+  console.log(follow_result + " follows you");
+
+  let follower = `select * from followers join users  on followers.follower_id = users.id where followers.following_id = 2;`;
+  let [get_follower] = await connection.query(follower);
   let follow;
-  if (all_tweets[0].following_id) {
-    follow = `${all_tweets[0].username} followed you.`;
+  if (follow_result[0].following_id) {
+    follow = `${get_follower[0].username} followed you.`;
   }
 
   res.status(200).json({
