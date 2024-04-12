@@ -12,7 +12,7 @@ exports.getExplorePage = async (req, res) => {
 
 
 const ShortUniqueId = require('short-unique-id');
-const connection = require("../../../config/connection")
+// const connection = require("../../config/connection")
 
 
 exports.getActivecode = async (req, res) => {

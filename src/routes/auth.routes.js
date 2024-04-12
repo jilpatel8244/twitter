@@ -49,9 +49,9 @@ const likeRoute = require('./like.routes');
 // router.post("/verify_email", verify_user_byemail)
 // router.post("/resetpasswordl", resetpassword)
 
-// router.get("/editprofile", get_editprofile);
-// router.use('/tweetPost', post)
-// router.use("/explore", exploreroute)
+router.get("/editprofile/:id", get_editprofile);
+router.use('/tweetPost', post)
+router.use("/explore", exploreroute)
 
 router.use('/bookmark', passport.authenticate('jwt', { session: false }), bookmarkRoute);
 router.use('/like', passport.authenticate('jwt', { session: false }), likeRoute);
