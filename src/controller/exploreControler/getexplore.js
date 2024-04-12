@@ -2,18 +2,8 @@ const connection = require("../../../config/connection");
 const ShortUniqueId = require("short-unique-id");
 
 exports.getExplorePage = async (req, res) => {
-    res.render("pages/explore")
-
-}
-
-
-
-
-
-
-const ShortUniqueId = require('short-unique-id');
-// const connection = require("../../config/connection")
-
+  res.render("pages/explore");
+};
 
 exports.getActivecode = async (req, res) => {
   const uid = new ShortUniqueId({ length: 12 });

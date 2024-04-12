@@ -1,9 +1,5 @@
 const express = require("express");
 const cookieParser = require("cookie-parser");
-<<<<<<< HEAD
-=======
-const bodyParser = require("body-parser");
->>>>>>> e1d982cdcc4c86fa69c1f5f91fd5a1cf3fb85fe9
 const GetProfileRouter = require("./src/routes/profile.routes");
 const body_parser = require("body-parser");
 const homeRouter = require("./src/routes/home.routes");
