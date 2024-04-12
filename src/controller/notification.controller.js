@@ -97,10 +97,21 @@ exports.getNotifications = async (req, res) => {
 
   let follower = `select * from followers join users  on followers.follower_id = users.id where followers.following_id = 2;`;
   let [get_follower] = await connection.query(follower);
+
   let follow;
   if (follow_result[0].id) {
     follow = `${get_follower[0].username} followed you.`;
   }
+
+  //
+  let comment_nitification = `select notifications.related_user_id as id from notifications 
+  left join users 
+  on notifications.user_id = users.id 
+  left join tweet_comments
+  on notifications.user_id = tweet_comments.user_id
+  where users.id = 1  and users.is_active = 1 and notifications.type = "Comment";`;
+  let [comment_result] = await connection.query(comment_nitification);
+  let comments;
 
   res.status(200).json({
     success: true,
