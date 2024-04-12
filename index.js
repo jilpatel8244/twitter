@@ -1,8 +1,9 @@
-const express = require('express');
-const cookieParser = require('cookie-parser');
-const GetProfileRouter = require('./src/routes/profile.routes');
-const body_parser = require('body-parser');
-const homeRouter = require('./src/routes/home.routes')
+const express = require("express");
+const cookieParser = require("cookie-parser");
+const bodyParser = require("body-parser");
+const GetProfileRouter = require("./src/routes/profile.routes");
+const body_parser = require("body-parser");
+const homeRouter = require("./src/routes/home.routes");
 // const authRouter = require('./src/routes/auth.routes');
 
 const authRouter = require("./src/routes/auth.routes");
@@ -11,6 +12,7 @@ const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 app.use(express.static("public"));
