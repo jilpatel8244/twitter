@@ -28,7 +28,7 @@ exports.getNotifications = async (req, res) => {
   left join users 
   on notifications.user_id = users.id 
   where users.id = ? `;
-  let [logged_in] = await connection.query(login_notification, [logged_id]);
+  let [logged_in] = await connection.query(login_notification, [2]);
   // console.log(logged_in);
 
   let date = new Date(all_tweets[0].created_at);
@@ -104,20 +104,26 @@ exports.getNotifications = async (req, res) => {
   }
 
   //
-  let comment_nitification = `select notifications.related_user_id as id from notifications 
+  let comment_nitification = `select * from notifications 
   left join users 
   on notifications.user_id = users.id 
   left join tweet_comments
   on notifications.user_id = tweet_comments.user_id
   where users.id = 1  and users.is_active = 1 and notifications.type = "Comment";`;
   let [comment_result] = await connection.query(comment_nitification);
+  console.log(comment_result);
   let comments;
 
+  if (comment_result[0].related_user_id) {
+    comments = `${comment_result[0].username} commented on your post `;
+    comments +=`${comment_result[0].content}`;
+  }
   res.status(200).json({
     success: true,
-    message: "in notification",
+    message: "in X notification",
     login,
     follow,
     like,
+    comments,
   });
 };

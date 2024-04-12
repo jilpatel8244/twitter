@@ -1,5 +1,9 @@
 const express = require("express");
 const cookieParser = require("cookie-parser");
+<<<<<<< HEAD
+=======
+const bodyParser = require("body-parser");
+>>>>>>> e1d982cdcc4c86fa69c1f5f91fd5a1cf3fb85fe9
 const GetProfileRouter = require("./src/routes/profile.routes");
 const body_parser = require("body-parser");
 const homeRouter = require("./src/routes/home.routes");
@@ -9,9 +13,10 @@ const notification = require("./src/routes/notification.route");
 const authRouter = require("./src/routes/auth.routes");
 const app = express();
 const PORT = process.env.PORT || 3000;
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(body_parser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 app.use(express.static("public"));
