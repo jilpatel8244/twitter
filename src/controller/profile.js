@@ -5,7 +5,7 @@ exports.getProfile = async (req,res)=>{
   console.log(id);
 
   const twitCount = `SELECT count(*) as t FROM twitsdtls_tbl WHERE twit_user_id = ?`;
-  const twitCountData = await db.query(twitCount,[id]); 
+  const [twitCountData] = await db.query(twitCount,[id]); 
   console.log(twitCountData[0]);
 
   const profileDataQuery = `SELECT * FROM users as u INNER JOIN twitsdtls_tbl as t ON u.id=t.twit_user_id WHERE t.twit_user_id = ?`;
