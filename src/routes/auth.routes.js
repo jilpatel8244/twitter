@@ -47,7 +47,7 @@ const post = require('./post.routes.js');
 // router.post("/verify_email", verify_user_byemail)
 // router.post("/resetpasswordl", resetpassword)
 
-router.get("/editprofile", get_editprofile);
+router.get("/editprofile/:id", get_editprofile);
 router.use('/tweetPost', post)
 router.use("/explore", exploreroute)
 
