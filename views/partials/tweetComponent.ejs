@@ -27,10 +27,11 @@
 
         <% if(singleTweet.media_url) {%>
             <div class="md:flex-shrink pr-6 pt-3">
-                <img class="rounded-lg w-full h-64"
-                    src="https://images.unsplash.com/photo-1556740738-b6a63e27c4df?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=448&q=80"
-                    alt="Woman paying for a purchase">
-            </div>
+                <div class="md:flex-shrink pr-6 pt-3">
+                    <div class="bg-cover bg-no-repeat bg-center rounded-lg w-full h-64" style="height: 200px; background-image: url(https://images.unsplash.com/photo-1556740738-b6a63e27c4df?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=448&amp;q=80);">
+                        <img class="opacity-0 w-full h-full" src="https://images.unsplash.com/photo-1556740738-b6a63e27c4df?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=448&amp;q=80" alt="">
+                    </div>
+                </div>
         <% } %>
 
                 <div class="flex">
@@ -64,11 +65,11 @@
 
 
                             <!-- like span tag -->
-                            <div class="flex-1 text-center py-2 m-2" onclick="likeHandler('<%= singleTweet.tweet_id %>')">
+                            <div class="flex-1 text-center py-2 m-2 like_<%= singleTweet.tweet_id %>" onclick="likeHandler('<%= singleTweet.tweet_id %>')">
                                 <span
-                                    class="w-12 mt-1 group flex items-center px-3 py-2 text-base leading-6 font-medium rounded-full  hover:text-red-300 text-red-600">
+                                    class="w-12 mt-1 group flex items-center px-3 py-2 text-base leading-6 font-medium rounded-full  hover:text-red-300">
                                     <% if(singleTweet.isLiked) { %>
-                                        <svg class="text-center h-7 w-6 fill-red-600 " fill="none"
+                                        <svg class="text-center h-7 w-6 fill-red-600 text-red-600" fill="none"
                                             stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             stroke="currentColor" viewBox="0 0 24 24">
                                             <path
@@ -101,9 +102,9 @@
                             </div>
 
                             <!-- bookmark span tag -->
-                            <div class="flex-1 text-center py-2 m-2" onclick="bookmarkHandler('<%= singleTweet.tweet_id %>')">
+                            <div class="flex-1 text-center py-2 m-2 bookmark_<%= singleTweet.tweet_id %>" onclick="bookmarkHandler('<%= singleTweet.tweet_id %>')">
                                 <span
-                                    class="w-12 mt-1 group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full  hover:text-blue-300 text-blue-800">
+                                    class="w-12 mt-1 group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full  hover:text-blue-300">
                                     <% if(singleTweet.isBookmarked) { %>
                                         <svg class="text-center h-7 w-6 fill-blue-300 text-blue-800" fill="none" stroke-linecap="round"
                                             stroke-linejoin="round" stroke-width="2" stroke="currentColor"
