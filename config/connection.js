@@ -4,7 +4,7 @@ require("dotenv").config();
 var connection = mysql.createConnection({
     host : "localhost",
     user : "root",
-    password : process.env.DB_PASSWORD,
+    password : process.env.PASSWORD,
     database : process.env.DB_NAME || 'temp_twitter'
 }).promise();
 
