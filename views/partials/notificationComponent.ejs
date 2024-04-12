@@ -1,0 +1,164 @@
+<section class="w-3/5 border border-gray-200 max-w-screen-sm min-h-dvh">
+  <div class="font-medium flex justify-around rounded-lg text-start p-8">
+    <span class="mt-2 font-medium text-xl"> Notification </span>
+    <img
+      class="p-1 w-10 h-10 rounded-full"
+      src="/assets/notification.gif"
+      alt="Bordered avatar"
+    />
+  </div>
+  <div
+    class="flex mt-2 md:flex items-center justify-between hidden"
+    id="navbar-sticky"
+  >
+    <ul
+      class="w-full flex items-center justify-between flex-col md:p-8 mt-4 font-medium border border-gray-100 rounded-lg md:space-x-8 md:flex-row md:mt-0 md:border-0 md:bg-white"
+    >
+      <li>
+        <a
+          id="alluser"
+          class="block py-2 px-3 text-black hover:text-blue-700 cursor-pointer rounded md:bg-transparent md:text-black-700 md:p-0"
+          aria-current="page"
+          >All</a
+        >
+      </li>
+      <li>
+        <a
+          id="verified"
+          class="block py-2 px-3 text-black-900 hover:text-blue-700 cursor-pointer rounded md:p-0"
+          >Verified</a
+        >
+      </li>
+      <li>
+        <a
+          id="mention"
+          class="block py-2 px-3 text-gray-900 rounded hover:text-blue-700 cursor-pointer md:p-0"
+          >Mentions</a
+        >
+      </li>
+    </ul>
+  </div>
+
+  <div
+    id="allusercontent"
+    class="max-w-screen-lg text-sm mt-4 font-medium text-gray-900 rounded-lg"
+  >
+    <div
+      class="block w-full px-4 py-2 border-b border-gray-200 cursor-pointer hover:bg-gray-100 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
+    >
+      <div class="flex">
+        <img
+          class="w-10 h-10 p-1 rounded-full"
+          src="/assets/x-logo.png"
+          alt="Bordered avatar"
+        />
+        <div class="mt-2">
+         
+        </div>
+      </div>
+    </div>
+    <div
+      class="block w-full px-4 py-2 border-b border-gray-200 cursor-pointer hover:bg-gray-100 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
+    >
+      <div class="flex">
+        <img
+          class="w-10 h-10 p-1 rounded-full"
+          src="/assets/x-logo.png"
+          alt="Bordered avatar"
+        />
+        <div class="mt-2">
+          There was a login to your account @Parmeshvar_1131 from a new device
+          on Apr 10, 2024. Review it now.
+        </div>
+      </div>
+    </div>
+    <div
+      class="block w-full px-4 py-2 border-b border-gray-200 cursor-pointer hover:bg-gray-100 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
+    >
+      <div class="flex">
+        <img
+          class="w-10 h-10 p-1 rounded-full"
+          src="/assets/lock.png"
+          alt="Bordered avatar"
+        />
+        <div class="mt-2">
+          Your password was reset on your account. Based on this change,
+          additional changes to your account may be restricted temporarily.
+        </div>
+      </div>
+    </div>
+    <div
+      class="block w-full px-4 py-2 border-b border-gray-200 cursor-pointer hover:bg-gray-100 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
+    >
+      <div class="flex">
+        <img
+          class="w-10 h-10 p-1 rounded-full"
+          src="/assets/user-icon.png"
+          alt="Bordered avatar"
+        />
+        <img
+          class="w-10 h-10 ml-2 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500"
+          src="/assets/user.png"
+          alt="Bordered avatar"
+        />
+      </div>
+      <div class="mt-2">Mark followed you</div>
+    </div>
+    <div
+      class="block w-full px-4 py-2 border-b border-gray-200 cursor-pointer hover:bg-gray-100 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
+    >
+      <div class="flex">
+        <img
+          class="w-15 h-10 p-1 rounded-full"
+          src="/assets/heart.png"
+          alt="like icon"
+        />
+        <img
+          class="w-10 h-10 ml-2 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500"
+          src="/assets/user.png"
+          alt="Bordered avatar"
+        />
+      </div>
+      <div class="mt-2">Mark liked your Tweeet</div>
+      <div class="mt-2">
+        The best things about growing on twitter is that is helps me hire really
+        good telent that would otherwise not be bothered to relpy on other
+        platforms to other recruites.
+      </div>
+      <div class="mt-2">
+        Something happens to the brain when it sees a decent follower count.
+      </div>
+    </div>
+  </div>
+
+  <div
+    id="verifiedcontent"
+    class="hidden flex items-center justify-center flex-col max-w-screen-lg text-sm mt-4 font-medium text-gray-900 rounded-lg"
+  >
+    <div class="mt-2 flex items-center justify-center flex-col">
+      <img
+        class="p-1 rounded-full"
+        src="/assets/verifiedpage.png"
+        alt="Bordered avatar"
+      />
+      <span class="mt-2 font-medium text-2xl">Nothing to see here — yet</span>
+      <p class="w-72">
+        Likes, mentions, reposts, and a whole lot more — when it comes from a
+        verified account, you’ll find it here.
+        <a href="#" class="text-blue-700">Learn more</a>
+      </p>
+    </div>
+  </div>
+
+  <div
+    id="mentioncontent"
+    class="hidden flex items-center justify-center flex-col max-w-screen-lg text-sm mt-4 font-medium text-gray-900 rounded-lg"
+  >
+    <div class="mt-2 flex items-center justify-center flex-col">
+      <span class="mt-2 font-medium text-2xl">Nothing to see here — yet</span>
+      <span class="mt-2 font-medium text-sm">
+        When someone mentions you, you’ll find it here.
+      </span>
+    </div>
+  </div>
+</section>

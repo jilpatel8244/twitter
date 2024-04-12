@@ -1,10 +1,14 @@
 const express = require("express");
 const cookieParser = require("cookie-parser");
+<<<<<<< HEAD
+=======
 const bodyParser = require("body-parser");
+>>>>>>> e1d982cdcc4c86fa69c1f5f91fd5a1cf3fb85fe9
 const GetProfileRouter = require("./src/routes/profile.routes");
 const body_parser = require("body-parser");
 const homeRouter = require("./src/routes/home.routes");
 // const authRouter = require('./src/routes/auth.routes');
+const notification = require("./src/routes/notification.route");
 
 const authRouter = require("./src/routes/auth.routes");
 const app = express();
@@ -20,8 +24,8 @@ app.use(express.static("public"));
 // app.use(authRouter);
 app.use(homeRouter);
 app.use(authRouter);
-// app.use(GetProfileRouter);
-
+app.use(GetProfileRouter);
+app.use(notification);
 app.set("view engine", "ejs");
 
 app.listen(PORT, (req, res) => {
