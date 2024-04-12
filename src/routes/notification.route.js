@@ -8,3 +8,4 @@ const {
 
 router.get("/notification", notification);
 router.get("/getnotification", getNotifications);
+module.exports = router;
