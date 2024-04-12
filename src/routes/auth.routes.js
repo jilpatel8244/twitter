@@ -15,7 +15,8 @@ const likeRoute = require('./like.routes');
 // const { verify_user_byemail } = require('../controller/verify_user_byemail');
 // const { login, loginHandler } = require('../controller/auth.controller');
 
-
+// const {USER_NAME_EXIST} = require('../controller/auth.controller');
+// router.post('/userExist',USER_NAME_EXIST);
 // router.get("/", (req, res) => {
 //     logger.info("information");
 //     res.render("pages/index");
