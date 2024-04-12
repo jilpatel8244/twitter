@@ -88,18 +88,17 @@ exports.getNotifications = async (req, res) => {
     like += all_likes[0].content;
   }
 
-  let follow_notification = `select notifications.related_user_id from notifications 
+  let follow_notification = `select notifications.related_user_id as id from notifications 
   left join users 
   on notifications.user_id = users.id 
   left join followers
   on notifications.user_id = followers.follower_id  where users.id = 2 and users.is_active = 1 and notifications.type = "Follow"`;
   let [follow_result] = await connection.query(follow_notification);
-  console.log(follow_result + " follows you");
 
   let follower = `select * from followers join users  on followers.follower_id = users.id where followers.following_id = 2;`;
   let [get_follower] = await connection.query(follower);
   let follow;
-  if (follow_result[0].following_id) {
+  if (follow_result[0].id) {
     follow = `${get_follower[0].username} followed you.`;
   }
 
