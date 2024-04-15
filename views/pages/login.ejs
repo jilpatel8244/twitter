@@ -149,7 +149,7 @@
         login_response = await login_response.json();
 
         if (login_response.success === true) {
-          url = window.location.replace(window.location.origin);
+          url = window.location.replace(window.location.origin +"/home");
           // Redirect to home page upon successful login
           // url = window.location.origin + "/home";
         } else {

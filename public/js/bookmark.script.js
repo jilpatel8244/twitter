@@ -12,7 +12,7 @@ async function bookmarkHandler(tweetId) {
     let response = await data.json();
 
     if (response.success == true) {
-        let bookmarkImg = document.querySelector(`.bookmark_${tweetId} svg`);
+        let bookmarkImg = document.querySelector(`.bookmark_${tweetId}`);
         if (response.bookmarkStatus) {
             bookmarkImg.classList.add('fill-blue-300', 'text-blue-800');
         } else {
