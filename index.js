@@ -1,8 +1,14 @@
 const express = require("express");
 const app = express();
+var http = require('http');
+const server = http.createServer(app);
+var {Server} = require('socket.io');
+
+const io = new Server(server);
+
 const cookieParser = require("cookie-parser");
 const GetProfileRouter = require("./src/routes/profile.routes");
-const bodyParser = require("body-parser");
+// const body_parser = require("body-parser");
 const homeRouter = require("./src/routes/home.routes");
 const notification = require("./src/routes/notification.route");
 
@@ -39,6 +45,27 @@ app.use(GetProfileRouter);
 app.use(notification);
 app.set("view engine", "ejs");
 
-app.listen(PORT, (req, res) => {
+//Whenever someone connects this gets executed
+io.on('connection', function (socket) {
+  console.log('A user connected');
+
+  //Whenever someone disconnects this piece of code executed
+  socket.on('disconnect', function () {
+    console.log('A user disconnected');
+  });
+
+  // chatting implementation
+  socket.on('newChat', (data) => {
+    socket.broadcast.emit('loadNewChat', data);
+  });
+
+  // load old chats
+  socket.on('existingChats', (data) => {
+    
+  })
+});
+
+
+server.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });

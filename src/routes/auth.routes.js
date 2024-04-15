@@ -4,7 +4,9 @@ const logger = require("../../logger/logger");
 const passport = require("passport");
 require("../middleware/passport");
 const bookmarkRoute = require("./bookmark.routes");
-const { get_editprofile, post_updateProfile } = require("../controller/editprofile.controller");
+const likeRoute = require("./like.routes");
+const messagesRoute = require("./messages.routes");
+const { get_editprofile } = require("../controller/editprofile.controller");
 const exploreroute = require("../routes/explore.routes");
 const post = require("./tweet.routes.js");
 // const { get_registration, post_registration } = require('../controller/registration');
@@ -59,5 +61,6 @@ router.use("/explore", exploreroute)
 router.use('/bookmark', passport.authenticate('jwt', { session: false }), bookmarkRoute);
 // router.use('/like', passport.authenticate('jwt', { session: false }), likeRoute);
 
+router.use('/messages', passport.authenticate('jwt', { session: false }), messagesRoute);
 
 module.exports = router;
