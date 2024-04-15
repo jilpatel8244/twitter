@@ -4,7 +4,7 @@ const logger = require("../../logger/logger");
 const passport = require("passport");
 require("../middleware/passport");
 const bookmarkRoute = require("./bookmark.routes");
-const { get_editprofile } = require("../controller/editprofile.controller");
+const { get_editprofile, post_updateProfile } = require("../controller/editprofile.controller");
 const exploreroute = require("../routes/explore.routes");
 // const post = require("./post.routes.js");
 const { get_registration, post_registration } = require('../controller/registration');
