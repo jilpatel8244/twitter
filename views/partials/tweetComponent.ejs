@@ -65,21 +65,21 @@
 
 
                             <!-- like span tag -->
-                            <div class="flex-1 text-center py-2 m-2 like_<%= singleTweet.tweet_id %>" onclick="likeHandler('<%= singleTweet.tweet_id %>')">
+                            <div class="flex-1 text-center py-2 m-2">
                                 <span
                                     class="w-12 mt-1 group flex items-center px-3 py-2 text-base leading-6 font-medium rounded-full  hover:text-red-300">
                                     <% if(singleTweet.isLiked) { %>
-                                        <svg class="text-center h-7 w-6 fill-red-600 text-red-600" fill="none"
+                                        <svg class="text-center h-7 w-6 fill-red-600 text-red-600 like_<%= singleTweet.tweet_id %>" fill="none"
                                             stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            stroke="currentColor" viewBox="0 0 24 24">
+                                            stroke="currentColor" viewBox="0 0 24 24" onclick="likeHandler('<%= singleTweet.tweet_id %>')">
                                             <path
                                                 d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z">
                                             </path>
                                         </svg>
                                         <% } else {%>
-                                            <svg class="text-center h-7 w-6 text-gray-500" fill="none" stroke-linecap="round"
+                                            <svg class="text-center h-7 w-6 text-gray-500 like_<%= singleTweet.tweet_id %>" fill="none" stroke-linecap="round"
                                                 stroke-linejoin="round" stroke-width="2" stroke="currentColor"
-                                                viewBox="0 0 24 24">
+                                                viewBox="0 0 24 24" onclick="likeHandler('<%= singleTweet.tweet_id %>')"> 
                                                 <path
                                                     d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z">
                                                 </path>
@@ -102,21 +102,21 @@
                             </div>
 
                             <!-- bookmark span tag -->
-                            <div class="flex-1 text-center py-2 m-2 bookmark_<%= singleTweet.tweet_id %>" onclick="bookmarkHandler('<%= singleTweet.tweet_id %>')">
+                            <div class="flex-1 text-center py-2 m-2 ">
                                 <span
                                     class="w-12 mt-1 group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full  hover:text-blue-300">
                                     <% if(singleTweet.isBookmarked) { %>
-                                        <svg class="text-center h-7 w-6 fill-blue-300 text-blue-800" fill="none" stroke-linecap="round"
+                                        <svg class="text-center h-7 w-6 fill-blue-300 text-blue-800 bookmark_<%= singleTweet.tweet_id %>" fill="none" stroke-linecap="round"
                                             stroke-linejoin="round" stroke-width="2" stroke="currentColor"
-                                            viewBox="0 0 24 24">
+                                            viewBox="0 0 24 24" onclick="bookmarkHandler('<%= singleTweet.tweet_id %>')">
                                             <path
                                                 d="M8 4H6a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-2m-4-1v8m0 0l3-3m-3 3L9 8m-5 5h2.586a1 1 0 01.707.293l2.414 2.414a1 1 0 00.707.293h3.172a1 1 0 00.707-.293l2.414-2.414a1 1 0 01.707-.293H20">
                                             </path>
                                         </svg>
                                         <% } else {%>
-                                            <svg class="text-center h-7 w-6" fill="none" stroke-linecap="round"
+                                            <svg class="text-center h-7 w-6 bookmark_<%= singleTweet.tweet_id %>" fill="none" stroke-linecap="round"
                                                 stroke-linejoin="round" stroke-width="2" stroke="currentColor"
-                                                viewBox="0 0 24 24">
+                                                viewBox="0 0 24 24" onclick="bookmarkHandler('<%= singleTweet.tweet_id %>')">
                                                 <path
                                                     d="M8 4H6a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-2m-4-1v8m0 0l3-3m-3 3L9 8m-5 5h2.586a1 1 0 01.707.293l2.414 2.414a1 1 0 00.707.293h3.172a1 1 0 00.707-.293l2.414-2.414a1 1 0 01.707-.293H20">
                                                 </path>

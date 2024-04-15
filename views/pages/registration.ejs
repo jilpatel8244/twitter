@@ -79,15 +79,10 @@
       let username = document.getElementById("username").value;
       let email = document.getElementById("email").value;
       let dob = document.getElementById("dob").value;
-      var namevalidation = document.getElementById("namevalidation");
-      var usernamevalidation = document.getElementById("usernamevalidation");
-      var emailvalidation = document.getElementById("emailvalidation");
-      var dobvalidation = document.getElementById("dobvalidation");
-
-      // namevalidation.innerHTML = "";
-      // usernamevalidation.innerHTML = "";
-      // emailvalidation.innerHTML = "";
-      // dobvalidation.innerHTML = "";
+      let namevalidation = document.getElementById("namevalidation");
+      let usernamevalidation = document.getElementById("usernamevalidation");
+      let emailvalidation = document.getElementById("emailvalidation");
+      let dobvalidation = document.getElementById("dobvalidation");
       isValid = true;
 
       if (name === "") {
@@ -104,23 +99,25 @@
         usernamevalidation.innerHTML = "UserName is required";
         isValid = false;
       } else {
-        usernamevalidation.innerHTML = ""; var emailvalidation = document.getElementById("emailvalidation");
-        //   username:username
-        // }
-
-        // let status= await isUserExist(usernamedata)
-        // usernamevalidation.innerHTML = "";
-        // if(typeof status =="boolean")
-        // {
+        usernamevalidation.innerHTML = ""; 
+      }
+      //   username:username
+      // }
+      
+      // let status= await isUserExist(usernamedata)
+      // usernamevalidation.innerHTML = "";
+      // if(typeof status =="boolean")
+      // {
         //   if(!status){
-        //     usernamevalidation.style.color = "red";
-        //     usernamevalidation.innerHTML="change the username";
-        //   }
-        // }
-        // else{
-        //   usernamevalidation.innerHTML=status;
-        // }
-
+          //     usernamevalidation.style.color = "red";
+          //     usernamevalidation.innerHTML="change the username";
+          //   }
+          // }
+          // else{
+            //   usernamevalidation.innerHTML=status;
+            // }
+            
+            var emailvalidation1 = document.getElementById("emailvalidation");
 
         let regexemail = "^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$";
 
@@ -146,7 +143,7 @@
 
         return isValid;
       }
-    }
+    
 
     async function register() {
 
