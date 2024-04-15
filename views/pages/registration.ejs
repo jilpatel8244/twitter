@@ -22,7 +22,7 @@
               Create Account
             </p>
 
-            <form id="registerForm" method="post" onsubmit="return registervalidate()">
+            <form id="registerForm" method="post">
               <div class="w-full mt-4">
                 <input
                   class="block w-full px-4 py-2 mt-2 text-gray-800 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-black dark:focus:border-black focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-gray-300"
@@ -49,9 +49,11 @@
               </div>
               <span id="dobvalidation"></span>
               <div class="flex items-center justify-between mt-4">
-                <input type="submit" value=" Sign In"
-                  class="px-6 py-2 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-black rounded-lg hover:bg-gray-900 focus:outline-none focus:ring focus:ring-gray-300 focus:ring-opacity-50"
-                  onclick="register()" />
+                <p class="px-6 py-2 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-black rounded-lg hover:bg-gray-900 focus:outline-none focus:ring focus:ring-gray-300 focus:ring-opacity-50"
+                  onclick="register()">
+                  Sign In
+                </p>
+
               </div>
             </form>
           </div>
@@ -90,61 +92,86 @@
         usernamevalidation.innerHTML = "UserName is required";
         isValid = false;
       } else {
-        usernamevalidation.innerHTML = "";
+        usernamevalidation.innerHTML = ""; var emailvalidation = document.getElementById("emailvalidation");
+        //   username:username
+        // }
+
+        // let status= await isUserExist(usernamedata)
+        // usernamevalidation.innerHTML = "";
+        // if(typeof status =="boolean")
+        // {
+        //   if(!status){
+        //     usernamevalidation.style.color = "red";
+        //     usernamevalidation.innerHTML="change the username";
+        //   }
+        // }
+        // else{
+        //   usernamevalidation.innerHTML=status;
+        // }
+
+
+        let regexemail = "^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$";
+
+
+        if (email === "") {
+          emailvalidation.innerHTML = "Email is required";
+          isValid = false;
+        }
+        else if (!email.match(regexemail)) {
+          emailvalidation.innerHTML = "Email is not valid";
+          isValid = false;
+        }
+        else {
+          emailvalidation.innerHTML = "";
+        }
+
+        if (dob === "") {
+          dobvalidation.innerHTML = "Date of Birth is required";
+          isValid = false;
+        } else {
+          dobvalidation.innerHTML = "";
+        }
+
+        return isValid;
       }
-      // let usernamedata = {
-      //   username:username
-      // }
-
-      // let status= await isUserExist(usernamedata)
-      // usernamevalidation.innerHTML = "";
-      // if(typeof status =="boolean")
-      // {
-      //   if(!status){
-      //     usernamevalidation.style.color = "red";
-      //     usernamevalidation.innerHTML="change the username";
-      //   }
-      // }
-      // else{
-      //   usernamevalidation.innerHTML=status;
-      // }
-
-      if (email === "") {
-        emailvalidation.innerHTML = "Email is required";
-        isValid = false;
-      } else {
-        emailvalidation.innerHTML = "";
-      }
-
-      if (dob === "") {
-        dobvalidation.innerHTML = "Date of Birth is required";
-        isValid = false;
-      } else {
-        dobvalidation.innerHTML = "";
-      }
-
-      return isValid;
     }
 
     async function register() {
-      if (!registervalidate) {
+
+
+
+      let validate = registervalidate();
+
+      if (validate == false) {
         return false;
       } else {
         let formdata = document.getElementById("registerForm");
         let data = new FormData(formdata);
         const param = new URLSearchParams(data);
-        const dataform = await new Response(param).text();
-        console.log(typeof dataform);
+        console.log(param);
         let url = window.location.origin + "/registration";
+
         let response = await fetch(url, {
           method: "POST",
           headers: {
             "Content-type": "application/x-www-form-urlencoded",
           },
-          body: dataform,
+          body: param,
         });
 
-        console.log(await response.json());
+
+        response = await response.json()
+
+        console.log(response);
+
+
+        if (response.isvalidate == false) {
+          var emailvalidation = document.getElementById("emailvalidation");
+          emailvalidation.innerHTML = "plese enter valid mail"
+
+
+
+        }
       }
     }
     // console.log(document.forms["registerForm"]["username"]);

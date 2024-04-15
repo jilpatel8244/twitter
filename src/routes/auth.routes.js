@@ -38,27 +38,6 @@ router.post("/registration", post_registration);
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // const post = require("./post.routes.js");
 // const { get_registration, post_registration } = require('../controller/registration');
 // const { getPassword, postPassword } = require("../controller/password");
