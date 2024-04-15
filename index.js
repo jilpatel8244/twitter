@@ -1,14 +1,15 @@
-const express = require('express');
-const cookieParser = require('cookie-parser');
-const bodyParser = require('body-parser');
-const GetProfileRouter = require('./src/routes/profile.routes');
-
-const homeRouter = require('./src/routes/home.routes')
+const express = require("express");
+const cookieParser = require("cookie-parser");
+const GetProfileRouter = require("./src/routes/profile.routes");
+const body_parser = require("body-parser");
+const homeRouter = require("./src/routes/home.routes");
 // const authRouter = require('./src/routes/auth.routes');
+const notification = require("./src/routes/notification.route");
 
 const authRouter = require("./src/routes/auth.routes");
 const app = express();
 const PORT = process.env.PORT || 3000;
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -20,7 +21,7 @@ app.use(express.static("public"));
 app.use(homeRouter);
 app.use(authRouter);
 app.use(GetProfileRouter);
-
+app.use(notification);
 app.set("view engine", "ejs");
 
 app.listen(PORT, (req, res) => {

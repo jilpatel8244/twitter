@@ -1,15 +1,11 @@
 const express = require("express");
-const logger = require("../../logger/logger");
 const router = express.Router();
-
+const {getHome} = require('../controller/home.controller');
 
 router.get("/", (req, res) => {
-    logger.info("information");
     res.render("pages/index");
   });
 
-router.get("/home", (req, res) => {
-    res.render("pages/home");
-  });
+router.get("/home", getHome);
 
   module.exports = router;
