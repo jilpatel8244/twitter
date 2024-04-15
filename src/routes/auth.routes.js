@@ -8,8 +8,10 @@ const likeRoute = require("./like.routes");
 const messagesRoute = require("./messages.routes");
 const { get_editprofile } = require("../controller/editprofile.controller");
 const exploreroute = require("../routes/explore.routes");
-// const post = require("./post.routes.js");
+const post = require("./tweet.routes.js");
 // const { get_registration, post_registration } = require('../controller/registration');
+// const post = require("./post.routes.js");
+const { get_registration, post_registration } = require('../controller/registration');
 const { getPassword, postPassword } = require("../controller/password");
 const { forgotpassword } = require("../controller/auth.controller");
 const { resetpassword } = require("../controller/resetpassword");
@@ -47,12 +49,17 @@ router.get("/forgotpassword", forgotpassword);
 router.post("/verify_email", verify_user_byemail);
 // router.post("/resetpasswordl", resetpassword);
 
-router.get("/editprofile/:id", get_editprofile);
+router.get("/registration", get_registration);
+router.post("/registration", post_registration);
+router.get('/password', getPassword);
+router.post('/password', postPassword);
+
+router.get("/editprofile", get_editprofile);
 // router.use('/tweetPost', post)
-router.use("/explore", exploreroute);
+router.use("/explore", exploreroute)
 
 router.use('/bookmark', passport.authenticate('jwt', { session: false }), bookmarkRoute);
-router.use('/like', passport.authenticate('jwt', { session: false }), likeRoute);
+// router.use('/like', passport.authenticate('jwt', { session: false }), likeRoute);
 
 router.use('/messages', passport.authenticate('jwt', { session: false }), messagesRoute);
 

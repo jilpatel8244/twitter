@@ -10,8 +10,23 @@ const cookieParser = require("cookie-parser");
 const GetProfileRouter = require("./src/routes/profile.routes");
 // const body_parser = require("body-parser");
 const homeRouter = require("./src/routes/home.routes");
-// const authRouter = require('./src/routes/auth.routes');
 const notification = require("./src/routes/notification.route");
+
+// const { Server } = require("socket.io");
+// const { createServer } = require("node:http");
+// const { join } = require('node:path');
+// const server = createServer(app);
+// const io = new Server(server);
+// io.on("connection", (socket) => {
+//   console.log("a user connected");
+//   socket.on("disconnect", () => {
+//     console.log("user disconnected");
+//   });
+// });
+
+// app.get('/index', (req, res) => {
+//   res.sendFile(join(__dirname, '/public/index.html'));
+// });
 
 const authRouter = require("./src/routes/auth.routes");
 const PORT = process.env.PORT || 3000;
