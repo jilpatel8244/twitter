@@ -96,7 +96,7 @@
           <div class="text-sm mt-2">
             Don't have an account?
             <a
-              href="/registration"
+              href="/home"
               class="font-semibold text-sky-600 hover:text-sky-500"
             >
               Sign up</a
@@ -147,9 +147,9 @@
         });
 
         login_response = await login_response.json();
-
+        console.log(login_response);
         if (login_response.success === true) {
-          url = window.location.replace(window.location.origin);
+          url = window.location.replace(window.location.origin + "/home");
           // Redirect to home page upon successful login
           // url = window.location.origin + "/home";
         } else {
