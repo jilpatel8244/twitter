@@ -5,7 +5,7 @@ const bodyParser = require("body-parser");
 const homeRouter = require("./src/routes/home.routes");
 // const authRouter = require('./src/routes/auth.routes');
 const notification = require("./src/routes/notification.route");
-
+const exploreRoute = require("./src/routes/explore.routes")
 const authRouter = require("./src/routes/auth.routes");
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -19,6 +19,7 @@ app.use(express.static("public"));
 
 // app.use(authRouter);
 app.use(homeRouter);
+app.use("/explore", exploreRoute);
 app.use(authRouter);
 app.use(GetProfileRouter);
 app.use(notification);
