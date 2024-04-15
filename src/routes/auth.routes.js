@@ -50,7 +50,7 @@ router.get("/editprofile/:id", get_editprofile);
 router.use("/explore", exploreroute);
 
 router.use('/bookmark', passport.authenticate('jwt', { session: false }), bookmarkRoute);
-router.use('/like', passport.authenticate('jwt', { session: false }), likeRoute);
+// router.use('/like', passport.authenticate('jwt', { session: false }), likeRoute);
 
 
 module.exports = router;
