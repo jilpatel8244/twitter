@@ -1,99 +1,66 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Registration</title>
-    <link rel="stylesheet" href="/css/output.css" />
-  </head>
 
-  <body>
-    <section class="h-screen">
-      <div class="h-full">
-        <div
-          class="flex h-full flex-wrap items-center justify-center lg:justify-between"
-        >
-          <div
-            class="w-full max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-md dark:bg-gray-800"
-          >
-            <div class="px-6 py-4">
-              <div class="flex justify-center mx-auto">
-                <img
-                  class="w-auto h-7 sm:h-8"
-                  src="/assets/X-Logo.png"
-                  alt=""
-                />
-              </div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Registration</title>
+  <link rel="stylesheet" href="/css/output.css" />
+</head>
 
-              <p class="mt-1 text-center text-black dark:text-gray-400">
-                Create Account
-              </p>
-
-              <form
-                id="registerForm"
-                method="post"
-                onsubmit="return registervalidate()"
-              >
-                <div class="w-full mt-4">
-                  <input
-                    class="block w-full px-4 py-2 mt-2 text-gray-800 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-black dark:focus:border-black focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-gray-300"
-                    type="text"
-                    placeholder="Name"
-                    id="name"
-                    aria-label="Name"
-                  />
-                </div>
-                <span id="namevalidation"></span>
-                <div class="w-full mt-4">
-                  <input
-                    class="block w-full px-4 py-2 mt-2 text-gray-800 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-black dark:focus:border-black focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-gray-300"
-                    type="text"
-                    placeholder="Username"
-                    id="username"
-                    aria-addlabel="Username"
-                    name="username"
-                  />
-                </div>
-                <span id="usernamevalidation"></span>
-                <div class="w-full mt-4">
-                  <input
-                    class="block w-full px-4 py-2 mt-2 text-gray-800 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-black dark:focus:border-black focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-gray-300"
-                    type="text"
-                    placeholder="Email Address"
-                    id="email"
-                    aria-label="Email Address"
-                  />
-                </div>
-                <span id="emailvalidation"></span>
-                <div class="w-full mt-4">
-                  <input
-                    class="block w-full px-4 py-2 mt-2 text-gray-800 placeholder-gray-500 bg-white border rounded-lg focus:border-black dark:focus:border-black focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-white"
-                    placeholder="Date Of Birth"
-                    class="textbox-n"
-                    type="text"
-                    onfocus="(this.type='date')"
-                    onblur="(this.type='text')"
-                    id="dob"
-                    aria-label="date"
-                  />
-                </div>
-                <span id="dobvalidation"></span>
-                <div class="flex items-center justify-between mt-4">
-                  <input
-                    type="submit"
-                    value=" Sign In"
-                    class="px-6 py-2 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-black rounded-lg hover:bg-gray-900 focus:outline-none focus:ring focus:ring-gray-300 focus:ring-opacity-50"
-                    onclick="register()"
-                  />
-                </div>
-              </form>
+<body>
+  <section class="h-screen">
+    <div class="h-full">
+      <div class="flex h-full flex-wrap items-center justify-center lg:justify-between">
+        <div class="w-full max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-md dark:bg-gray-800">
+          <div class="px-6 py-4">
+            <div class="flex justify-center mx-auto">
+              <img class="w-auto h-7 sm:h-8" src="/assets/X-Logo.png" alt="" />
             </div>
+
+            <p class="mt-1 text-center text-black dark:text-gray-400">
+              Create Account
+            </p>
+
+            <form id="registerForm" method="post" onsubmit="return registervalidate()">
+              <div class="w-full mt-4">
+                <input
+                  class="block w-full px-4 py-2 mt-2 text-gray-800 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-black dark:focus:border-black focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-gray-300"
+                  type="text" placeholder="Name" id="name" aria-label="Name" name="name" />
+              </div>
+              <span id="namevalidation"></span>
+              <div class="w-full mt-4">
+                <input
+                  class="block w-full px-4 py-2 mt-2 text-gray-800 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-black dark:focus:border-black focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-gray-300"
+                  type="text" placeholder="Username" id="username" aria-addlabel="Username" name="username" />
+              </div>
+              <span id="usernamevalidation"></span>
+              <div class="w-full mt-4">
+                <input
+                  class="block w-full px-4 py-2 mt-2 text-gray-800 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-black dark:focus:border-black focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-gray-300"
+                  type="text" placeholder="Email Address" id="email" aria-label="Email Address" name="email" />
+              </div>
+              <span id="emailvalidation"></span>
+              <div class="w-full mt-4">
+                <input
+                  class="block w-full px-4 py-2 mt-2 text-gray-800 placeholder-gray-500 bg-white border rounded-lg focus:border-black dark:focus:border-black focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-white"
+                  placeholder="Date Of Birth" class="textbox-n" type="text" onfocus="(this.type='date')"
+                  onblur="(this.type='text')" id="dob" aria-label="date" name="dob" />
+              </div>
+              <span id="dobvalidation"></span>
+              <div class="flex items-center justify-between mt-4">
+                <input type="submit" value=" Sign In"
+                  class="px-6 py-2 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-black rounded-lg hover:bg-gray-900 focus:outline-none focus:ring focus:ring-gray-300 focus:ring-opacity-50"
+                  onclick="register()" />
+              </div>
+            </form>
           </div>
         </div>
       </div>
-    </section>
-    <script>
-      function registervalidate() {
+    </div>
+  </section>
+  <script>
+    function registervalidate() {
       let name = document.getElementById("name").value;
       let username = document.getElementById("username").value;
       let email = document.getElementById("email").value;
@@ -109,92 +76,93 @@
       // dobvalidation.innerHTML = "";
       isValid = true;
 
-        if (name === "") {
-          namevalidation.innerHTML = "Name is required";
-          isValid = false;
-        } else if (/\d/.test(name)) {
-          namevalidation.innerHTML = "Name should not contain numbers";
-          isValid = false;
-        } else {
-          namevalidation.innerHTML = "";
-        }
-
-        if (username === "") {
-          usernamevalidation.innerHTML = "UserName is required";
-          isValid = false;
-        }else{
-          usernamevalidation.innerHTML = "";
-        }
-        // let usernamedata = {
-        //   username:username
-        // }
-       
-        // let status= await isUserExist(usernamedata)
-        // usernamevalidation.innerHTML = "";
-        // if(typeof status =="boolean")
-        // {
-        //   if(!status){
-        //     usernamevalidation.style.color = "red";
-        //     usernamevalidation.innerHTML="change the username";
-        //   }
-        // }
-        // else{
-        //   usernamevalidation.innerHTML=status;
-        // }
-
-        if (email === "") {
-          emailvalidation.innerHTML = "Email is required";
-          isValid = false;
-        }else {
-          emailvalidation.innerHTML = "";
-        }
-
-        if (dob === "") {
-          dobvalidation.innerHTML = "Date of Birth is required";
-          isValid = false;
-        }else{
-          dobvalidation.innerHTML = "";
-        }
-
-        return isValid;
+      if (name === "") {
+        namevalidation.innerHTML = "Name is required";
+        isValid = false;
+      } else if (/\d/.test(name)) {
+        namevalidation.innerHTML = "Name should not contain numbers";
+        isValid = false;
+      } else {
+        namevalidation.innerHTML = "";
       }
 
-      async function register() {
-        if (!registervalidate) {
-          return false;
-        } else {
-          let formdata = document.getElementById("registerForm");
-          let data = new FormData(formdata);
-          const param = new URLSearchParams(data);
-          const dataform = await new Response(param).text();
-          console.log(typeof dataform);
-          let url = window.location.origin + "/registration";
-          let response = await fetch(url, {
-            method: "POST",
-            headers: {
-              "Content-type": "application/x-www-form-urlencoded",
-            },
-            body: dataform,
-          });
-
-          console.log(await response.json());
-        }
+      if (username === "") {
+        usernamevalidation.innerHTML = "UserName is required";
+        isValid = false;
+      } else {
+        usernamevalidation.innerHTML = "";
       }
-      // console.log(document.forms["registerForm"]["username"]);
-      // let isUserExist = async (username) => {
-      //   console.log(username);
-      //   let response = await fetch("/userExist", {
-      //     method: "POST",
-      //     body: new URLSearchParams(
-      //       new FormData(document.forms["registerForm"])
-      //     ),
-      //   });
-      //   let { isValid, error } = await response.json();
-      //   if (error != undefined) {
-      //     return error;
+      // let usernamedata = {
+      //   username:username
+      // }
+
+      // let status= await isUserExist(usernamedata)
+      // usernamevalidation.innerHTML = "";
+      // if(typeof status =="boolean")
+      // {
+      //   if(!status){
+      //     usernamevalidation.style.color = "red";
+      //     usernamevalidation.innerHTML="change the username";
       //   }
-      //   return isValid;
-      // };
-    </script>
-  </body>
+      // }
+      // else{
+      //   usernamevalidation.innerHTML=status;
+      // }
+
+      if (email === "") {
+        emailvalidation.innerHTML = "Email is required";
+        isValid = false;
+      } else {
+        emailvalidation.innerHTML = "";
+      }
+
+      if (dob === "") {
+        dobvalidation.innerHTML = "Date of Birth is required";
+        isValid = false;
+      } else {
+        dobvalidation.innerHTML = "";
+      }
+
+      return isValid;
+    }
+
+    async function register() {
+      if (!registervalidate) {
+        return false;
+      } else {
+        let formdata = document.getElementById("registerForm");
+        let data = new FormData(formdata);
+        const param = new URLSearchParams(data);
+        const dataform = await new Response(param).text();
+        console.log(typeof dataform);
+        let url = window.location.origin + "/registration";
+        let response = await fetch(url, {
+          method: "POST",
+          headers: {
+            "Content-type": "application/x-www-form-urlencoded",
+          },
+          body: dataform,
+        });
+
+        console.log(await response.json());
+      }
+    }
+    // console.log(document.forms["registerForm"]["username"]);
+    // let isUserExist = async (username) => {
+    //   console.log(username);
+    //   let response = await fetch("/userExist", {
+    //     method: "POST",
+    //     body: new URLSearchParams(
+    //       new FormData(document.forms["registerForm"])
+    //     ),
+    //   });
+    //   let { isValid, error } = await response.json();
+    //   if (error != undefined) {
+    //     return error;
+    //   }
+    //   return isValid;
+    // };
+  </script>
+</body>
+
 </html>
