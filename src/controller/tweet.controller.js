@@ -1,5 +1,8 @@
 const logger = require("../../logger/logger");
 const conn=require('../../config/connection.js')
+const {upload}=require('../middleware/multer')
+
+
 module.exports.tweetCreate = (req,res)=>{
   res.render('partials/post.ejs')
 }
