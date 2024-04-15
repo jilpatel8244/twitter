@@ -4,7 +4,7 @@ const logger = require("../../logger/logger");
 const passport = require("passport");
 require("../middleware/passport");
 const bookmarkRoute = require("./bookmark.routes");
-const { get_editprofile } = require("../controller/editprofile.controller");
+const { get_editprofile, post_updateProfile } = require("../controller/editprofile.controller");
 const exploreroute = require("../routes/explore.routes");
 // const post = require("./post.routes.js");
 // const { get_registration, post_registration } = require('../controller/registration');
@@ -45,12 +45,14 @@ router.get("/forgotpassword", forgotpassword);
 router.post("/verify_email", verify_user_byemail);
 // router.post("/resetpasswordl", resetpassword);
 
-router.get("/editprofile/:id", get_editprofile);
+router.get("/editprofile", get_editprofile);
+router.post("/updateProfile", post_updateProfile);
+
 // router.use('/tweetPost', post)
 router.use("/explore", exploreroute);
 
 router.use('/bookmark', passport.authenticate('jwt', { session: false }), bookmarkRoute);
-router.use('/like', passport.authenticate('jwt', { session: false }), likeRoute);
+// router.use('/like', passport.authenticate('jwt', { session: false }), likeRoute);
 
 
 module.exports = router;
