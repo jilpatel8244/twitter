@@ -50,9 +50,16 @@
               <span id="dobvalidation"></span>
               <div class="flex items-center justify-between mt-4">
                 <p class="px-6 py-2 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-black rounded-lg hover:bg-gray-900 focus:outline-none focus:ring focus:ring-gray-300 focus:ring-opacity-50"
-                  onclick="register()">
+                  onclick="register()" id="submit">
                   Sign In
                 </p>
+
+
+                <div id="link">
+
+                  <a href="#" class="block w-full px-4 py-2 mt-2 text-gray-700  " id="linka">
+                    hello</a>
+                </div>
 
               </div>
             </form>
@@ -62,6 +69,11 @@
     </div>
   </section>
   <script>
+
+    let link = document.getElementById("link");
+
+    link.style.display = "none"
+
     function registervalidate() {
       let name = document.getElementById("name").value;
       let username = document.getElementById("username").value;
@@ -164,11 +176,24 @@
 
         console.log(response);
 
-
+        let emailvalidation = document.getElementById("emailvalidation");
         if (response.isvalidate == false) {
-          var emailvalidation = document.getElementById("emailvalidation");
-          emailvalidation.innerHTML = "plese enter valid mail"
 
+          emailvalidation.innerHTML = "plese enter valid mail"
+        }
+        else {
+          emailvalidation.innerHTML = ""
+
+          let link = document.getElementById("link");
+          let linka = document.getElementById("linka");
+          let verify = document.getElementById("submit");
+          verify.style.display = "none"
+          link.style.display = "block"
+          let email = document.getElementById("email").value;
+          let code = response.activationCode
+          let activationlink = window.location.origin + `/createPassword?email=${email}&activecode=${code}`
+          linka.innerText = activationlink
+          linka.href = activationlink
 
 
         }
