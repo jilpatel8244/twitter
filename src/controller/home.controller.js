@@ -25,7 +25,7 @@ ORDER BY tweets.created_at DESC;
 `;
 
   const [rows] = await connection.execute(sql);
-  console.log(rows[0].id)
+
   res.render('../views/pages/home', { tweets: rows });
 } 
 
