@@ -9,6 +9,8 @@ const {
   getNotifications,
 } = require("../controller/notification.controller");
 
-router.get("/notification",passport.authenticate('jwt', { session: false }), notification);
-router.get("/getnotification",passport.authenticate('jwt', { session: false }), getNotifications);
+// router.get("/notification",passport.authenticate('jwt', { session: false }), notification);
+
+
+router.get("/notification",passport.authenticate('jwt', { session: false }), getNotifications);
 module.exports = router;
