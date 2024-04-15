@@ -121,9 +121,9 @@ exports.getNotifications = async (req, res) => {
   res.status(200).json({
     success: true,
     message: "in X notification",
-    login,
-    follow,
-    like,
-    comments,
+    // login,
+    // follow,
+    // like,
+    // comments,
   });
 };

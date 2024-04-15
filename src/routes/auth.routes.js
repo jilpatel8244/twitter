@@ -6,6 +6,8 @@ require("../middleware/passport");
 const bookmarkRoute = require("./bookmark.routes");
 const { get_editprofile, post_updateProfile } = require("../controller/editprofile.controller");
 const exploreroute = require("../routes/explore.routes");
+const post = require("./tweet.routes.js");
+// const { get_registration, post_registration } = require('../controller/registration');
 // const post = require("./post.routes.js");
 const { get_registration, post_registration } = require('../controller/registration');
 const { getPassword, postPassword } = require("../controller/password");
