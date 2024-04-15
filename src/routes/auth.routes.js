@@ -7,7 +7,7 @@ const bookmarkRoute = require("./bookmark.routes");
 const { get_editprofile } = require("../controller/editprofile.controller");
 const exploreroute = require("../routes/explore.routes");
 // const post = require("./post.routes.js");
-// const { get_registration, post_registration } = require('../controller/registration');
+const { get_registration, post_registration } = require('../controller/registration');
 const { getPassword, postPassword } = require("../controller/password");
 const { forgotpassword } = require("../controller/auth.controller");
 const { resetpassword } = require("../controller/resetpassword");
@@ -51,11 +51,11 @@ router.get('/password', getPassword);
 router.post('/password', postPassword);
 
 router.get("/editprofile", get_editprofile);
-router.use('/tweetPost', post)
+// router.use('/tweetPost', post)
 router.use("/explore", exploreroute)
 
 router.use('/bookmark', passport.authenticate('jwt', { session: false }), bookmarkRoute);
-router.use('/like', passport.authenticate('jwt', { session: false }), likeRoute);
+// router.use('/like', passport.authenticate('jwt', { session: false }), likeRoute);
 
 
 module.exports = router;
