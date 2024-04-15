@@ -8,6 +8,6 @@ const router = express.Router();
 
 router.get("/", getExplorePage)
 
-router.get("/" , )
+// router.get("/" , )
 
 module.exports = router;
