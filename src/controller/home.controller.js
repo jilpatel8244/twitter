@@ -19,8 +19,8 @@ END as time,
   COALESCE(medias.media_url, 'https://cdn.pixabay.com/photo/2016/05/05/02/37/sunset-1373171_1280.jpg') as media_url
 FROM users
 JOIN tweets ON users.id = tweets.user_id
-LEFT JOIN medias ON tweets.id = medias.tweet_id
-WHERE users.is_active = 1 AND tweets.is_posted
+LEFT JOIN medias ON tweets.id = medias.tweet_id = 1
+WHERE users.is_active = 1 AND tweets.is_posted = 1
 ORDER BY tweets.created_at DESC;
 `;
 

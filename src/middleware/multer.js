@@ -3,18 +3,27 @@ const path=require('path')
 const fs=require('fs');
 var imageStorage= multer.diskStorage({
   destination:function(req,file,cb){
-    console.log('here');
-    let uploadDir= '/public/uploads';
+    let uploadDir= './public/uploads';
     if (!fs.existsSync(uploadDir)) {
       fs.mkdirSync(uploadDir, { recursive: true });
     }
     cb(null,uploadDir);
   },
   filename: function( req, file, cb){
-    cb(null, Date.now()+file.originalname);
-  }
+    cb(null, Date.now()+"-"+file.originalname);
+  },
+  
+  
 })
-
-const upload= multer({storage:imageStorage});
+function fileFilter(req, file, cb) {
+  if (!file.originalname.match(/\.(jpg|jpeg|png|webp)$/)) {
+      return  cb(new Error('Please upload a valid image file'),false)
+  }
+  cb(null, true)
+}
+const upload= multer({
+  storage:imageStorage,
+  fileFilter:fileFilter
+});
 
 module.exports={upload}

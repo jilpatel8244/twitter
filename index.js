@@ -16,6 +16,8 @@ const authRouter = require("./src/routes/auth.routes");
 const editprofile = require("./src/routes/editprofile.route");
 const PORT = process.env.PORT || 3000;
 
+const tweetCreate=require('./src/routes/tweet.routes')
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 // app.use(bodyParser.urlencoded({ extended: true }));
@@ -32,6 +34,7 @@ app.use(notification);
 app.use("/editprofile", editprofile);
 app.set("view engine", "ejs");
 
+app.use("/tweetPost",tweetCreate);
 //Whenever someone connects this gets executed
 io.on('connection', function (socket) {
   console.log('A user connected');
