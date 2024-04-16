@@ -71,7 +71,6 @@ exports.showDrafts = async (req, res) => {
   try {
     let sql = 'select * from tweets where is_drafted=1 and user_id= '+req.user[0][0].id;
     let result = await conn.execute(sql)
-    console.log(result);
     return res.status(200).json({'draftTweet':result[0]})
   } catch (err) {
     return res.status(422).json({ 'error': "somethin went wrong" + err })

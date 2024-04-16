@@ -1,19 +1,16 @@
 const express = require("express");
 const router = express.Router();
-const { getHome } = require('../controller/home.controller');
-const { likeUnlikeHandler } = require("../controller/likeUnlikeHandler");
-const { getAllBookmarks } = require("../controller/getAllBookmarks.controller");
-const { bookmarkUnbookmarkHandler } = require("../controller/bookmarkUnbookmarkHandler.controller");
-const { get_retweet ,post_retweet} = require("../controller/retweet.controller");
+const passport = require("passport");
+const { getHome,likeUnlikeHandler,bookmarkUnbookmarkHandler,comment } = require('../controller/home.controller');
+
 
 
 router.get("/", (req, res) => {
   res.render("pages/index");
 });
-router.get("/allbookmark", getAllBookmarks);
-router.post("/blaa", bookmarkUnbookmarkHandler)
-
+router.post("/home_bookamrkUnbookmarkHandler", bookmarkUnbookmarkHandler)
 router.post("/like", likeUnlikeHandler);
-router.get("/home", getHome);
+router.get("/home", passport.authenticate('jwt', { session: false }), getHome);
+router.post('/comments',passport.authenticate('jwt', { session: false }), comment);
 
 module.exports = router;

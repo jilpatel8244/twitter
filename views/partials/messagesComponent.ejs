@@ -1,4 +1,4 @@
-<section class="w-3/5" style="max-width:600px;">
+<section class="w-3/5 border-x border-gray-200" >
     <!--Content (Center)-->
         <aside>
             <div class="flex">
@@ -21,14 +21,14 @@
         </aside>
 
         <ul class="list-none">
-            <li>
-                <article class=" transition duration-350 ease-in-out" id="allTweets">
+            <article class=" transition duration-350 ease-in-out" id="allTweets">
                     <!-- all followers list -->
-                    <% allFollowers.forEach((element, index) => { %>
+                <% allFollowers.forEach((element, index) => { %>
+                    <li>
                         <%- include('./userComponentOnMessages.ejs', {follower: element, user: user}) %>
-                    <% }) %>
-                </article>
-            </li>
+                    </li>
+                <% }) %>
+            </article>
         </ul>
 
 </section>

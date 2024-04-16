@@ -61,22 +61,168 @@
       verifiedBtn.style.color = "black";
     });
 
-    document.addEventListener("DOMContentLoaded", async () => {
-      const loadNotifications = async () => {
-        try {
-          var url = window.location.origin + "/notification";
-          const response = await fetch(url);
-          console.log(response);
-          const notifications = await response.json();
-          console.log(notifications);
-          // Assuming the notifications are returned as JSON from the backend
-        } catch (error) {
-          console.error("Error loading notifications:", error);
+    async function fetchNotificatons() {
+      try {
+        let url = window.location.origin + "/notification";
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error("Failed to fetch notifications");
         }
-      };
-      // // Example: Trigger loading notifications when a button is clicked
-      alluserBtn.addEventListener("click", loadNotifications);
-      alluserContent.innerHTML = ""; // Clear previous content
-    });
+        const notifications = await response.json();
+        diplayNotifications(notifications);
+      } catch (error) {
+        console.error("Error while fetching notifications", error);
+      }
+
+      function diplayNotifications(notifications) {
+        const notificationContainer = document.getElementById("allusercontent");
+        notificationContainer.innerHTML = "";
+        let data = notifications.notifications;
+
+        data.forEach((notification) => {
+          let notificationHTML = "";
+          switch (notification.type) {
+            case "Follow":
+              notificationHTML = `
+              <div
+        class="  w-full px-4 py-2 border-b border-gray-200 cursor-pointer hover:bg-gray-100 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
+      >
+        <div class="flex">
+          <img
+            class="w-10 h-10 p-1 rounded-full"
+            src="/assets/user-icon.png"
+            alt="Bordered avatar"
+          />
+          <img
+            class="w-10 h-10 ml-2 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500"
+            src="/assets/user.png"
+            alt="Bordered avatar"
+          />
+          <div class="notification mt-2 flex flex-col ml-2">
+            <span>${notification.username} followed you</span>
+          </div>
+        </div>`;
+              break;
+            case "Comment":
+              notificationHTML = `
+      <div
+        class="block w-full px-4 py-2 border-b border-gray-200 cursor-pointer hover:bg-gray-100 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
+      >
+        <div class="flex">
+          <img
+            class="w-15 h-10 p-1 rounded-full"
+            src="/assets/message.png"
+            alt="like icon"
+          />
+          <img
+            class="w-10 h-10 ml-2 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500"
+            src="/assets/user.png"
+            alt="Bordered avatar"
+          />
+
+          <div class="notification ml-2 flex flex-col mt-2">
+            <span>${notification.username} commented on your post</span>
+          </div>
+        </div>
+        <div class="ml-2 mt-2"> ${notification.tweet_content}</div>
+      </div>
+ 
+        `;
+              break;
+            case "Like":
+              notificationHTML = `
+      <div
+        class="block w-full px-4 py-2 border-b border-gray-200 cursor-pointer hover:bg-gray-100 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
+      >
+        <div class="flex">
+          <img
+            class="w-10 h-10 p-1 rounded-full"
+            src="/assets/heart_like.png"
+            alt="like icon"
+          />
+          <img
+            class="w-10 h-10 ml-2 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500"
+            src="/assets/user.png"
+            alt="Bordered avatar"
+          />
+
+          <div class="ml-2 flex flex-col mt-2">
+            <span>${notification.username} liked your post</span>
+          </div>
+        </div>
+        <div class="ml-2 mt-2">${notification.tweet_content}</div>
+      </div>`;
+              // ${notification.followed_username}
+              break;
+              case "Password_reset":
+              notificationHTMl = `
+      <div
+        class="  w-full px-4 py-2 border-b border-gray-200 cursor-pointer hover:bg-gray-100 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
+      >
+        <div class="flex">
+          <img
+            class="w-10 h-10 p-1 rounded-full"
+            src="/assets/lock.png"
+            alt="Bordered avatar"
+          />
+          <div class="mt-2">
+            Your password was reset on your account. Based on this change,
+            additional changes to your account may be restricted temporarily.
+          </div>
+        </div>
+      </div>`;
+              break;
+            case "Login":
+              notificationHTML = `  
+      <div
+        class=" w-full px-4 py-2 border-b border-gray-200 cursor-pointer hover:bg-gray-100 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
+      >
+        <div class="flex">
+          <img
+            class="w-10 h-10 p-1 rounded-full"
+            src="/assets/lock.png"
+            alt="Bordered avatar"
+          />
+          <div class="mt-2">
+            There was a login to your account  @ ${notification.username}  from a
+            new device on ${notification.created_at}. Review it now.
+          </div>
+        </div>
+      </div>`;
+              break;
+            case "Retweet":
+              notificationHTML = ` <div
+        class="block w-full px-4 py-2 border-b border-gray-200 cursor-pointer hover:bg-gray-100 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
+      >
+        <div class="flex">
+          <img
+            class="w-15 h-10 p-1 rounded-full"
+            src="/assets/retweet.jpg"
+            alt="retweet icon"
+          />
+          <img
+            class="w-10 h-10 ml-2 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500"
+            src="/assets/user.png"
+            alt="Bordered avatar"
+          />
+
+          <div class="notification ml-2 flex flex-col mt-2">
+            <span>${notification.username} retweet your post</span>
+          </div>
+        </div>
+        <div class="ml-2 mt-2"> ${notification.tweet_content}</div>
+      </div>
+ `
+           
+            default:
+              console.warn(`Unknown notification type: ${notification.type}`);
+          }
+
+          notificationContainer.innerHTML += notificationHTML;
+        });
+      }
+    }
+    // window.addEventListener("load", fetchNotificatons);
+    window.addEventListener("DOMContentLoaded", fetchNotificatons);
   </script>
 </html>

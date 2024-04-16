@@ -25,7 +25,6 @@ exports.set_password = async (req, res) => {
     if (!req.body.inputEmail && !req.body.inputPassword && !req.body.activeCode) {
         return res.json({ isvalidate_user: false })
     }
-    console.log(req.body);
 
 
     let { inputEmail, inputPassword, activeCode } = req.body;

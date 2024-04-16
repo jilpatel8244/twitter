@@ -1,0 +1,197 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+        integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>X</title>
+
+    <style>
+        #search {
+            border: 1px #1D9BF0;
+            margin-top: 2%;
+            border-radius: 50px;
+            background-color: #EFF3F4;
+            height: 40px;
+            width: 70%;
+            padding-left: 5%;
+
+        }
+
+        .boxmain {
+            margin-top: 100px;
+        }
+
+        /* .search_con {
+
+            width: 60%;
+
+            border: 1px solid black;
+            display: flex;
+            flex-direction: column;
+            position: a;
+        }
+
+    
+      
+
+        
+        } */
+
+
+        .fix {
+            position: fixed;
+            background-color: white;
+
+            width: 50%;
+            top: 0;
+
+        }
+
+        .heading {
+            color: black;
+            font-weight: bolder;
+        }
+
+        .topmain {
+            display: flex;
+            width: 100%;
+            position: absolute;
+        }
+
+        .sidebar {
+            width: 25%;
+            padding-left: 5%;
+
+        }
+
+        .main {
+            width: 50%;
+            position: relative;
+
+        }
+
+        .asidebar {
+            width: 25%;
+        }
+
+        .btn1 {
+            width: 30%;
+
+        }
+
+        .btn1:hover {
+            background-color: #E6E7E7;
+            border-bottom: 5px solid #1D9BF0;
+            ;
+        }
+
+        .btn {
+            display: flex;
+            gap: 80px;
+
+            font-size: larger;
+            color: #536471;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="topmain">
+
+
+        <div class="sidebar">
+            <%- include('../partials/sidebar.ejs') %>
+        </div>
+
+
+
+        <div class="main">
+            <%- include('../partials/content.ejs') %>
+        </div>
+
+
+
+        <div class="asidebar">
+
+            <%- include('../partials/aside.ejs')%>
+        </div>
+
+
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <style>
+        .overflow-y-auto::-webkit-scrollbar,
+        .overflow-y-scroll::-webkit-scrollbar,
+        .overflow-x-auto::-webkit-scrollbar,
+        .overflow-x::-webkit-scrollbar,
+        .overflow-x-scroll::-webkit-scrollbar,
+        .overflow-y::-webkit-scrollbar,
+        body::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Hide scrollbar for IE, Edge and Firefox */
+        .overflow-y-auto,
+        .overflow-y-scroll,
+        .overflow-x-auto,
+        .overflow-x,
+        .overflow-x-scroll,
+        .overflow-y,
+        body {
+            -ms-overflow-style: none;
+            /* IE and Edge */
+            scrollbar-width: none;
+            /* Firefox */
+        }
+
+        .bg-dim-700 {
+            --bg-opacity: 1;
+            background-color: white;
+        }
+
+        html,
+        body {
+            margin: 0;
+            background-color: white;
+        }
+
+        svg.paint-icon {
+            fill: currentcolor;
+        }
+    </style>
+
+
+</body>
+
+
+
+<script>
+
+
+
+    let top = document.getElementById("")
+</script>
+
+</html>

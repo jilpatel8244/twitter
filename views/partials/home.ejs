@@ -37,6 +37,7 @@
                                 class="mt-1 group flex items-center text-blue-400 px-2 py-2 text-base leading-6 font-medium rounded-full hover:bg-sky-100 ">
                                 <svg class="text-center h-7 w-6" fill="none" stroke-linecap="round"
                                     stroke-linejoin="round" stroke-width="2" stroke="currentColor" viewBox="0 0 24 24">
+                                
                                     <path
                                         d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z">
                                     </path>
@@ -106,8 +107,10 @@
                                         alt="">
                                 </div>
                                 <div class="ml-3">
-                                    <p class="text-base leading-6 font-medium ">
-                                        <%= tweet.name %>
+                                    <p class="text-base leading-6 font-medium">
+                                        <%= tweet.name %> <span class="text-gray-400">
+                                                <%= tweet.username %> .
+                                            </span>
                                             <span
                                                 class="text-sm leading-5 font-medium text-gray-400  transition ease-in-out duration-150">
                                                 <%= tweet.time %>
@@ -121,7 +124,6 @@
                         <p class="text-base width-auto font-medium">
                             <%= tweet.content %>
                         </p>
-
                         <div class="size-fit pr-6 pt-3">
                             <div class="">
                                 <img class="rounded" src="./uploads/<%= tweet.media_url %>" alt="">
@@ -132,7 +134,8 @@
                             <div class="flex items-center py-4">
                                 <input type="hidden" name="tweet_id" value="<%= tweet.tweet_id %>">
                                 <!-- comments span tag -->
-                                <div class="flex-1 text-center">
+                                <div onclick="show('<%= tweet.tweet_id %>')" class="flex-1 text-center"
+                                    data-modal-target="crud-modal" data-modal-toggle="crud-modal">
                                     <span
                                         class="w-12 mt-1 group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full  hover:text-blue-400">
                                         <svg class="text-center h-6 w-6" fill="none" stroke-linecap="round"
@@ -145,8 +148,47 @@
                                     </span>
                                 </div>
 
-                                <!-- retweet span tag -->
-                                <div class="flex-1 text-center py-2 m-2" id="defaultModalButton">
+                                <!-- modal -->
+                                <div id="crud-modal" tabindex="-1" aria-hidden="true"
+                                    class="comments_<%= tweet.tweet_id %> hidden overflow-y-auto overflow-x-hidden top-0 -right-40 absolute justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                                    <div
+                                        class="relative w-full max-w-md max-h-full mx-auto my-10 h-full md:h-auto ml-[35%]">
+                                        <!-- Modal content -->
+                                        <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+
+                                            <!-- Modal body -->
+                                            <form
+                                                class="p-4 md:p-5">
+                                                <div class="flex justify-end">
+                                                    <span onclick="hide('<%= tweet.tweet_id %>')">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                            viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                                            class="w-6 h-6">
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                d="M6 18 18 6M6 6l12 12" />
+                                                        </svg>
+                                                    </span>
+
+                                                </div>
+                                                <div class="grid gap-4 mb-4 grid-cols-2">
+
+                                                    <div class="col-span-2">
+                                                        <textarea name="comment" id="description" rows="4"
+                                                            class="block p-2.5 w-full text-xl text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                                            placeholder="Post your reply"></textarea>
+                                                    </div>
+                                                </div>
+
+                                                <div class="flex justify-end" onclick="submitComment('<%= tweet.tweet_id %>'); return false;">
+                                                    <span
+                                                        class="text-white inline-flex items-center bg-sky-500 hover:bg-sky-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                                        Reply</span>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class=" flex-1 text-center py-2 m-2" id="defaultModalButton">
                                     <span
                                         class="w-12 mt-1 group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full  hover:text-green-600">
                                         <svg class="text-center h-7 w-6" fill="none" stroke-linecap="round"
@@ -198,8 +240,9 @@
                                 <!-- bookmark span tag -->
                                 <div class="flex-1 text-center py-2 m-2 bookmark_<%= tweet.tweet_id %>"
                                     onclick="bookmarkHandler('<%= tweet.tweet_id %>')">
-                                    <span
-                                        class="w-12 mt-1 group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full  hover:text-blue-400">
+                                    <span <%=tweet.tweet_id %>
+                                        class="w-12 mt-1 group flex items-center text-gray-500 px-3 py-2 text-base
+                                        leading-6 font-medium rounded-full hover:text-blue-400">
                                         <% if(tweet.isBookmarked) { %>
                                             <svg class="text-center h-7 w-6 fill-blue-300 text-blue-800" fill="none"
                                                 stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -235,8 +278,8 @@
                                 </div>
                             </div>
                         </div>
-                       
-                       
+
+
                     </div>
                     <hr class="border-gray-200">
                 </article>
@@ -247,3 +290,4 @@
 <script src="./js/like.script.js"></script>
 <script src="./js/bookmark.script.js"></script>
 <script src="./js/tweet.script.js"></script>
+<script src="./js/comment.script.js"></script>
