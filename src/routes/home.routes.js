@@ -12,8 +12,6 @@ router.get("/", (req, res) => {
 });
 router.get("/allbookmark", getAllBookmarks);
 router.post("/blaa", bookmarkUnbookmarkHandler)
-
-router.post("/like", likeUnlikeHandler);
 router.get("/home", getHome);
 
 module.exports = router;
