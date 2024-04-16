@@ -14,7 +14,6 @@ exports.get_registration = async (req, res) => {
 exports.post_registration = async (req, res) => {
   let { name, email, dob, username } = req.body;
 
-  console.log(req.body);
   let activationCode = randomCode(12);
   let salt = randomCode(4);
   let check_registration_query = `SELECT count(*) as count  FROM users where email = ?;`

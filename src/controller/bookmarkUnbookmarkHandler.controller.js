@@ -3,8 +3,7 @@ const connection = require("../../config/connection");
 
 exports.bookmarkUnbookmarkHandler = async (req, res) => {
     try {
-        // console.log(req.body);
-        // console.log(req.user[0][0].id);
+        console.log(req.user);
 
         let {tweetId} = req.body;
         let userId = req.user[0][0].id;
