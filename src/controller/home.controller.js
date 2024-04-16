@@ -2,7 +2,7 @@ const { log } = require("winston");
 const connection = require("../../config/connection");
 
 exports.getHome = async (req, res) => {
-  let sql = `
+    let sql = `
 
   SELECT users.username,
   users.id as user_id, 
@@ -29,14 +29,16 @@ ORDER BY tweets.created_at DESC;
   const [rows] = await connection.execute(sql);
   console.log(rows);
 
-  res.render('../views/pages/home', { tweets: rows });
-} 
+
+    console.log(rows);
+
+    res.render('../views/pages/home', { tweets: rows });
+}
 
 
 exports.likeUnlikeHandler = async (req, res) => {
   try {
       let {tweetId} = req.body.tweet_id;
-      console.log(req.body);
       let userId = req.user[0][0].id;
 
       let [result] = await connection.query('select * from tweet_likes where tweet_id = ? and user_id = ?', [tweetId, userId]);
@@ -76,17 +78,11 @@ exports.bookmarkUnbookmarkHandler = async (req, res) => {
       
       let [result] = await connection.query('select * from bookmarks where tweet_id = ? and user_id = ?', [tweetId, userId]);
 
-      if (!result.length) {
-          // make new entry
-          await connection.query('insert into bookmarks (tweet_id, user_id, status) values (?, ?, ?)', [tweetId, userId, 1]);
+        
 
-          return  res.status(200).json({
-              success: true,
-              bookmarkStatus: 1
-          })
-      } else {
-          // update status
-          await connection.query('update bookmarks set status = ? where tweet_id = ? and user_id = ?', [(parseInt(result[0].status)) ? 0 : 1, tweetId, userId]);
+        if (!result.length) {
+            // make new entry
+            await connection.query('insert into bookmarks (tweet_id, user_id, status) values (?, ?, ?)', [tweetId, userId, 1]);
 
           return res.status(200).json({
               success: true,

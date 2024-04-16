@@ -6,8 +6,6 @@ const upload = multer({ dest: "public/uploads" });
 
   exports.get_editprofile = async (req,res)=>{
   const userId = req.query.id;
-    console.log(userId);
-    console.log(req.query);
  
   if (!userId) {
       res.send('User ID is required');
@@ -18,7 +16,6 @@ try {
   const show_detail = 'SELECT id, username, bio, date_of_birth FROM users WHERE id = ?';
   let [show_detail_data] = await connection.query(show_detail,[userId])
 
-  console.log(show_detail_data);
 
   res.render('pages/editprofile', { profileData : show_detail_data[0] });
 } catch (error) {
@@ -30,11 +27,9 @@ try {
 
 // app.post('/updateProfile', (req, res) => {
   exports.post_updateProfile = async (req,res)=>{
-  console.log("body is " , req.body);
 
 
   const userId = req.body.userId;
-  console.log(userId+"-hello");
   const { username, bio, dob } = req.body;
   
 

@@ -25,7 +25,6 @@ exports.verify_user_byemail = async (req, res) => {
 
     let result = await email_verify(input_email)
 
-    console.log(result[0].count);
     if (result[0].count == 0) {
         return res.json({ isvalidate_user: false })
     }

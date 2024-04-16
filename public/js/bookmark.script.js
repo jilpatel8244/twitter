@@ -29,7 +29,6 @@ async function bookmarkHandler(tweetId) {
                 newDiv.innerHTML = `<div>No saved post</div>`;
                 document.getElementById('allTweets').appendChild(newDiv);
             }
-
         }
         // console.log(response);
     } else {

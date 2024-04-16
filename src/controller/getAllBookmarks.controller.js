@@ -2,6 +2,8 @@ const connection = require("../../config/connection");
 
 exports.getAllBookmarks = async (req, res) => {
     try {
+        // console.log(req.user);
+
         let sql = `select tweets.id as tweet_id, tweets.content, tweets.created_at, users.name, users.username, tweet_likes.status as isLiked, medias.media_url from bookmarks 
         left join tweets on bookmarks.tweet_id = tweets.id
         left join users on tweets.user_id = users.id
@@ -10,18 +12,12 @@ exports.getAllBookmarks = async (req, res) => {
         where bookmarks.user_id = '${req.user[0][0].id}' and bookmarks.status = '1'
         ;`
         
-
-        console.log(req.user[0][0].id);
         let [allBookmarkTweets] = await connection.query(sql);
-
-        console.log(allBookmarkTweets);
 
         allBookmarkTweets = allBookmarkTweets.map((element) => {
             element.isBookmarked = 1;
             return element;
         })
-
-        // console.log(allBookmarkTweets);
 
         res.render('pages/bookmark', {
             allBookmarkTweets: allBookmarkTweets
