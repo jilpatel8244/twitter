@@ -1,6 +1,6 @@
 <!--first reply start-->
 <%if(!replyData){%>
-  <section class="w-full border border-gray-200" style="max-width:600px;">
+  <!-- <section class="w-full border border-gray-200" style="max-width:600px;">
   
     <div class="flex p-4 pb-0">
       <a href="#" class="group ">
@@ -113,7 +113,8 @@
   
     </div>
     <hr class="border-gray-600">
-  </section>
+  </section> -->
+    <div class="w-full text-center">There is No data to show</div>
   <%}%>
   
   <!--First reply-->
@@ -131,10 +132,10 @@
             </div>
             <div class="ml-3">
               <p class="text-base leading-6 font-medium text-black">
-                <%=replyData[0].name%>
+                <%=tweetData[0].name%>
                 <span
                   class="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 transition ease-in-out duration-150">
-                  @<%=replyData[0].username%>. <%=replyData[0].created_at%>
+                  @<%=tweetData[0].username%>. <%=replyData[0].created_at%>
                 </span>
               </p>
             </div>
@@ -143,7 +144,7 @@
       </div>
       <div class="pl-16">
         <p class="text-base width-auto font-medium text-black ">
-          <%=replyData[0].retweet_message%><span class="text-blue-400">#100DaysOfCode</span>
+          <%=tweetData[0].content%><span class="text-blue-400">#100DaysOfCode</span>
           I was wondering what I can do with <span class="text-blue-400">#tailwindcss</span>, so just started building
           Twitter UI using Tailwind and so far it looks so promising. I will post my code after completion.
           [07/100]
@@ -249,10 +250,10 @@
             </div>
             <div class="ml-3">
               <p class="text-base leading-6 font-medium text-black">
-                Sonali Hirave
+                <%=replyData[0].name%>
                 <span
                   class="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 transition ease-in-out duration-150">
-                  @ShonaDesign . 16 April
+                  @<%=replyData[0].username%> . <%=replyData[0].tweet_Date%>
                 </span>
               </p>
             </div>
@@ -261,17 +262,14 @@
       </div>
       <div class="pl-16">
         <p class="text-base width-auto font-medium text-black ">
-          Day 07 of the challenge <span class="text-blue-400">#100DaysOfCode</span>
-          I was wondering what I can do with <span class="text-blue-400">#tailwindcss</span>, so just started building
-          Twitter UI using Tailwind and so far it looks so promising. I will post my code after completion.
-          [07/100]
-          <span class="text-blue-400"> #WomenWhoCode #CodeNewbie</span>
+          <%=replyData[0].retweet_message%>
+          <span class="text-blue-400"> </span>
         </p>
     
         <div class="md:flex pr-6 pt-3">
-          <img class="rounded-lg w-full h-64"
-            src="https://images.unsplash.com/photo-1556740738-b6a63e27c4df?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=448&q=80"
-            alt="Woman paying for a purchase">
+          <!-- <img class="rounded-lg w-full h-64"
+            src=""
+            alt=""> -->
         </div>
     
         <div class="flex">
