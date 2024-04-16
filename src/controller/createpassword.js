@@ -2,21 +2,12 @@ const connection = require("../../config/connection")
 
 let md5 = require('md5');
 
-exports.resetPassword = async (req, res) => {
+exports.getCreatepassword = async (req, res) => {
 
     res.render("pages/resetpassword")
 
 
 }
-
-
-exports.verify = async (req, res) => {
-
-    res.render("pages/forgot_password")
-
-
-}
-
 
 
 
@@ -25,7 +16,6 @@ exports.set_password = async (req, res) => {
     if (!req.body.inputEmail && !req.body.inputPassword && !req.body.activeCode) {
         return res.json({ isvalidate_user: false })
     }
-
 
     let { inputEmail, inputPassword, activeCode } = req.body;
 
@@ -39,7 +29,7 @@ exports.set_password = async (req, res) => {
         return result;
     }
 
-    let result = await get_data(inputEmail)
+    let [result] = await get_data(inputEmail)
 
 
 

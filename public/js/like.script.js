@@ -10,7 +10,7 @@ async function likeHandler(tweetId) {
     });
 
     let response = await data.json();
-
+    
     if (response.success == true) {
         let likeImg = document.querySelector(`.like_${tweetId}`);
 
@@ -19,8 +19,7 @@ async function likeHandler(tweetId) {
         } else {
             likeImg.classList.remove('fill-red-600', 'text-red-600');
         }
-
-        console.log(response);
+        
     } else {
         console.log(response.message);
     }

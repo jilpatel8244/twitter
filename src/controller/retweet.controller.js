@@ -1,13 +1,10 @@
 const logger = require("../../logger/logger");
 const conn=require('../../config/connection.js')
-const {upload}=require('../middleware/multer')
-
-
-module.exports.tweetCreate = (req,res)=>{
+module.exports.get_retweet = (req,res)=>{
   res.render('partials/post.ejs')
 }
 
-module.exports.insertTweet=async(req,res)=>{
+module.exports.post_retweet=async(req,res)=>{
     let {content}=req.body;
     let {status}= req.query;
     if(content.trim() == ""){

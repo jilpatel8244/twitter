@@ -8,13 +8,19 @@ const io = new Server(server);
 
 const cookieParser = require("cookie-parser");
 const GetProfileRouter = require("./src/routes/profile.routes");
-// const body_parser = require("body-parser");
+const bodyParser = require("body-parser");
 const homeRouter = require("./src/routes/home.routes");
-// const authRouter = require('./src/routes/auth.routes');
 const notification = require("./src/routes/notification.route");
-
+const exploreRoute = require("./src/routes/explore.routes")
 const authRouter = require("./src/routes/auth.routes");
 const connection = require("./config/connection");
+const editprofile = require("./src/routes/editprofile.route");
+const passport = require("passport");
+require("./src/middleware/passport");
+const bookmarkRoute = require("./src/routes/bookmark.routes");
+const likeRoute = require("./src/routes/like.routes");
+const messagesRoute = require("./src/routes/messages.routes");
+
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
@@ -26,9 +32,17 @@ app.use(express.static("public"));
 
 // app.use(authRouter);
 app.use(homeRouter);
+app.use("/explore", exploreRoute);
 app.use(authRouter);
 app.use(GetProfileRouter);
 app.use(notification);
+app.use("/editprofile", editprofile);
+app.use('/like', passport.authenticate('jwt', { session: false}), likeRoute);
+app.use('/bookmark', passport.authenticate('jwt', { session: false }), bookmarkRoute);
+app.use('/messages', passport.authenticate('jwt', { session: false }), messagesRoute);
+
+
+
 app.set("view engine", "ejs");
 
 //Whenever someone connects this gets executed

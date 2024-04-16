@@ -23,8 +23,6 @@ exports.getMessagesPage = async (req, res) => {
 
 exports.storeMessageHandler = async (req, res) => {
     try {
-        console.log(req.body);
-
         let { senderId, reciverId, message } = req.body;
 
         let sql = `insert into direct_messages (sender_id, receiver_id, content) values ( ?, ?, ? );`;

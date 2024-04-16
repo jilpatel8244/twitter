@@ -6,6 +6,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>X - messages</title>
     <link href="/css/output.css" rel="stylesheet" />
+    <style>
+        input:focus{
+            outline: none;
+        }
+
+        .sender-chat, .reciver-chat{
+            padding: 20px 20px;
+        }
+
+        .sender-chat span, .reciver-chat span{
+            padding: 15px 20px;
+            background-color: rgb(14 165 233);
+            color: white;
+            border-radius: 30px;
+        }
+
+        .active-user{
+            background-color: rgb(245, 248, 250);
+        }
+    </style>
 </head>
 
 <body>
@@ -16,19 +36,37 @@
                 <%- include('../partials/sidebar.ejs') %>
             </header>
             <main role="main">
-                <div class="flex" style="width: 990px;">
+                <div class="flex h-lvh" style="width: 990px;">
                     <%- include('../partials/messagesComponent.ejs') %>
 
+                    <div class="w-3/5 border-r border-gray-200 overflow-auto relative" id="user-display-and-chatting">
                         <div id="prev-chat-section">
-                            <div style="max-width:350px;">
+                            <div>
                                 <div class="overflow-y-auto fixed  h-screen">
                                     <h2>select to start the chat</h2>
                                 </div>
                             </div>
                         </div>
 
-                        <div id="chat-section" class="h-screen" style="display: none;">
-                            <div class="h-5/6 overflow-scroll" id="chat-container">
+                        <div id="chat-section" class="relative" style="display: none;">
+                            <div class="flex-1 mx-2 sticky top-0 text-black bg-white opacity-90">
+                                <h2 class="px-4 py-4 text-xl font-semibold " id="selectedUserName">name</h2>
+                            </div>
+                            <div id="reciver-user-info" class="border-b border-gray-200">
+                                <div class="flex flex-col items-center pb-11">
+                                    <div>
+                                        <img class="inline-block h-14 w-14 rounded-full"
+                                            src="https://pbs.twimg.com/profile_images/1121328878142853120/e-rpjoJi_bigger.png" alt="" />
+                                    </div>
+                                    <div>
+                                        <span class="text-black font-semibold" id="selectedUserName1">name</span>
+                                    </div>
+                                    <div>
+                                        <span class="text-black" id="selectedUserUsername">user name</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="h-5/6 py-5 " id="chat-container">
                                 <!-- <div class="text-right sender-chat">
                                     <p>jil</p>
                                 </div>
@@ -36,13 +74,16 @@
                                     <p>abhishek</p>
                                 </div> -->
                             </div>
-                            <div>
-                                <form id="messageForm">
-                                    <input type="text" name="message" id="message" placeholder="write message here">
-                                    <input type="submit" value="Send">
-                                </form>
+                            <div class="sticky bottom-0 py-2 bg-white">
+                                <div class="p-2 mx-4 border border-t-gray-200 rounded-xl" style="background-color: #eff3f4;">
+                                    <form id="messageForm" class="relative">
+                                        <input type="text" class="placeholder:text-gray-400 w-full" name="message" id="message" placeholder="Start a new message" style="background-color: #eff3f4;">
+                                        <input type="submit" value="Send" class="absolute bottom-0 right-0">
+                                    </form>
+                                </div>
                             </div>
                         </div>
+                    </div>
                 </div>
             </main>
         </div>
@@ -96,9 +137,22 @@
 
         let senderId = '<%= user %>';
         let reciverId;
+        let reciverName;
 
-        function openMessageBox(followerId) {
+        function openMessageBox(followerId, reciverName, reciverUsername, reciverImgUrl) {
             reciverId = followerId;
+
+            let allUsers = Array.from(document.querySelectorAll('ul li'));
+            allUsers.forEach((element) => {
+                element.classList.remove('active-user');
+            });
+
+            document.getElementById(followerId).parentElement.classList.add('active-user');
+
+
+            document.getElementById('selectedUserName').innerHTML = reciverName;
+            document.getElementById('selectedUserUsername').innerHTML = `@`+reciverUsername;
+            document.getElementById('selectedUserName1').innerHTML = reciverName;
 
             document.getElementById('prev-chat-section').style.display = 'none';
             document.getElementById('chat-section').style.display = 'block';
@@ -111,33 +165,36 @@
 
             let message = document.getElementById('message').value;
 
-            let url = window.location.origin + '/messages/storeMessage';
+            if (message) {
+                let url = window.location.origin + '/messages/storeMessage';
 
-            let data = await fetch(url, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    senderId: senderId,
-                    reciverId: reciverId,
-                    message: message
-                }),
-            });
+                let data = await fetch(url, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        senderId: senderId,
+                        reciverId: reciverId,
+                        message: message
+                    }),
+                });
 
-            let response = await data.json();
+                let response = await data.json();
 
-            if (response.success) {
+                if (response.success) {
 
-                document.getElementById('message').value = '';
+                    document.getElementById('message').value = '';
 
-                let newDiv = document.createElement('div');
-                newDiv.classList.add('text-right', 'sender-chat');
-                newDiv.innerHTML = `<p>${response.message.message}</p>`;
+                    let newDiv = document.createElement('div');
+                    newDiv.classList.add('text-right', 'sender-chat');
+                    newDiv.innerHTML = `<span>${response.message.message}</span>`;
 
-                document.getElementById('chat-container').appendChild(newDiv);
+                    document.getElementById('chat-container').appendChild(newDiv);
+                    scrollToBottom('user-display-and-chatting');
 
-                socket.emit('newChat', response.message);
+                    socket.emit('newChat', response.message);
+                }
             }
 
         })
@@ -147,9 +204,10 @@
             if (senderId == data.reciverId && reciverId == data.senderId) {
                 let newDiv = document.createElement('div');
                 newDiv.classList.add('reciver-chat');
-                newDiv.innerHTML = `<p>${data.message}</p>`;
+                newDiv.innerHTML = `<span>${data.message}</span>`;
     
                 document.getElementById('chat-container').appendChild(newDiv);  
+                scrollToBottom('user-display-and-chatting');
             }
         })
 
@@ -163,19 +221,25 @@
                 if (element.sender_id == senderId) {
                     let newDiv = document.createElement('div');
                     newDiv.classList.add('text-right', 'sender-chat');
-                    newDiv.innerHTML = `<p>${element.content}</p>`;
+                    newDiv.innerHTML = `<span>${element.content}</span>`;
 
                     document.getElementById('chat-container').appendChild(newDiv);
                 } else {
                     let newDiv = document.createElement('div');
                     newDiv.classList.add('reciver-chat');
-                    newDiv.innerHTML = `<p>${element.content}</p>`;
+                    newDiv.innerHTML = `<span>${element.content}</span>`;
         
                     document.getElementById('chat-container').appendChild(newDiv);  
                 }
+                scrollToBottom('user-display-and-chatting');
             });
         })
 
+
+        const scrollToBottom = (id) => {
+            const element = document.getElementById(id);
+            element.scrollTop = element.scrollHeight;
+        }
     </script>
 </body>
 

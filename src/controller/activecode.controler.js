@@ -6,7 +6,6 @@ exports.getActivecode = async (req, res) => {
 
 
   const uid = new ShortUniqueId({ length: 12 });
-  console.log("hello");
   let Activationcode = uid.rnd();
   let email = req.body.email;
   try {

@@ -1,15 +1,9 @@
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
-      integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    />
+    <link href="./css/output.css" rel="stylesheet" />
     <title>X</title>
   </head>
 
@@ -35,19 +29,12 @@
   <script>
     let alluserBtn = document.getElementById("alluser");
     let alluserContent = document.getElementById("allusercontent");
+
     let verifiedBtn = document.getElementById("verified");
     let verifiedContent = document.getElementById("verifiedcontent");
     let mentionBtn = document.getElementById("mention");
     let mentionContent = document.getElementById("mentioncontent");
 
-    verifiedBtn.addEventListener("click", function () {
-      alluserContent.style.display = "none";
-      mentionContent.style.display = "none";
-      verifiedContent.style.display = "block";
-      alluserBtn.style.color = "black";
-      mentionBtn.style.color = "black";
-      verifiedBtn.style.color = "blue";
-    });
     alluserBtn.addEventListener("click", function () {
       alluserContent.style.display = "block";
       mentionContent.style.display = "none";
@@ -56,6 +43,15 @@
       mentionBtn.style.color = "black";
       verifiedBtn.style.color = "black";
     });
+    verifiedBtn.addEventListener("click", function () {
+      alluserContent.style.display = "none";
+      mentionContent.style.display = "none";
+      verifiedContent.style.display = "block";
+      alluserBtn.style.color = "black";
+      mentionBtn.style.color = "black";
+      verifiedBtn.style.color = "blue";
+    });
+
     mentionBtn.addEventListener("click", function () {
       alluserContent.style.display = "none";
       mentionContent.style.display = "block";
@@ -63,6 +59,24 @@
       mentionBtn.style.color = "blue";
       alluserBtn.style.color = "black";
       verifiedBtn.style.color = "black";
+    });
+
+    document.addEventListener("DOMContentLoaded", async () => {
+      const loadNotifications = async () => {
+        try {
+          var url = window.location.origin + "/notification";
+          const response = await fetch(url);
+          console.log(response);
+          const notifications = await response.json();
+          console.log(notifications);
+          // Assuming the notifications are returned as JSON from the backend
+        } catch (error) {
+          console.error("Error loading notifications:", error);
+        }
+      };
+      // // Example: Trigger loading notifications when a button is clicked
+      alluserBtn.addEventListener("click", loadNotifications);
+      alluserContent.innerHTML = ""; // Clear previous content
     });
   </script>
 </html>
