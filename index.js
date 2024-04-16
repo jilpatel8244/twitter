@@ -22,7 +22,7 @@ const likeRoute = require("./src/routes/like.routes");
 const messagesRoute = require("./src/routes/messages.routes");
 
 const PORT = process.env.PORT || 3000;
-
+const tweetCreate=require('./src/routes/tweet.routes')
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 // app.use(bodyParser.urlencoded({ extended: true }));
@@ -45,6 +45,7 @@ app.use('/messages', passport.authenticate('jwt', { session: false }), messagesR
 
 app.set("view engine", "ejs");
 
+app.use("/tweetPost",tweetCreate);
 //Whenever someone connects this gets executed
 io.on('connection', function (socket) {
   console.log('A user connected');
