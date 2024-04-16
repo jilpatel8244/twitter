@@ -50,10 +50,10 @@
   </style>
 </head>
 
-<body>
+<body onload="fetchPosts()">
   <div class="container">
     <div class="p-relative h-screen flex" style="background-color: whitesmoke;">
-      <%- include('../partials/navigationbar.ejs') %>
+      <%- include('../partials/sidebar.ejs') %>
 
         <%if(profileData[0]){%>
           <div class="px-10 py-10 justify-center">
@@ -94,7 +94,7 @@
                   <div>
                     <div class="w-full bg-fit bg-no-repeat bg-center" style="height: 200px; background-image:
                   linear-gradient(to bottom, rgba(245, 246, 252, 0.52), rgba(206, 202, 202, 0.73)),
-                  url('/assets/camera.png');">
+                  url('<%=profileData[0].cover_img_url%>');">
 
                     </div>
                     <div class="w-full p-4">
@@ -105,7 +105,7 @@
                             <div style="height:9rem; width:9rem;" class="md rounded-full relative avatar">
                               <img style="height:9rem; width:9rem;"
                                 class="md rounded-full relative border-4 border-gray-900"
-                                src="/assets/user.png" alt="">
+                                src="<%=profileData[0].profile_img_url%>" alt="">
                               <div class="absolute"></div>
                             </div>
                           </div>
@@ -114,7 +114,7 @@
                         <div class="flex flex-col text-right">
                           <div
                             class="flex justify-center  max-h-max whitespace-nowrap focus:outline-none  focus:ring  rounded max-w-max border bg-transparent border-blue-500 text-blue-500 hover:border-blue-800 hover:border-blue-800 flex items-center hover:shadow-lg font-bold py-2 px-4 rounded-full mr-0 ml-auto">
-                            <a href="editprofile">Edit Profile</a>
+                            <a href="editprofile?id=2">Edit Profile</a>
                           </div>
 
                         </div>
@@ -187,10 +187,14 @@
 
                       <input type="button" value="Posts" onclick="fetchPosts()"
                         class="w-1/3 text-gray-600 py-4 px-6 block hover:text-blue-500 focus:outline-none">
-
+                      <% if(replyData){%>
                       <input type="button" value="Replies" onclick="fetchReplies()"
                         class="w-1/3 text-gray-600 py-4 px-6 block hover:text-blue-500 focus:outline-none">
-
+                        <%}%>
+                        <% if(!replyData){%>
+                          <input type="button" value="Replies" onclick="fetchRepliesNo()"
+                            class="w-1/3 text-gray-600 py-4 px-6 block hover:text-blue-500 focus:outline-none">
+                            <%}%>
                       <input type="button" value="Likes" onclick="fetchLikes()"
                         class="w-1/3 text-gray-600 py-4 px-6 block hover:text-blue-500 focus:outline-none">
 
@@ -368,7 +372,7 @@
   <script>
     function fetchPosts() {
       let tab = document.getElementById("tab");
-      tab.innerHTML = `<%- include('../partials/posts.ejs',{profileData}) %>`;
+      tab.innerHTML = `<%- include('../partials/posts.ejs',{profileData,commentData}) %>`;
       tab.removeAttribute("hidden");
       console.log("Hello From the Posts section");
     }
@@ -378,13 +382,25 @@
       tab.removeAttribute("hidden");
       console.log("Hello From the Replies section");
     }
+    function fetchRepliesNoData(){
+      let tab = document.getElementById("tab");
+      tab.innerHTML = `<%- include('../partials/reply.ejs')%>`;
+      tab.removeAttribute("hidden");
+      console.log("Hello From the Replies Section!");
+    }
     function fetchLikes() {
       let tab = document.getElementById("tab");
       tab.innerHTML = 'You Are in Like Section';
       tab.removeAttribute("hidden");
       console.log("Hello From the likes section");
     }
-    function postData() {
+    function comment() {
+
+      let commentSection = document.getElementById("comment");
+      let place=document.getElementById("place");
+      place.removeAttribute("hidden");
+      place.innerHTML = `<%- include('../partials/comment.ejs', {commentData})%>`;
+      console.log("You clicked!");
 
     }
   </script>
