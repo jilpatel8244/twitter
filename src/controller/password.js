@@ -33,7 +33,7 @@ exports.setPassword = async (req, res) => {
     let dataId = emailData[0].id;
     let salt = emailData[0].salt;
     let hashPassword = md5(password + salt);
-    console.log(hashPassword);
+    console.log("hashPassword",hashPassword);
     let passwordUpdateQuery = `UPDATE users SET password = ? ,is_active=1 WHERE id= ?`;
     await db.query(passwordUpdateQuery, [hashPassword, dataId]);
     res.json({ isComplete: true });
