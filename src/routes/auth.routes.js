@@ -1,6 +1,12 @@
 const express = require("express");
 const router = express.Router();
 const logger = require("../../logger/logger");
+const passport = require("passport");
+require("../middleware/passport");
+const homeRoute = require("./home.routes");
+const bookmarkRoute = require("./bookmark.routes");
+const likeRoute = require("./like.routes");
+const messagesRoute = require("./messages.routes");
 
 const exploreroute = require("../routes/explore.routes");
 const { get_registration, post_registration } = require("../controller/registration");
@@ -33,6 +39,10 @@ router.get("/resetPassword", resetPassword)
 router.post("/setPassword", set_password)
 
 
+router.use('/home', homeRoute);
+router.use('/bookmark', passport.authenticate('jwt', { session: false }), bookmarkRoute);
+router.use('/like', passport.authenticate('jwt', { session: false }), likeRoute);
+router.use('/messages', passport.authenticate('jwt', { session: false }), messagesRoute);
 
 
 module.exports = router;

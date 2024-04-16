@@ -27,6 +27,7 @@ exports.loginHandler = async (req, res) => {
         }
         
         console.log(md5(password+userExist[0].salt));
+        console.log(userExist[0].password);
         
         if (userExist[0].password !== md5(password + userExist[0].salt)) {
             await connection.query("insert into logs (user_id, is_successfull) values (?, ?)", [userExist[0].id, 0]);
