@@ -146,11 +146,34 @@
             console.log(data);
             if (senderId == data.reciverId && reciverId == data.senderId) {
                 let newDiv = document.createElement('div');
-                    newDiv.classList.add('reciver-chat');
-                    newDiv.innerHTML = `<p>${data.message}</p>`;
+                newDiv.classList.add('reciver-chat');
+                newDiv.innerHTML = `<p>${data.message}</p>`;
     
-                    document.getElementById('chat-container').appendChild(newDiv);  
+                document.getElementById('chat-container').appendChild(newDiv);  
             }
+        })
+
+        // load old chats
+        socket.on('loadChats', (data) => {
+            document.getElementById('chat-container').innerHTML = '';
+
+            console.log(data.oldchats);
+
+            data.oldchats.forEach((element, index) => {
+                if (element.sender_id == senderId) {
+                    let newDiv = document.createElement('div');
+                    newDiv.classList.add('text-right', 'sender-chat');
+                    newDiv.innerHTML = `<p>${element.content}</p>`;
+
+                    document.getElementById('chat-container').appendChild(newDiv);
+                } else {
+                    let newDiv = document.createElement('div');
+                    newDiv.classList.add('reciver-chat');
+                    newDiv.innerHTML = `<p>${element.content}</p>`;
+        
+                    document.getElementById('chat-container').appendChild(newDiv);  
+                }
+            });
         })
 
     </script>
