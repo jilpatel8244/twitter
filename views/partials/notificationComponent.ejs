@@ -1,11 +1,6 @@
 <section class="w-3/5 border border-gray-200 max-w-screen-sm min-h-dvh">
-  <div class="font-medium flex justify-around rounded-lg text-start p-8">
+  <div class="font-medium flex rounded-lg text-start p-8">
     <span class="mt-2 font-medium text-xl"> Notification </span>
-    <img
-      class="p-1 w-10 h-10 rounded-full"
-      src="/assets/notification.gif"
-      alt="Bordered avatar"
-    />
   </div>
   <div
     class="flex mt-2 md:flex items-center justify-between hidden"
@@ -38,97 +33,17 @@
       </li>
     </ul>
   </div>
-    <% notifications.forEach(notification => { %>
-    <div
-      id="allusercontent"
-      class="max-w-screen-lg text-sm font-medium text-gray-900 rounded-lg"
-    >
-      <% if (notification.type === 'Login') { %>
-      <div
-        class=" w-full px-4 py-2 border-b border-gray-200 cursor-pointer hover:bg-gray-100 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
-      >
-        <div class="flex">
-          <img
-            class="w-10 h-10 p-1 rounded-full"
-            src="/assets/lock.png"
-            alt="Bordered avatar"
-          />
-          <div class="mt-2">
-            There was a login to your account @<%= notification.user %> from a
-            new device on <%= notification.created_at %>. Review it now.
-          </div>
-        </div>
-      </div>
-
-      <% } else if (notification.type === 'Password_reset') { %>
-      <div
-        class="  w-full px-4 py-2 border-b border-gray-200 cursor-pointer hover:bg-gray-100 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
-      >
-        <div class="flex">
-          <img
-            class="w-10 h-10 p-1 rounded-full"
-            src="/assets/lock.png"
-            alt="Bordered avatar"
-          />
-          <div class="mt-2">
-            Your password was reset on your account. Based on this change,
-            additional changes to your account may be restricted temporarily.
-          </div>
-        </div>
-        <% } %>
-      </div>
-      <% }); %>
+  <div
+    id="allusercontent"
+    class="flex items-center justify-center flex-col max-w-screen-lg text-sm mt-4 font-medium text-gray-900 rounded-lg"
+  >
+    <div class="mt-2 flex items-center justify-center flex-col">
+      <span class="mt-2 font-medium text-2xl">Nothing to see here — yet</span>
+      <span class="mt-2 font-medium text-sm">
+        When some notification arrive, you’ll find it here.
+      </span>
     </div>
-
-    <% other_users.forEach(notification => { %>
-    <div class="max-w-screen-lg text-sm font-medium text-gray-900 rounded-lg">
-      <% if (notification.type === 'Follow') { %>
-      <div
-        class="  w-full px-4 py-2 border-b border-gray-200 cursor-pointer hover:bg-gray-100 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
-      >
-        <div class="flex">
-          <img
-            class="w-10 h-10 p-1 rounded-full"
-            src="/assets/user-icon.png"
-            alt="Bordered avatar"
-          />
-          <img
-            class="w-10 h-10 ml-2 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500"
-            src="/assets/user.png"
-            alt="Bordered avatar"
-          />
-          <div class="mt-2 flex flex-col ml-2">
-            <%= notification.related_username %> followed you
-          </div>
-        </div>
-      </div>
-
-      <% } else if (notification.type === 'Like') { %>
-      <div
-        class="block w-full px-4 py-2 border-b border-gray-200 cursor-pointer hover:bg-gray-100 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
-      >
-        <div class="flex">
-          <img
-            class="w-15 h-10 p-1 rounded-full"
-            src="/assets/heart.png"
-            alt="like icon"
-          />
-          <img
-            class="w-10 h-10 ml-2 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500"
-            src="/assets/user.png"
-            alt="Bordered avatar"
-          />
-
-          <div class="ml-2 flex flex-col mt-2">
-            <%= notification.related_username %> liked your Tweet
-          </div>
-        </div>
-        <div class="ml-2 mt-2"><%= notification.tweet_content %></div>
-      </div>
-      <% } %>
-    </div>
-    <% }); %>
- 
+  </div>
   <div
     id="verifiedcontent"
     class="hidden flex items-center justify-center flex-col max-w-screen-lg text-sm mt-4 font-medium text-gray-900 rounded-lg"
@@ -147,7 +62,6 @@
       </p>
     </div>
   </div>
-
   <div
     id="mentioncontent"
     class="hidden flex items-center justify-center flex-col max-w-screen-lg text-sm mt-4 font-medium text-gray-900 rounded-lg"
@@ -160,4 +74,3 @@
     </div>
   </div>
 </section>
-
