@@ -4,7 +4,7 @@ const { getHome } = require('../controller/home.controller');
 const { likeUnlikeHandler } = require("../controller/likeUnlikeHandler");
 const { getAllBookmarks } = require("../controller/getAllBookmarks.controller");
 const { bookmarkUnbookmarkHandler } = require("../controller/bookmarkUnbookmarkHandler.controller");
-const { get_retweet ,post_retweet} = require("../controller/retweet.controller");
+const { get_retweet, post_retweet } = require("../controller/retweet.controller");
 
 
 router.get("/", (req, res) => {
