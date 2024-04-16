@@ -20,7 +20,7 @@ END as time,
 FROM users
 JOIN tweets ON users.id = tweets.user_id
 LEFT JOIN medias ON tweets.id = medias.tweet_id
-WHERE users.is_active = 1 AND tweets.is_posted
+WHERE users.is_active = 1 AND tweets.is_posted = 1
 ORDER BY tweets.created_at DESC;
 `;
 
