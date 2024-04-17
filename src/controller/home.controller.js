@@ -1,5 +1,5 @@
-const { log } = require("winston");
 const connection = require("../../config/connection");
+const logger = require('../../logger/logger');
 
 exports.getHome = async (req, res) => {
     let sql = `
@@ -27,76 +27,76 @@ ORDER BY tweets.created_at DESC;
 `;
 
   const [rows] = await connection.execute(sql);
-  console.log(rows);
+//   console.log(rows);
 
 
-    console.log(rows);
+    // console.log(rows);
 
     res.render('../views/pages/home', { tweets: rows });
 }
 
 
-exports.likeUnlikeHandler = async (req, res) => {
-  try {
-      let {tweetId} = req.body.tweet_id;
-      let userId = req.user[0][0].id;
+// exports.likeUnlikeHandler = async (req, res) => {
+//   try {
+//       let {tweetId} = req.body.tweet_id;
+//       let userId = req.user[0][0].id;
 
-      let [result] = await connection.query('select * from tweet_likes where tweet_id = ? and user_id = ?', [tweetId, userId]);
+//       let [result] = await connection.query('select * from tweet_likes where tweet_id = ? and user_id = ?', [tweetId, userId]);
 
-      if (!result.length) {
-          // make new entry
-          await connection.query('insert into tweet_likes (tweet_id, user_id, status) values (?, ?, ?)', [tweetId, userId, 1]);
+//       if (!result.length) {
+//           // make new entry
+//           await connection.query('insert into tweet_likes (tweet_id, user_id, status) values (?, ?, ?)', [tweetId, userId, 1]);
 
-          return  res.status(200).json({
-              success: true,
-              likeStatus: 1
-          })
-      } else {
-          // update status
-          await connection.query('update tweet_likes set status = ? where tweet_id = ? and user_id = ?', [(parseInt(result[0].status)) ? 0 : 1, tweetId, userId]);
+//           return  res.status(200).json({
+//               success: true,
+//               likeStatus: 1
+//           })
+//       } else {
+//           // update status
+//           await connection.query('update tweet_likes set status = ? where tweet_id = ? and user_id = ?', [(parseInt(result[0].status)) ? 0 : 1, tweetId, userId]);
 
-          return res.status(200).json({
-              success: true,
-              likeStatus: (parseInt(result[0].status)) ? 0 : 1
-          })
-      }
-  } catch (error) {
-      logger.error(error);
-      return res.status(500).json({
-          success: false,
-          message: error.message
-      })
-  }
-}
+//           return res.status(200).json({
+//               success: true,
+//               likeStatus: (parseInt(result[0].status)) ? 0 : 1
+//           })
+//       }
+//   } catch (error) {
+//       logger.error(error);
+//       return res.status(500).json({
+//           success: false,
+//           message: error.message
+//       })
+//   }
+// }
 
 
-exports.bookmarkUnbookmarkHandler = async (req, res) => {
-  try {
-      let {tweetId} = req.body;
-      console.log(req.body);
-      let userId = req.user[0][0].id;
+// exports.bookmarkUnbookmarkHandler = async (req, res) => {
+//   try {
+//       let {tweetId} = req.body;
+//       console.log(req.body);
+//       let userId = req.user[0][0].id;
       
-      let [result] = await connection.query('select * from bookmarks where tweet_id = ? and user_id = ?', [tweetId, userId]);
+//       let [result] = await connection.query('select * from bookmarks where tweet_id = ? and user_id = ?', [tweetId, userId]);
 
         
 
-        if (!result.length) {
-            // make new entry
-            await connection.query('insert into bookmarks (tweet_id, user_id, status) values (?, ?, ?)', [tweetId, userId, 1]);
+//         if (!result.length) {
+//             // make new entry
+//             await connection.query('insert into bookmarks (tweet_id, user_id, status) values (?, ?, ?)', [tweetId, userId, 1]);
 
-          return res.status(200).json({
-              success: true,
-              bookmarkStatus: (parseInt(result[0].status)) ? 0 : 1
-          })
-      }
-  } catch (error) {
-      console.log(error);
-      return res.status(500).json({
-          success: false,
-          message: error.message
-      })
-  }
-}
+//           return res.status(200).json({
+//               success: true,
+//               bookmarkStatus: (parseInt(result[0].status)) ? 0 : 1
+//           })
+//       }
+//   } catch (error) {
+//       console.log(error);
+//       return res.status(500).json({
+//           success: false,
+//           message: error.message
+//       })
+//   }
+// }
 
 exports.comment = async (req, res) => {
     let { tweetId, comment } = req.body;

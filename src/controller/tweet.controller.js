@@ -1,6 +1,5 @@
 const logger = require("../../logger/logger");
 const conn = require('../../config/connection.js')
-const { upload } = require('../middleware/multer');
 const cookieParser = require("cookie-parser");
 
 
@@ -77,3 +76,60 @@ exports.showDrafts = async (req, res) => {
   }
 }
 
+exports.tweetUpdate = async (req,res) =>{
+  let {tweetId,content,action,media}=req.body;
+  let userId = req.user[0][0].id;
+  console.log(media);
+  if (media == [] && content.trim() == "") {
+    return res.status(422).json({ 'error': "You didn't tweet content and Image(s)!" })
+  }
+  else {
+    try {
+      if (action == 'tweet') {
+        let data = [ content || "", '0', '1',tweetId,userId];
+        let sql = 'update tweets set content= ? ,is_drafted= ? , is_posted = ? where id = ? and user_id=?';
+        await conn.query(sql,data)
+        if (media != undefined) {
+          let { filename, mimetype } = media[0];
+          await updateTweetImage([ filename, mimetype,tweetId], res)
+        }
+        return res.status(200).json({ 'msg': 'Updated' })
+      }
+      else {
+        let data = [content || "", '1', '0',tweetId,userId];
+        let sql = 'update tweets set content= ? ,is_drafted= ? , is_posted = ? where id = ? and user_id=?';
+        await conn.query(sql,data)
+        if (media != null) {
+          let { filename, mimetype } = media[0];
+          await updateTweetImage([ filename, mimetype,tweetId], res)
+        }
+        return res.status(200).json({ 'msg': 'Re-Drafted' })
+      }
+    }
+    catch (err) {
+      console.log(err)
+      return res.status(422).json({ 'error': "something went wrong" + err })
+    }
+  }
+}
+
+const updateTweetImage=async(data,res)=>{
+  try{
+    let sql=" update set medias media_url=?,media_type=? where tweet_id= ?";
+    await conn.query(sql,data);
+  }
+  catch(err){
+    return res.status(422).json({'error': "Draft error-"+err})
+  }
+}
+exports.displayImage = async(req,res)=>{
+  let {id}=req.query;
+  try{
+    let sql="select * from medias where tweet_id=?";
+    let result=await conn.query(sql,id);
+    return res.status(200).json({'image':result[0][0]})
+  }
+  catch(err){
+    return res.status(422).json({'error': "Image-"+err})
+  }
+}
