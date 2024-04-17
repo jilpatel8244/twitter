@@ -29,15 +29,33 @@ exports.getProfile = async (req, res) => {
         const tweetDataQuery = `SELECT u.name,u.username,t.id,t.content,t.created_at as tweet_Date FROM tweets as t INNER JOIN users as u ON u.id = t.user_id WHERE t.id=?`;
         let [tweetData] = await connection.query(tweetDataQuery, [tweetId]);
         console.log(tweetData);
+
+        let getAllLikedData = `	select tweets.id as tweet_id, tweets.content, tweets.created_at, users.name, 
+        users.username, bookmarks.status as isBookmarked, medias.media_url from tweet_likes 
+        left join tweets on tweet_likes.tweet_id = tweets.id
+        left join users on tweets.user_id = users.id
+        left join bookmarks on tweet_likes.tweet_id = bookmarks.tweet_id   and 
+      tweet_likes.user_id = bookmarks.user_id 
+        left join medias on tweet_likes.tweet_id = medias.tweet_id 
+        where tweet_likes.user_id = ? and tweet_likes.status = '1';`
+        
+        let [allLikedTweet] = await connection.query(getAllLikedData, [id]);
+       console.log(allLikedTweet);
+        
+        allLikedTweet = allLikedTweet.map((element) => {
+          element.isLiked = 1;
+          return element;
+        })
+
         if (commentData[0]) {
-          res.render('../views/pages/profile', { profileData, twitCountData, replyData, tweetData, commentData });
+          res.render('../views/pages/profile', { profileData, twitCountData, replyData, tweetData, commentData,allLikedTweet });
         } else {
           let commentData;
-          res.render('../views/pages/profile', { profileData, twitCountData, replyData, tweetData, commentData });
+          res.render('../views/pages/profile', { profileData, twitCountData, replyData, tweetData, commentData ,allLikedTweet});
         }
       } else {
         let replyData, tweetData, commentData;
-        res.render('../views/pages/profile', { profileData, twitCountData, replyData, tweetData, commentData });
+        res.render('../views/pages/profile', { profileData, twitCountData, replyData, tweetData, commentData ,allLikedTweet});
       }
 
 
