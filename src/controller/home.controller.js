@@ -1,5 +1,5 @@
-const { log } = require("winston");
 const connection = require("../../config/connection");
+const logger = require('../../logger/logger');
 
 exports.getHome = async (req, res) => {
     let sql = `
@@ -27,10 +27,10 @@ ORDER BY tweets.created_at DESC;
 `;
 
   const [rows] = await connection.execute(sql);
-  console.log(rows);
+//   console.log(rows);
 
 
-    console.log(rows);
+    // console.log(rows);
 
     res.render('../views/pages/home', { tweets: rows });
 }
@@ -100,7 +100,7 @@ ORDER BY tweets.created_at DESC;
 
 exports.comment = async (req, res) => {
     let { tweetId, comment } = req.body;
-    let user_id = req.user[0][0].id
+    let user_id = req.user[0][0].id;
     console.log(user_id);
     console.log(req.body);  
     let sql = `
