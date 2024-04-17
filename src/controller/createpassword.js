@@ -33,7 +33,7 @@ exports.set_password = async (req, res) => {
 
 
 
-    inputPassword += result.solt;
+    inputPassword += result.salt;
 
     inputPassword = md5(inputPassword);
 

@@ -13,7 +13,7 @@ const upload = multer({ dest: "public/uploads" });
   }
 try {
   
-  const show_detail = 'SELECT id, username, bio, date_of_birth FROM users WHERE id = ?';
+  const show_detail = 'SELECT * FROM users WHERE id = ?';
   let [show_detail_data] = await connection.query(show_detail,[userId])
 
 

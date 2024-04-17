@@ -133,15 +133,15 @@
   <!-- <div class="max-w-[600px] bg-white shadow-[0_0_10px_rgba(0,0,0,0.1)] mx-auto my-5 p-5 rounded-lg;"> -->
   <div class="container">
     <h1>Edit Profile</h1>
-    <form action="/updateProfile" method="POST">
+    <form action="/editProfile/updateProfile" method="POST">
       <input id="userId" name="userId" value="<%= profileData.id %>" hidden>
 
     <div class="profile-section">
       <div class="cover-photo">
         <label for="coverPhoto">Cover Photo</label>
-        <img src="#" alt="Cover Photo Preview" id="coverPhotoPreview"/>
+        <img src="<%= profileData.cover_img_url %>" alt="Cover Photo Preview" id="coverPhotoPreview"/>
         <input type="file" id="coverPhoto" name="coverPhoto" accept="image/*"
-          onchange="previewImage('coverPhoto', 'coverPhotoPreview')" style="display: none" />
+          onchange="previewImage('coverPhoto', 'coverPhotoPreview')" style="display: none" value=""/>
         <button onclick="document.getElementById('coverPhoto').click()">
           change
         </button>
@@ -149,8 +149,8 @@
       <div class="display-photo">
         <label for="displayPhoto">Display Photo</label>
         <input type="file" id="displayPhoto" name="displayPhoto" accept="image/*"
-          onchange="previewImage('displayPhoto', 'displayPhotoPreview')" style="display: none" />
-        <img src="#" alt="Display Photo Preview" id="displayPhotoPreview"/>
+          onchange="previewImage('displayPhoto', 'displayPhotoPreview')" style="display: none" value="" />
+        <img src="<%= profileData.profile_img_url %>" alt="Display Photo Preview" id="displayPhotoPreview"/>
         <button onclick="document.getElementById('displayPhoto').click()">
           change
         </button>
