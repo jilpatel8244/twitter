@@ -1,5 +1,5 @@
-const { log } = require("winston");
 const connection = require("../../config/connection");
+const logger = require('../../logger/logger');
 
 exports.getHome = async (req, res) => {
   let sql = `

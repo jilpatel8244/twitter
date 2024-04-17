@@ -20,7 +20,7 @@ async function bookmarkHandler(tweetId) {
         }
 
         // bookmark ma hase to entry ni display none jo bookmark remove kare to but in home page its not the case
-        if (url.includes('bookmark')) {
+        if ((window.location.href).includes('bookmark')) {
             // document.getElementById(tweetId).style.display = 'none';
             document.getElementById(tweetId).remove();
 

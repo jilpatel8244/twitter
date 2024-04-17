@@ -17,9 +17,17 @@
 
         .sender-chat span, .reciver-chat span{
             padding: 15px 20px;
+            border-radius: 30px;
+        }
+        
+        .sender-chat span{
             background-color: rgb(14 165 233);
             color: white;
-            border-radius: 30px;
+        }
+
+        .reciver-chat span{
+            background-color: rgb(245, 248, 250);
+            color: black;
         }
 
         .active-user{
@@ -49,9 +57,13 @@
                         </div>
 
                         <div id="chat-section" class="relative" style="display: none;">
-                            <div class="flex-1 mx-2 sticky top-0 text-black bg-white opacity-90">
+
+                            <!-- sticky follower name -->
+                            <div class="flex-1 sticky top-0 text-black bg-white opacity-90">
                                 <h2 class="px-4 py-4 text-xl font-semibold " id="selectedUserName">name</h2>
                             </div>
+
+                            <!-- reciver-user (follower) info  -->
                             <div id="reciver-user-info" class="border-b border-gray-200">
                                 <div class="flex flex-col items-center pb-11">
                                     <div>
@@ -66,19 +78,30 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <!-- chat container -->
                             <div class="h-5/6 py-5 " id="chat-container">
-                                <!-- <div class="text-right sender-chat">
-                                    <p>jil</p>
-                                </div>
-                                <div class="reciver-chat">
-                                    <p>abhishek</p>
-                                </div> -->
                             </div>
+
+                            <!-- sticky user input form -->
                             <div class="sticky bottom-0 py-2 bg-white">
-                                <div class="p-2 mx-4 border border-t-gray-200 rounded-xl" style="background-color: #eff3f4;">
+                                <div class="mx-4 border border-t-gray-200 rounded-xl" style="background-color: #eff3f4;">
                                     <form id="messageForm" class="relative">
-                                        <input type="text" class="placeholder:text-gray-400 w-full" name="message" id="message" placeholder="Start a new message" style="background-color: #eff3f4;">
-                                        <input type="submit" value="Send" class="absolute bottom-0 right-0">
+                                        <div class="flex items-center relative">
+                                            <div>
+                                                <label for="img-message">
+                                                    <a class="-1 group flex items-center text-blue-400 px-2 py-2 text-base leading-6 font-medium rounded-full hover:bg-opacity-20 hover:bg-[#8fa2c4] hover:text-blue-600">
+                                                        <svg class="text-center h-7 w-6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z">
+                                                            </path>
+                                                        </svg>
+                                                    </a>
+                                                </label>
+                                                <input type="file" onchange="previewMedia(event)" name="img-message" id="img-message" accept="image/png, image/jpeg, image/jpg" class="hidden">
+                                            </div>
+                                            <input type="text" class="placeholder:text-gray-400"  name="message" onkeyup="checkMessageBox()" onkeydown="checkMessageBox()" id="message" placeholder="Start a new message" style="background-color: #eff3f4; width: 100%;">
+                                            <input type="submit" value="Send" class="opacity-50 p-2" id="messageSendBtn">
+                                        </div>
                                     </form>
                                 </div>
                             </div>
@@ -139,6 +162,12 @@
         let reciverId;
         let reciverName;
 
+        socket.on('connect', () => {
+            console.log('connected to server ' + socket.id);
+
+            socket.emit('user-connected', senderId);
+        })
+
         function openMessageBox(followerId, reciverName, reciverUsername, reciverImgUrl) {
             reciverId = followerId;
 
@@ -164,8 +193,9 @@
             event.preventDefault();
 
             let message = document.getElementById('message').value;
+        
 
-            if (message) {
+            // if (message && message.length != 0 && message.length < 250) {
                 let url = window.location.origin + '/messages/storeMessage';
 
                 let data = await fetch(url, {
@@ -193,22 +223,19 @@
                     document.getElementById('chat-container').appendChild(newDiv);
                     scrollToBottom('user-display-and-chatting');
 
-                    socket.emit('newChat', response.message);
+                    socket.emit('send-private-message', response.message);
                 }
-            }
-
+            // }
         })
 
-        socket.on('loadNewChat', (data) => {
-            console.log(data);
-            if (senderId == data.reciverId && reciverId == data.senderId) {
-                let newDiv = document.createElement('div');
-                newDiv.classList.add('reciver-chat');
-                newDiv.innerHTML = `<span>${data.message}</span>`;
+        // receive private messages
+        socket.on('receive-private-message', (data) => {
+            let newDiv = document.createElement('div');
+            newDiv.classList.add('reciver-chat');
+            newDiv.innerHTML = `<span>${data.message}</span>`;
     
-                document.getElementById('chat-container').appendChild(newDiv);  
-                scrollToBottom('user-display-and-chatting');
-            }
+            document.getElementById('chat-container').appendChild(newDiv);  
+            scrollToBottom('user-display-and-chatting');
         })
 
         // load old chats
@@ -239,6 +266,38 @@
         const scrollToBottom = (id) => {
             const element = document.getElementById(id);
             element.scrollTop = element.scrollHeight;
+        }
+
+        const checkMessageBox = () => {
+            let message = document.getElementById('message').value;
+            // let file = document.getElementById('img-message');
+
+            if (message.length === 0 || message.length > 250) {
+                document.getElementById("messageSendBtn").disabled = true;
+                document.getElementById("messageSendBtn").style.opacity = 0.5;
+            } else {
+                document.getElementById("messageSendBtn").disabled = false;
+                document.getElementById("messageSendBtn").style.opacity = 1;
+            }
+        }
+
+        const previewMedia = (event) => {
+            let form = document.getElementById('messageForm');
+
+            let newDiv = document.createElement('div');
+            newDiv.innerHTML = `<img src="" alt="" id="preview_img" class="h-24 w-24">`;
+
+            form.insertBefore(newDiv, form.firstChild);
+
+            let output = document.getElementById('preview_img');
+
+            output.src = URL.createObjectURL(event.target.files[0]);
+            output.onload = function () {
+                URL.revokeObjectURL(output.src) // free memory
+            }
+
+            // document.getElementById("messageSendBtn").disabled = false;
+            // document.getElementById("messageSendBtn").style.opacity = 1;
         }
     </script>
 </body>

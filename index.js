@@ -5,9 +5,9 @@ const server = http.createServer(app);
 const {Server} = require('socket.io');
 
 const io = new Server(server);
-
 const cookieParser = require("cookie-parser");
-const GetProfileRouter = require("./src/routes/profile.routes");
+const getProfileRouter = require("./src/routes/profile.routes");
+const getTimeZone = require("./src/routes/timezone.routes");
 const bodyParser = require("body-parser");
 const homeRouter = require("./src/routes/home.routes");
 const notification = require("./src/routes/notification.route");
@@ -30,13 +30,13 @@ app.use(cookieParser());
 
 app.use(express.static("public"));
 
-// app.use(authRouter);
 app.use(homeRouter);
 app.use("/explore", exploreRoute);
 app.use(authRouter);
-app.use(GetProfileRouter);
+app.use(getTimeZone);
 app.use(notification);
 app.use("/editprofile", editprofile);
+app.use('/profile', passport.authenticate('jwt', { session: false}), getProfileRouter);
 app.use('/like', passport.authenticate('jwt', { session: false}), likeRoute);
 app.use('/bookmark', passport.authenticate('jwt', { session: false }), bookmarkRoute);
 app.use('/messages', passport.authenticate('jwt', { session: false }), messagesRoute);
@@ -46,19 +46,41 @@ app.use('/messages', passport.authenticate('jwt', { session: false }), messagesR
 app.set("view engine", "ejs");
 
 app.use("/tweetPost",tweetCreate);
+
+let connectedUser = {};
+
 //Whenever someone connects this gets executed
 io.on('connection', function (socket) {
-  console.log('A user connected');
+  console.log('A user connected : ', socket.id);
+
+  // store userId and socketId when user connects
+  socket.on('user-connected', async (userId) => {
+    connectedUser[userId] = socket.id;
+  });
 
   //Whenever someone disconnects this piece of code executed
   socket.on('disconnect', function () {
-    console.log('A user disconnected');
+    console.log(connectedUser);
+    console.log('A user disconnected : ', socket.id);
+
+    for (const userId in connectedUser) {
+      if (connectedUser[userId] === socket.id) {
+        delete connectedUser[userId];
+        break;
+      }
+    }
+
+    console.log(connectedUser);
   });
 
-  // chatting implementation
-  socket.on('newChat', (data) => {
-    socket.broadcast.emit('loadNewChat', data);
-  });
+
+  socket.on('send-private-message', async (data) => {
+    const {senderId, reciverId, message} = data;
+
+    if(connectedUser[reciverId]) {
+      io.to(connectedUser[reciverId]).emit('receive-private-message', {senderId, message});
+    }
+  })
 
   // load old chats
   socket.on('existingChats', async (data) => {

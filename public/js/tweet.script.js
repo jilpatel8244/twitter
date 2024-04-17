@@ -7,6 +7,7 @@ let images = document.getElementById('images')
 let drafts = document.getElementById('drafts');
 let draftList = document.getElementById('draftList');
 let closeDraft=document.getElementById('closeDraft');
+let hiddenId=document.getElementById('tweetId');
 document.addEventListener("DOMContentLoaded", function (event) {
 
   document.getElementById('defaultModalButton').onclick = () => {
@@ -65,12 +66,21 @@ const tweetInsert = async (status) => {
   }
 }
 post.onclick = () => {
-
-  tweetInsert('tweet')
+  if(hiddenId.value != ''){
+    tweetUpdate('tweet')
+  }
+  else{
+    tweetInsert('tweet')
+  }
 }
 
 save.onclick = () => {
+  if(hiddenId.value != ''){
+    tweetUpdate('draft')
+  }
+  else{
   tweetInsert('draft')
+  }
   clearImages();
   document.getElementById('popup-modal').style.display = 'none'
   document.getElementById('defaultModal').style.display = 'none';
@@ -138,12 +148,12 @@ const displayDraft = async () => {
   if (!draftTweet.length) {
     return;
   }
-  draftTweet.forEach(darft => {
-    list += `<li onclick=sendDraft(${darft})>
+  draftTweet.forEach(draft => {
+    list += `<li>
     <input type="checkbox" id="job-1" name="job" value="job-1" class="hidden peer" required />
-    <label for="job-1" class="inline-flex items-center justify-between w-full p-5 text-gray-900 bg-white border border-gray-200 rounded-lg cursor-pointer hover:text-gray-900 hover:bg-gray-100 ">
+    <label for="job-1" class="inline-flex items-center justify-between w-full p-5 text-gray-900 bg-white border border-gray-200 rounded-lg cursor-pointer hover:text-gray-900 hover:bg-gray-100 " onclick='sendDraft(${draft.id} , "${draft.content}")'>
       <div class="block" >
-        <div class="w-full text-lg font-semibold">${darft.content}</div>
+        <div class="w-full text-lg font-semibold">${draft.content}</div>
       </div>
     </label>
   </li>`
@@ -155,8 +165,47 @@ closeDraft.onclick=()=>{
   document.getElementById('select-modal').style.display = 'none';
 }
 
-const sendDraft = (draft) =>{
-  alert('here')
+const sendDraft =async (tweetId,tweetContent) =>{
+  hiddenId.value=tweetId;
+  alert(hiddenId.value);
+  let response = await fetch('/tweetPost/displayImage/?id='+tweetId,{
+    method:'GET'
+  })
+  let {image , error}= await response.json();
+  if(error){
+    return alert(error);
+  }
+  if(image != undefined){
+    let {media_url} =image;
+    images.innerHTML='<img class="w-[25rem] h-[25rem] m-2" src="./uploads/' + media_url + '">';
+  }
   document.getElementById('select-modal').style.display = 'none';
-  content.value=draft.content;
+  content.value=tweetContent;
+  post.style.opacity = '1'
+  post.style.cursor = 'pointer'
 }
+
+const tweetUpdate = async (action) =>{
+  if (content.value.trim() != '' || images.childNodes[0].tagName == 'IMG') {
+    let form = new FormData(document.forms['tweet']);
+    console.log(media.files);
+    form.append('media',media.files[0]) ;
+    form.append('action',action);
+    const response = await fetch('/tweetPost/tweetUpdate' , {
+      method: 'POST',
+      body:form 
+    })
+    let {msg,error}=await response.json();
+    if(error){
+      return alert(error);
+    }
+    if(msg == 'Updated'){
+      window.location.href='/home'
+    }
+    post.style.opacity = '0.25'
+    post.style.cursor = 'default'
+    clearImages();
+    document.getElementById('defaultModal').style.display = 'none'
+  }
+}
+
