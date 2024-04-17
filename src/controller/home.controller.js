@@ -100,7 +100,7 @@ ORDER BY tweets.created_at DESC;
 
 exports.comment = async (req, res) => {
     let { tweetId, comment } = req.body;
-    let user_id = req.user[0][0].id
+    let user_id = req.user[0][0].id;
     console.log(user_id);
     console.log(req.body);  
     let sql = `

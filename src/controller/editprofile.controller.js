@@ -10,9 +10,10 @@ exports.getEditprofile = async (req, res) => {
     res.send('User ID is required');
     return;
   }
-  try {
-    const show_detail = 'SELECT id, username, bio, date_of_birth FROM users WHERE id = ?';
-    let [show_detail_data] = await connection.query(show_detail, [userId])
+try {
+  
+  const show_detail = 'SELECT * FROM users WHERE id = ?';
+  let [show_detail_data] = await connection.query(show_detail,[userId])
 
 
     res.render('pages/editprofile', { profileData: show_detail_data[0] });
