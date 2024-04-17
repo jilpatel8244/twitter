@@ -111,7 +111,7 @@ media.onchange = () => {
 }
 const getImages = () => {
   const files = media.files;
-  var photos = "";
+  let photos = "";
   for (let i = 0; i < files.length; i++) {
     const fileReader = new FileReader();
     fileReader.readAsDataURL(files[i]);
