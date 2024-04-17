@@ -46,19 +46,41 @@ app.use('/messages', passport.authenticate('jwt', { session: false }), messagesR
 app.set("view engine", "ejs");
 
 app.use("/tweetPost",tweetCreate);
+
+let connectedUser = {};
+
 //Whenever someone connects this gets executed
 io.on('connection', function (socket) {
-  console.log('A user connected');
+  console.log('A user connected : ', socket.id);
+
+  // store userId and socketId when user connects
+  socket.on('user-connected', async (userId) => {
+    connectedUser[userId] = socket.id;
+  });
 
   //Whenever someone disconnects this piece of code executed
   socket.on('disconnect', function () {
-    console.log('A user disconnected');
+    console.log(connectedUser);
+    console.log('A user disconnected : ', socket.id);
+
+    for (const userId in connectedUser) {
+      if (connectedUser[userId] === socket.id) {
+        delete connectedUser[userId];
+        break;
+      }
+    }
+
+    console.log(connectedUser);
   });
 
-  // chatting implementation
-  socket.on('newChat', (data) => {
-    socket.broadcast.emit('loadNewChat', data);
-  });
+
+  socket.on('send-private-message', async (data) => {
+    const {senderId, reciverId, message} = data;
+
+    if(connectedUser[reciverId]) {
+      io.to(connectedUser[reciverId]).emit('receive-private-message', {senderId, message});
+    }
+  })
 
   // load old chats
   socket.on('existingChats', async (data) => {
