@@ -1,4 +1,4 @@
-const { log } = require("winston");
+const { logger } = require("winston");
 const connection = require("../../config/connection");
 
 exports.getHome = async (req, res) => {
@@ -27,10 +27,10 @@ ORDER BY tweets.created_at DESC;
 `;
 
   const [rows] = await connection.execute(sql);
-  console.log(rows);
+//   console.log(rows);
 
 
-    console.log(rows);
+    // console.log(rows);
 
     res.render('../views/pages/home', { tweets: rows });
 }

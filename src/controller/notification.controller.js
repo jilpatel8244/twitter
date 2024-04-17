@@ -8,63 +8,71 @@ exports.notification = async (req, res) => {
 exports.getNotifications = async (req, res) => {
   let logger_id = req.user[0][0].id;
   const [notifications] = await connection.query(
-    `SELECT n.*, u.username AS username, t.content AS tweet_content, c.content AS reply
+    `SELECT f.current_status, n.*, u.username AS username, u2.name AS related_user_name, u2.username AS related_username, t.*, t.content AS tweet_content, n.created_at,
+    CASE
+    WHEN TIMESTAMPDIFF(SECOND, t.created_at, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(SECOND, t.created_at, NOW()), ' seconds ago')
+    WHEN TIMESTAMPDIFF(MINUTE, t.created_at, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(MINUTE, t.created_at, NOW()), ' minutes ago')
+    WHEN TIMESTAMPDIFF(HOUR, t.created_at, NOW()) < 24 THEN CONCAT(TIMESTAMPDIFF(HOUR, t.created_at, NOW()), ' hours ago')
+    ELSE CONCAT(DATE_FORMAT(t.created_at, '%d'), ' ', DATE_FORMAT(t.created_at, '%M'))
+    END as time
     FROM notifications n
-    LEFT JOIN users u ON n.related_user_id = u.id
+    LEFT JOIN users u ON n.user_id = u.id
+    LEFT JOIN users u2 ON n.related_user_id = u2.id
+    LEFT JOIN followers f ON n.user_id = f.follower_id
     LEFT JOIN tweets t ON n.tweet_id = t.id
-    LEFT JOIN tweet_comments c ON n.tweet_id = c.id 
-    WHERE n.user_id = ?
+    WHERE n.user_id = ? AND f.current_status = 1
     ORDER BY n.created_at DESC;`,
     [logger_id]
   );
-  notifications.forEach(async (notification) => {
-    switch (notification.type) {
-      case "Follow":
-        const [followData] = await connection.query(
-          `SELECT follower.username AS follower_username, followed.username AS followed_username
-          FROM followers
-          JOIN users AS follower ON followers.following_id = follower.id
-          JOIN users AS followed ON followers.follower_id = followed.id
-          WHERE followers.follower_id = ?;`,
-          [logger_id]
-        );
 
-        followData.forEach((followers) => {
-          // console.log(followers);
-          notification.username = followers.follower_username;
-        });
-
-        break;
-      case "Comment":
-        const [CommentData] = await connection.query(
-          "select username from users where id = ?",
-          [notification.related_user_id]
-        );
-        notification.username = CommentData[0].username;
-
-        break;
-
-      case "Like":
-      case "New Tweet":
-      case "replay_tweet":
-      case "Retweet":
-        const [actionUserData] = await connection.query(
-          "select username from users where id = ?",
-          [notification.related_user_id]
-        );
-        notification.username = actionUserData[0].username;
-        break;
-      case "Login":
-        break;
-      case "Password_reset":
-        break;
-      default:
-        console.warn("Unknwon notification type : ", notification.type);
-    }
-    // console.log(notification);
-  });
+  console.log(notifications);
+  const [verifiedNotification] = await connection.query(
+    `SELECT  f.current_status, n.*, u.username AS username, u2.name AS related_user_name, u2.username AS related_username, t.*, t.content AS tweet_content, n.created_at,
+     CASE
+     WHEN TIMESTAMPDIFF(SECOND, t.created_at, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(SECOND, t.created_at, NOW()), ' seconds ago')
+     WHEN TIMESTAMPDIFF(MINUTE, t.created_at, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(MINUTE, t.created_at, NOW()), ' minutes ago')
+     WHEN TIMESTAMPDIFF(HOUR, t.created_at, NOW()) < 24 THEN CONCAT(TIMESTAMPDIFF(HOUR, t.created_at, NOW()), ' hours ago')
+     ELSE CONCAT(DATE_FORMAT(t.created_at, '%d'), ' ', DATE_FORMAT(t.created_at, '%M'))
+     END as time
+     FROM notifications n
+     LEFT JOIN users u ON n.user_id = u.id
+     LEFT JOIN users u2 ON n.related_user_id = u2.id
+     LEFT JOIN followers f ON n.related_user_id = f.following_id
+     LEFT JOIN tweets t ON n.tweet_id = t.id
+     WHERE n.user_id = ? AND u.is_varified = 1 AND u2.is_varified = 1 AND f.current_status = 1
+     ORDER BY n.created_at DESC;`,
+    [logger_id]
+  );
+  // console.log(notifications);
+  const mentionedUsernames = extractMentionedUsernames(
+    // notification.tweet_content
+    "hello there @jil and @harsh !!! what is your opinion on this tweet functionality"
+  );
+  const mentionedUsers = await getUsersByUsernames(mentionedUsernames);
+  // console.log(mentionedUsers);
 
   res.status(200).json({
     notifications,
+    verifiedNotification,
   });
 };
+
+function extractMentionedUsernames(tweetContent) {
+  const regex = /@(\w+)/g;
+  const matches = tweetContent.match(regex);
+  if (matches) {
+    return matches.map((match) => match.substring(1));
+  }
+  return [];
+}
+
+async function getUsersByUsernames(usernames) {
+  if (usernames.length === 0) {
+    return [];
+  }
+  const [users] = await connection.query(
+    "SELECT id, username FROM users WHERE username IN (?)",
+    [usernames]
+  );
+  return users;
+}
