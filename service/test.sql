@@ -68,16 +68,4 @@ CREATE TABLE `notifications` (
   `created_at` TIMESTAMP NOT NULL DEFAULT (CURRENT_TIMESTAMP)
 );
 
-
--- if a user is veried and you are following him/her
---  then in verified section of notification it will show his/her 
--- posts, comments, retweets, reply etc
-
- SELECT n.*, u.username AS username, t.content AS tweet_content, c.content AS reply
-    FROM notifications n
-    LEFT JOIN users u ON n.related_user_id = u.id
-    LEFT JOIN tweets t ON n.tweet_id = t.id
-    LEFT JOIN followers f ON n.user_id = f.following_id
-    LEFT JOIN tweet_comments c ON n.tweet_id = c.id 
-    WHERE n.related_user_id = 3 AND u.is_varified = 1 AND f.current_status = 1
-    ORDER BY n.created_at DESC;
+ 
