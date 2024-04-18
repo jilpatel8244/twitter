@@ -1,0 +1,26 @@
+<article class="hover:bg-gray-100 transition duration-350 ease-in-out">
+    <% comments.forEach(function(comment) { %>
+        <div class="flex flex-shrink-0 p-4 pb-0">
+            <a href="#" class="flex-shrink-0 group block">
+                <div class="flex items-center">
+                    <div>
+                        <img class="inline-block h-10 w-10 rounded-full" src="<%= comment.profile_img_url %>" alt="Profile Photo">
+                    </div>
+                    <div class="ml-3">
+                        <p class="text-base leading-6 font-medium">
+                            <%= comment.name %> <span class="text-gray-400">
+                                <%= comment.username %> .
+                            </span>
+                            <span class="text-sm leading-5 font-medium text-gray-400 transition ease-in-out duration-150">
+                                Posted on <%= comment.created_at %>
+                            </span>
+                        </p>
+                        <p class="text-base leading-6 font-medium">
+                            <%= comment.content %>
+                        </p>
+                    </div>
+                </div>
+            </a>
+        </div>
+    <% }); %>
+</article>

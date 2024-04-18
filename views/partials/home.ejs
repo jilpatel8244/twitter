@@ -37,7 +37,7 @@
                                 class="mt-1 group flex items-center text-blue-400 px-2 py-2 text-base leading-6 font-medium rounded-full hover:bg-sky-100 ">
                                 <svg class="text-center h-7 w-6" fill="none" stroke-linecap="round"
                                     stroke-linejoin="round" stroke-width="2" stroke="currentColor" viewBox="0 0 24 24">
-                                
+
                                     <path
                                         d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z">
                                     </path>
@@ -94,6 +94,7 @@
             <hr class="border-gray-200">
     </aside>
 
+
     <ul class="list-none">
         <% tweets.forEach(function(tweet){ %>
             <li>
@@ -120,172 +121,178 @@
                             </div>
                         </a>
                     </div>
-                    <div class="pl-16">
-                        <p class="text-base width-auto font-medium">
-                            <%= tweet.content %>
-                        </p>
-                        <div class="size-fit pr-6 pt-3">
-                            <div class="">
-                                <img class="rounded" src="./uploads/<%= tweet.media_url %>" alt="">
+                    <a href="/get_comments/<%= tweet.tweet_id %>">
+                        <div class="pl-16">
+                            <p class="text-base width-auto font-medium">
+                                <%= tweet.content %>
+                            </p>
+                            <div class="size-fit pr-6 pt-3">
+                                <div class="">
+                                    <img class="rounded" src="./uploads/<%= tweet.media_url %>" alt="">
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="w-full">
-                            <div class="flex items-center py-4">
-                                <input type="hidden" name="tweet_id" value="<%= tweet.tweet_id %>">
-                                <!-- comments span tag -->
-                                <div onclick="show('<%= tweet.tweet_id %>')" class="flex-1 text-center"
-                                    data-modal-target="crud-modal" data-modal-toggle="crud-modal">
-                                    <span
-                                        class="w-12 mt-1 group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full  hover:text-blue-400">
-                                        <svg class="text-center h-6 w-6" fill="none" stroke-linecap="round"
-                                            stroke-linejoin="round" stroke-width="2" stroke="currentColor"
-                                            viewBox="0 0 24 24">
-                                            <path
-                                                d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z">
-                                            </path>
-                                        </svg>
-                                    </span>
-                                </div>
+                            <div class="w-full">
+                                <div class="flex items-center py-4">
+                                    <input type="hidden" name="tweet_id" value="<%= tweet.tweet_id %>">
+                                    <!-- comments span tag -->
 
-                                <!-- modal -->
-                                <div id="crud-modal" tabindex="-1" aria-hidden="true"
-                                    class="comments_<%= tweet.tweet_id %> hidden overflow-y-auto overflow-x-hidden top-0 -right-40 absolute justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
-                                    <div
-                                        class="relative w-full max-w-md max-h-full mx-auto my-10 h-full md:h-auto ml-[35%]">
-                                        <!-- Modal content -->
-                                        <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
-
-                                            <!-- Modal body -->
-                                            <form
-                                                class="p-4 md:p-5">
-                                                <div class="flex justify-end">
-                                                    <span onclick="hide('<%= tweet.tweet_id %>')">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                            viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                                                            class="w-6 h-6">
-                                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                                d="M6 18 18 6M6 6l12 12" />
-                                                        </svg>
-                                                    </span>
-
-                                                </div>
-                                                <div class="grid gap-4 mb-4 grid-cols-2">
-
-                                                    <div class="col-span-2">
-                                                        <textarea name="comment" id="description" rows="4"
-                                                            class="block p-2.5 w-full text-xl text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                                            placeholder="Post your reply"></textarea>
-                                                    </div>
-                                                </div>
-
-                                                <div class="flex justify-end" onclick="submitComment('<%= tweet.tweet_id %>'); return false;">
-                                                    <span
-                                                        class="text-white inline-flex items-center bg-sky-500 hover:bg-sky-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                                                        Reply</span>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class=" flex-1 text-center py-2 m-2" id="defaultModalButton">
-                                    <span
-                                        class="w-12 mt-1 group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full  hover:text-green-600">
-                                        <svg class="text-center h-7 w-6" fill="none" stroke-linecap="round"
-                                            stroke-linejoin="round" stroke-width="2" stroke="currentColor"
-                                            viewBox="0 0 24 24">
-                                            <path d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"></path>
-                                        </svg>
-                                    </span>
-                                </div>
-
-                                <!-- like span tag -->
-                                <div class="flex-1 text-center py-2 m-2 like_<%= tweet.tweet_id %>"
-                                    onclick="likeHandler('<%= tweet.tweet_id %>')">
-                                    <span
-                                        class="w-12 mt-1 group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full  hover:text-red-600">
-
-                                        <% if(tweet.isLiked) { %>
-                                            <svg class="text-center h-7 w-6 from-green-700 text-red-600" fill="none"
-                                                stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                stroke="currentColor" viewBox="0 0 24 24">
+                                    <div onclick="show('<%= tweet.tweet_id %>')" class="flex-1 text-center"
+                                        data-modal-target="crud-modal" data-modal-toggle="crud-modal">
+                                        <span
+                                            class="w-12 mt-1 group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full  hover:text-blue-400">
+                                            <svg class="text-center h-6 w-6" fill="none" stroke-linecap="round"
+                                                stroke-linejoin="round" stroke-width="2" stroke="currentColor"
+                                                viewBox="0 0 24 24">
                                                 <path
-                                                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z">
+                                                    d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z">
                                                 </path>
                                             </svg>
-                                            <% } else {%>
-                                                <svg class="text-center h-7 w-6 text-gray-500" fill="none"
+                                        </span>
+                                    </div>
+
+                                    <!-- modal -->
+                                    <div id="crud-modal" tabindex="-1" aria-hidden="true"
+                                        class="comments_<%= tweet.tweet_id %> hidden overflow-y-auto overflow-x-hidden top-0 -right-40 absolute justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                                        <div
+                                            class="relative w-full max-w-md max-h-full mx-auto my-10 h-full md:h-auto ml-[35%]">
+                                            <!-- Modal content -->
+                                            <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+
+                                                <!-- Modal body -->
+                                                <form class="p-4 md:p-5">
+                                                    <div class="flex justify-end">
+                                                        <span onclick="hide('<%= tweet.tweet_id %>')">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                                viewBox="0 0 24 24" stroke-width="1.5"
+                                                                stroke="currentColor" class="w-6 h-6">
+                                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                                    d="M6 18 18 6M6 6l12 12" />
+                                                            </svg>
+                                                        </span>
+
+                                                    </div>
+                                                    <div class="grid gap-4 mb-4 grid-cols-2">
+
+                                                        <div class="col-span-2">
+                                                            <textarea name="comment" id="comment" rows="4"
+                                                                class="block p-2.5 w-full text-xl text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                                                placeholder="Post your reply"></textarea>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="flex justify-end"
+                                                        onclick="submitComment('<%= tweet.tweet_id %>'); return false;">
+                                                        <span
+                                                            class="text-white cursor-pointer inline-flex items-center bg-sky-500 hover:bg-sky-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                                            Reply</span>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class=" flex-1 text-center py-2 m-2" id="defaultModalButton">
+                                        <span
+                                            class="w-12 mt-1 group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full  hover:text-green-600">
+                                            <svg class="text-center h-7 w-6" fill="none" stroke-linecap="round"
+                                                stroke-linejoin="round" stroke-width="2" stroke="currentColor"
+                                                viewBox="0 0 24 24">
+                                                <path d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"></path>
+                                            </svg>
+                                        </span>
+                                    </div>
+
+                                    <!-- like span tag -->
+                                    <div class="flex-1 text-center py-2 m-2 like_<%= tweet.tweet_id %>"
+                                        onclick="likeHandler('<%= tweet.tweet_id %>')">
+                                        <span
+                                            class="w-12 mt-1 group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full  hover:text-red-600">
+
+                                            <% if(tweet.isLiked) { %>
+                                                <svg class="text-center h-7 w-6 from-green-700 text-red-600" fill="none"
                                                     stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                     stroke="currentColor" viewBox="0 0 24 24">
                                                     <path
                                                         d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z">
                                                     </path>
                                                 </svg>
-                                                <% } %>
-                                    </span>
-                                </div>
+                                                <% } else {%>
+                                                    <svg class="text-center h-7 w-6 text-gray-500" fill="none"
+                                                        stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                        stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path
+                                                            d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z">
+                                                        </path>
+                                                    </svg>
+                                                    <% } %>
+                                        </span>
+                                    </div>
 
-                                <!-- share span tag -->
-                                <div class="flex-1 text-center py-2 m-2">
-                                    <span
-                                        class="w-12 mt-1 group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full  hover:text-blue-400">
-                                        <svg class="text-center h-7 w-6" fill="none" stroke-linecap="round"
-                                            stroke-linejoin="round" stroke-width="2" stroke="currentColor"
-                                            viewBox="0 0 24 24">
-                                            <path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12">
-                                            </path>
-                                        </svg>
-                                    </span>
-                                </div>
-                                <!-- bookmark span tag -->
-                                <div class="flex-1 text-center py-2 m-2 bookmark_<%= tweet.tweet_id %>"
-                                    onclick="bookmarkHandler('<%= tweet.tweet_id %>')">
-                                    <span <%=tweet.tweet_id %>
-                                        class="w-12 mt-1 group flex items-center text-gray-500 px-3 py-2 text-base
-                                        leading-6 font-medium rounded-full hover:text-blue-400">
-                                        <% if(tweet.isBookmarked) { %>
-                                            <svg class="text-center h-7 w-6 fill-blue-300 text-blue-800" fill="none"
-                                                stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                stroke="currentColor" viewBox="0 0 24 24">
+                                    <!-- share span tag -->
+                                    <div class="flex-1 text-center py-2 m-2">
+                                        <span
+                                            class="w-12 mt-1 group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full  hover:text-blue-400">
+                                            <svg class="text-center h-7 w-6" fill="none" stroke-linecap="round"
+                                                stroke-linejoin="round" stroke-width="2" stroke="currentColor"
+                                                viewBox="0 0 24 24">
                                                 <path
-                                                    d="M8 4H6a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-2m-4-1v8m0 0l3-3m-3 3L9 8m-5 5h2.586a1 1 0 01.707.293l2.414 2.414a1 1 0 00.707.293h3.172a1 1 0 00.707-.293l2.414-2.414a1 1 0 01.707-.293H20">
+                                                    d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12">
                                                 </path>
                                             </svg>
-                                            <% } else {%>
-                                                <svg class="text-center h-7 w-6" fill="none" stroke-linecap="round"
-                                                    stroke-linejoin="round" stroke-width="2" stroke="currentColor"
-                                                    viewBox="0 0 24 24">
+                                        </span>
+                                    </div>
+                                    <!-- bookmark span tag -->
+                                    <div class="flex-1 text-center py-2 m-2 bookmark_<%= tweet.tweet_id %>"
+                                        onclick="bookmarkHandler('<%= tweet.tweet_id %>')">
+                                        <span <%=tweet.tweet_id %>
+                                            class="w-12 mt-1 group flex items-center text-gray-500 px-3 py-2 text-base
+                                            leading-6 font-medium rounded-full hover:text-blue-400">
+                                            <% if(tweet.isBookmarked) { %>
+                                                <svg class="text-center h-7 w-6 fill-blue-300 text-blue-800" fill="none"
+                                                    stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    stroke="currentColor" viewBox="0 0 24 24">
                                                     <path
                                                         d="M8 4H6a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-2m-4-1v8m0 0l3-3m-3 3L9 8m-5 5h2.586a1 1 0 01.707.293l2.414 2.414a1 1 0 00.707.293h3.172a1 1 0 00.707-.293l2.414-2.414a1 1 0 01.707-.293H20">
                                                     </path>
                                                 </svg>
-                                                <% } %>
-                                    </span>
-                                </div>
+                                                <% } else {%>
+                                                    <svg class="text-center h-7 w-6" fill="none" stroke-linecap="round"
+                                                        stroke-linejoin="round" stroke-width="2" stroke="currentColor"
+                                                        viewBox="0 0 24 24">
+                                                        <path
+                                                            d="M8 4H6a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-2m-4-1v8m0 0l3-3m-3 3L9 8m-5 5h2.586a1 1 0 01.707.293l2.414 2.414a1 1 0 00.707.293h3.172a1 1 0 00.707-.293l2.414-2.414a1 1 0 01.707-.293H20">
+                                                        </path>
+                                                    </svg>
+                                                    <% } %>
+                                        </span>
+                                    </div>
 
-                                <!-- views span tag -->
-                                <div class="flex-1 text-center py-2 m-2">
-                                    <span href="#"
-                                        class="w-12 mt-1 group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full  hover:text-blue-400">
-                                        <svg class="text-center h-7 w-6" fill="none" stroke-linecap="round"
-                                            stroke-linejoin="round" stroke-width="2" stroke="currentColor"
-                                            viewBox="0 0 24 24">
-                                            <path
-                                                d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z">
-                                            </path>
-                                        </svg>
-                                    </span>
+                                    <!-- views span tag -->
+                                    <div class="flex-1 text-center py-2 m-2">
+                                        <span href="#"
+                                            class="w-12 mt-1 group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full  hover:text-blue-400">
+                                            <svg class="text-center h-7 w-6" fill="none" stroke-linecap="round"
+                                                stroke-linejoin="round" stroke-width="2" stroke="currentColor"
+                                                viewBox="0 0 24 24">
+                                                <path
+                                                    d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z">
+                                                </path>
+                                            </svg>
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
+
+
                         </div>
-
-
-                    </div>
+                    </a>
                     <hr class="border-gray-200">
                 </article>
             </li>
+
             <% }); %>
     </ul>
+
 </section>
 <script src="./js/like.script.js"></script>
 <script src="./js/bookmark.script.js"></script>

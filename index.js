@@ -1,13 +1,13 @@
 const express = require("express");
 const app = express();
-var http = require('http');
+const http = require('http');
 const server = http.createServer(app);
-var {Server} = require('socket.io');
+const {Server} = require('socket.io');
 
 const io = new Server(server);
-
 const cookieParser = require("cookie-parser");
-const GetProfileRouter = require("./src/routes/profile.routes");
+const getProfileRouter = require("./src/routes/profile.routes");
+const getTimeZone = require("./src/routes/timezone.routes");
 const bodyParser = require("body-parser");
 const homeRouter = require("./src/routes/home.routes");
 const notification = require("./src/routes/notification.route");
@@ -30,13 +30,13 @@ app.use(cookieParser());
 
 app.use(express.static("public"));
 
-// app.use(authRouter);
 app.use(homeRouter);
 app.use("/explore", exploreRoute);
 app.use(authRouter);
-app.use(GetProfileRouter);
+app.use(getTimeZone);
 app.use(notification);
 app.use("/editprofile", editprofile);
+app.use('/profile', passport.authenticate('jwt', { session: false}), getProfileRouter);
 app.use('/like', passport.authenticate('jwt', { session: false}), likeRoute);
 app.use('/bookmark', passport.authenticate('jwt', { session: false }), bookmarkRoute);
 app.use('/messages', passport.authenticate('jwt', { session: false }), messagesRoute);

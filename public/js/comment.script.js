@@ -1,5 +1,4 @@
 function submitComment(tweetId) {
-    console.log("blaa");
     let commentInput = document.querySelector(`.comments_${tweetId} textarea[name="comment"]`);
     let commentText = commentInput.value;
     commentInput.value = '';
@@ -14,14 +13,14 @@ function submitComment(tweetId) {
             comment: commentText,
         }),
     })
-    .then(response => response.json())
-    document.querySelector(`.comments_${tweetId}`).style.display = 'none' ;
+        .then(response => response.json());
+    document.querySelector(`.comments_${tweetId}`).style.display = 'none';
 }
 
-function show(tweetId){
-    document.querySelector(`.comments_${tweetId}`).style.display = 'block' ;
-    document.querySelector(`.comments_${tweetId}`).style.opacity = '1' ;
+function show(tweetId) {
+    document.querySelector(`.comments_${tweetId}`).style.display = 'block';
+    document.querySelector(`.comments_${tweetId}`).style.opacity = '1';
 }
-function hide(tweetId){
+function hide(tweetId) {
     document.querySelector(`.comments_${tweetId}`).style.display = 'none';
 }
