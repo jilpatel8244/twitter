@@ -1,5 +1,5 @@
 <!--first tweet start-->
-<%if(!profileData){%>
+<%if(!postData){%>
   <section class="w-full border border-gray-200" style="width:600px;">
 
     <div class="flex p-4 pb-0">
@@ -108,8 +108,8 @@
 
     <!--First tweet-->
 
-    <%if(profileData){%>
-      <%for(let i=0;i<profileData.length;i++){%>
+    <%if(postData){%>
+      <%for(let i=0;i<postData.length;i++){%>
         <section class="w-full border border-gray-200" style="width:600px;">
 
           <div class="flex p-4 pb-0">
@@ -121,10 +121,10 @@
                 </div>
                 <div class="ml-3">
                   <p class="text-base leading-6 font-medium text-black">
-                    <%=profileData[i].name%>
+                    <p id="name"><%=postData[i].name%></p>
                       <span
                         class="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 transition ease-in-out duration-150">
-                        @<%=profileData[i].username%>. <%=profileData[i].created_at%>
+                        <p id="username">@<%=postData[i].username%></p>.<p id="created_at"> <%=postData[i].created_at%></p>
                       </span>
                   </p>
                 </div>
@@ -133,7 +133,7 @@
           </div>
           <div class="pl-16">
             <p class="text-base width-auto font-medium text-black ">
-              <%=profileData[i].content%>
+              <p id="content"><%=postData[i].content%></p>
                 <span class="text-blue-400"> </span>
             </p>
 

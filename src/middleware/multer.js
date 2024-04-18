@@ -19,7 +19,8 @@ var imageStorage= multer.diskStorage({
 })
 function fileFilter(req, file, cb) {
   if (!file.originalname.match(/\.(jpg|jpeg|png|webp)$/)) {
-      return  cb(new Error('Please upload a valid image file'),false)
+      req.fileValidationError='Please upload a valid image file'
+      return cb(null,false)
   }
   cb(null, true)
 }
