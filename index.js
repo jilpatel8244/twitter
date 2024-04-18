@@ -8,7 +8,6 @@ const io = new Server(server);
 const cookieParser = require("cookie-parser");
 const getProfileRouter = require("./src/routes/profile.routes");
 const getTimeZone = require("./src/routes/timezone.routes");
-const bodyParser = require("body-parser");
 const homeRouter = require("./src/routes/home.routes");
 const notification = require("./src/routes/notification.route");
 const exploreRoute = require("./src/routes/explore.routes")
@@ -36,6 +35,7 @@ app.use(authRouter);
 app.use(getTimeZone);
 app.use(notification);
 app.use("/editprofile", editprofile);
+
 app.use('/profile', passport.authenticate('jwt', { session: false}), getProfileRouter);
 app.use('/like', passport.authenticate('jwt', { session: false}), likeRoute);
 app.use('/bookmark', passport.authenticate('jwt', { session: false }), bookmarkRoute);
