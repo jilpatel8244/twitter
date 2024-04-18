@@ -24,14 +24,25 @@ exports.getMessagesPage = async (req, res) => {
 exports.storeMessageHandler = async (req, res) => {
     try {
         let { senderId, reciverId, message } = req.body;
+        let content_type = 'text';
 
-        let sql = `insert into direct_messages (sender_id, receiver_id, content) values ( ?, ?, ? );`;
+        if (req.file) {
+            message = req.file.filename;
+            content_type = 'media';
+        }
 
-        await connection.query(sql, [ senderId, reciverId, message ]);
+        let sql = `insert into direct_messages (sender_id, receiver_id, content, content_type) values ( ?, ?, ?, ? );`;
+
+        await connection.query(sql, [ senderId, reciverId, message, content_type ]);
 
         return res.status(200).json({
             success: true,
-            message: req.body
+            message: {
+                'senderId': senderId,
+                'reciverId': reciverId,
+                'message': message,
+                'content_type': content_type  
+            }
         });
 
     } catch (error) {
@@ -39,6 +50,6 @@ exports.storeMessageHandler = async (req, res) => {
         return res.status(500).json({
             success: false,
             message: error.message
-        })
+        });
     }
 }

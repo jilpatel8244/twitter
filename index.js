@@ -75,10 +75,11 @@ io.on('connection', function (socket) {
 
 
   socket.on('send-private-message', async (data) => {
-    const {senderId, reciverId, message} = data;
+    const {senderId, reciverId, message, content_type} = data;
+    console.log(data);
 
     if(connectedUser[reciverId]) {
-      io.to(connectedUser[reciverId]).emit('receive-private-message', {senderId, message});
+      io.to(connectedUser[reciverId]).emit('receive-private-message', {senderId, reciverId, message, content_type});
     }
   })
 

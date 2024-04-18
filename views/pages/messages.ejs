@@ -48,11 +48,10 @@
                     <%- include('../partials/messagesComponent.ejs') %>
 
                     <div class="w-3/5 border-r border-gray-200 overflow-auto relative" id="user-display-and-chatting">
-                        <div id="prev-chat-section">
-                            <div>
-                                <div class="overflow-y-auto fixed  h-screen">
-                                    <h2>select to start the chat</h2>
-                                </div>
+                        <div id="prev-chat-section" class="h-full flex justify-center items-center ">
+                            <div class="w-3/5" style="line-height: 25px;">
+                                <h2 class="font-bold text-4xl">Select a message</h2>
+                                <p style="color: rgb(83, 100, 113);">Choose from your existing conversations, start a new one, or just keep swimming.</p>
                             </div>
                         </div>
 
@@ -86,7 +85,7 @@
                             <!-- sticky user input form -->
                             <div class="sticky bottom-0 py-2 bg-white">
                                 <div class="mx-4 border border-t-gray-200 rounded-xl" style="background-color: #eff3f4;">
-                                    <form id="messageForm" class="relative">
+                                    <form id="messageForm" class="relative" enctype="multipart/form-data">
                                         <div class="flex items-center relative">
                                             <div>
                                                 <label for="img-message">
@@ -99,8 +98,18 @@
                                                 </label>
                                                 <input type="file" onchange="previewMedia(event)" name="img-message" id="img-message" accept="image/png, image/jpeg, image/jpg" class="hidden">
                                             </div>
-                                            <input type="text" class="placeholder:text-gray-400"  name="message" onkeyup="checkMessageBox()" onkeydown="checkMessageBox()" id="message" placeholder="Start a new message" style="background-color: #eff3f4; width: 100%;">
-                                            <input type="submit" value="Send" class="opacity-50 p-2" id="messageSendBtn">
+                                            <div>
+                                                <label for="img-message">
+                                                    <a class="-1 group flex items-center text-blue-400 px-2 py-2 text-base leading-6 font-medium rounded-full hover:bg-opacity-20 hover:bg-[#8fa2c4] hover:text-blue-600">
+                                                        <img src="./assets/gif.png" alt="" srcset="" height="50px" width="50px" class="outline-1 select-none">
+                                                    </a>
+                                                </label>
+                                                <input type="file" onchange="previewMedia(event)" name="img-message" id="img-message" accept="image/*" class="hidden">
+                                            </div>
+
+                                            
+                                            <input type="text" class="placeholder:text-gray-400 px-2"  name="message" onkeyup="checkMessageBox()" onkeydown="checkMessageBox()" id="message" placeholder="Start a new message" style="background-color: #eff3f4; width: 100%;">
+                                            <input type="submit" value="Send" class="opacity-50 p-2" id="messageSendBtn" disabled>
                                         </div>
                                     </form>
                                 </div>
@@ -160,7 +169,6 @@
 
         let senderId = '<%= user %>';
         let reciverId;
-        let reciverName;
 
         socket.on('connect', () => {
             console.log('connected to server ' + socket.id);
@@ -193,34 +201,48 @@
             event.preventDefault();
 
             let message = document.getElementById('message').value;
-        
+            let imgFile = document.getElementById('img-message').files[0];
+
+            let formData = new FormData();
+            formData.append('senderId', senderId);
+            formData.append('reciverId', reciverId);
+            formData.append('message', message);
+            formData.append('imgFile', imgFile);
 
             // if (message && message.length != 0 && message.length < 250) {
                 let url = window.location.origin + '/messages/storeMessage';
 
                 let data = await fetch(url, {
                     method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        senderId: senderId,
-                        reciverId: reciverId,
-                        message: message
-                    }),
+                    body: formData
                 });
 
                 let response = await data.json();
 
                 if (response.success) {
 
-                    document.getElementById('message').value = '';
-
                     let newDiv = document.createElement('div');
-                    newDiv.classList.add('text-right', 'sender-chat');
-                    newDiv.innerHTML = `<span>${response.message.message}</span>`;
+                    newDiv.classList.add('text-right', 'sender-chat', 'flex', 'justify-end');
+
+                    if (imgFile) {
+                        newDiv.innerHTML = `<img src="/uploads/${response.message.message}" alt="img" class="border rounded-xl" style="height: 300px; width: 300px">`;
+                    } else {
+                        newDiv.innerHTML = `<span>${response.message.message}</span>`;
+                    }
 
                     document.getElementById('chat-container').appendChild(newDiv);
+
+                    // remove messge text
+                    document.getElementById('message').value = '';
+
+                    // remove preview image
+                    if (document.getElementById('img-message').value) {
+                        document.getElementById('preview_img').parentElement.remove();
+                    }
+
+                    // remove selected image
+                    document.getElementById('img-message').value = '';
+
                     scrollToBottom('user-display-and-chatting');
 
                     socket.emit('send-private-message', response.message);
@@ -232,9 +254,15 @@
         socket.on('receive-private-message', (data) => {
             let newDiv = document.createElement('div');
             newDiv.classList.add('reciver-chat');
-            newDiv.innerHTML = `<span>${data.message}</span>`;
+
+            if (data.content_type == 'text') {
+                newDiv.innerHTML = `<span>${data.message}</span>`;
+            } else {
+                newDiv.innerHTML = `<img src="/uploads/${data.message}" alt="img" class="border rounded-xl" style="height: 300px; width: 300px">`;
+            }
     
             document.getElementById('chat-container').appendChild(newDiv);  
+
             scrollToBottom('user-display-and-chatting');
         })
 
@@ -242,22 +270,23 @@
         socket.on('loadChats', (data) => {
             document.getElementById('chat-container').innerHTML = '';
 
-            console.log(data.oldchats);
-
             data.oldchats.forEach((element, index) => {
-                if (element.sender_id == senderId) {
-                    let newDiv = document.createElement('div');
-                    newDiv.classList.add('text-right', 'sender-chat');
-                    newDiv.innerHTML = `<span>${element.content}</span>`;
+                let newDiv = document.createElement('div');
 
-                    document.getElementById('chat-container').appendChild(newDiv);
-                } else {
-                    let newDiv = document.createElement('div');
-                    newDiv.classList.add('reciver-chat');
+                if (element.content_type == 'text') {
                     newDiv.innerHTML = `<span>${element.content}</span>`;
-        
-                    document.getElementById('chat-container').appendChild(newDiv);  
+                } else {
+                    newDiv.innerHTML = `<img src="/uploads/${element.content}" alt="img" class="border rounded-xl" style="height: 300px; width: 300px">`;
                 }
+
+                if (element.sender_id == senderId) {
+                    newDiv.classList.add('text-right', 'sender-chat', 'flex', 'justify-end');
+                } else {
+                    newDiv.classList.add('reciver-chat');
+                }
+
+                document.getElementById('chat-container').appendChild(newDiv);  
+
                 scrollToBottom('user-display-and-chatting');
             });
         })
@@ -270,8 +299,9 @@
 
         const checkMessageBox = () => {
             let message = document.getElementById('message').value;
-            // let file = document.getElementById('img-message');
+            let imgMessage = document.getElementById('img-message').value;
 
+            // check it
             if (message.length === 0 || message.length > 250) {
                 document.getElementById("messageSendBtn").disabled = true;
                 document.getElementById("messageSendBtn").style.opacity = 0.5;
@@ -282,10 +312,15 @@
         }
 
         const previewMedia = (event) => {
+
+            if(document.getElementById('preview_img')){
+                document.getElementById('preview_img').parentElement.remove();
+            }
+
             let form = document.getElementById('messageForm');
 
             let newDiv = document.createElement('div');
-            newDiv.innerHTML = `<img src="" alt="" id="preview_img" class="h-24 w-24">`;
+            newDiv.innerHTML = `<img src="" alt="" id="preview_img" class="h-36 w-36 m-4 rounded-xl">`;
 
             form.insertBefore(newDiv, form.firstChild);
 
@@ -296,8 +331,7 @@
                 URL.revokeObjectURL(output.src) // free memory
             }
 
-            // document.getElementById("messageSendBtn").disabled = false;
-            // document.getElementById("messageSendBtn").style.opacity = 1;
+            // checkMessageBox();
         }
     </script>
 </body>
