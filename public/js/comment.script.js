@@ -1,9 +1,10 @@
 function submitComment(tweetId) {
+    console.log("bls");
     let commentInput = document.querySelector(`.comments_${tweetId} textarea[name="comment"]`);
     let commentText = commentInput.value;
     commentInput.value = '';
 
-    fetch('/comments', {
+    fetch('/post_comments', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

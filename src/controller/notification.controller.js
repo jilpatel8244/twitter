@@ -46,10 +46,10 @@ exports.getNotifications = async (req, res) => {
   // console.log(notifications);
   const mentionedUsernames = extractMentionedUsernames(
     // notification.tweet_content
-    "hello there @jil and @harsh !!! what is your opinion on this tweet functionality"
+    "hello there @nikitakangad and @ !!! what is your opinion on this tweet functionality"
   );
   const mentionedUsers = await getUsersByUsernames(mentionedUsernames);
-  // console.log(mentionedUsers);
+  console.log(mentionedUsers);
 
   res.status(200).json({
     notifications,
