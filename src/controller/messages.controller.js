@@ -25,6 +25,7 @@ exports.storeMessageHandler = async (req, res) => {
     try {
         let { senderId, reciverId, message } = req.body;
 
+        // set content_type
         let sql = `insert into direct_messages (sender_id, receiver_id, content) values ( ?, ?, ? );`;
 
         await connection.query(sql, [ senderId, reciverId, message ]);

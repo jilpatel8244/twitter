@@ -100,7 +100,7 @@
                                                 <input type="file" onchange="previewMedia(event)" name="img-message" id="img-message" accept="image/png, image/jpeg, image/jpg" class="hidden">
                                             </div>
                                             <input type="text" class="placeholder:text-gray-400"  name="message" onkeyup="checkMessageBox()" onkeydown="checkMessageBox()" id="message" placeholder="Start a new message" style="background-color: #eff3f4; width: 100%;">
-                                            <input type="submit" value="Send" class="opacity-50 p-2" id="messageSendBtn">
+                                            <input type="submit" value="Send" class="opacity-50 p-2" id="messageSendBtn" disabled>
                                         </div>
                                     </form>
                                 </div>
@@ -193,7 +193,18 @@
             event.preventDefault();
 
             let message = document.getElementById('message').value;
-        
+            let imgMessage = document.getElementById('img-message').value;
+
+            console.log(imgMessage);
+
+            if(imgMessage.length) {
+                // use multer
+                // set the content_type 
+                // set the message to url(that are get using multer)
+
+                // remove the preview
+                document.getElementById('preview_img').remove();
+            }
 
             // if (message && message.length != 0 && message.length < 250) {
                 let url = window.location.origin + '/messages/storeMessage';
@@ -206,6 +217,7 @@
                     body: JSON.stringify({
                         senderId: senderId,
                         reciverId: reciverId,
+                        // send content_type
                         message: message
                     }),
                 });
@@ -215,6 +227,7 @@
                 if (response.success) {
 
                     document.getElementById('message').value = '';
+                    document.getElementById('img-message').value = '';
 
                     let newDiv = document.createElement('div');
                     newDiv.classList.add('text-right', 'sender-chat');
@@ -270,9 +283,10 @@
 
         const checkMessageBox = () => {
             let message = document.getElementById('message').value;
-            // let file = document.getElementById('img-message');
+            let imgMessage = document.getElementById('img-message').value;
 
-            if (message.length === 0 || message.length > 250) {
+            // check it
+            if (message.length === 0 || message.length > 250 || imgMessage.length === 0) {
                 document.getElementById("messageSendBtn").disabled = true;
                 document.getElementById("messageSendBtn").style.opacity = 0.5;
             } else {
@@ -296,6 +310,7 @@
                 URL.revokeObjectURL(output.src) // free memory
             }
 
+            checkMessageBox();
             // document.getElementById("messageSendBtn").disabled = false;
             // document.getElementById("messageSendBtn").style.opacity = 1;
         }
