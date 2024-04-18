@@ -25,11 +25,9 @@
                 <article class=" transition duration-350 ease-in-out" id="allTweets">
                     <!-- all tweets -->
                     <% if(allBookmarkTweets.length) { %>
-
                         <% allBookmarkTweets.forEach((element, index)=> { %>
                             <%- include('../partials/tweetComponent.ejs', {singleTweet: element}) %>
                         <% }) %>
-
                     <% } else { %>
                         <div> No saved post </div>
                     <% } %>
