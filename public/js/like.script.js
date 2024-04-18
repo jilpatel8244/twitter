@@ -14,6 +14,9 @@ async function likeHandler(tweetId) {
     if (response.success == true) {
         let likeImg = document.querySelector(`.like_${tweetId}`);
 
+        console.log(likeImg);
+        console.log(response);
+
         if (response.likeStatus) {
             likeImg.classList.add('fill-red-600', 'text-red-600');
         } else {
