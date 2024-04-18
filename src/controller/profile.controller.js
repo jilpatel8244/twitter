@@ -14,13 +14,13 @@ exports.getProfile = async (req, res) => {
 
     if (userProfileData) {
 
-      const profileDataQuery = `SELECT * FROM users as u INNER JOIN tweets as t ON u.id=t.user_id WHERE u.id = ?`;
-      const [profileData] = await connection.query(profileDataQuery, [id]);
-      console.log(profileData[0]);
+      const postDataQuery = `SELECT * FROM users as u INNER JOIN tweets as t ON u.id=t.user_id WHERE u.id = ?`;
+      const [postData] = await connection.query(postDataQuery, [id]);
+      console.log(postData[0]);
 
-      if (profileData[0]) {
+      if (postData[0]) {
 
-        const profileTweetId = profileData[0].id;
+        const profileTweetId = postData[0].id;
 
         const twitCount = `SELECT count(*) as t FROM tweets WHERE user_id = ?`;
         const [twitCountData] = await connection.query(twitCount, [id]);
@@ -31,40 +31,50 @@ exports.getProfile = async (req, res) => {
         console.log(profileTweetId);
         console.log(commentData);
 
-        if (commentData) {
+        if (commentData[0]) {
 
-          const replyCommentDataQuery = `SELECT * FROM reply_comments WHERE id=`;
+          const replyCommentDataQuery = `SELECT * FROM reply_comments WHERE id=?`;
+          const [replyCommentData] = await connection.query(replyCommentDataQuery, [id]);
+          console.log(replyCommentData);
 
-        }
+          if (replyCommentData[0]) {
 
-        const replyDataQuery = `SELECT rt.tweet_id,rt.retweet_message,rt.user_id as retweeter, rt.created_at as retweet_date, u.username, u.name ,t.* FROM users as u INNER JOIN retweets as rt INNER JOIN tweets as t ON u.id=rt.user_id AND rt.tweet_id = t.id WHERE u.id =?`;
-        let [replyData] = await connection.query(replyDataQuery, [id]) || [[]];
-
-        if (replyData[0]) {
-          console.log(replyData);
-          let tweetId = replyData[0].tweet_id;
-          // console.log(tweetId);
-          logger.info(tweetId);
-          const tweetDataQuery = `SELECT u.name,u.username,t.id,t.content,t.created_at as tweet_Date FROM tweets as t INNER JOIN users as u ON u.id = t.user_id WHERE t.id=?`;
-          let [tweetData] = await connection.query(tweetDataQuery, [tweetId]);
-          console.log(tweetData);
-          if (commentData[0]) {
+            let replyData, tweetData;
             let allLikedTweet = [];
-            res.render('../views/pages/profile', { allLikedTweet, profileData, twitCountData, replyData, tweetData, commentData });
+            res.render("../views/pages/profile", { userProfileData, replyCommentData, postData, allLikedTweet, twitCountData, replyData, tweetData, commentData });
+
           } else {
-            let commentData;
-            let allLikedTweet = [];
-            res.render('../views/pages/profile', { allLikedTweet, profileData, twitCountData, replyData, tweetData, commentData });
+        
+            const replyDataQuery = `SELECT rt.tweet_id,rt.retweet_message,rt.user_id as retweeter, rt.created_at as retweet_date, u.username, u.name ,t.* FROM users as u INNER JOIN retweets as rt INNER JOIN tweets as t ON u.id=rt.user_id AND rt.tweet_id = t.id WHERE u.id =?`;
+            let [replyData] = await connection.query(replyDataQuery, [id]) || [[]];
+
+            if (replyData[0]) {
+              console.log(replyData);
+              let tweetId = replyData[0].tweet_id;
+              // console.log(tweetId);
+              logger.info(tweetId);
+              const tweetDataQuery = `SELECT u.name,u.username,t.id,t.content,t.created_at as tweet_Date FROM tweets as t INNER JOIN users as u ON u.id = t.user_id WHERE t.id=?`;
+              let [tweetData] = await connection.query(tweetDataQuery, [tweetId]);
+              console.log(tweetData);
+              if (commentData[0]) {
+                let allLikedTweet = [];
+                res.render('../views/pages/profile', { userProfileData, allLikedTweet, postData, twitCountData, replyData, tweetData, commentData });
+              } else {
+                let commentData;
+                let allLikedTweet = [];
+                res.render('../views/pages/profile', { userProfileData, allLikedTweet, postData, twitCountData, replyData, tweetData, commentData });
+              }
+            } else {
+              let replyData, tweetData, commentData;
+              let allLikedTweet = [];
+              res.render('../views/pages/profile', { userProfileData, postData, allLikedTweet, twitCountData, replyData, tweetData, commentData });
+            }
           }
-        } else {
-          let replyData, tweetData, commentData;
-          let allLikedTweet = [];
-          res.render('../views/pages/profile', { profileData, allLikedTweet, twitCountData, replyData, tweetData, commentData });
         }
-      }else{
-        let profileData,twitCountData,replyData,tweetData,commentData;
-        let allLikedTweet=[];
-        res.render("../views/pages/profile",  {userProfileData, profileData, allLikedTweet, twitCountData, replyData, tweetData, commentData });
+      } else {
+        let postData, twitCountData, replyData, tweetData, commentData;
+        let allLikedTweet = [];
+        res.render("../views/pages/profile", { userProfileData, postData, allLikedTweet, twitCountData, replyData, tweetData, commentData });
       }
 
     } else {
@@ -74,3 +84,9 @@ exports.getProfile = async (req, res) => {
     console.log(error);
   }
 }
+
+
+
+
+
+
