@@ -69,3 +69,34 @@ CREATE TABLE `notifications` (
 );
 
  
+
+
+// in controller 
+
+const mentionedUsernames = extractMentionedUsernames(
+  // notification.tweet_content
+  "hello there @jil and @harsh @Parmeshvar!!! what is your opinion on this tweet functionality"
+);
+const mentionedUsers = await getUsersByUsernames(mentionedUsernames);
+// console.log(mentionedUsers);
+
+// functions
+function extractMentionedUsernames(tweetContent) {
+  const regex = /@(\w+)/g;
+  const matches = tweetContent.match(regex);
+  if (matches) {
+    return matches.map((match) => match.substring(1));
+  }
+  return [];
+}
+
+async function getUsersByUsernames(usernames) {
+  if (usernames.length === 0) {
+    return [];
+  }
+  const [users] = await connection.query(
+    "SELECT id, username FROM users WHERE username IN (?)",
+    [usernames]
+  );
+  return users;
+}
