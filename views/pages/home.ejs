@@ -8,10 +8,34 @@
         integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <title>X</title>
+    <style>
+      
+        #bla:after {
+            position: fixed;
+            content: "";
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: -2;
+        }
+
+        #bla:before {
+            position: absolute;
+            content: "";
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background: #FFF;
+            z-index: -1;
+        }
+    </style>
 </head>
 
 <body>
-    <div class="p-relative h-screen" id="main" style="background-color: white">
+    <div class="relative h-screen" id="main" style="background-color: white">
         <div class="flex justify-center">
             <header class=" py-4 h-auto">
                 <!-- Side Navbar (left side) -->
