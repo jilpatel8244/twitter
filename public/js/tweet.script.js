@@ -6,8 +6,10 @@ let media = document.getElementById('media')
 let images = document.getElementById('images')
 let drafts = document.getElementById('drafts');
 let draftList = document.getElementById('draftList');
-let closeDraft=document.getElementById('closeDraft');
-let hiddenId=document.getElementById('tweetId');
+let closeDraft = document.getElementById('closeDraft');
+let hiddenId = document.getElementById('tweetId');
+let editDraftBlock = document.getElementById('edit')
+let editDraft = document.getElementById('editBtn')
 document.addEventListener("DOMContentLoaded", function (event) {
 
   document.getElementById('defaultModalButton').onclick = () => {
@@ -66,26 +68,27 @@ const tweetInsert = async (status) => {
   }
 }
 post.onclick = () => {
-  if(hiddenId.value != ''){
+  if (hiddenId.value != '') {
     tweetUpdate('tweet')
   }
-  else{
+  else {
     tweetInsert('tweet')
   }
 }
 
 save.onclick = () => {
-  if(hiddenId.value != ''){
+  if (hiddenId.value != '') {
     tweetUpdate('draft')
   }
-  else{
-  tweetInsert('draft')
+  else {
+    tweetInsert('draft')
   }
   clearImages();
   document.getElementById('popup-modal').style.display = 'none'
   document.getElementById('defaultModal').style.display = 'none';
   post.style.opacity = '0.25'
   post.style.cursor = 'default'
+  document.forms['tweet'].reset();
 }
 
 discard.onclick = () => {
@@ -148,59 +151,62 @@ const displayDraft = async () => {
   if (!draftTweet.length) {
     return;
   }
+  else {
+    editDraftBlock.style.display = 'block';
+  }
+  let number = 1;
   draftTweet.forEach(draft => {
     list += `<li>
-    <input type="checkbox" id="job-1" name="job" value="job-1" class="hidden peer" required />
-    <label for="job-1" class="inline-flex items-center justify-between w-full p-5 text-gray-900 bg-white border border-gray-200 rounded-lg cursor-pointer hover:text-gray-900 hover:bg-gray-100 " onclick='sendDraft(${draft.id} , "${draft.content}")'>
-      <div class="block" >
-        <div class="w-full text-lg font-semibold">${draft.content}</div>
+    <label for="draftRow${number}" class="inline-flex items-center justify-between w-full p-5 text-gray-900 bg-white border border-gray-200 rounded-lg cursor-pointer hover:text-gray-900 hover:bg-gray-100 " onclick='sendDraft(${draft.id} , "${draft.content}")'>
+      <div class="flex" >
+        <input type="checkbox" id="draftRow${number}" name="draftRow${number}" class="hidden " />
+        <div class="w-full text-lg px-2 font-semibold">${draft.content}</div>
       </div>
     </label>
-  </li>`
+  </li>`;
+    number++;
   });
   draftList.innerHTML = list;
 }
 
-closeDraft.onclick=()=>{
+closeDraft.onclick = () => {
   document.getElementById('select-modal').style.display = 'none';
 }
 
-const sendDraft =async (tweetId,tweetContent) =>{
-  hiddenId.value=tweetId;
+const sendDraft = async (tweetId, tweetContent) => {
+  hiddenId.value = tweetId;
   alert(hiddenId.value);
-  let response = await fetch('/tweetPost/displayImage/?id='+tweetId,{
-    method:'GET'
+  let response = await fetch('/tweetPost/displayImage/?id=' + tweetId, {
+    method: 'GET'
   })
-  let {image , error}= await response.json();
-  if(error){
+  let { image, error } = await response.json();
+  if (error) {
     return alert(error);
   }
-  if(image != undefined){
-    let {media_url} =image;
-    images.innerHTML='<img class="w-[25rem] h-[25rem] m-2" src="./uploads/' + media_url + '">';
+  if (image != undefined) {
+    let { media_url } = image;
+    images.innerHTML = '<img class="w-[25rem] h-[25rem] m-2" src="./uploads/' + media_url + '">';
   }
   document.getElementById('select-modal').style.display = 'none';
-  content.value=tweetContent;
+  content.value = tweetContent;
   post.style.opacity = '1'
   post.style.cursor = 'pointer'
 }
 
-const tweetUpdate = async (action) =>{
+const tweetUpdate = async (action) => {
   if (content.value.trim() != '' || images.childNodes[0].tagName == 'IMG') {
-    let form = new FormData(document.forms['tweet']);
-    console.log(media.files);
-    form.append('media',media.files[0]) ;
-    form.append('action',action);
-    const response = await fetch('/tweetPost/tweetUpdate' , {
+    let form = new FormData(document.forms[0]);
+    form.append('action', action);
+    const response = await fetch('/tweetPost/tweetUpdate', {
       method: 'POST',
-      body:form 
+      body: form
     })
-    let {msg,error}=await response.json();
-    if(error){
+    let { msg, error } = await response.json();
+    if (error) {
       return alert(error);
     }
-    if(msg == 'Updated'){
-      window.location.href='/home'
+    if (msg == 'Updated') {
+      window.location.href = '/home'
     }
     post.style.opacity = '0.25'
     post.style.cursor = 'default'
@@ -209,3 +215,20 @@ const tweetUpdate = async (action) =>{
   }
 }
 
+editDraft.onclick = () => {
+  let checksForDelete = document.querySelectorAll('input[type=checkbox]')
+  let editDraft = document.getElementById('editBtn')
+  if (editDraft.innerText == 'Edit') {
+    editDraft.innerText = 'Done'
+    for (let i = 0; i < checksForDelete.length; i++) {
+      checksForDelete[i].style.display = 'block'
+    }
+  }
+
+  else {
+    editDraft.innerText = 'Edit'
+    for (let i = 0; i < checksForDelete.length; i++) {
+      checksForDelete[i].style.display = 'none'
+    }
+  }
+} 

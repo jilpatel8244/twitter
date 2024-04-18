@@ -8,6 +8,9 @@ module.exports.tweetCreate = (req, res) => {
 }
 
 module.exports.insertTweet = async (req, res) => {
+  if(req.fileValidationError != undefined){
+    return res.status(422).json({ 'error':req.fileValidationError});
+  }
   let { content } = req.body;
   let { status } = req.query;
   let userId = req.user[0][0].id;
@@ -25,7 +28,7 @@ module.exports.insertTweet = async (req, res) => {
         }
         return res.status(200).json({ 'msg': 'Inserted' })
       }
-      else {
+      if(status == 'draft'){
         let data = [userId, content || "", '1', '0'];
         lastInsertedId = await insertContent(data)
         if (req.files[0] != null) {
@@ -77,10 +80,12 @@ exports.showDrafts = async (req, res) => {
 }
 
 exports.tweetUpdate = async (req,res) =>{
-  let {tweetId,content,action,media}=req.body;
+  if(req.fileValidationError != undefined){
+    return res.status(422).json({ 'error':req.fileValidationError});
+  }
+  let {tweetId,content,action}=req.body;
   let userId = req.user[0][0].id;
-  console.log(media);
-  if (media == [] && content.trim() == "") {
+  if (req.file == [] && content.trim() == "") {
     return res.status(422).json({ 'error': "You didn't tweet content and Image(s)!" })
   }
   else {
@@ -88,19 +93,19 @@ exports.tweetUpdate = async (req,res) =>{
       if (action == 'tweet') {
         let data = [ content || "", '0', '1',tweetId,userId];
         let sql = 'update tweets set content= ? ,is_drafted= ? , is_posted = ? where id = ? and user_id=?';
-        await conn.query(sql,data)
-        if (media != undefined) {
-          let { filename, mimetype } = media[0];
+        await conn.query(sql,data);
+        if (req.file != undefined) {
+          let { filename, mimetype } = req.file;
           await updateTweetImage([ filename, mimetype,tweetId], res)
         }
         return res.status(200).json({ 'msg': 'Updated' })
       }
-      else {
+      else if(action == 'draft'){
         let data = [content || "", '1', '0',tweetId,userId];
         let sql = 'update tweets set content= ? ,is_drafted= ? , is_posted = ? where id = ? and user_id=?';
         await conn.query(sql,data)
-        if (media != null) {
-          let { filename, mimetype } = media[0];
+        if (req.file != null) {
+          let { filename, mimetype } = req.file;
           await updateTweetImage([ filename, mimetype,tweetId], res)
         }
         return res.status(200).json({ 'msg': 'Re-Drafted' })
@@ -115,7 +120,17 @@ exports.tweetUpdate = async (req,res) =>{
 
 const updateTweetImage=async(data,res)=>{
   try{
-    let sql=" update set medias media_url=?,media_type=? where tweet_id= ?";
+    let sql="select count(*) as isTweetExist from medias where tweet_id = ?"
+    let [isTweetExist] = await conn.query(sql,data[2]);
+    console.log(isTweetExist);
+    if(isTweetExist[0].isTweetExist == 0){
+      return await insertTweetImage([data[2],data[0],data[1]],res)
+    }
+  }catch(error){
+    return res.status(422).json({'error': "tweet image error"+err})
+  }
+  try{
+    let sql="update medias set media_url = ? , media_type = ? where tweet_id= ?";
     await conn.query(sql,data);
   }
   catch(err){
