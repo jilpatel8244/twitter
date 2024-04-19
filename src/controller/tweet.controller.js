@@ -71,7 +71,7 @@ const insertTweetImage = async (data, res) => {
 
 exports.showDrafts = async (req, res) => {
   try {
-    let sql = 'select * from tweets where is_drafted=1 and user_id= '+req.user[0][0].id;
+    let sql = 'select * from tweets where deleted_at IS NULL and is_drafted=1 and user_id= '+req.user[0][0].id;
     let result = await conn.execute(sql)
     return res.status(200).json({'draftTweet':result[0]})
   } catch (err) {
@@ -146,5 +146,23 @@ exports.displayImage = async(req,res)=>{
   }
   catch(err){
     return res.status(422).json({'error': "Image-"+err})
+  }
+}
+
+exports.deleteDraft = async (req,res)=>{
+  let {deleteDraft}=req.body;
+  if(!deleteDraft.length){
+    console.log(deleteDraft);
+    return res.status(422).json({'error': "nothing sending..."})
+  }
+  let sql1 = "update tweets set deleted_at= current_timestamp() where id in ("+deleteDraft+")";
+  let sql2 = "update medias set deleted_at= current_timestamp() where case when tweet_id in ("+deleteDraft+") then  tweet_id in ("+deleteDraft+")  end";
+  try{
+    await conn.query(sql2)
+    await conn.query(sql1,deleteDraft)
+    res.status(200).json({msg:'Deleted'})
+  }
+  catch(err){
+    return res.status(422).json({'error': "delete-"+err})
   }
 }
