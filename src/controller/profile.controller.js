@@ -84,7 +84,7 @@ exports.getProfile = async (req, res) => {
         left join medias on tweet_likes.tweet_id = medias.tweet_id 
         where tweet_likes.user_id = ? and tweet_likes.status = '1';`
 
-        let [allLikedTweet] = await connection.query(getAllLikedData, [id]);
+         [allLikedTweet] = await connection.query(getAllLikedData, [id]);
         console.log("data of like", allLikedTweet);
 
         allLikedTweet = allLikedTweet.map((element) => {
@@ -93,7 +93,7 @@ exports.getProfile = async (req, res) => {
         })
 
         const replyDataQuery = `SELECT rt.tweet_id,rt.retweet_message,rt.user_id as retweeter, rt.created_at as retweet_date, u.username, u.name ,t.* FROM users as u INNER JOIN retweets as rt INNER JOIN tweets as t ON u.id=rt.user_id AND rt.tweet_id = t.id WHERE u.id =?`;
-        let [replyData] = await connection.query(replyDataQuery, [id]) || [[]];
+         [replyData] = await connection.query(replyDataQuery, [id]) || [[]];
 
 
         if (replyData[0]) {
@@ -117,16 +117,14 @@ exports.getProfile = async (req, res) => {
 
           res.render('../views/pages/profile', { userProfileData, profileData, allLikedTweet, twitCountData, replyData, tweetData, commentData });
         }
-      }else {
+      }
         let profileData, twitCountData, replyData, tweetData, commentData;
         // let allLikedTweet=[];
         res.render("../views/pages/profile", { userProfileData, profileData, allLikedTweet, twitCountData, replyData, tweetData, commentData });
       }
 
-    } else {
-      res.redirect("/home");
     }
-  } catch (error) {
+  catch (error) {
     console.log(error);
   }
 }
