@@ -6,7 +6,7 @@ const { Server } = require('socket.io');
 
 const io = new Server(server);
 const cookieParser = require("cookie-parser");
-const getProfileRouter = require("./src/routes/profile.routes");
+// const getProfileRouter = require("./src/routes/profile.routes");
 const getTimeZone = require("./src/routes/timezone.routes");
 const homeRouter = require("./src/routes/home.routes");
 const notification = require("./src/routes/notification.route");
@@ -34,7 +34,7 @@ app.use("/explore", exploreRoute);
 app.use(authRouter);
 app.use(getTimeZone);
 app.use(notification);
-app.use("/editprofile", editprofile);
+// app.use("/editprofile", editprofile);
 
 app.use('/profile', passport.authenticate('jwt', { session: false}), getProfileRouter);
 app.use('/like', passport.authenticate('jwt', { session: false }), likeRoute);
