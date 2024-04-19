@@ -5,10 +5,57 @@ exports.notification = async (req, res) => {
   res.render("pages/notification");
 };
 
+
 exports.getNotifications = async (req, res) => {
   let logger_id = req.user[0][0].id;
+  const notifications = await getAllNotifications(logger_id);
+  const verifiedNotification = await getVerifiedNotifications(logger_id);
+  const mentionNotification = await getMentionNotifications(logger_id);
+
+  const [logNotification] = await connection.query(
+    `SELECT n.*, u.username AS username,n.created_at
+    FROM notifications n
+    LEFT JOIN users u ON n.user_id = u.id
+    WHERE n.user_id = ? AND n.type = "Login"
+    ORDER BY n.created_at DESC;`,
+    [logger_id]
+  );
+
+  const verifiedUser = `SELECT distinct(n.related_user_id)
+    FROM notifications n
+    LEFT JOIN users u ON n.user_id = u.id
+    LEFT JOIN users u2 ON n.related_user_id = u2.id
+    JOIN followers f ON u.id = f.following_id AND u2.id = f.follower_id
+    WHERE n.user_id = ? AND f.current_status = 1 AND u2.is_varified = 1; `;
+  const [result] = await connection.query(verifiedUser, [logger_id]);
+  // let arr = [];
+  // for (let i = 0; i < result.length; i++) {
+  //   arr[i] = result[i].related_user_id;
+  // }
+  // arr = arr.toString();
+  // console.log(arr);
+
+  let [notificationCount] = await connection.execute(
+    `select count(*) as count from notifications where user_id = ? and  is_read = 0;`,
+    [logger_id]
+  );
+
+  let countNotification = notificationCount[0].count;
+  // console.log(verifiedNotification);
+
+  res.status(200).json({
+    logNotification,
+    notifications,
+    verifiedNotification,
+    mentionNotification,
+    countNotification,
+  });
+};
+
+async function getAllNotifications(userId) {
   const [notifications] = await connection.query(
-    `SELECT n.*, u.username AS username, u2.name AS related_user_name, u2.username AS related_username, t.*, t.content AS tweet_content, 
+    `SELECT n.*, u.username AS username, u2.name AS related_user_name, u2.username AS related_username, t.*, t.content AS tweet_content,
+    n.created_at,
     CASE
       WHEN TIMESTAMPDIFF(SECOND, n.created_at, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(SECOND, n.created_at, NOW()), ' seconds ago')
       WHEN TIMESTAMPDIFF(MINUTE, n.created_at, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(MINUTE, n.created_at, NOW()), ' minutes ago')
@@ -18,64 +65,55 @@ exports.getNotifications = async (req, res) => {
     FROM notifications n
     LEFT JOIN users u ON n.user_id = u.id
     LEFT JOIN users u2 ON n.related_user_id = u2.id
+    LEFT JOIN followers f ON u.id = f.following_id AND u2.id = f.follower_id 
     LEFT JOIN tweets t ON n.tweet_id = t.id
-    WHERE n.user_id = ?
+    WHERE n.user_id = ? AND f.current_status = 1
     ORDER BY n.created_at DESC;`,
-    [logger_id]
+    [userId]
   );
+  return notifications;
+}
 
-  const [verifiedUser] = await connection.query(
-    `SELECT n.*, u.username AS username, u2.username AS related_username
+async function getVerifiedNotifications(userId) {
+  const [notifications] = await connection.query(
+    `SELECT  f.current_status, n.*, u.username AS username, u2.name AS related_user_name, u2.username AS related_username, t.*, t.content AS tweet_content, n.created_at,
+    CASE
+    WHEN TIMESTAMPDIFF(SECOND, t.created_at, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(SECOND, t.created_at, NOW()), ' seconds ago')
+    WHEN TIMESTAMPDIFF(MINUTE, t.created_at, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(MINUTE, t.created_at, NOW()), ' minutes ago')
+    WHEN TIMESTAMPDIFF(HOUR, t.created_at, NOW()) < 24 THEN CONCAT(TIMESTAMPDIFF(HOUR, t.created_at, NOW()), ' hours ago')
+    ELSE CONCAT(DATE_FORMAT(t.created_at, '%d'), ' ', DATE_FORMAT(t.created_at, '%M'))
+    END as time
     FROM notifications n
     LEFT JOIN users u ON n.user_id = u.id
-    LEFT JOIN users u2 ON n.related_user_id = u2.id WHERE n.user_id = ?;`,
-    [logger_id]
+    LEFT JOIN users u2 ON n.related_user_id = u2.id
+    LEFT JOIN followers f ON n.related_user_id = f.follower_id
+    LEFT JOIN tweets t ON n.tweet_id = t.id
+    WHERE n.user_id = ? AND n.related_user_id  in (u2.id) AND u2.is_varified = 1 AND f.current_status = 1 AND n.user_id = f.following_id 
+    AND n.related_user_id = f.follower_id
+    ORDER BY n.created_at DESC;`,
+    [userId]
   );
-  // console.log(verifiedUser[0].related_user_id);
+  return notifications;
+}
 
-  const [verifiedNotification] = await connection.query(
-    `SELECT  f.current_status, n.*, u.username AS username, u2.name AS related_user_name, u2.username AS related_username, t.*, t.content AS tweet_content, n.created_at,
-     CASE
-     WHEN TIMESTAMPDIFF(SECOND, n.created_at, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(SECOND, n.created_at, NOW()), ' seconds ago')
-     WHEN TIMESTAMPDIFF(MINUTE, n.created_at, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(MINUTE, n.created_at, NOW()), ' minutes ago')
-     WHEN TIMESTAMPDIFF(HOUR, n.created_at, NOW()) < 24 THEN CONCAT(TIMESTAMPDIFF(HOUR, n.created_at, NOW()), ' hours ago')
-     ELSE CONCAT(DATE_FORMAT(n.created_at, '%d'), ' ', DATE_FORMAT(n.created_at, '%M'))
-     END as time
-     FROM notifications n
-     LEFT JOIN users u ON n.user_id = u.id
-     LEFT JOIN users u2 ON n.related_user_id = u2.id
-     LEFT JOIN followers f ON n.related_user_id = f.follower_id
-     LEFT JOIN tweets t ON n.tweet_id = t.id
-     WHERE n.user_id = ? AND n.related_user_id  in (u2.id) AND u2.is_varified = 1 AND f.current_status = 1 AND n.user_id = f.following_id 
-     AND n.related_user_id = f.follower_id
-     ORDER BY n.created_at DESC;`,
-    [logger_id]
+async function getMentionNotifications(userId) {
+  const [mentionNotifications] = await connection.query(
+    `SELECT f.current_status, n.*, u.username AS username, u2.name AS related_user_name, u2.username AS related_username, t.*, t.content AS tweet_content, 
+    CASE
+        WHEN TIMESTAMPDIFF(SECOND, n.created_at, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(SECOND, n.created_at, NOW()), ' seconds ago')
+        WHEN TIMESTAMPDIFF(MINUTE, n.created_at, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(MINUTE, n.created_at, NOW()), ' minutes ago')
+        WHEN TIMESTAMPDIFF(HOUR, n.created_at, NOW()) < 24 THEN CONCAT(TIMESTAMPDIFF(HOUR, n.created_at, NOW()), ' hours ago')
+        ELSE CONCAT(DATE_FORMAT(n.created_at, '%d'), ' ', DATE_FORMAT(n.created_at, '%M'))
+      END AS time
+    FROM notifications n
+    LEFT JOIN users u ON n.user_id = u.id
+    LEFT JOIN users u2 ON n.related_user_id = u2.id
+    LEFT JOIN followers f ON n.related_user_id = f.follower_id
+    LEFT JOIN tweets t ON n.tweet_id = t.id
+    WHERE n.user_id = ? AND u.username IN  (u.username) AND n.type = "Mention" 
+    AND n.user_id = f.following_id  AND n.related_user_id = f.follower_id AND f.is_blocked = 0
+    ORDER BY n.created_at DESC;`,
+    [userId]
   );
-
-  // console.log(verifiedNotification);
-  const [mentionNotification] = await connection.query(
-    `
-SELECT f.current_status, n.*, u.username AS username, u2.name AS related_user_name, u2.username AS related_username, t.*, t.content AS tweet_content, 
-CASE
-    WHEN TIMESTAMPDIFF(SECOND, n.created_at, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(SECOND, n.created_at, NOW()), ' seconds ago')
-    WHEN TIMESTAMPDIFF(MINUTE, n.created_at, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(MINUTE, n.created_at, NOW()), ' minutes ago')
-    WHEN TIMESTAMPDIFF(HOUR, n.created_at, NOW()) < 24 THEN CONCAT(TIMESTAMPDIFF(HOUR, n.created_at, NOW()), ' hours ago')
-    ELSE CONCAT(DATE_FORMAT(n.created_at, '%d'), ' ', DATE_FORMAT(n.created_at, '%M'))
-  END AS time
-FROM notifications n
-LEFT JOIN users u ON n.user_id = u.id
-LEFT JOIN users u2 ON n.related_user_id = u2.id
-LEFT JOIN followers f ON n.related_user_id = f.follower_id
-LEFT JOIN tweets t ON n.tweet_id = t.id
-WHERE n.user_id = ? AND u.username IN  (u.username) AND n.type = "Mention" 
-AND n.user_id = f.following_id  AND n.related_user_id = f.follower_id AND f.is_blocked = 0
-ORDER BY n.created_at DESC;`,
-    [logger_id]
-  );
-
-  res.status(200).json({
-    notifications,
-    verifiedNotification,
-    mentionNotification,
-  });
-};
+  return mentionNotifications;
+}

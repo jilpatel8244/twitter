@@ -71,16 +71,16 @@ CREATE TABLE `notifications` (
  
 
 
-// in controller 
-
+--  in controller 
 const mentionedUsernames = extractMentionedUsernames(
-  // notification.tweet_content
+  -- notification.tweet_content
   "hello there @jil and @harsh @Parmeshvar!!! what is your opinion on this tweet functionality"
 );
 const mentionedUsers = await getUsersByUsernames(mentionedUsernames);
-// console.log(mentionedUsers);
+--  console.log(mentionedUsers);
 
-// functions
+
+-- functions
 function extractMentionedUsernames(tweetContent) {
   const regex = /@(\w+)/g;
   const matches = tweetContent.match(regex);
@@ -100,3 +100,9 @@ async function getUsersByUsernames(usernames) {
   );
   return users;
 }
+
+
+-- changes in notifications table
+alter table notifications add column is_read tinyint default 0;
+
+
