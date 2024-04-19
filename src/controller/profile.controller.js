@@ -72,20 +72,20 @@ exports.getProfile = async (req, res) => {
           }
         }
       } else {
-        let postData, twitCountData, replyData, tweetData, commentData;
-        let allLikedTweet = [];
-        res.render("../views/pages/profile", { userProfileData, postData, allLikedTweet, twitCountData, replyData, tweetData, commentData });
-        let getAllLikedData = `	select tweets.id as tweet_id, tweets.content, tweets.created_at, users.name, 
-        users.username, bookmarks.status as isBookmarked, medias.media_url from tweet_likes 
-        left join tweets on tweet_likes.tweet_id = tweets.id
-        left join users on tweets.user_id = users.id
-        left join bookmarks on tweet_likes.tweet_id = bookmarks.tweet_id   and 
-      tweet_likes.user_id = bookmarks.user_id 
-        left join medias on tweet_likes.tweet_id = medias.tweet_id 
-        where tweet_likes.user_id = ? and tweet_likes.status = '1';`
+        // let postData, twitCountData, replyData, tweetData, commentData;
+      //   let allLikedTweet = [];
+      //   res.render("../views/pages/profile", { userProfileData, postData, allLikedTweet, twitCountData, replyData, tweetData, commentData });
+      //   let getAllLikedData = `	select tweets.id as tweet_id, tweets.content, tweets.created_at, users.name, 
+      //   users.username, bookmarks.status as isBookmarked, medias.media_url from tweet_likes 
+      //   left join tweets on tweet_likes.tweet_id = tweets.id
+      //   left join users on tweets.user_id = users.id
+      //   left join bookmarks on tweet_likes.tweet_id = bookmarks.tweet_id   and 
+      // tweet_likes.user_id = bookmarks.user_id 
+      //   left join medias on tweet_likes.tweet_id = medias.tweet_id 
+      //   where tweet_likes.user_id = ? and tweet_likes.status = '1';`
 
-        let [allLikedTweet] = await connection.query(getAllLikedData, [id]);
-        console.log("data of like", allLikedTweet);
+      //   let [allLikedTweet] = await connection.query(getAllLikedData, [id]);
+      //   console.log("data of like", allLikedTweet);
 
         allLikedTweet = allLikedTweet.map((element) => {
           element.isLiked = 1;
@@ -117,11 +117,12 @@ exports.getProfile = async (req, res) => {
 
           res.render('../views/pages/profile', { userProfileData, profileData, allLikedTweet, twitCountData, replyData, tweetData, commentData });
         }
-      }else {
-        let profileData, twitCountData, replyData, tweetData, commentData;
-        // let allLikedTweet=[];
-        res.render("../views/pages/profile", { userProfileData, profileData, allLikedTweet, twitCountData, replyData, tweetData, commentData });
-      }
+     }
+     // else {
+      //   let profileData, twitCountData, replyData, tweetData, commentData;
+      //   // let allLikedTweet=[];
+      //   res.render("../views/pages/profile", { userProfileData, profileData, allLikedTweet, twitCountData, replyData, tweetData, commentData });
+      // }
 
     } else {
       res.redirect("/home");

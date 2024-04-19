@@ -84,11 +84,7 @@
                         <%=userProfileData[0].name%>
                       </h2>
                       <p class="mb-0 w-48 text-xs text-gray-400">
-<<<<<<< HEAD
                         <%if(postData){%>
-=======
-                        <%if(profileData){%>
->>>>>>> development
                           <%=twitCountData[0].t%> Tweets
                             <%}%>
                       </p>
@@ -230,27 +226,16 @@
               <!-- User basic-->
               <div>
                 <h2 class="text-xl leading-6 font-bold text-black">
-<<<<<<< HEAD
                   <%=postData[0].name%>
                 </h2>
                 <p class="text-sm leading-5 font-medium text-gray-600">
                   @<%=postData[0].username%>
-=======
-                  <%=profileData[0].name%>
-                </h2>
-                <p class="text-sm leading-5 font-medium text-gray-600">
-                  @<%=profileData[0].username%>
->>>>>>> development
                 </p>
               </div>
               <!-- Description and others -->
               <div class="mt-3">
                 <p class="text-black leading-tight mb-2">
-<<<<<<< HEAD
                   <%=postData[0].bio%><br />Visit my website to test
-=======
-                  <%=profileData[0].bio%><br />Visit my website to test
->>>>>>> development
                     a working <b>Twitter Clone.</b>
                 </p>
                 <div class="text-gray-600 flex">
@@ -265,11 +250,7 @@
                       </g>
                     </svg>
                     <a href="" target="#" class="leading-5 ml-1 text-blue-400">
-<<<<<<< HEAD
                       <%=postData[0].email%>
-=======
-                      <%=profileData[0].email%>
->>>>>>> development
                     </a></span>
                   <span class="flex mr-2"><svg viewBox="0 0 24 24" class="h-5 w-5 paint-icon">
                       <g>
@@ -287,11 +268,7 @@
                       </g>
                     </svg>
                     <span class="leading-5 ml-1">
-<<<<<<< HEAD
                       <%=postData[0].created_at%>
-=======
-                      <%=profileData[0].created_at%>
->>>>>>> development
                     </span></span>
                 </div>
               </div>
@@ -344,7 +321,6 @@
       let replies = document.getElementById("replies");
       let post = document.getElementById("post");
       let like = document.getElementById("like");
-<<<<<<< HEAD
 
       async function fetchPosts() {
 
@@ -365,33 +341,20 @@
           }
         });
 
-=======
-      function fetchPosts() {
->>>>>>> development
         post.setAttribute("style", "border-bottom: 2px solid skyblue");
         like.removeAttribute("style");
         replies.removeAttribute("style");
 
-<<<<<<< HEAD
-        
-=======
         tab.innerHTML = `<%- include('../partials/posts.ejs',{profileData,commentData}) %>`;
->>>>>>> development
         tab.removeAttribute("hidden");
         console.log("Hello From the Posts section");
       }
 
-<<<<<<< HEAD
-      async function fetchReplies() {
-
-=======
       function fetchReplies() {
->>>>>>> development
         replies.setAttribute("style", "border-bottom: 2px solid skyblue");
         post.removeAttribute("style");
         like.removeAttribute("style");
 
-<<<<<<< HEAD
         await fetch('/profile/reply', {
           method: "GET"
         }).then((value) => {
@@ -423,17 +386,6 @@
 
           });
 
-=======
-        tab.innerHTML = `<%- include('../partials/reply.ejs',{replyData})%>`;
-        tab.removeAttribute("hidden");
-        console.log("Hello From the Replies section");
-      }
-
-      function fetchRepliesNoData() {
-        tab.innerHTML = `<%- include('../partials/reply.ejs')%>`;
-        tab.removeAttribute("hidden");
-        console.log("Hello From the Replies Section!");
->>>>>>> development
       }
 
       function comment() {
@@ -444,7 +396,6 @@
         console.log("You clicked!");
       }
 
-<<<<<<< HEAD
       async function fetchLikes() {
 
         like.setAttribute("style", "border-bottom: 2px solid skyblue");
@@ -483,25 +434,6 @@
 
               <script src="/js/bookmark.script.js"></script>
               <script src="/js/like.script.js"></script>
-=======
-    
-
-    </script>
-    <script>
-      function fetchLikes() {
-        let tab = document.getElementById("tab");
-        tab.innerHTML = `<%- include('../partials/tweetComponent.ejs', {allLikedTweet}) %>`;
-        tab.removeAttribute("hidden");
-        console.log("Hello From the like section");
-      }
-    </script>
-
-    <script src="/js/bookmark.script.js"></script>
-    <script src="/js/like.script.js"></script>
-
-    <script src="/js/bookmark.script.js"></script>
-    <script src="/js/like.script.js"></script>
->>>>>>> development
 </body>
 
 </html>
