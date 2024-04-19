@@ -26,7 +26,7 @@ exports.getAllBookmarks = async (req, res) => {
             element.isBookmarked = 1;
             return element;
         })
-
+        console.log(allBookmarkTweets);
         res.render('pages/bookmark', {
             allBookmarkTweets: allBookmarkTweets
         });

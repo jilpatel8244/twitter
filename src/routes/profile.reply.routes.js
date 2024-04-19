@@ -1,8 +1,8 @@
 const {getReplies} = require('../controller/profile.reply.controller');
 const express = require('express');
 
-const replyRouter = express.Router();
+const router = express.Router();
 
-replyRouter.get("/profile",getReplies);
+router.get("/reply",getReplies);
 
-module.exports = replyRouter;
+module.exports = router;

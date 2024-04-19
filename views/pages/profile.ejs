@@ -52,8 +52,8 @@
 
 <body onload="fetchPosts()">
   <div class="container">
-    <div class="p-relative h-screen flex" style="background-color: whitesmoke;">
-      <section class="border border-y-0 border-gray-800">
+    <div class="p-relative h-screen flex">
+      <section>
         <%- include('../partials/sidebar.ejs') %>
       </section>
 
@@ -62,7 +62,7 @@
 
           <main role="main">
             <div class="flex w-full">
-              <section class="border border-y-0 border-gray-800" style="width: 900px">
+              <section class="border border-y-0 border-gray-800" style="width: 660px">
                 <!--Content (Center)-->
                 <!-- Nav back-->
                 <div>
@@ -84,11 +84,7 @@
                         <%=userProfileData[0].name%>
                       </h2>
                       <p class="mb-0 w-48 text-xs text-gray-400">
-<<<<<<< HEAD
                         <%if(postData){%>
-=======
-                        <%if(profileData){%>
->>>>>>> development
                           <%=twitCountData[0].t%> Tweets
                             <%}%>
                       </p>
@@ -102,7 +98,7 @@
                 <div>
                   <div class="w-full bg-fit bg-no-repeat bg-center" style="height: 200px; background-image:
                   linear-gradient(to bottom, rgba(245, 246, 252, 0.52), rgba(206, 202, 202, 0.73)),
-                  url('./uploads/<%=userProfileData[0].cover_img_url%>');">
+                  url('<%=userProfileData[0].cover_img_url%>');">
 
                   </div>
                   <div class="w-full p-4">
@@ -113,7 +109,7 @@
                           <div style="height:9rem; width:9rem;" class="md rounded-full relative avatar">
                             <img style="height:9rem; width:9rem;"
                               class="md rounded-full relative border-4 border-gray-900"
-                              src="./uploads/<%=userProfileData[0].profile_img_url%>" alt="">
+                              src="<%=userProfileData[0].profile_img_url%>" alt="">
                             <div class="absolute"></div>
                           </div>
                         </div>
@@ -190,10 +186,10 @@
                 <div class="bg-whitesmoke">
                   <nav class="flex flex-col sm:flex-row">
 
-                    <input type="button" value="Posts" onclick="fetchPosts()" id="post"
+                    <input type="button" value="Posts" onclick="fetchPosts()" id="posts"
                       class="w-1/3 text-gray-600 py-4 px-6 block hover:text-blue-500 focus:outline-none">
                     <% if(replyData){%>
-                      <input type="button" value="Replies" onclick="fetchReplies()" id="replies"
+                      <input type="button" value="Retweets" onclick="fetchReplies()" id="replies"
                         class="w-1/3 text-gray-600 py-4 px-6 block hover:text-blue-500 focus:outline-none">
                       <%}%>
                         <% if(!replyData){%>
@@ -214,7 +210,7 @@
                 </article>
 
               </section>
-              <section class="border border-y-0 border-gray-800 w-2/5">
+              <section>
                 <%- include('../partials/aside.ejs') %>
               </section>
             </div>
@@ -230,27 +226,16 @@
               <!-- User basic-->
               <div>
                 <h2 class="text-xl leading-6 font-bold text-black">
-<<<<<<< HEAD
                   <%=postData[0].name%>
                 </h2>
                 <p class="text-sm leading-5 font-medium text-gray-600">
                   @<%=postData[0].username%>
-=======
-                  <%=profileData[0].name%>
-                </h2>
-                <p class="text-sm leading-5 font-medium text-gray-600">
-                  @<%=profileData[0].username%>
->>>>>>> development
                 </p>
               </div>
               <!-- Description and others -->
               <div class="mt-3">
                 <p class="text-black leading-tight mb-2">
-<<<<<<< HEAD
                   <%=postData[0].bio%><br />Visit my website to test
-=======
-                  <%=profileData[0].bio%><br />Visit my website to test
->>>>>>> development
                     a working <b>Twitter Clone.</b>
                 </p>
                 <div class="text-gray-600 flex">
@@ -265,11 +250,7 @@
                       </g>
                     </svg>
                     <a href="" target="#" class="leading-5 ml-1 text-blue-400">
-<<<<<<< HEAD
                       <%=postData[0].email%>
-=======
-                      <%=profileData[0].email%>
->>>>>>> development
                     </a></span>
                   <span class="flex mr-2"><svg viewBox="0 0 24 24" class="h-5 w-5 paint-icon">
                       <g>
@@ -287,11 +268,7 @@
                       </g>
                     </svg>
                     <span class="leading-5 ml-1">
-<<<<<<< HEAD
                       <%=postData[0].created_at%>
-=======
-                      <%=profileData[0].created_at%>
->>>>>>> development
                     </span></span>
                 </div>
               </div>
@@ -313,7 +290,7 @@
         <input type="button" value="Posts" onclick="fetchPosts()"
           class="w-1/3 text-gray-600 py-4 px-6 block hover:text-blue-500 focus:outline-none" />
         <% if(replyData){%>
-          <input type="button" value="Replies" onclick="fetchReplies()"
+          <input type="button" value="Retweets" onclick="fetchReplies()"
             class="w-1/3 text-gray-600 py-4 px-6 block hover:text-blue-500 focus:outline-none" />
           <%}%>
             <% if(!replyData){%>
@@ -326,7 +303,7 @@
     </div>
 
     <!-- tweet-->
-    <article class="hover:bg-whitesmoke-800 transition duration-350 ease-in-out w-full" id="tab" onclick="" hidden>
+    <article class="hover:bg-whitesmoke-800 transition duration-350 ease-in-out " id="tab" onclick="" hidden>
     </article>
     </section>
     <%- include('../partials/aside.ejs') %>
@@ -340,13 +317,14 @@
     </div>
 
     <script>
+      console.log("Hello");
       let tab = document.getElementById("tab");
       let replies = document.getElementById("replies");
-      let post = document.getElementById("post");
+      let posts = document.getElementById("posts");
       let like = document.getElementById("like");
-<<<<<<< HEAD
+      
 
-      async function fetchPosts() {
+      async function fetchPosts() {        
 
         tab.innerHTML = `<%- include('../partials/post.ejs')%>`;
 
@@ -356,84 +334,84 @@
           return value.json();
         }).then((value2) => {
           console.log(value2.postData);
-          console.log("post");
+          for(let i=0; i<value2.postData.length-1; i++){
+            tab.innerHTML += `<%- include('../partials/post.ejs')%>`;
+          }
+          let postName = document.getElementsByClassName("name");
+          let postUsername = document.getElementsByClassName("username");
+          let profileImage = document.getElementsByClassName("profileImage");
+          let postCreatedAt = document.getElementsByClassName("created_at");
+          let postContent = document.getElementsByClassName("content");
+          console.log(postName,postUsername,postCreatedAt,postContent);
+
+          // console.log(postCount);
           for(let i=0; i<value2.postData.length; i++){
-          document.getElementById("name").innerText = value2.postData[i].name;
-          document.getElementById("username").innerText = value2.postData[i].username;
-          document.getElementById("created_at").innerText = value2.postData[i].created_at;
-          document.getElementById("content").innerText = value2.postData[i].content;
+          postName[i].innerText = value2.postData[i].name;
+          postUsername[i].innerText = value2.postData[i].username;
+          profileImage[i].setAttribute("src",value2.postData[i].profileImage);
+          postCreatedAt[i].innerText = value2.postData[i].created_at;
+          postContent[i].innerText = value2.postData[i].content;          
           }
         });
 
-=======
-      function fetchPosts() {
->>>>>>> development
-        post.setAttribute("style", "border-bottom: 2px solid skyblue");
+        posts.setAttribute("style", "border-bottom: 2px solid skyblue");
         like.removeAttribute("style");
-        replies.removeAttribute("style");
-
-<<<<<<< HEAD
-        
-=======
-        tab.innerHTML = `<%- include('../partials/posts.ejs',{profileData,commentData}) %>`;
->>>>>>> development
+        replies.removeAttribute("style");        
         tab.removeAttribute("hidden");
         console.log("Hello From the Posts section");
       }
 
-<<<<<<< HEAD
       async function fetchReplies() {
 
-=======
-      function fetchReplies() {
->>>>>>> development
         replies.setAttribute("style", "border-bottom: 2px solid skyblue");
-        post.removeAttribute("style");
+        posts.removeAttribute("style");
         like.removeAttribute("style");
+        tab.innerHTML = "";
 
-<<<<<<< HEAD
         await fetch('/profile/reply', {
           method: "GET"
         }).then((value) => {
           return value.json();
         }).then((value1) => {
-          console.log(value1);
-          tab.innerHTML = `<%- include('../partials/reply.ejs',{replyData})%>`;
+          console.log(value1.repliesData);
+          console.log(value1.repliesData[0].length);
+
+          for(let i=0; i<value1.repliesData[0].length; i++){
+            tab.innerHTML += `<%- include('../partials/reply.ejs')%>`;
+          }
+
+          let name = document.getElementsByClassName("name");
+          let username = document.getElementsByClassName("username");
+          let profileImage = document.getElementsByClassName("profileImage");
+          let createdAt = document.getElementsByClassName("created_at");
+          let content = document.getElementsByClassName("content");
+
+          let replyerName = document.getElementsByClassName("replyerName");
+          let replyerUsername = document.getElementsByClassName("replyerUsername");
+          let retweeterProfileImage = document.getElementsByClassName("retweeterProfileImage");
+          let replyerTweetDate = document.getElementsByClassName("replyerTweetDate");
+          let replyerRetweetMessage = document.getElementsByClassName("replyerRetweetMessage");
+
+          console.log(name,username,createdAt,content,replyerName,replyerUsername,replyerTweetDate,replyerRetweetMessage);
+
+          for(let i=0; i<value1.repliesData[0].length; i++){
+            
+            name[i].innerText = value1.repliesData[0][i].name;
+            username[i].innerText = value1.repliesData[0][i].username;
+            profileImage[i].setAttribute("src",value1.repliesData[0][i].profileImage);
+            createdAt[i].innerText = value1.repliesData[0][i].created_at;
+            content[i].innerText = value1.repliesData[0][i].content;
+
+            replyerName[i].innerText = value1.repliesData[1][i].retweeterName;
+            replyerUsername[i].innerText = value1.repliesData[1][i].retweeterUsername;
+            retweeterProfileImage[i].setAttribute("src",value1.repliesData[1][i].retweeterProfileImage); 
+            replyerTweetDate[i].innerText = value1.repliesData[1][i].retweetDate;
+            replyerRetweetMessage[i].innerText = value1.repliesData[1][i].retweeterMessage;
+
+          }
           tab.removeAttribute("hidden");
           console.log("Hello From the Replies section");
         });
-      }
-
-      async function fetchRepliesNoData() {
-
-        replies.setAttribute("style", "border-bottom: 2px solid skyblue");
-        post.removeAttribute("style");
-        like.removeAttribute("style");
-
-        await fetch('/profile/reply')
-          .then((response) => {
-            return response.json();
-          }).then((data) => {
-            console.log(data);
-            console.log("reply");
-
-            tab.innerHTML = `<%- include('../partials/reply.ejs')%>`;
-            tab.removeAttribute("hidden");
-            console.log("Hello From the Replies Section!");
-
-          });
-
-=======
-        tab.innerHTML = `<%- include('../partials/reply.ejs',{replyData})%>`;
-        tab.removeAttribute("hidden");
-        console.log("Hello From the Replies section");
-      }
-
-      function fetchRepliesNoData() {
-        tab.innerHTML = `<%- include('../partials/reply.ejs')%>`;
-        tab.removeAttribute("hidden");
-        console.log("Hello From the Replies Section!");
->>>>>>> development
       }
 
       function comment() {
@@ -441,14 +419,14 @@
         let place = document.getElementById("place");
         place.removeAttribute("hidden");
         place.innerHTML = `<%- include('../partials/comment.ejs', {commentData})%>`;
-        console.log("You clicked!");
+        console.log("You clicked!");        
       }
 
-<<<<<<< HEAD
       async function fetchLikes() {
 
+        tab.innerHTML = "";
         like.setAttribute("style", "border-bottom: 2px solid skyblue");
-        post.removeAttribute("style");
+        posts.removeAttribute("style");
         replies.removeAttribute("style");
 
         await fetch('/profile/likes')
@@ -483,25 +461,33 @@
 
               <script src="/js/bookmark.script.js"></script>
               <script src="/js/like.script.js"></script>
-=======
-    
-
-    </script>
-    <script>
-      function fetchLikes() {
-        let tab = document.getElementById("tab");
-        tab.innerHTML = `<%- include('../partials/tweetComponent.ejs', {allLikedTweet}) %>`;
-        tab.removeAttribute("hidden");
-        console.log("Hello From the like section");
-      }
-    </script>
-
-    <script src="/js/bookmark.script.js"></script>
-    <script src="/js/like.script.js"></script>
-
-    <script src="/js/bookmark.script.js"></script>
-    <script src="/js/like.script.js"></script>
->>>>>>> development
 </body>
 
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
