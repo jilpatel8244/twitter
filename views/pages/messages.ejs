@@ -12,7 +12,7 @@
         }
 
         .sender-chat, .reciver-chat{
-            padding: 20px 20px;
+            padding: 10px 20px;
         }
 
         .sender-chat span, .reciver-chat span{
@@ -174,7 +174,19 @@
             console.log('connected to server ' + socket.id);
 
             socket.emit('user-connected', senderId);
-        })
+            socket.emit('getUnreadMessages', senderId);     
+        });
+
+        socket.on('unreadMessages', (data) => {
+            console.log(data);
+
+            data.forEach((element, index) => {
+                let unreadMessagesSpan = document.createElement('span');
+                unreadMessagesSpan.classList.add('unreadMessageCount');
+                unreadMessagesSpan.innerHTML = `${element.count}`;
+                document.getElementById(element.sender_id).appendChild(unreadMessagesSpan);
+            });
+        });
 
         function openMessageBox(followerId, reciverName, reciverUsername, reciverImgUrl) {
             reciverId = followerId;
@@ -195,6 +207,9 @@
             document.getElementById('chat-section').style.display = 'block';
 
             socket.emit('existingChats', {senderId: senderId, reciverId: reciverId});
+            socket.emit('messageRead', {senderId: senderId, reciverId: reciverId});
+
+            document.getElementById(`${reciverId}`).querySelector('.unreadMessageCount').remove();
         }
 
         document.getElementById('messageForm').addEventListener('submit', async (event) => {
@@ -253,7 +268,7 @@
         // receive private messages
         socket.on('receive-private-message', (data) => {
             let newDiv = document.createElement('div');
-            newDiv.classList.add('reciver-chat');
+            newDiv.classList.add('reciver-chat', 'flex', 'justify-start');
 
             if (data.content_type == 'text') {
                 newDiv.innerHTML = `<span>${data.message}</span>`;
@@ -282,7 +297,7 @@
                 if (element.sender_id == senderId) {
                     newDiv.classList.add('text-right', 'sender-chat', 'flex', 'justify-end');
                 } else {
-                    newDiv.classList.add('reciver-chat');
+                    newDiv.classList.add('reciver-chat', 'flex', 'justify-start');
                 }
 
                 document.getElementById('chat-container').appendChild(newDiv);  

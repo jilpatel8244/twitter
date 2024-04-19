@@ -33,7 +33,11 @@ exports.storeMessageHandler = async (req, res) => {
 
         let sql = `insert into direct_messages (sender_id, receiver_id, content, content_type) values ( ?, ?, ?, ? );`;
 
-        await connection.query(sql, [ senderId, reciverId, message, content_type ]);
+        let lastInsertedId = await connection.query(sql, [ senderId, reciverId, message, content_type ]);
+
+        sql = `insert into unread_messages (user_id, message_id, is_read) values ( ?, ?, ? )`;
+
+        await connection.query(sql, [ reciverId, lastInsertedId[0].insertId, 0 ]);
 
         return res.status(200).json({
             success: true,

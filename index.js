@@ -50,13 +50,29 @@ app.use("/tweetPost",tweetCreate);
 let connectedUser = {};
 
 //Whenever someone connects this gets executed
-io.on('connection', function (socket) {
+io.on('connection', async function (socket) {
   console.log('A user connected : ', socket.id);
 
   // store userId and socketId when user connects
   socket.on('user-connected', async (userId) => {
     connectedUser[userId] = socket.id;
   });
+
+  // to get all unread message count follower wise
+  socket.on('getUnreadMessages', async (userId) => {
+    let sql = `select direct_messages.sender_id, count(unread_messages.message_id) as count from unread_messages inner join direct_messages on unread_messages.message_id = direct_messages.id where user_id = ? and is_read = 0 group by direct_messages.sender_id;`;
+
+    let data = await connection.query(sql, [userId]);
+    
+    socket.emit('unreadMessages', data[0]);
+  });
+
+  // to update the read flag of some specific follower
+  socket.on('messageRead', async (data) => {
+    let sql = `update unread_messages join direct_messages on unread_messages.message_id = direct_messages.id set unread_messages.is_read = 1 where unread_messages.user_id = ? and direct_messages.receiver_id = ?`;
+
+    await connection.query(sql, [data.senderId, data.reciverId]);
+  })
 
   //Whenever someone disconnects this piece of code executed
   socket.on('disconnect', function () {
