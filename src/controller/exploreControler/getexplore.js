@@ -2,26 +2,26 @@ const connection = require("../../../config/connection");
 const ShortUniqueId = require("short-unique-id");
 
 exports.getExplorePage = async (req, res) => {
-    res.render("pages/demoexplore");
+    res.render("pages/explore");
 };
-
 // api for the get all usename and hatag based in search box on change event 
 exports.getUsernameOrHastagOnchage = async (req, res) => {
 
-    let searchbox = "#mihir"
+    let searchbox = req.body.searchbox;
+
 
 
     searchbox = searchbox.trim();
 
     if (!searchbox) {
-        return res.json({ msg: "not found" })
+        return res.json({ msg: "not found", type: 2 })
     }
     if (searchbox.charAt(0) == "#") {
         try {
             let sql = `SELECT DISTINCT hashtag_name FROM hashtag_lists WHERE hashtag_name LIKE '${searchbox.substring(1)}%'`
 
             let [result] = await connection.query(sql);
-            return res.json({ result: result })
+            return res.json({ result: result, type: 0 })
 
         } catch (error) {
             return res.json({ error: error })
@@ -29,9 +29,9 @@ exports.getUsernameOrHastagOnchage = async (req, res) => {
     }
     else {
         try {
-            let sql = `SELECT * FROM users WHERE username LIKE '${searchbox}%' and is_active=1`
+            let sql = `SELECT * FROM users WHERE username LIKE '${searchbox}%' or name LIKE '${searchbox}%' and is_active=1`
             let [result] = await connection.query(sql);
-            return res.json({ result: result })
+            return res.json({ result: result, type: 1 })
 
 
         } catch (error) {
@@ -97,6 +97,7 @@ exports.getTopTweetAndHastag = async (req, res) => {
     }
 };
 
+
 exports.getHastag = async (req, res) => {
 
     try {
@@ -117,6 +118,7 @@ exports.getHastag = async (req, res) => {
     }
 }
 
+
 exports.getUsername = async (req, res) => {
 
     let searchbox = "mihir"
@@ -136,9 +138,11 @@ exports.getUsername = async (req, res) => {
 
 };
 
+
 exports.getMedia = async (req, res) => {
 
-    let searchbox = req.body.searchbox;
+    // let searchbox = req.body.searchbox;
+    let searchbox = "demo"
 
     if (!searchbox) {
         return res.json({ msg: "not found" })
@@ -162,6 +166,7 @@ exports.getMedia = async (req, res) => {
     }
 
 };
+
 
 
 exports.getLatestTweet = async (req, res) => {
@@ -245,7 +250,7 @@ exports.getLatestTweet = async (req, res) => {
             LEFT JOIN medias ON tweets.id = medias.tweet_id
             LEFT JOIN tweet_comments ON tweet_comments.user_id = tweets.id 
             WHERE  tweets.content LIKE '%demo%' OR users.username LIKE '%demo%' OR users.name LIKE '%demo%'
-                  ORDER BY time DESC
+                  ORDER BY tweets.created_at DESC
           `
             let [result] = await connection.query(sql);
             return res.json({ resultTweet: result })

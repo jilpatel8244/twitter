@@ -46,19 +46,19 @@
         }
 
         .sidebar {
-            width: 25%;
+            width: 30%;
             padding-left: 5%;
 
         }
 
         .main {
-            width: 50%;
+
             position: relative;
 
         }
 
         .asidebar {
-            width: 25%;
+            width: 30%;
         }
 
         .btn1 {
@@ -113,7 +113,7 @@
 
 
 
-        <div class="main">
+        <div class="main w-3/5">
             <%- include('../partials/content.ejs') %>
         </div>
 
@@ -121,82 +121,11 @@
 
         <div class="popup" id="popup">
             <div class="hastag" id="hastag">
-                <h2 class="px-4 ml-2 w-48 font-bold ">#Microsoft363</h2>
-                <h2 class="px-4 ml-2 w-48 font-bold ">#Microsoft363</h2>
-                <h2 class="px-4 ml-2 w-48 font-bold ">#Microsoft363</h2>
-                <h2 class="px-4 ml-2 w-48 font-bold ">#Microsoft363</h2>
 
             </div>
             <div class="username check" id="username">
 
 
-                <div class="flex flex-shrink-0 check " onclick="hello()">
-                    <div class="flex-1 check">
-                        <div class="flex items-center w-48 check">
-                            <div>
-                                <img class="inline-block h-10 w-auto rounded-full ml-4 mt-2 check"
-                                    src="https://pbs.twimg.com/profile_images/1121328878142853120/e-rpjoJi_bigger.png"
-                                    alt="">
-                            </div>
-                            <div class="ml-3 mt-3 check">
-                                <p class="text-base leading-6 font-medium check">
-                                    Sonali Hirave
-                                </p>
-                                <p
-                                    class="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 transition ease-in-out duration-150 check">
-                                    @ShonaDesign
-                                </p>
-                            </div>
-                        </div>
-
-                    </div>
-
-                </div>
-                <div class="flex flex-shrink-0 check">
-                    <div class="flex-1 check">
-                        <div class="flex items-center w-48 check">
-                            <div>
-                                <img class="inline-block h-10 w-auto rounded-full ml-4 mt-2 check"
-                                    src="https://pbs.twimg.com/profile_images/1121328878142853120/e-rpjoJi_bigger.png"
-                                    alt="">
-                            </div>
-                            <div class="ml-3 mt-3 check">
-                                gettweet <p class="text-base leading-6 font-medium check">
-                                    Sonali Hirave
-                                </p>
-                                <p
-                                    class="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 transition ease-in-out duration-150 check">
-                                    @ShonaDesign
-                                </p>
-                            </div>
-                        </div>
-
-                    </div>
-
-                </div>
-
-                <div class="flex flex-shrink-0 check ">
-                    <div class="flex-1 check">
-                        <div class="flex items-center w-48 check">
-                            <div>
-                                <img class="inline-block h-10 w-auto rounded-full ml-4 mt-2 check"
-                                    src="https://pbs.twimg.com/profile_images/1121328878142853120/e-rpjoJi_bigger.png"
-                                    alt="">
-                            </div>
-                            <div class="ml-3 mt-3 check">
-                                <p class="text-base leading-6 font-medium check">
-                                    Sonali Hirave
-                                </p>
-                                <p
-                                    class="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 transition ease-in-out duration-150 check">
-                                    @ShonaDesign
-                                </p>
-                            </div>
-                        </div>
-
-                    </div>
-
-                </div>
 
 
 
@@ -292,7 +221,7 @@
     console.log(search);
 
 
-    function searchOnchange() {
+    async function searchOnchange() {
         let hastag = document.getElementById("hastag")
         let username = document.getElementById("username")
         let simpale = document.getElementById("simpal")
@@ -303,19 +232,93 @@
         popup.style.display = "block"
 
 
-        if (search.value == "#") {
-            hastag.style.display = "block";
-            simpale.style.display = "block";
+
+
+        async function getdata(search) {
+            let url = window.location.origin + "/explore/searchboxdata"
+            let bodyargs = { searchbox: search }
+            console.log(bodyargs);
+            let data = await fetch(url, {
+                method: 'post',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(bodyargs)
+            })
+
+            data = await data.json()
+            console.log(data);
+            return data;
 
         }
-        else if (search.value == " ") {
-            simpale.style.display = "block";
+
+
+        let search = document.getElementById("search").value;
+        let data = await getdata(search);
+
+
+        if (data.type == 0) {
+
+
+
+
+            let tag = ``
+
+            data.result.forEach(element => {
+
+                tag += `  <h2 class="px-4 ml-2 w-48 font-bold ">#${element.hashtag_name}</h2>`
+
+            });
+            hastag.innerHTML = tag
+            hastag.style.display = "block";
+            simpale.style.display = "none";
             username.style.display = "none";
+
+        }
+        else if (data.type == 1) {
+
+
+
+            let con = ``
+            data.result.forEach(element => {
+
+                con += `
+            <div class="flex flex-shrink-0 check ">
+                    <div class="flex-1 check">
+                        <div class="flex items-center w-48 check">
+                            <div>
+                                <img class="inline-block h-10 w-auto rounded-full ml-4 mt-2 check"
+                                    src=""
+                                    alt="">
+                            </div>
+                            <div class="ml-3 mt-3 check">
+                                <p class="text-base leading-6 font-medium check">
+                                    ${element.name}
+                                </p>
+                                <p
+                                    class="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 transition ease-in-out duration-150 check">
+                                    @${element.username}
+                                </p>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>`
+            });
+
+
+
+
             hastag.style.display = "none";
+            simpale.style.display = "none";
+            username.innerHTML = con;
+
+            username.style.display = "block";
         }
         else {
-            username.style.display = "block";
-            simpale.style.display = "none";
+
+            hastag.style.display = "none";
+            simpale.style.display = "block";
+            username.style.display = "none";
         }
 
     }
@@ -384,17 +387,17 @@
 
 
 
-    async function data() {
+    async function data(route) {
 
 
-        let tweet = await gettweet("/explore/data");
+        let tweet = await gettweet(route);
         return tweet;
     }
 
 
     async function topPostHandeler() {
 
-        let tweet = await data()
+        let tweet = await data("/explore/topTweet")
         let conn = document.getElementById("tweetss")
         conn.innerHTML = ""
         let et = tweet + tweet
@@ -405,18 +408,18 @@
 
 
     async function pepoleHandeler() {
-        let tweet = await data()
+        // let tweet = await data()
 
-        let conn = document.getElementById("tweetss")
-        conn.innerHTML = ""
-        conn.innerHTML = tweet;
-        alert("pepoles")
+        // let conn = document.getElementById("tweetss")
+        // conn.innerHTML = ""
+        // conn.innerHTML = tweet;
+        // alert("pepoles")
 
     }
 
 
     async function latestPostHandeler() {
-        let tweet = await data()
+        let tweet = await data("/explore/latestTweet")
         let conn = document.getElementById("tweetss")
         conn.innerHTML = ""
         conn.innerHTML = tweet;
@@ -432,7 +435,43 @@
 
 
 
-        // let tweet = await data()
+        async function getdata(search) {
+            let url = window.location.origin + "/explore/getMedia"
+            let bodyargs = { searchbox: search }
+            let data = await fetch(url, {
+                method: 'post',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(bodyargs)
+            })
+
+            data = await data.json()
+            console.log(data);
+            return data.media;
+
+        }
+
+
+        let search = document.getElementById("search").value
+        let data = await getdata(search);
+
+
+        let mediacon = `<div class="grid grid-cols-2 md:grid-cols-3 gap-4">`
+
+        console.log("data is ", data);
+
+
+        data.forEach(element => {
+            mediacon += `<div>
+                                <img class="h-auto max-w-full rounded-lg" src="/uploads/${element.media_url}" alt="">
+                            </div>`
+        });
+
+
+
+        mediacon += `</div>`
+
+
+
         let conn = document.getElementById("tweetss")
         let head = document.getElementById("head");
         let usersa = document.getElementById("usersa");
@@ -440,9 +479,7 @@
         usersa.innerHTML = "";
 
         conn.innerHTML = ""
-        conn.innerHTML = mid;
-
-
+        conn.innerHTML = mediacon;
 
     }
 
