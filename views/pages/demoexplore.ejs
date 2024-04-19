@@ -23,21 +23,6 @@
             margin-top: 100px;
         }
 
-        /* .search_con {
-
-            width: 60%;
-
-            border: 1px solid black;
-            display: flex;
-            flex-direction: column;
-            position: a;
-        }
-
-    
-      
-
-        
-        } */
 
 
         .fix {
@@ -375,39 +360,7 @@
     
 
 <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-    <div>
-        <img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image.jpg" alt="">
-    </div>
-    <div>
-        <img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-1.jpg" alt="">
-    </div>
-    <div>
-        <img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-2.jpg" alt="">
-    </div>
-    <div>
-        <img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-3.jpg" alt="">
-    </div>
-    <div>
-        <img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-4.jpg" alt="">
-    </div>
-    <div>
-        <img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-5.jpg" alt="">
-    </div>
-    <div>
-        <img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-6.jpg" alt="">
-    </div>
-    <div>
-        <img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-7.jpg" alt="">
-    </div>
-    <div>
-        <img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-8.jpg" alt="">
-    </div>
-    <div>
-        <img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-9.jpg" alt="">
-    </div>
-    <div>
-        <img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-10.jpg" alt="">
-    </div>
+    
     <div>
         <img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-11.jpg" alt="">
     </div>
@@ -416,7 +369,11 @@
     let top1 = document.getElementById("top");
     let Pepole = document.getElementById("Pepole");
     let Latest = document.getElementById("Latest");
-    let media1 = document.getElementById("media");
+    let media1 = document.getElementById("media1");
+
+
+
+    console.log(media1);
 
     top1.addEventListener("click", topPostHandeler);
     Pepole.addEventListener("click", pepoleHandeler);
@@ -467,8 +424,15 @@
 
     }
 
+
+
+
     async function mediaPostHandeler() {
-        let tweet = await data()
+
+
+
+
+        // let tweet = await data()
         let conn = document.getElementById("tweetss")
         let head = document.getElementById("head");
         let usersa = document.getElementById("usersa");
@@ -488,9 +452,9 @@
 
 
 </script>
-<script src="/js/like.script.js"></script>
+<!-- <script src="/js/like.script.js"></script>
 <script src="/js/bookmark.script.js"></script>
-<script src="/js/comment.script.js"></script>
+<script src="/js/comment.script.js"></script> -->
 
 
 </html>
