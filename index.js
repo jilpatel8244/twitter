@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 const http = require('http');
 const server = http.createServer(app);
-const {Server} = require('socket.io');
+const { Server } = require('socket.io');
 
 const io = new Server(server);
 const cookieParser = require("cookie-parser");
@@ -21,7 +21,7 @@ const likeRoute = require("./src/routes/like.routes");
 const messagesRoute = require("./src/routes/messages.routes");
 
 const PORT = process.env.PORT || 3000;
-const tweetCreate=require('./src/routes/tweet.routes')
+const tweetCreate = require('./src/routes/tweet.routes')
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 // app.use(bodyParser.urlencoded({ extended: true }));
@@ -36,8 +36,8 @@ app.use(getTimeZone);
 app.use(notification);
 // app.use("/editprofile", editprofile);
 
-// app.use('/profile', passport.authenticate('jwt', { session: false}), getProfileRouter);
-app.use('/like', passport.authenticate('jwt', { session: false}), likeRoute);
+app.use('/profile', passport.authenticate('jwt', { session: false}), getProfileRouter);
+app.use('/like', passport.authenticate('jwt', { session: false }), likeRoute);
 app.use('/bookmark', passport.authenticate('jwt', { session: false }), bookmarkRoute);
 app.use('/messages', passport.authenticate('jwt', { session: false }), messagesRoute);
 
@@ -45,7 +45,7 @@ app.use('/messages', passport.authenticate('jwt', { session: false }), messagesR
 
 app.set("view engine", "ejs");
 
-app.use("/tweetPost",tweetCreate);
+app.use("/tweetPost", tweetCreate);
 
 let connectedUser = {};
 
@@ -75,11 +75,11 @@ io.on('connection', function (socket) {
 
 
   socket.on('send-private-message', async (data) => {
-    const {senderId, reciverId, message, content_type} = data;
+    const { senderId, reciverId, message, content_type } = data;
     console.log(data);
 
-    if(connectedUser[reciverId]) {
-      io.to(connectedUser[reciverId]).emit('receive-private-message', {senderId, reciverId, message, content_type});
+    if (connectedUser[reciverId]) {
+      io.to(connectedUser[reciverId]).emit('receive-private-message', { senderId, reciverId, message, content_type });
     }
   })
 
@@ -87,8 +87,8 @@ io.on('connection', function (socket) {
   socket.on('existingChats', async (data) => {
     let sql = `select * from direct_messages where (sender_id = '${data.senderId}' and receiver_id = '${data.reciverId}') or (sender_id = '${data.reciverId}' and receiver_id = '${data.senderId}') order by created_at;`;
     let [oldchats] = await connection.query(sql);
-    
-      socket.emit('loadChats', {oldchats: oldchats});
+
+    socket.emit('loadChats', { oldchats: oldchats });
   })
 });
 
