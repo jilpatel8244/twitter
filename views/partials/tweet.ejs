@@ -41,7 +41,7 @@
 
           <div class="w-64 px-2">
 
-            <div class="flex items-center -mb-6">
+            <div class="flex items-center -mb-2">
               <div class="flex-1 text-center px-1 py-1 m-2">
                 <label for="media">
                   <a class="mt-1 group flex items-center text-blue-400 px-2 py-2 text-base leading-6 font-medium rounded-full hover:bg-opacity-20 hover:bg-[#8fa2c4] hover:text-blue-600">
@@ -140,8 +140,7 @@
           </h3>
         </div>
         <div id="edit" class="hidden">
-          <p data-modal-hide="popup-modal" type="button"
-            class="py-1 w-[5rem] text-center font-medium focus:outline-none bg-black rounded-2xl border  hover:bg-gray-900 hover:text-white focus:z-10 focus:ring-4 focus:ring-gray-100 cursor-pointer text-white select-none"
+          <p class="py-1 w-[5rem] text-center font-medium focus:outline-none bg-black rounded-2xl border  hover:bg-gray-900 hover:text-white focus:z-10 focus:ring-4 focus:ring-gray-100 cursor-pointer text-white select-none"
             id="editBtn">
             Edit
           </p>
@@ -156,6 +155,36 @@
             <p class="text-gray-800"> Not ready to post just yet? Save it to your drafts or schedule it for later. </p>
           </li>
         </ul>
+        <div id="deleteBlock" class="hidden">
+          <div class="flex justify-between border-t">
+          <div class=" my-2">
+            <p class="py-1 w-[6rem] text-center font-medium focus:outline-none rounded-2xl  hover:bg-blue-100 hover:text-blue-600 focus:z-10 focus:ring-4 focus:ring-gray-100 cursor-pointer text-blue-500 select-none"  id="selectAll">Select all</p>
+          </div>
+          <div class="my-2">
+            <button id="delete" data-modal-target="delete-modal" data-modal-toggle="delete-modal" class="py-1 w-[5rem] text-center font-medium focus:outline-none rounded-2xl  focus:z-10 focus:ring-4 focus:ring-gray-100 disabled:opacity-70 text-red-600 select-none" disabled>Delete</button>
+          </div>
+        </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="delete-modal" tabindex="-1"
+  class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center  items-center w-full md:inset-0 h-[calc(100%-1rem)] mt-44 max-h-full">
+  <div class=" p-4  mx-auto max-w-fit max-h-screen">
+    <div class=" bg-white rounded-2xl shadow-2xl">
+      <div class="p-4 md:p-5 ">
+        <h3 class=" text-lg font-normal text-black dark:text-black">Discard unsent posts</h3>
+        <p class="text-gray-700 mb-5">This can’t be undone and you’ll lose your unsent posts. </p>
+        <div class="text-center  flex items-center flex-col">
+          <p data-modal-hide="delete-model" 
+            class="py-2.5 w-[25rem] text-center font-medium focus:outline-none bg-red-600 rounded-2xl border  hover:bg-red-900 hover:text-white focus:z-10 focus:ring-4 focus:ring-gray-100  text-white select-none cursor-pointer"
+            id="finalDelete">
+            Delete
+          </p>
+          <p data-modal-hide="delete-modal"  class="py-2.5 w-[25rem] text-center font-medium text-gray-900 focus:outline-none bg-white rounded-2xl border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-white dark:text-black dark:border-gray-600 dark:hover:text-gray-900 dark:hover:bg-gray-100 select-none cursor-pointer" id="deleteCancle">Cancle</p>
+        </div>
       </div>
     </div>
   </div>
