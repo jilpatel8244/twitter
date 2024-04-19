@@ -37,28 +37,46 @@ exports.getUsernameOrHastagOnchage = async (req, res) => {
 exports.getTopTweetAndHastag = async (req, res) => {
 
 
-
+    console.log("body is ", req.body);
     let TopTweet = `        
-        SELECT tweets.id AS tweet_id, tweets.content, tweets.user_id, tweets.created_at , users.name, users.username, tweet_likes.status as isLiked, medias.media_url
-              FROM tweets
-              LEFT JOIN hashtag_tweet ON tweets.id = hashtag_tweet.tweet_id
-            left join users on tweets.user_id = users.id
-                   left join tweet_likes on tweets.user_id = tweet_likes.id
-                    left join medias on tweets.id = medias.tweet_id 
-              WHERE tweets.content LIKE '%demo%' OR tweets.id IN (
-                  SELECT tweet_id FROM hashtag_tweet WHERE hashtag_id IN (
-                      SELECT id FROM hashtag_lists WHERE hashtag_name LIKE '%demo%'
-                  )
-              ) OR tweets.user_id IN (
-                  SELECT id FROM users WHERE username LIKE '%demo%'
-              )
-              ORDER BY (
-                  SELECT COUNT(*) FROM tweet_likes WHERE tweet_likes.tweet_id = tweets.id AND tweet_likes.status = 1
-              ) DESC;
+    SELECT users.username,
+    users.id as user_id, 
+    users.name, 
+    COALESCE(users.profile_img_url, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTOFx557XPIXXmnhk7joe2Pq2uQhb1iCJ688RgQZzH5ZA&s') as profile_img_url, 
+    tweets.content,
+    tweets.id as tweet_id,
+    tweet_comments.content as comments, 
+    CASE
+      WHEN tweets.updated_at IS NOT NULL THEN
+        CASE
+          WHEN TIMESTAMPDIFF(SECOND, tweets.updated_at, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(SECOND, tweets.updated_at, NOW()+1), ' seconds ago')
+          WHEN TIMESTAMPDIFF(MINUTE, tweets.updated_at, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(MINUTE, tweets.updated_at, NOW()), ' minutes ago')
+          WHEN TIMESTAMPDIFF(HOUR, tweets.updated_at, NOW()) < 24 THEN CONCAT(TIMESTAMPDIFF(HOUR, tweets.updated_at, NOW()), ' hours ago')
+          ELSE CONCAT(DATE_FORMAT(tweets.updated_at, '%d'), ' ', DATE_FORMAT(tweets.updated_at, '%M'))
+        END
+      ELSE
+        CASE
+          WHEN TIMESTAMPDIFF(SECOND, tweets.created_at, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(SECOND, tweets.created_at, NOW()+1), ' seconds ago')
+          WHEN TIMESTAMPDIFF(MINUTE, tweets.created_at, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(MINUTE, tweets.created_at, NOW()), ' minutes ago')
+          WHEN TIMESTAMPDIFF(HOUR, tweets.created_at, NOW()) < 24 THEN CONCAT(TIMESTAMPDIFF(HOUR, tweets.created_at, NOW()), ' hours ago')
+          ELSE CONCAT(DATE_FORMAT(tweets.created_at, '%d'), ' ', DATE_FORMAT(tweets.created_at, '%M'))
+        END
+    END as time,
+    COALESCE(medias.media_url) as media_url
+  FROM users
+  JOIN tweets ON users.id = tweets.user_id
+  LEFT JOIN medias ON tweets.id = medias.tweet_id
+  LEFT JOIN tweet_comments ON tweet_comments.user_id = tweets.id 
+  WHERE users.is_active = 1 AND tweets.is_posted = 1
+  ORDER BY 
+    CASE
+      WHEN tweets.updated_at IS NOT NULL THEN tweets.updated_at
+      ELSE tweets.created_at
+    END DESC
       `
     let [result1] = await connection1.query(TopTweet);
     console.log(result1);
-    res.json({ result1 })
+    res.json({ resultTweet: result1 })
 }
 
 

@@ -8,10 +8,34 @@
         integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <title>X</title>
+    <style>
+      
+        #bla:after {
+            position: fixed;
+            content: "";
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: -2;
+        }
+
+        #bla:before {
+            position: absolute;
+            content: "";
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background: #FFF;
+            z-index: -1;
+        }
+    </style>
 </head>
 
 <body>
-    <div class="p-relative h-screen" id="main" style="background-color: white">
+    <div class="relative h-screen" id="main" style="background-color: white">
         <div class="flex justify-center">
             <header class=" py-4 h-auto">
                 <!-- Side Navbar (left side) -->
@@ -20,10 +44,14 @@
             <main role="main">
                 <div class="flex" style="width: 990px;">
 
-                    <%- include('../partials/home')%>
+                    <div>
 
-                        <!-- right sidebar -->
-                        <%- include('../partials/aside.ejs')%>
+
+
+                    </div>
+
+                    <!-- right sidebar -->
+                    <%- include('../partials/aside.ejs')%>
                 </div>
             </main>
         </div>
@@ -74,3 +102,27 @@
 </body>
 
 </html>
+
+<!-- 
+<script src="/socket.io/socket.io.js"></script>
+
+    <script>
+        let socket = io();
+
+        let senderId = 13;
+        let reciverId;
+
+        socket.on('connect', () => {
+            console.log('connected to server ' + socket.id);
+
+            socket.emit('user-connected', senderId);
+            socket.emit('getUnreadMessages', senderId);     
+        });
+
+        socket.on('unreadMessages', (data) => {
+            if (data.length) {
+                document.getElementById('messageCount').parentElement.style.display = "flex";
+                document.getElementById('messageCount').innerHTML = `${data.length}`;
+            }
+        });
+    </script> -->

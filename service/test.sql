@@ -69,3 +69,59 @@ CREATE TABLE `notifications` (
 );
 
  
+-- modified direct message table and new unread message table
+CREATE TABLE `direct_messages` (
+  `id` INT PRIMARY KEY AUTO_INCREMENT,
+  `sender_id` INT NOT NULL,
+  `receiver_id` INT NOT NULL,
+  `content_type` VARCHAR(255),
+  `content` VARCHAR(255),
+  `created_at` TIMESTAMP DEFAULT (CURRENT_TIMESTAMP),
+  `updated_at` TIMESTAMP on update CURRENT_TIMESTAMP,
+  `deleted_at` TIMESTAMP
+);
+-- for now type is text and media
+ALTER TABLE `direct_messages` ADD FOREIGN KEY (`sender_id`) REFERENCES `users` (`id`);
+ALTER TABLE `direct_messages` ADD FOREIGN KEY (`receiver_id`) REFERENCES `users` (`id`);
+
+CREATE TABLE `unread_messages` (
+  `id` INT PRIMARY KEY AUTO_INCREMENT,
+  `user_id` INT NOT NULL,
+  `message_id` INT NOT NULL,
+  `is_read` boolean
+);
+
+ALTER TABLE `unread_messages` ADD FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
+ALTER TABLE `unread_messages` ADD FOREIGN KEY (`message_id`) REFERENCES `direct_messages` (`id`);
+
+
+
+// in controller 
+
+const mentionedUsernames = extractMentionedUsernames(
+  // notification.tweet_content
+  "hello there @jil and @harsh @Parmeshvar!!! what is your opinion on this tweet functionality"
+);
+const mentionedUsers = await getUsersByUsernames(mentionedUsernames);
+// console.log(mentionedUsers);
+
+// functions
+function extractMentionedUsernames(tweetContent) {
+  const regex = /@(\w+)/g;
+  const matches = tweetContent.match(regex);
+  if (matches) {
+    return matches.map((match) => match.substring(1));
+  }
+  return [];
+}
+
+async function getUsersByUsernames(usernames) {
+  if (usernames.length === 0) {
+    return [];
+  }
+  const [users] = await connection.query(
+    "SELECT id, username FROM users WHERE username IN (?)",
+    [usernames]
+  );
+  return users;
+}

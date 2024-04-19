@@ -6,9 +6,8 @@ const {Server} = require('socket.io');
 
 const io = new Server(server);
 const cookieParser = require("cookie-parser");
-const getProfileRouter = require("./src/routes/profile.routes");
+// const getProfileRouter = require("./src/routes/profile.routes");
 const getTimeZone = require("./src/routes/timezone.routes");
-const bodyParser = require("body-parser");
 const homeRouter = require("./src/routes/home.routes");
 const notification = require("./src/routes/notification.route");
 const exploreRoute = require("./src/routes/explore.routes")
@@ -36,7 +35,8 @@ app.use(authRouter);
 app.use(getTimeZone);
 app.use(notification);
 app.use("/editprofile", editprofile);
-app.use('/profile', passport.authenticate('jwt', { session: false}), getProfileRouter);
+
+// app.use('/profile', passport.authenticate('jwt', { session: false}), getProfileRouter);
 app.use('/like', passport.authenticate('jwt', { session: false}), likeRoute);
 app.use('/bookmark', passport.authenticate('jwt', { session: false }), bookmarkRoute);
 app.use('/messages', passport.authenticate('jwt', { session: false }), messagesRoute);
@@ -52,10 +52,11 @@ let connectedUser = {};
 //Whenever someone connects this gets executed
 io.on('connection', async function (socket) {
   console.log('A user connected : ', socket.id);
-
+  
   // store userId and socketId when user connects
   socket.on('user-connected', async (userId) => {
     connectedUser[userId] = socket.id;
+    console.log(connectedUser);
   });
 
   // to get all unread message count follower wise
@@ -69,14 +70,13 @@ io.on('connection', async function (socket) {
 
   // to update the read flag of some specific follower
   socket.on('messageRead', async (data) => {
-    let sql = `update unread_messages join direct_messages on unread_messages.message_id = direct_messages.id set unread_messages.is_read = 1 where unread_messages.user_id = ? and direct_messages.receiver_id = ?`;
+    let sql = `update unread_messages join direct_messages on unread_messages.message_id = direct_messages.id set unread_messages.is_read = 1 where unread_messages.user_id = ? and direct_messages.sender_id = ?;`;
 
     await connection.query(sql, [data.senderId, data.reciverId]);
   })
 
   //Whenever someone disconnects this piece of code executed
   socket.on('disconnect', function () {
-    console.log(connectedUser);
     console.log('A user disconnected : ', socket.id);
 
     for (const userId in connectedUser) {

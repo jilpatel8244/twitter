@@ -25,9 +25,9 @@ exports.getAllBookmarks = async (req, res) => {
         allBookmarkTweets = allBookmarkTweets.map((element) => {
             element.isBookmarked = 1;
             return element;
-        })
+        });
 
-        res.render('pages/bookmark', {
+        res.render('pages/bookmark.ejs', {
             allBookmarkTweets: allBookmarkTweets
         });
     } catch (error) {

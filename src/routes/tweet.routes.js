@@ -9,6 +9,6 @@ router.get('/',passport.authenticate('jwt',{session:false}),tweetCreate);
 
 router.post('/insertTweet',passport.authenticate('jwt',{session:false}),upload.array('media',1),insertTweet);
 router.get('/displayDrafts',passport.authenticate('jwt',{session:false}),showDrafts);
-router.post('/tweetUpdate',passport.authenticate('jwt',{session:false}),upload.fields([{name:'media',maxCount:1}]),tweetUpdate);
+router.post('/tweetUpdate',passport.authenticate('jwt',{session:false}),upload.single('media'),tweetUpdate);
 router.get('/displayImage',passport.authenticate('jwt',{session:false}),displayImage)
 module.exports = router
