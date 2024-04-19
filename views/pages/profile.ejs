@@ -322,7 +322,6 @@
       let replies = document.getElementById("replies");
       let posts = document.getElementById("posts");
       let like = document.getElementById("like");
-      
 
       async function fetchPosts() {        
 
@@ -354,9 +353,11 @@
           }
         });
 
-        posts.setAttribute("style", "border-bottom: 2px solid skyblue");
+        post.setAttribute("style", "border-bottom: 2px solid skyblue");
         like.removeAttribute("style");
-        replies.removeAttribute("style");        
+        replies.removeAttribute("style");
+
+        tab.innerHTML = `<%- include('../partials/posts.ejs',{profileData,commentData}) %>`;
         tab.removeAttribute("hidden");
         console.log("Hello From the Posts section");
       }
@@ -464,7 +465,6 @@
 </body>
 
 </html>
-
 
 
 
