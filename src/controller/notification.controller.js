@@ -10,10 +10,10 @@ exports.getNotifications = async (req, res) => {
   const [notifications] = await connection.query(
     `SELECT n.*, u.username AS username, u2.name AS related_user_name, u2.username AS related_username, t.*, t.content AS tweet_content, 
     CASE
-      WHEN TIMESTAMPDIFF(SECOND, t.created_at, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(SECOND, t.created_at, NOW()), ' seconds ago')
-      WHEN TIMESTAMPDIFF(MINUTE, t.created_at, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(MINUTE, t.created_at, NOW()), ' minutes ago')
-      WHEN TIMESTAMPDIFF(HOUR, t.created_at, NOW()) < 24 THEN CONCAT(TIMESTAMPDIFF(HOUR, t.created_at, NOW()), ' hours ago')
-      ELSE CONCAT(DATE_FORMAT(t.created_at, '%d'), ' ', DATE_FORMAT(t.created_at, '%M'))
+      WHEN TIMESTAMPDIFF(SECOND, n.created_at, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(SECOND, n.created_at, NOW()), ' seconds ago')
+      WHEN TIMESTAMPDIFF(MINUTE, n.created_at, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(MINUTE, n.created_at, NOW()), ' minutes ago')
+      WHEN TIMESTAMPDIFF(HOUR, n.created_at, NOW()) < 24 THEN CONCAT(TIMESTAMPDIFF(HOUR, n.created_at, NOW()), ' hours ago')
+      ELSE CONCAT(DATE_FORMAT(n.created_at, '%d'), ' ', DATE_FORMAT(n.created_at, '%M'))
     END AS time
     FROM notifications n
     LEFT JOIN users u ON n.user_id = u.id
@@ -36,10 +36,10 @@ exports.getNotifications = async (req, res) => {
   const [verifiedNotification] = await connection.query(
     `SELECT  f.current_status, n.*, u.username AS username, u2.name AS related_user_name, u2.username AS related_username, t.*, t.content AS tweet_content, n.created_at,
      CASE
-     WHEN TIMESTAMPDIFF(SECOND, t.created_at, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(SECOND, t.created_at, NOW()), ' seconds ago')
-     WHEN TIMESTAMPDIFF(MINUTE, t.created_at, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(MINUTE, t.created_at, NOW()), ' minutes ago')
-     WHEN TIMESTAMPDIFF(HOUR, t.created_at, NOW()) < 24 THEN CONCAT(TIMESTAMPDIFF(HOUR, t.created_at, NOW()), ' hours ago')
-     ELSE CONCAT(DATE_FORMAT(t.created_at, '%d'), ' ', DATE_FORMAT(t.created_at, '%M'))
+     WHEN TIMESTAMPDIFF(SECOND, n.created_at, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(SECOND, n.created_at, NOW()), ' seconds ago')
+     WHEN TIMESTAMPDIFF(MINUTE, n.created_at, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(MINUTE, n.created_at, NOW()), ' minutes ago')
+     WHEN TIMESTAMPDIFF(HOUR, n.created_at, NOW()) < 24 THEN CONCAT(TIMESTAMPDIFF(HOUR, n.created_at, NOW()), ' hours ago')
+     ELSE CONCAT(DATE_FORMAT(n.created_at, '%d'), ' ', DATE_FORMAT(n.created_at, '%M'))
      END as time
      FROM notifications n
      LEFT JOIN users u ON n.user_id = u.id
@@ -57,10 +57,10 @@ exports.getNotifications = async (req, res) => {
     `
 SELECT f.current_status, n.*, u.username AS username, u2.name AS related_user_name, u2.username AS related_username, t.*, t.content AS tweet_content, 
 CASE
-    WHEN TIMESTAMPDIFF(SECOND, t.created_at, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(SECOND, t.created_at, NOW()), ' seconds ago')
-    WHEN TIMESTAMPDIFF(MINUTE, t.created_at, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(MINUTE, t.created_at, NOW()), ' minutes ago')
-    WHEN TIMESTAMPDIFF(HOUR, t.created_at, NOW()) < 24 THEN CONCAT(TIMESTAMPDIFF(HOUR, t.created_at, NOW()), ' hours ago')
-    ELSE CONCAT(DATE_FORMAT(t.created_at, '%d'), ' ', DATE_FORMAT(t.created_at, '%M'))
+    WHEN TIMESTAMPDIFF(SECOND, n.created_at, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(SECOND, n.created_at, NOW()), ' seconds ago')
+    WHEN TIMESTAMPDIFF(MINUTE, n.created_at, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(MINUTE, n.created_at, NOW()), ' minutes ago')
+    WHEN TIMESTAMPDIFF(HOUR, n.created_at, NOW()) < 24 THEN CONCAT(TIMESTAMPDIFF(HOUR, n.created_at, NOW()), ' hours ago')
+    ELSE CONCAT(DATE_FORMAT(n.created_at, '%d'), ' ', DATE_FORMAT(n.created_at, '%M'))
   END AS time
 FROM notifications n
 LEFT JOIN users u ON n.user_id = u.id
