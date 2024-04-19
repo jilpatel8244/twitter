@@ -3,6 +3,6 @@ const express = require('express');
 
 const replyRouter = express.Router();
 
-replyRouter.get("/profile",getReplies);
+replyRouter.get("/reply",getReplies);
 
 module.exports = replyRouter;
