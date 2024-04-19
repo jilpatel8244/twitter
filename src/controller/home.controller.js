@@ -1,3 +1,4 @@
+const { log } = require("winston");
 const connection = require("../../config/connection");
 const logger = require('../../logger/logger');
 
@@ -42,9 +43,18 @@ exports.getHome = async (req, res) => {
   const [rows] = await connection.execute(sql);
   res.render('../views/pages/home', { tweets: rows });
 }
-
 exports.post_comment = async (req, res) => {
   let { tweetId, comment } = req.body;
+
+  if (comment.length > 255) {
+    res.json({
+      success: false,
+      message: 'Comment is too long',
+    });
+    return;
+  }
+
+  console.log(req.body);
   let user_id = req.user[0][0].id
   let sql = `
         INSERT INTO tweet_comments (user_id, tweet_id, content)
@@ -52,23 +62,16 @@ exports.post_comment = async (req, res) => {
     `;
 
   let [result] = await connection.execute(sql, [user_id, tweetId, comment]);
-  let [comment_mention] = await connection.execute(`SELECT * FROM tweet_comments WHERE tweet_id = ?`, [tweetId])
-  comment_mention.forEach((mention_name) => {
-    console.log("result", mention_name.content);
-  })
-  const mentionedUsernames = extractMentionedUsernames(
-    comment_mention[0].content
-  );
+  let [comment_mention] = await connection.execute(`SELECT * FROM tweet_comments WHERE tweet_id = ? order by created_at desc`, [tweetId])
+  console.log(comment_mention[0].content);
+  const mentionedUsernames = extractMentionedUsernames(comment_mention[0].content);
+  console.log(mentionedUsernames);
   const mentionedUsers = await getUsersByUsernames(mentionedUsernames);
-  console.log(mentionedUsers);
-
-
-  // console.log(sql);
-
-  let [tweet_user_id] = await connection.execute(`SELECT user_id FROM tweets WHERE id = ?`, [tweetId])
-  await connection.execute(`INSERT INTO notifications (user_id, tweet_id, type, related_user_id)
-    VALUES (?, ?, 'Comment', ?);`, [tweet_user_id[0].user_id, tweetId, user_id])
-
+  if (mentionedUsers.length >= 1) {
+    let [tweet_user_id] = await connection.execute(`SELECT user_id FROM tweets WHERE id = ?`, [tweetId])
+    await connection.execute(`INSERT INTO notifications (user_id, tweet_id, type, related_user_id)
+    VALUES (?, ?, 'Mention', ?);`, [mentionedUsers[0].id, tweetId, user_id]);
+  }
   res.json({
     success: result.affectedRows > 0,
     comment: {
@@ -77,6 +80,7 @@ exports.post_comment = async (req, res) => {
     },
   });
 }
+
 exports.get_comment = async (req, res) => {
   let tweetId = req.params.id;
   let sql = `SELECT tc.id, tc.user_id, tc.tweet_id, tc.content, tc.created_at, tc.updated_at, tc.deleted_at, u.username, u.name, u.profile_img_url, t.id as tweet_id,
@@ -94,8 +98,9 @@ ORDER BY tc.created_at DESC  ;
   `;
 
   let [result] = await connection.execute(sql, [tweetId]);
-  console.log(result);
   res.render('../views/pages/comments', {
+    tweetId: tweetId,
+    message: '',
     comments: result.map(comment => {
       if (comment && comment.profile_img_url) {
         return comment;
@@ -104,8 +109,8 @@ ORDER BY tc.created_at DESC  ;
       }
     })
   });
-}
 
+}
 
 function extractMentionedUsernames(tweetContent) {
   const regex = /@(\w+)/g;
@@ -126,3 +131,67 @@ async function getUsersByUsernames(usernames) {
   );
   return users;
 }
+
+
+exports.post_reply = async (req, res) => {
+  console.log("b;a");
+  let comment = req.body;
+  let comment_id = req.body.comment_id;
+
+  if (comment.length > 255) {
+    res.json({
+      success: false,
+      message: 'Comment is too long',
+    });
+    return;
+  }
+
+  console.log(req.body);
+  let user_id = req.user[0][0].id
+  let sql = `
+        INSERT INTO reply_comments (user_id, comment_id, content)
+        VALUES (?, ?, ?)
+    `;
+
+  let [result] = await connection.execute(sql, [user_id, comment_id, comment]); 
+  console.log(result);
+  res.json({
+    success: result.affectedRows > 0,
+    comment: {
+      id: result.insertId,
+      comment_id:comment_id,
+      content: comment,
+    },
+  });
+}
+
+// exports.get_reply = async (req, res) => {
+//   let tweetId = req.params.id;
+//   let sql = `SELECT tc.id, tc.user_id, tc.tweet_id, tc.content, tc.created_at, tc.updated_at, tc.deleted_at, u.username, u.name, u.profile_img_url, t.id as tweet_id,
+//   CASE
+//       WHEN TIMESTAMPDIFF(SECOND, tc.created_at, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(SECOND, tc.created_at, NOW()+1), ' seconds ago')
+//       WHEN TIMESTAMPDIFF(MINUTE, tc.created_at, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(MINUTE, tc.created_at, NOW()), ' minutes ago')
+//       WHEN TIMESTAMPDIFF(HOUR, tc.created_at, NOW()) < 24 THEN CONCAT(TIMESTAMPDIFF(HOUR, tc.created_at, NOW()), ' hours ago')
+//       ELSE CONCAT(DATE_FORMAT(tc.created_at, '%d'), ' ', DATE_FORMAT(tc.created_at, '%M'))
+//   END as time
+// FROM reply_comments tc
+// JOIN users u ON tc.user_id = u.id 
+// JOIN tweets t ON tc.tweet_id = t.id
+// WHERE tc.tweet_id = ?
+// ORDER BY tc.created_at DESC  ;
+//   `;
+
+//   let [result] = await connection.execute(sql, [tweetId]);
+//   res.render('../views/pages/comments', {
+//     tweetId: tweetId,
+//     message: '',
+//     comments: result.map(comment => {
+//       if (comment && comment.profile_img_url) {
+//         return comment;
+//       } else {
+//         return { ...comment, profile_img_url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTOFx557XPIXXmnhk7joe2Pq2uQhb1iCJ688RgQZzH5ZA&s' };
+//       }
+//     })
+//   });
+
+// }
