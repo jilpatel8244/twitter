@@ -52,47 +52,43 @@ async function fetchNotificatons() {
     const mentionContainer = document.getElementById("mentioncontent");
     const verifiedContainer = document.getElementById("verifiedcontent");
 
+    // console.log(notifications.countNotification);
+    const allcount = document.getElementById("allusercount");
+    allcount.innerHTML = notifications.countNotification - 1 + "+";
+    
     let simpleData = notifications.notifications;
-    notificationContainer.innerHTML = "";
-
     simpleData.forEach((notification) => {
       let notificationHTML = "";
+      notificationHTML = `<div class="mt-2 flex items-center justify-center flex-col">
+          <span class="mt-2 font-medium text-2xl">Nothing to see here — yet</span>
+          <span class="mt-2 font-medium text-sm">
+            When some notification arrive, you’ll find it here.
+          </span>
+        </div>`;
+      notificationHTML = "";
       switch (notification.type) {
-        case "Password_reset":
-          notificationHTMl = `
-  <div
-    class="  w-full px-4 py-2 border-b border-gray-200 cursor-pointer hover:bg-gray-100 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
-  >
-    <div class="flex">
-      <img
-        class="w-10 h-10 p-1 rounded-full"
-        src="/assets/lock.png"
-        alt="Bordered avatar"
-      />
-      <div class="mt-2">
-        Your password was reset on your account. Based on this change,
-        additional changes to your account may be restricted temporarily.
-      </div>
-    </div>
-  </div>`;
-          break;
-        case "Login":
-          notificationHTML = `  
-  <div
-    class=" w-full px-4 py-2 border-b border-gray-200 cursor-pointer hover:bg-gray-100 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
-  >
-    <div class="flex">
-      <img
-        class="w-10 h-10 p-1 rounded-full"
-        src="/assets/lock.png"
-        alt="Bordered avatar"
-      />
-      <div class="mt-2">
-        There was a login to your account  @ ${notification.related_username}  from a
-        new device on ${notification.created_at}. Review it now.
-      </div>
-    </div>
-  </div>`;
+        case "Mention":
+          notificationHTML = `
+        <div
+            class="block w-full px-4 py-2 border-b border-gray-200 cursor-pointer hover:bg-gray-100 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
+          >
+          <a href="/home/?tweet_id=${notification.tweet_id}"> 
+            <div class="flex">
+              
+              <img
+                class="w-10 h-10 ml-2 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500"
+                src="/assets/user.png"
+                alt="Bordered avatar"
+              />
+        
+              <div class="notification ml-2 flex flex-col mt-2">
+                <span><strong>${notification.related_user_name} </strong>
+                  Mentioned you</span>
+              </div>
+            </div>
+            <div class="ml-2 mt-2"> ${notification.tweet_content}</div>
+            </a>
+        </div>`;
           break;
         case "Follow":
           notificationHTML = `
@@ -203,15 +199,101 @@ async function fetchNotificatons() {
       }
       notificationContainer.innerHTML += notificationHTML;
     });
+    let loginData = notifications.logNotification;
+    loginData.forEach((lognotification) => {
+      let loginHTML = "";
+      switch (lognotification.type) {
+        case "Password_reset":
+          loginHTML = `
+  <div
+    class="  w-full px-4 py-2 border-b border-gray-200 cursor-pointer hover:bg-gray-100 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
+  >
+    <div class="flex">
+      <img
+        class="w-10 h-10 p-1 rounded-full"
+        src="/assets/lock.png"
+        alt="Bordered avatar"
+      />
+      <div class="mt-2">
+        Your password was reset on your account. Based on this change,
+        additional changes to your account may be restricted temporarily.
+      </div>
+    </div>
+  </div>`;
+          break;
+        case "Login":
+          loginHTML = `  
+  <div
+    class=" w-full px-4 py-2 border-b border-gray-200 cursor-pointer hover:bg-gray-100 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
+  >
+    <div class="flex">
+      <img
+        class="w-10 h-10 p-1 rounded-full"
+        src="/assets/lock.png"
+        alt="Bordered avatar"
+      />
+      <div class="mt-2">
+        There was a login to your account  @ ${lognotification.username}  from a
+        new device on ${lognotification.created_at}. Review it now.
+      </div>
+    </div>
+  </div>`;
+          break;
+        default:
+          console.warn(`Unknown notification type: ${lognotification.type}`);
+      }
+      notificationContainer.innerHTML += loginHTML;
+    });
 
     let verifiedData = notifications.verifiedNotification;
-    verifiedContainer.innerHTML = "";
 
-    verifiedData.forEach((verifiednotification) => {
-      let verifiedHTML = "";
-      switch (verifiednotification.type) {
-        case "Follow":
-          verifiedHTML = `
+    if (verifiedData.length < 1) {
+      let noVerifiedHTML = "";
+      noVerifiedHTML = ` <div class="mt-2 flex items-center justify-center flex-col">
+      <img
+        class="p-1 rounded-full"
+        src="/assets/verifiedpage.png"
+        alt="Bordered avatar"
+      />
+      <span class="mt-2 font-medium text-2xl">Nothing to see here — yet</span>
+      <p class="w-72">
+        Likes, mentions, reposts, and a whole lot more — when it comes from a
+        verified account, you’ll find it here.
+        <a href="#" class="text-blue-700">Learn more</a>
+      </p>
+    </div>`;
+      verifiedContainer.innerHTML += noVerifiedHTML;
+    } else {
+      verifiedData.forEach((verifiednotification) => {
+        let verifiedHTML = "";
+        switch (verifiednotification.type) {
+          case "Tweet":
+            verifiedHTML = `<div
+            class="block w-full px-4 py-2 border-b border-gray-200 cursor-pointer hover:bg-gray-100 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
+          >
+          <a href="/home/?tweet_id=${verifiednotification.tweet_id}">
+            <div class="flex">
+              <img
+                class="w-15 h-10 p-1 rounded-full"
+                src="/assets/message.png"
+                alt="like icon"
+              />
+              <img
+                class="w-10 h-10 ml-2 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500"
+                src="/assets/user.png"
+                alt="Bordered avatar"
+              />
+    
+              <div class="notification ml-2 flex flex-col mt-2">
+                <span><strong>${verifiednotification.username} </strong> post a tweet</span>
+              </div>
+            </div>
+            <div class="ml-2 mt-2"> ${verifiednotification.tweet_content}</div>
+            </a>
+          </div>`;
+            break;
+          case "Follow":
+            verifiedHTML = `
               <div
                 class="  w-full px-4 py-2 border-b border-gray-200 cursor-pointer hover:bg-gray-100 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
               >
@@ -233,14 +315,14 @@ async function fetchNotificatons() {
                     alt="Bordered avatar"
                   />
                   <div class="notification mt-2 flex flex-col ml-2">
-                    <span><strong>${verifiednotification.related_user_name} </strong> followed you</span>
+                    <span><strong>${verifiednotification.related_user_name} </strong> followed  <strong> ${verifiednotification.username}</strong></span>
                   </div>
                  </div>
                 </a>
               </div>`;
-          break;
-        case "Comment":
-          verifiedHTML = `
+            break;
+          case "Comment":
+            verifiedHTML = `
 
               <div
                 class="block w-full px-4 py-2 border-b border-gray-200 cursor-pointer hover:bg-gray-100 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
@@ -259,16 +341,16 @@ async function fetchNotificatons() {
                   />
 
                   <div class="notification ml-2 flex flex-col mt-2">
-                    <span><strong>${verifiednotification.related_user_name} </strong> commented on your post</span>
+                    <span><strong>${verifiednotification.related_user_name} </strong> commented on <strong> ${verifiednotification.username}'s</strong> post</span>
                   </div>
                 </div>
                 <div class="ml-2 mt-2"> ${verifiednotification.tweet_content}</div>
                 </a>
               </div>
                 `;
-          break;
-        case "Like":
-          verifiedHTML = `
+            break;
+          case "Like":
+            verifiedHTML = `
               <div
                 class="block w-full px-4 py-2 border-b border-gray-200 cursor-pointer hover:bg-gray-100 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
               >
@@ -286,15 +368,15 @@ async function fetchNotificatons() {
                   />
 
                   <div class="ml-2 flex flex-col mt-2">
-                    <span><strong>${verifiednotification.related_user_name} </strong> liked your post</span>
+                    <span><strong>${verifiednotification.related_user_name} </strong> liked  <strong> ${verifiednotification.username}'s</strong> post</span>
                   </div>
                 </div>
                 <div class="ml-2 mt-2">${verifiednotification.tweet_content}</div>
                 </a>
               </div>`;
-          break;
-        case "Retweet":
-          verifiedHTML = ` <div
+            break;
+          case "Retweet":
+            verifiedHTML = ` <div
                 class="block w-full px-4 py-2 border-b border-gray-200 cursor-pointer hover:bg-gray-100 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
               >
               <a href="/home/?tweet_id=${verifiednotification.tweet_id}">
@@ -311,16 +393,16 @@ async function fetchNotificatons() {
                   />
 
                   <div class="notification ml-2 flex flex-col mt-2">
-                    <span><strong>${verifiednotification.related_user_name} </strong> retweet your post</span>
+                    <span><strong>${verifiednotification.related_user_name} </strong> retweet  <strong> ${verifiednotification.username}'s</strong> post</span>
                   </div>
                 </div>
                 <div class="ml-2 mt-2"> ${verifiednotification.tweet_content}</div>
                 </a>
               </div>
          `;
-          break;
-        case "Mention":
-          verifiedHTML = `<div
+            break;
+          case "Mention":
+            verifiedHTML = `<div
                 class="block w-full px-4 py-2 border-b border-gray-200 cursor-pointer hover:bg-gray-100 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
               >
               <a href="/home/?tweet_id=${verifiednotification.tweet_id}">
@@ -335,26 +417,37 @@ async function fetchNotificatons() {
                   <div class="notification ml-2 flex flex-col">
                     <span><strong>${verifiednotification.related_user_name} </strong>
                       @${verifiednotification.related_username} ~ ${verifiednotification.time}</span>
-                      <span> <strong>Mentioned you</strong> in their tweet </span>
+                      <span> <strong>Mentioned ${verifiednotification.username}</strong> in their tweet </span>
                   </div>
                 </div>
                 <div class="ml-4 mt-4"> ${verifiednotification.tweet_content}</div>
                 </a>
               </div>`;
-          break;
-        default:
-          console.warn(
-            `Unknown notification type: ${verifiednotification.type}`
-          );
-      }
-      verifiedContainer.innerHTML += verifiedHTML;
-    });
+            break;
+          default:
+            console.warn(
+              `Unknown notification type: ${verifiednotification.type}`
+            );
+        }
+        verifiedContainer.innerHTML += verifiedHTML;
+      });
+    }
 
     let mentionData = notifications.mentionNotification;
-    mentionContainer.innerHTML = "";
-    mentionData.forEach((mentionNotification) => {
-      let mentionHTML = "";
-      mentionHTML = `<div
+    if (mentionData.length < 1) {
+      let noMentionHTML = "";
+      noMentionHTML = `<div class="mt-2 flex items-center justify-center flex-col">
+      <span class="mt-2 font-medium text-2xl">Nothing to see here — yet</span>
+      <span class="mt-2 font-medium text-sm">
+        When someone mentions you, you’ll find it here.
+      </span>
+    </div>`;
+      mentionContainer.innerHTML += noMentionHTML;
+    } else {
+      mentionContainer.innerHTML = "";
+      mentionData.forEach((mentionNotification) => {
+        let mentionHTML = "";
+        mentionHTML = `<div
       class="block w-full px-4 py-2 border-b border-gray-200 cursor-pointer hover:bg-gray-100 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
     >
     <a href="/home/?tweet_id=${mentionNotification.tweet_id}"> 
@@ -373,43 +466,12 @@ async function fetchNotificatons() {
       </div>
       <div class="ml-2 mt-2"> ${mentionNotification.tweet_content}</div>
       </a>
-                     </div>`;
-      mentionContainer.innerHTML += mentionHTML;
-    });
-
-    // console.log(notifications);
-    // let verifiedTweets = notifications.premiumTweet;
-    // console.log(verifiedTweets);
-    // verifiedTweets.forEach((verifiedTweet) => {
-    //   let verifiedTweetHTML = "";
-    //   if (verifiedTweet.type === "Tweet") {
-    //     verifiedTweetHTML = ` <div
-    //   class="block w-full px-4 py-2 border-b border-gray-200 cursor-pointer hover:bg-gray-100 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
-    // >
-    // <a href="/home/?tweet_id=${verifiedTweet.tweet_id}">
-    //   <div class="flex">
-    //     <img
-    //       class="w-15 h-10 p-1 rounded-full"
-    //       src="/assets/message.png"
-    //       alt="like icon"
-    //     />
-    //     <img
-    //       class="w-10 h-10 ml-2 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500"
-    //       src="/assets/user.png"
-    //       alt="Bordered avatar"
-    //     />
-
-    //     <div class="notification ml-2 flex flex-col mt-2">
-    //       <span><strong>${verifiedTweet.username} </strong> post a tweet</span>
-    //     </div>
-    //   </div>
-    //   <div class="ml-2 mt-2"> ${verifiedTweet.tweet_content}</div>
-    //   </a>
-    // </div>`;
-    //     verifiedContainer.innerHTML += verifiedTweetHTML;
-    //   }
-    // });
+</div>`;
+        mentionContainer.innerHTML += mentionHTML;
+      });
+    }
   }
 }
+
 // window.addEventListener("load", fetchNotificatons);
 window.addEventListener("DOMContentLoaded", fetchNotificatons);
