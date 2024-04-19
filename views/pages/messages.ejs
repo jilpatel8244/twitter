@@ -12,7 +12,7 @@
         }
 
         .sender-chat, .reciver-chat{
-            padding: 20px 20px;
+            padding: 10px 20px;
         }
 
         .sender-chat span, .reciver-chat span{
@@ -174,7 +174,23 @@
             console.log('connected to server ' + socket.id);
 
             socket.emit('user-connected', senderId);
-        })
+            socket.emit('getUnreadMessages', senderId);     
+        });
+
+        socket.on('unreadMessages', (data) => {
+            // console.log(data);
+
+            data.forEach((element, index) => {
+                console.log(document.getElementById(`${element.sender_id}`).querySelector('.unreadMessageCount'));
+                document.getElementById(`${element.sender_id}`).querySelector('.unreadMessageCount').parentElement.style.display = 'flex';
+                document.getElementById(`${element.sender_id}`).querySelector('.unreadMessageCount').innerHTML = `${element.count}`;
+            });
+
+            if (data.length) {
+                document.getElementById('messageCount').parentElement.style.display = "flex";
+                document.getElementById('messageCount').innerHTML = `${data.length}`;
+            }
+        });
 
         function openMessageBox(followerId, reciverName, reciverUsername, reciverImgUrl) {
             reciverId = followerId;
@@ -195,6 +211,19 @@
             document.getElementById('chat-section').style.display = 'block';
 
             socket.emit('existingChats', {senderId: senderId, reciverId: reciverId});
+            socket.emit('messageRead', {senderId: senderId, reciverId: reciverId});
+
+            let unreadSpanTag = document.getElementById(`${reciverId}`).querySelector('.unreadMessageCount');
+
+            if (parseInt(unreadSpanTag.innerHTML) > 0) {
+                
+                document.getElementById('messageCount').innerHTML -= 1;
+                if (parseInt(document.getElementById('messageCount').innerHTML) == 0) {
+                    document.getElementById('messageCount').parentElement.style.display = "none";
+                }
+                unreadSpanTag.innerHTML = 0;
+                unreadSpanTag.parentElement.style.display = 'none';
+            }
         }
 
         document.getElementById('messageForm').addEventListener('submit', async (event) => {
@@ -252,8 +281,10 @@
 
         // receive private messages
         socket.on('receive-private-message', (data) => {
+            console.log(data);
+
             let newDiv = document.createElement('div');
-            newDiv.classList.add('reciver-chat');
+            newDiv.classList.add('reciver-chat', 'flex', 'justify-start');
 
             if (data.content_type == 'text') {
                 newDiv.innerHTML = `<span>${data.message}</span>`;
@@ -264,6 +295,11 @@
             document.getElementById('chat-container').appendChild(newDiv);  
 
             scrollToBottom('user-display-and-chatting');
+
+
+            if (data.senderId === reciverId) {
+                socket.emit('messageRead', {senderId: senderId, reciverId: data.senderId});
+            }
         })
 
         // load old chats
@@ -282,7 +318,7 @@
                 if (element.sender_id == senderId) {
                     newDiv.classList.add('text-right', 'sender-chat', 'flex', 'justify-end');
                 } else {
-                    newDiv.classList.add('reciver-chat');
+                    newDiv.classList.add('reciver-chat', 'flex', 'justify-start');
                 }
 
                 document.getElementById('chat-container').appendChild(newDiv);  

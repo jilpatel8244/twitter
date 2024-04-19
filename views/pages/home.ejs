@@ -101,3 +101,27 @@
 </body>
 
 </html>
+
+<!-- 
+<script src="/socket.io/socket.io.js"></script>
+
+    <script>
+        let socket = io();
+
+        let senderId = 13;
+        let reciverId;
+
+        socket.on('connect', () => {
+            console.log('connected to server ' + socket.id);
+
+            socket.emit('user-connected', senderId);
+            socket.emit('getUnreadMessages', senderId);     
+        });
+
+        socket.on('unreadMessages', (data) => {
+            if (data.length) {
+                document.getElementById('messageCount').parentElement.style.display = "flex";
+                document.getElementById('messageCount').innerHTML = `${data.length}`;
+            }
+        });
+    </script> -->
