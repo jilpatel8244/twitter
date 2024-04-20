@@ -167,7 +167,9 @@
     <script>
         let socket = io();
 
-        let senderId = '<%= user %>';
+        document.getElementById('img-message').value = '';
+
+        let senderId = '<%= user.id %>';
         let reciverId;
 
         socket.on('connect', () => {

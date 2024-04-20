@@ -25,7 +25,7 @@
                     <!-- all followers list -->
                 <% allFollowers.forEach((element, index) => { %>
                     <li>
-                        <%- include('./userComponentOnMessages.ejs', {follower: element, user: user}) %>
+                        <%- include('./userComponentOnMessages.ejs', {follower: element}) %>
                     </li>
                 <% }) %>
             </article>

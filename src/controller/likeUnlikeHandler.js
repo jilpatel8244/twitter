@@ -13,8 +13,11 @@ exports.likeUnlikeHandler = async (req, res) => {
             // make new entry
             await connection.query('insert into tweet_likes (tweet_id, user_id, status) values (?, ?, ?)', [tweetId, userId, 1]);
 
+            // get user_id whose tweet was liked
+            let tweet_user_id = await connection.query('select user_id from tweets where id = ?', [tweetId]);
+
             // notification
-            await connection.query(`INSERT INTO notifications (user_id, tweet_id, type, related_user_id) VALUES (?, ?, 'Like', ?);`, [result[0].user_id, tweetId, userId]);
+            await connection.query(`INSERT INTO notifications (user_id, tweet_id, type, related_user_id) VALUES (?, ?, 'Like', ?);`, [tweet_user_id[0][0].user_id, tweetId, userId]);
 
             return  res.status(200).json({
                 success: true,

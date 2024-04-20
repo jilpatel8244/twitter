@@ -96,25 +96,31 @@
             <!-- User Menu -->
             <div class="absolute" style="bottom: 2rem; top: 50rem">
                 <div class="flex-shrink-0 flex hover:bg-gray-200 rounded-full px-4 py-3 mt-12 mr-2">
-                    <a href="#" class="flex-shrink-0 group block">
+                    <span class="flex-shrink-0 group block">
                         <div class="flex items-center">
                             <div>
                                 <img class="inline-block h-10 w-10 rounded-full"
-                                    src="https://cdni.iconscout.com/illustration/premium/thumb/female-user-image-8110250-6515859.png?f=webp"
+
+                                    <% if (user.profile_img_url) { %>
+                                        src="/uploads/<%= user.profile_img_url %>"
+                                    <% } else { %>
+                                        src="https://cdni.iconscout.com/illustration/premium/thumb/female-user-image-8110250-6515859.png?f=webp"
+                                    <% } %>
+
                                     alt="">
                             </div>
                             <div class="ml-3">
                                 <p class="text-base leading-6 font-medium ">
-                                    xyz
+                                    <%= user.name %>
                                 </p>
                                 <p
                                     class="text-sm leading-5 font-medium text-gray-500 transition ease-in-out duration-150">
-                                    @xyz ghSd
+                                    <%= user.username %>
                                 </p>
                             </div>
                             <div class="ml-10 font-bold">. . .</div>
                         </div>
-                    </a>
+                    </span>
                 </div>
             </div>
     </div>

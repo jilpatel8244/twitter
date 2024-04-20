@@ -20,19 +20,28 @@
             <hr class="border-gray-800">
         </aside>
 
-        <ul class="list-none">
-            <li>
-                <article class=" transition duration-350 ease-in-out" id="allTweets">
-                    <!-- all tweets -->
-                    <% if(allBookmarkTweets.length) { %>
-                        <% allBookmarkTweets.forEach((element, index)=> { %>
+        <!-- all tweets -->
+        <div id="allTweets">
+            <% if(allBookmarkTweets.length) { %>
+                <ul class="list-none">
+                    <% allBookmarkTweets.forEach((element, index)=> { %>
+                    <li>
+                        <article class=" transition duration-350 ease-in-out">
                             <%- include('../partials/tweetComponent.ejs', {singleTweet: element}) %>
-                        <% }) %>
-                    <% } else { %>
-                        <div> No saved post </div>
-                    <% } %>
-                </article>
-            </li>
-        </ul>
+                        </article>
+                    </li>
+                    <% }) %>
+                </ul>
+            <% } else { %>
+                <div class="w-3/5 mx-auto my-8">
+                    <div class="mb-3">
+                        <h2 class="font-bold text-3xl">Save posts for later</h2>
+                    </div>
+                    <div class="mb-3">
+                        <p style="color: rgb(83, 100, 113);">Bookmark posts to easily find them again in the future.</p>
+                    </div>
+                </div>
+            <% } %>
+        </div>
 
 </section>

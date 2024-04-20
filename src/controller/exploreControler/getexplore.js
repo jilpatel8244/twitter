@@ -2,7 +2,7 @@ const connection = require("../../../config/connection");
 const ShortUniqueId = require("short-unique-id");
 
 exports.getExplorePage = async (req, res) => {
-    res.render("pages/explore");
+    res.render("pages/explore", {user: req.user[0][0]});
 };
 // api for the get all usename and hatag based in search box on change event 
 exports.getUsernameOrHastagOnchage = async (req, res) => {
