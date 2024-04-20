@@ -1,7 +1,7 @@
 
-let content = document.getElementById('content')
-let post = document.getElementById('post')
-let save = document.getElementById('save')
+let content = document.getElementById('content');
+let post = document.getElementById('post');
+let save = document.getElementById('save');
 let discard = document.getElementById('discard');
 let media = document.getElementById('media')
 let images = document.getElementById('images')
@@ -14,8 +14,8 @@ let editDraft = document.getElementById('editBtn');
 let deleteBlock = document.getElementById('deleteBlock')
 let selectAll = document.getElementById('selectAll')
 let deleteBtn = document.getElementById('delete');
-let deleteCancle=document.getElementById('deleteCancle');
-let finalDelete=document.getElementById('finalDelete');
+let deleteCancle = document.getElementById('deleteCancle');
+let finalDelete = document.getElementById('finalDelete');
 document.addEventListener("DOMContentLoaded", function (event) {
 
   document.getElementById('defaultModalButton').onclick = () => {
@@ -155,10 +155,11 @@ const displayDraft = async () => {
   let list = ""
   console.log(draftTweet.length);
   if (draftTweet.length == 0) {
-    draftList.innerHTML=`<li>
+    draftList.innerHTML = `<li>
     <p class="text-black text-2xl">Hold that thought</p> 
     <p class="text-gray-800"> Not ready to post just yet? Save it to your drafts or schedule it for later. </p>
   </li>`;
+    editDraftBlock.style.display = 'none';
     return;
   }
   else {
@@ -355,33 +356,40 @@ const selectAllChecks = () => {
 
 
 deleteBtn.onclick = () => {
-  document.getElementById('delete-modal').style.display='block';
+  document.getElementById('delete-modal').style.display = 'block';
 }
 
-deleteCancle.onclick = () =>{
-  document.getElementById('delete-modal').style.display='none';
+deleteCancle.onclick = () => {
+  document.getElementById('delete-modal').style.display = 'none';
 }
 
-finalDelete.onclick= async()=>{
+finalDelete.onclick = async () => {
   let checksForDelete = document.querySelectorAll('input[type=checkbox]');
-  let draftId=[]
-  checksForDelete.forEach(checks=>{
-    if(checks.checked){
+  let deleteBtn = document.getElementById('delete');
+  let draftId = []
+  checksForDelete.forEach(checks => {
+    if (checks.checked) {
       draftId.push(checks.nextElementSibling.getAttribute('id'));
     }
   })
-  var formsData=new FormData();
-  formsData.append('deleteDraft',draftId);
-  let response = await fetch('/tweetPost/draftDelete',{
-    method:'POST',
-    body:new URLSearchParams(formsData)
+  var formsData = new FormData();
+  formsData.append('deleteDraft', draftId);
+  let response = await fetch('/tweetPost/draftDelete', {
+    method: 'POST',
+    body: new URLSearchParams(formsData)
   })
-  let {msg,error}= await response.json();
-  if(error) return alert(error);
+  let { msg, error } = await response.json();
+  if (error) {
+    alert(error);
+    deselect();
+    document.getElementById('delete-modal').style.display = 'none';
+  }
   alert(msg);
-  document.getElementById('delete-modal').style.display='none';
+  selectAll.innerText = 'Select all';
+  document.getElementById('delete-modal').style.display = 'none';
   document.getElementById('select-modal').style.display = 'block';
-  editDraft.innerText='Edit'
+  editDraft.innerText = 'Edit'
   deleteBlock.style.display = 'none'
   displayDraft();
+  deselect();
 }
