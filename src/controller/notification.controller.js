@@ -2,7 +2,7 @@ const connection = require("../../config/connection");
 const logger = require("../../logger/logger");
 
 exports.notification = async (req, res) => {
-  res.render("pages/notification");
+  res.render("pages/notification",{user: req.user[0][0]});
 };
 
 

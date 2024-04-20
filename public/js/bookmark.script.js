@@ -22,12 +22,20 @@ async function bookmarkHandler(tweetId) {
         // bookmark ma hase to entry ni display none jo bookmark remove kare to but in home page its not the case
         if ((window.location.href).includes('bookmark')) {
             // document.getElementById(tweetId).style.display = 'none';
-            document.getElementById(tweetId).remove();
+            document.getElementById(tweetId).parentElement.parentElement.remove();
 
-            if (!document.getElementById('allTweets').childElementCount) {
+            if (!document.getElementById('allTweets').querySelector('ul').childElementCount) {
+                let allTweets = document.getElementById('allTweets');
                 let newDiv = document.createElement('div');
-                newDiv.innerHTML = `<div>No saved post</div>`;
-                document.getElementById('allTweets').appendChild(newDiv);
+                newDiv.innerHTML = `<div class="w-3/5 mx-auto my-8">
+                                        <div class="mb-3">
+                                            <h2 class="font-bold text-3xl">Save posts for later</h2>
+                                        </div>
+                                        <div class="mb-3">
+                                            <p style="color: rgb(83, 100, 113);">Bookmark posts to easily find them again in the future.</p>
+                                        </div>
+                                    </div>`;
+                allTweets.appendChild(newDiv);
             }
         }
         // console.log(response);

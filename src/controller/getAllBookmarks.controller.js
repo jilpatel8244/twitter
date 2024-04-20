@@ -28,7 +28,8 @@ exports.getAllBookmarks = async (req, res) => {
         });
 
         res.render('pages/bookmark.ejs', {
-            allBookmarkTweets: allBookmarkTweets
+            allBookmarkTweets: allBookmarkTweets,
+            user: req.user[0][0]
         });
     } catch (error) {
         logger.error(error);

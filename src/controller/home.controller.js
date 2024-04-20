@@ -41,7 +41,7 @@ exports.getHome = async (req, res) => {
 `;
 
   const [rows] = await connection.execute(sql);
-  res.render('../views/pages/home', { tweets: rows });
+  res.render('../views/pages/home', { tweets: rows, user: req.user[0][0] });
 }
 exports.post_comment = async (req, res) => {
   let { tweetId, comment } = req.body;
