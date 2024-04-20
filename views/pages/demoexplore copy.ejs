@@ -3,37 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/css/output.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
-        integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdn.tailwindcss.com"></script>
+
     <title>X</title>
+
     <style>
-        #bla:after {
-            position: fixed;
-            content: "";
-            top: 0;
-            left: 0;
-            bottom: 0;
-            right: 0;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: -2;
-        }
-
-        #bla:before {
-            position: absolute;
-            content: "";
-            top: 0;
-            left: 0;
-            bottom: 0;
-            right: 0;
-            background: #FFF;
-            z-index: -1;
-        }
-
-
-
-
         #search {
             border: 1px #1D9BF0;
             margin-top: 2%;
@@ -55,7 +29,7 @@
             position: fixed;
             background-color: white;
 
-            width: 46%;
+            width: 50%;
             top: 0;
 
         }
@@ -67,12 +41,12 @@
 
         .topmain {
             display: flex;
-
+            width: 100%;
             position: absolute;
         }
 
         .sidebar {
-
+            width: 30%;
             padding-left: 5%;
 
         }
@@ -83,18 +57,19 @@
 
         }
 
-        .asidebar {}
+        .asidebar {
+            width: 30%;
+        }
 
         .btn1 {
             width: 30%;
-            text-align: center;
 
         }
 
         .btn1:hover {
-            /* background-color: #cad3d3; */
-            border-bottom: 2px solid #1D9BF0;
-            /* border-radius: 6px; */
+            background-color: #E6E7E7;
+            border-bottom: 5px solid #1D9BF0;
+            ;
         }
 
         .btn {
@@ -103,10 +78,11 @@
 
             font-size: larger;
             color: #536471;
-            display: none;
         }
 
         .popup {
+
+
             min-height: 14%;
             width: 30%;
             background-color: rgb(255, 255, 255);
@@ -122,37 +98,52 @@
             padding-bottom: 20px;
             padding-left: 10px;
         }
-
-        .margmain {
-            margin-top: 12%;
-        }
     </style>
     <script src="/js/tweetgenrate.js"></script>
-
 </head>
 
-<body onload="topPostHandeler()">
-    <div class="relative h-screen" id="main" style="background-color: white">
-        <div class="flex justify-center">
-            <header class=" py-4 h-auto">
-                <!-- Side Navbar (left side) -->
-                <%- include('../partials/sidebar.ejs') %>
-            </header>
-            <main role="main">
-                <div class="flex" style="width: 990px;">
+<body>
 
-                    <div style="max-width: 600px;" class="margmain">
+    <div class="topmain" id="topmain">
 
-                        <%- include('../partials/explore.ejs')%>
 
-                    </div>
-
-                    <!-- right sidebar -->
-                    <%- include('../partials/aside.ejs')%>
-                </div>
-            </main>
+        <div class="sidebar">
+            <%- include('../partials/sidebar.ejs') %>
         </div>
+
+
+
+        <div class="main w-3/5">
+            <%- include('../partials/content.ejs') %>
+        </div>
+
+
+
+        <div class="popup" id="popup">
+            <div class="hastag" id="hastag">
+
+            </div>
+            <div class="username check" id="username">
+
+
+
+
+
+            </div>
+            <div class="simpal check" id="simpal">
+                <p onclick="hello()" class="check">Try searching for people, lists, or keywords</p>
+            </div>
+
+        </div>
+
+        <div class="asidebar">
+
+            <%- include('../partials/aside.ejs')%>
+        </div>
+
+
     </div>
+
 
 
 
@@ -196,6 +187,8 @@
             fill: currentcolor;
         }
     </style>
+
+
 </body>
 
 
@@ -258,20 +251,10 @@
         }
 
 
-        let search = document.getElementById("search");
+        let search = document.getElementById("search").value;
+        let data = await getdata(search);
 
 
-        search.addEventListener("keypress", handelclick)
-        let data = await getdata(search.value);
-
-        function handelclick(e) {
-            if (e.key == "Enter") {
-
-                let btncon = document.getElementById("btncon")
-                btncon.style.display = "flex"
-                topPostHandeler()
-            }
-        }
         if (data.type == 0) {
 
 
@@ -297,23 +280,32 @@
             let con = ``
             data.result.forEach(element => {
 
-                con += `<div class="flex flex-shrink-0 check ">
-                        <div class="flex-1 check">
+                con += `
+            <div class="flex flex-shrink-0 check ">
+                    <div class="flex-1 check">
                         <div class="flex items-center w-48 check">
-                        <div>
-                        <img class="inline-block h-10 w-auto rounded-full ml-4 mt-2 check"
-                        src=""
-                        alt="">
+                            <div>
+                                <img class="inline-block h-10 w-auto rounded-full ml-4 mt-2 check"
+                                    src=""
+                                    alt="">
+                            </div>
+                            <div class="ml-3 mt-3 check">
+                                <p class="text-base leading-6 font-medium check">
+                                    ${element.name}
+                                </p>
+                                <p
+                                    class="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 transition ease-in-out duration-150 check">
+                                    @${element.username}
+                                </p>
+                            </div>
                         </div>
-                        <div class="ml-3 mt-3 check">
-                        <p class="text-base leading-6 font-medium check">
-                        ${element.name}
-                        </p>
-                        <p
-                        class="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 transition ease-in-out duration-150 check">
-                        @${element.username}
-                        </p></div></div></div></div>`
+
+                    </div>
+
+                </div>`
             });
+
+
 
 
             hastag.style.display = "none";
@@ -331,6 +323,7 @@
 
     }
 
+
     function searchOnfocus() {
         let hastag = document.getElementById("hastag")
         let username = document.getElementById("username")
@@ -341,18 +334,36 @@
         simpale.style.display = "block"
     }
 
+
+
+
+
+
     // topmain.addEventListener("click", remove);
 
     function remove(e) {
+
+
+
         if (e.target.class == "check") {
+
             popup.style.display = "block"
+
         }
         else {
             popup.style.display = "none"
         }
     }
 
-    let mid = `<div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+
+
+
+
+    let mid = `
+    
+
+<div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+    
     <div>
         <img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-11.jpg" alt="">
     </div>
@@ -362,6 +373,9 @@
     let Pepole = document.getElementById("Pepole");
     let Latest = document.getElementById("Latest");
     let media1 = document.getElementById("media1");
+
+
+
     console.log(media1);
 
     top1.addEventListener("click", topPostHandeler);
@@ -369,22 +383,30 @@
     Latest.addEventListener("click", latestPostHandeler);
     media1.addEventListener("click", mediaPostHandeler);
 
+
+
+
+
     async function data(route) {
 
 
         let tweet = await gettweet(route);
         return tweet;
     }
+
+
     async function topPostHandeler() {
 
         let tweet = await data("/explore/topTweet")
         let conn = document.getElementById("tweetss")
         conn.innerHTML = ""
-
-        conn.innerHTML = tweet;
-
-
+        let et = tweet + tweet
+        conn.innerHTML = et;
+        alert("hello")
     }
+
+
+
     async function pepoleHandeler() {
         // let tweet = await data()
 
@@ -395,6 +417,7 @@
 
     }
 
+
     async function latestPostHandeler() {
         let tweet = await data("/explore/latestTweet")
         let conn = document.getElementById("tweetss")
@@ -404,7 +427,13 @@
 
     }
 
+
+
+
     async function mediaPostHandeler() {
+
+
+
 
         async function getdata(search) {
             let url = window.location.origin + "/explore/getMedia"
@@ -424,23 +453,45 @@
 
         let search = document.getElementById("search").value
         let data = await getdata(search);
+
+
         let mediacon = `<div class="grid grid-cols-2 md:grid-cols-3 gap-4">`
 
         console.log("data is ", data);
+
+
         data.forEach(element => {
             mediacon += `<div>
                                 <img class="h-auto max-w-full rounded-lg" src="/uploads/${element.media_url}" alt="">
                             </div>`
         });
+
+
+
         mediacon += `</div>`
+
+
+
         let conn = document.getElementById("tweetss")
+        let head = document.getElementById("head");
+        let usersa = document.getElementById("usersa");
+        head.innerHTML = "";
+        usersa.innerHTML = "";
+
         conn.innerHTML = ""
         conn.innerHTML = mediacon;
 
     }
+
+
+
+
+
+
 </script>
-<script src="/js/like.script.js"></script>
+<!-- <script src="/js/like.script.js"></script>
 <script src="/js/bookmark.script.js"></script>
-<script src="/js/comment.script.js"></script>
+<script src="/js/comment.script.js"></script> -->
+
 
 </html>

@@ -1,120 +1,184 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="./css/output.css" rel="stylesheet" />
+    <title>Twitter Login</title>
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link href="./css/output.css" rel="stylesheet" />
-  <title>Twitter Login</title>
-</head>
+  <body>
+    <div class="mt-48">
+      <div
+        class="flex mx-auto max-w-md mt-10 rounded-lg flex-col justify-center px-6 py-12 lg:px-8"
+      >
+        <div class="sm:mx-auto justify-center sm:w-full sm:max-w-sm">
+          <div class="sm:mx-auto flex justify-center sm:w-full sm:max-w-sm">
+            <img
+              class="rounded-full w-14 h-10"
+              src="/assets/x-logo.png"
+              alt="x logo"
+            />
+          </div>
+          <p class="mt-1 text-center text-black dark:text-gray-400">
+            Sign in to X
+          </p>
+        </div>
+        <div
+          class="flex justify-center border rounded-full border-slate-300 w-full mb-2 hover:bg-gray-100 mt-2"
+        >
+          <div id="signup-google" class="flex items-center px-10 py-2">
+            <img
+              class="size-4 mr-2"
+              src="./assets/google-logo.png"
+              alt=""
+            /><span class="text-sm">Sign up with Google</span>
+          </div>
+        </div>
+        <div
+          class="flex justify-center border rounded-full border-slate-300 w-full hover:bg-gray-100 mt-2"
+        >
+          <div id="signup-google" class="flex items-center px-10 py-2">
+            <img
+              class="size-4 mr-2"
+              src="./assets/apple-logo.png"
+              alt=""
+            /><span class="text-sm">Sign up with Apple</span>
+          </div>
+        </div>
+        <div class="flex items-center justify-center w-full mt-2">
+          <hr class="w-[100px] h-[1px] bg-slate-200 border-0 rounded" />
+          <span class="px-3">or</span>
+          <hr class="w-[100px] h-[1px] bg-slate-200 border-0 rounded" />
+        </div>
 
-<body>
-  <div class="flex mx-auto max-w-md mt-10 rounded-lg bg-gray-100 flex-col justify-center px-6 py-12 lg:px-8">
-    <div class="sm:mx-auto justify-center sm:w-full sm:max-w-sm">
-      <div class="sm:mx-auto flex justify-center sm:w-full sm:max-w-sm">
-        <img class="rounded-full w-14 h-10" src="/assets/x-logo.png" alt="x logo" />
+        <form name="login" class="space-y-6" action="" method="POST">
+          <div class="mt-2 sm:mx-auto sm:w-full sm:max-w-sm">
+            <div>
+              <div class="mt-2">
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  placeholder="abc123@email.com"
+                  autocomplete="email"
+                  class="w-full block px-4 py-2 mt-2 text-gray-800 placeholder-gray-500 bg-white border rounded-lg focus:border-black dark:focus:border-black focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-gray-300"
+                />
+                <span class="text-red-500" id="checkmail"></span>
+              </div>
+            </div>
+
+            <div>
+              <div class="flex items-center justify-between"></div>
+              <div class="mt-2">
+                <input
+                  id="password"
+                  name="password"
+                  type="password"
+                  placeholder=" Password"
+                  autocomplete="current-password"
+                  class="block w-full px-4 py-2 mt-2 text-gray-800 placeholder-gray-500 bg-white border rounded-lg focus:border-black dark:focus:border-black focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-gray-300"
+                />
+
+                <span class="text-red-500" id="checkpassword"></span>
+              </div>
+              <div class="text-sm mt-2">
+                <a
+                  href="/forgotpassword"
+                  class="font-semibold text-sky-500 hover:text-sky-700"
+                  >Forgot password?</a
+                >
+              </div>
+            </div>
+
+            <div
+              class="mt-3 flex justify-center border rounded-full border-slate-300 w-full hover:bg-gray-100"
+            >
+              <input
+                name="signin"
+                id="signin"
+                type="button"
+                class="flex w-full justify-center cursor-pointer rounded-full bg-white px-3 py-1.5 leading-6 shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600 text-sm text-sky-500 font-bold"
+                value="Sign in"
+                onclick="return validateAndSubmit()"
+              />
+            </div>
+            <div class="text-sm mt-4">
+              Don't have an account?
+              <a
+                href="/registration"
+                class="font-semibold text-sky-500 hover:text-sky-600"
+              >
+                Sign up</a
+              >
+            </div>
+          </div>
+          <span
+            id="errorMessage"
+            class="text-red-500 text-sm block text-center"
+          ></span>
+        </form>
       </div>
-      <p class="mt-1 text-center text-black dark:text-gray-400">
-        Sign in to X
-            </p>
     </div>
-    <div class="flex justify-center mt-2 border rounded-full border-slate-300 w-full hover:bg-gray-100">
-      <div id="signup-google" class="flex items-center px-10 py-2">
-        <img class="size-4 mr-2" src="./assets/google-logo.png" alt="" /><span class="text-sm">Sign up with Google</span>
-      </div>
-    </div>
+  </body>
+  <script>
+    const validateAndSubmit = async () => {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+      const emailErrorElement = document.getElementById("checkmail");
+      const passwordErrorElement = document.getElementById("checkpassword");
+      const errorMessageElement = document.getElementById("errorMessage");
+      isValid = true;
 
-    <form name="login" class="space-y-6" action="" method="POST">
-      <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-        <div>
-          <div class="mt-2">
-            <input id="email" name="email" type="email" placeholder=" Email Address" autocomplete="email"
-            class="block w-full px-4 py-2 mt-2 text-gray-800 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-black dark:focus:border-black focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-gray-300">
-            <span class="text-red-500" id="checkmail"></span>
-          </div>
-        </div>
+      emailErrorElement.textContent = "";
+      passwordErrorElement.textContent = "";
+      errorMessageElement.textContent = "";
+      let regexemail = "^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$";
 
-        <div>
-          <div class="flex items-center justify-between">
-          </div>
-          <div class="mt-2">
-            <input id="password" name="password" type="password" placeholder=" Password" autocomplete="current-password"
-            class="block w-full px-4 py-2 mt-2 text-gray-800 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-black dark:focus:border-black focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-gray-300">
-
-              <span class="text-red-500" id="checkpassword"></span>
-          </div>
-          <div class="text-sm mt-2">
-            <a href="/forgotpassword" class="font-semibold text-blue-950 hover:text-sky-700">Forgot password?</a>
-          </div>
-        </div>
-
-        <div>
-          <input name="signin" id="signin" type="button"
-            class="mt-2 flex w-full justify-center cursor-pointer rounded-full bg-black px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-gray-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600"
-            value="Sign in" onclick="return validateAndSubmit()" />
-        </div>
-        <div class="text-sm mt-2">
-          Don't have an account?
-          <a href="/registration" class="font-semibold text-sky-600 hover:text-sky-500">
-            Sign up</a>
-        </div>
-      </div>
-      <span id="errorMessage" class="text-red-500 text-sm block text-center"></span>
-    </form>
-  </div>
-</body>
-<script>
-  const validateAndSubmit = async () => {
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
-    const emailErrorElement = document.getElementById("checkmail");
-    const passwordErrorElement = document.getElementById("checkpassword");
-    const errorMessageElement = document.getElementById("errorMessage");
-
-    emailErrorElement.textContent = "";
-    passwordErrorElement.textContent = "";
-    errorMessageElement.textContent = "";
-
-    if (!email) {
-      emailErrorElement.textContent = "Please enter your email.";
-      return;
-    }
-
-    if (!password) {
-      passwordErrorElement.textContent = "Please enter your password.";
-      return;
-    }
-
-    try {
-      let url = window.location.origin + "/login";
-      let login_data = {
-        email,
-        password,
-      };
-      let login_response = await fetch(url, {
-        method: "POST",
-        body: JSON.stringify(login_data),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      login_response = await login_response.json();
-      console.log(login_response);
-      if (login_response.success === true) {
-        url = window.location.replace(window.location.origin + "/home");
-        // Redirect to home page upon successful login
-        // url = window.location.origin + "/home";
+      if (email === "") {
+        emailErrorElement.innerHTML = "Email is required";
+        isValid = false;
+      } else if (!email.match(regexemail)) {
+        emailErrorElement.innerHTML = "Email is not valid";
+        isValid = false;
       } else {
-        const errorMessage = await login_response;
-        errorMessageElement.textContent = errorMessage.message;
+        emailErrorElement.innerHTML = "";
       }
-    } catch (error) {
-      console.error("Login error:", error);
-      errorMessageElement.textContent =
-        "An error occurred. Please try again.";
-    }
-  };
-</script>
 
+      if (!password) {
+        passwordErrorElement.textContent = "Please enter your password.";
+        isValid = false;
+      }
+
+      try {
+        let url = window.location.origin + "/login";
+        let login_data = {
+          email,
+          password,
+        };
+        let login_response = await fetch(url, {
+          method: "POST",
+          body: JSON.stringify(login_data),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        login_response = await login_response.json();
+        console.log(login_response);
+        if (login_response.success === true) {
+          url = window.location.replace(window.location.origin + "/home");
+          // Redirect to home page upon successful login
+          // url = window.location.origin + "/home";
+        } else {
+          const errorMessage = await login_response;
+          errorMessageElement.textContent = errorMessage.message;
+        }
+      } catch (error) {
+        console.error("Login error:", error);
+        errorMessageElement.textContent =
+          "An error occurred. Please try again.";
+      }
+    };
+  </script>
 </html>

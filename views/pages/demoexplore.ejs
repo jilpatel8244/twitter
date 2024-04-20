@@ -104,45 +104,32 @@
 
 <body>
 
-    <div class="topmain" id="topmain">
-
-
-        <div class="sidebar">
-            <%- include('../partials/sidebar.ejs') %>
+    <div class="p-relative h-screen" style="background-color: white">
+        <div class="topmain" id="topmain">
+          <div class="flex justify-center">
+            <header class="h-12 py-4 h-auto">
+              <!-- Side Navbar (left side) -->
+              <%- include('../partials/sidebar.ejs') %>
+            </header>
+            <main role="main">
+              <div class="flex" style="width: 990px">
+                <%- include('../partials/content.ejs') %>
+                <div class="popup" id="popup">
+                  <div class="hastag" id="hastag"></div>
+                  <div class="username check" id="username"></div>
+                  <div class="simpal check" id="simpal">
+                    <p onclick="hello()" class="check">
+                      Try searching for people, lists, or keywords
+                    </p>
+                  </div>
+                </div>
+                <!-- right sidebar -->
+                <%- include('../partials/aside.ejs')%>
+              </div>
+            </main>
+          </div>
         </div>
-
-
-
-        <div class="main w-3/5">
-            <%- include('../partials/content.ejs') %>
-        </div>
-
-
-
-        <div class="popup" id="popup">
-            <div class="hastag" id="hastag">
-
-            </div>
-            <div class="username check" id="username">
-
-
-
-
-
-            </div>
-            <div class="simpal check" id="simpal">
-                <p onclick="hello()" class="check">Try searching for people, lists, or keywords</p>
-            </div>
-
-        </div>
-
-        <div class="asidebar">
-
-            <%- include('../partials/aside.ejs')%>
-        </div>
-
-
-    </div>
+      </div>
 
 
 
