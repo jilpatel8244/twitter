@@ -105,7 +105,7 @@
                         <a href="#" class="flex-shrink-0 group block">
                             <div class="flex items-center">
                                 <div>
-                                    <img class="inline-block h-10 w-10 rounded-full" src=" <%= tweet.profile_img_url %>"
+                                    <img class="inline-block h-10 w-10 rounded-full" src="/uploads/<%= tweet.profile_img_url %>"
                                         alt="">
                                 </div>
                                 <div class="ml-3">
@@ -124,12 +124,10 @@
                     </div>
                     <div class="pl-16">
                         <a href="/get_comments/<%= tweet.tweet_id %>">
-                            <p class="text-base width-auto font-medium">
-                                <%= tweet.content %>
-                            </p>
+                            <pre class="width-auto font-serif text-xl"><%= tweet.content %></pre>
                             <div class="size-fit pr-6 pt-3">
                                 <div class="">
-                                    <img class="rounded" src="./uploads/<%= tweet.media_url %>" alt="">
+                                    <img class="rounded" src="/uploads/<%= tweet.media_url %>" alt="">
                                 </div>
                             </div>
                         </a>
@@ -297,6 +295,6 @@
     </ul>
 
 </section>
-<script src="./js/like.script.js"></script>
-<script src="./js/bookmark.script.js"></script>
-<script src="./js/comment.script.js"></script>
+<script src="/js/like.script.js"></script>
+<script src="/js/bookmark.script.js"></script>
+<script src="/js/comment.script.js"></script>
