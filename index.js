@@ -36,7 +36,7 @@ app.use(getTimeZone);
 app.use(notification);
 // app.use("/editprofile", editprofile);
 
-// app.use('/profile', passport.authenticate('jwt', { session: false}), getProfileRouter);
+app.use('/profile', passport.authenticate('jwt', { session: false }), getProfileRouter);
 app.use('/like', passport.authenticate('jwt', { session: false }), likeRoute);
 app.use('/bookmark', passport.authenticate('jwt', { session: false }), bookmarkRoute);
 app.use('/messages', passport.authenticate('jwt', { session: false }), messagesRoute);
@@ -51,12 +51,12 @@ let connectedUser = {};
 
 //Whenever someone connects this gets executed
 io.on('connection', async function (socket) {
-  console.log('A user connected : ', socket.id);
-  
+
+
   // store userId and socketId when user connects
   socket.on('user-connected', async (userId) => {
     connectedUser[userId] = socket.id;
-    console.log(connectedUser);
+
   });
 
   // to get all unread message count follower wise
@@ -64,7 +64,7 @@ io.on('connection', async function (socket) {
     let sql = `select direct_messages.sender_id, count(unread_messages.message_id) as count from unread_messages inner join direct_messages on unread_messages.message_id = direct_messages.id where user_id = ? and is_read = 0 group by direct_messages.sender_id;`;
 
     let data = await connection.query(sql, [userId]);
-    
+
     socket.emit('unreadMessages', data[0]);
   });
 
@@ -77,7 +77,7 @@ io.on('connection', async function (socket) {
 
   //Whenever someone disconnects this piece of code executed
   socket.on('disconnect', function () {
-    console.log('A user disconnected : ', socket.id);
+
 
     for (const userId in connectedUser) {
       if (connectedUser[userId] === socket.id) {

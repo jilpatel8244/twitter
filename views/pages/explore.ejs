@@ -31,9 +31,6 @@
             z-index: -1;
         }
 
-
-
-
         #search {
             border: 1px #1D9BF0;
             margin-top: 2%;
@@ -41,8 +38,13 @@
             background-color: #EFF3F4;
             height: 40px;
             width: 70%;
-            padding-left: 5%;
+            padding-left: 10%;
 
+
+        }
+
+        input {
+            margin-left: 100px;
         }
 
         .boxmain {
@@ -83,7 +85,7 @@
 
         }
 
-        .asidebar {}
+
 
         .btn1 {
             width: 30%;
@@ -131,7 +133,7 @@
 
 </head>
 
-<body onload="topPostHandeler()">
+<body onload="onchangetop()">
     <div class="relative h-screen" id="main" style="background-color: white">
         <div class="flex justify-center">
             <header class=" py-4 h-auto">
@@ -198,49 +200,30 @@
     </style>
 </body>
 
-
-
 <script>
-
-
 
     function hello() {
         alert("hello")
     }
 
     let search = document.getElementById("search")
-
     let popup = document.getElementById("popup")
-
-
     let topmain = document.getElementById("topmain");
-
     search.addEventListener("keyup", searchOnchange);
     topmain.addEventListener("click", remove);
-
     search.addEventListener("focus", searchOnfocus);
     popup.addEventListener("click", show)
-
-
     function show() {
         popup.style.display = "block"
     }
-    console.log(search);
-
-
+    //done
     async function searchOnchange() {
         let hastag = document.getElementById("hastag")
         let username = document.getElementById("username")
         let simpale = document.getElementById("simpal")
         username.style.display = "none";
         hastag.style.display = "none";
-
-
         popup.style.display = "block"
-
-
-
-
         async function getdata(search) {
             let url = window.location.origin + "/explore/searchboxdata"
             let bodyargs = { searchbox: search }
@@ -250,9 +233,7 @@
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(bodyargs)
             })
-
             data = await data.json()
-            console.log(data);
             return data;
 
         }
@@ -269,6 +250,13 @@
 
                 let btncon = document.getElementById("btncon")
                 btncon.style.display = "flex"
+                let popup = document.getElementById("popup")
+                let search = document.getElementById("search").blur();
+
+
+
+                popup.style.display = "none"
+
                 topPostHandeler()
             }
         }
@@ -341,8 +329,6 @@
         simpale.style.display = "block"
     }
 
-    // topmain.addEventListener("click", remove);
-
     function remove(e) {
         if (e.target.class == "check") {
             popup.style.display = "block"
@@ -352,55 +338,302 @@
         }
     }
 
-    let mid = `<div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-    <div>
-        <img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-11.jpg" alt="">
-    </div>
-</div>
-`
+
     let top1 = document.getElementById("top");
     let Pepole = document.getElementById("Pepole");
     let Latest = document.getElementById("Latest");
     let media1 = document.getElementById("media1");
-    console.log(media1);
-
     top1.addEventListener("click", topPostHandeler);
     Pepole.addEventListener("click", pepoleHandeler);
     Latest.addEventListener("click", latestPostHandeler);
     media1.addEventListener("click", mediaPostHandeler);
 
-    async function data(route) {
+    async function data(route, objarg) {
 
-
-        let tweet = await gettweet(route);
+        let tweet = await gettweet(route, objarg);
         return tweet;
     }
     async function topPostHandeler() {
 
-        let tweet = await data("/explore/topTweet")
+
+        let search = document.getElementById("search");
+
+        async function getdata(search) {
+            let url = window.location.origin + "/explore/username"
+            let bodyargs = { searchbox: search, type: 0 }
+            let data1 = await fetch(url, {
+                method: 'post',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(bodyargs)
+            })
+            data1 = await data1.json()
+            console.log("data is ", data1.username);
+            return data1.username;
+        }
+
+        let data1 = await getdata(search.value.trim())
+
+        let tweet = ``;
+
+        if (data1.length > 0) {
+            tweet += `<div class="heading mt-2 text-2xl ml-5" id="head">
+                    <h2>Pepole</h2>
+                </div>
+`;
+
+        }
+
+        data1.forEach(element => {
+            tweet += `   <div class="flex flex-shrink-0 ">
+                        <div class="flex-1">
+                            <div class="flex items-center w-48">
+                                <div>
+                                    <img class="inline-block h-10 w-auto rounded-full ml-4 mt-2"
+                                        src="https://pbs.twimg.com/profile_images/1121328878142853120/e-rpjoJi_bigger.png"
+                                        alt="">
+                                </div>
+                                <div class="ml-3 mt-3">
+                                    <p class="text-base leading-6 font-medium ">
+                                        ${element.name}
+                                    </p>
+                                    <p
+                                        class="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 transition ease-in-out duration-150">
+                                        @ ${element.username}
+                                    </p>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="flex-1 px-4 py-2 m-2">
+                            <a href="" class=" float-right">
+                                <button class="font-semibold text-white bg-black py-2 px-4 rounded-full">
+                                    Follow
+                                </button>
+                            </a>
+
+                        </div>
+                    </div>
+`
+
+        });
+
+
+        tweet += await data("/explore/topTweet", { search: search.value.trim() })
         let conn = document.getElementById("tweetss")
+        conn.style.marginTop = "3px"
+
         conn.innerHTML = ""
 
         conn.innerHTML = tweet;
 
 
     }
-    async function pepoleHandeler() {
-        // let tweet = await data()
 
-        // let conn = document.getElementById("tweetss")
-        // conn.innerHTML = ""
-        // conn.innerHTML = tweet;
-        // alert("pepoles")
+    async function onchangetop() {
+
+
+        async function getdata(search) {
+            let url = window.location.origin + "/explore/username"
+            let bodyargs = { searchbox: search, type: 0 }
+            let data1 = await fetch(url, {
+                method: 'post',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(bodyargs)
+            })
+            data1 = await data1.json()
+            console.log("data is ", data1.username);
+            return data1.username;
+        }
+
+
+        let data1 = await getdata("")
+        let tweet = `<div class="heading mt-2 text-2xl ml-5" id="head">
+            <h2>Pepole</h2>
+        </div>
+`;
+
+        data1.forEach(element => {
+            tweet += `   <div class="flex flex-shrink-0 ">
+                <div class="flex-1">
+                    <div class="flex items-center w-48">
+                        <div>
+                            <img class="inline-block h-10 w-auto rounded-full ml-4 mt-2"
+                                src="https://pbs.twimg.com/profile_images/1121328878142853120/e-rpjoJi_bigger.png"
+                                alt="">
+                        </div>
+                        <div class="ml-3 mt-3">
+                            <p class="text-base leading-6 font-medium ">
+                                ${element.name}
+                            </p>
+                            <p
+                                class="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 transition ease-in-out duration-150">
+                                @ ${element.username}
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="flex-1 px-4 py-2 m-2">
+                    <a href="" class=" float-right">
+                        <button class="font-semibold text-white bg-black py-2 px-4 rounded-full">
+                            Follow
+                        </button>
+                    </a>
+
+                </div>
+            </div>
+`
+
+        });
+        let search = document.getElementById("search");
+
+        tweet += await data("/explore/topTweet", { search: search.value.trim() })
+        let conn = document.getElementById("tweetss")
+
+        conn.style.marginTop = "-50px"
+        conn.innerHTML = ""
+
+        conn.innerHTML = tweet;
+
+
+    }
+
+    async function pepoleHandeler() {
+
+        async function getdata(search) {
+            let url = window.location.origin + "/explore/username"
+            let bodyargs = { searchbox: search, type: 1 }
+            let data1 = await fetch(url, {
+                method: 'post',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(bodyargs)
+            })
+            data1 = await data1.json()
+            return data1.username;
+        }
+
+
+        let data1 = await getdata(search.value.trim())
+        let tweet = ``;
+
+
+        if (data1.length > 0) {
+
+            tweet += `<div class="heading mt-2 text-2xl ml-5" id="head">
+                <h2>Pepole</h2>
+            </div>
+    `;
+        }
+
+        data1.forEach(element => {
+            tweet += `   <div class="flex flex-shrink-0 ">
+                <div class="flex-1">
+                    <div class="flex items-center w-48">
+                        <div>
+                            <img class="inline-block h-10 w-auto rounded-full ml-4 mt-2"
+                                src="https://pbs.twimg.com/profile_images/1121328878142853120/e-rpjoJi_bigger.png"
+                                alt="">
+                        </div>
+                        <div class="ml-3 mt-3">
+                            <p class="text-base leading-6 font-medium ">
+                                ${element.name}
+                            </p>
+                            <p
+                                class="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 transition ease-in-out duration-150">
+                                @ ${element.username}
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="flex-1 px-4 py-2 m-2">
+                    <a href="" class=" float-right">
+                        <button class="font-semibold text-white bg-black py-2 px-4 rounded-full">
+                            Follow
+                        </button>
+                    </a>
+
+                </div>
+            </div>
+`
+
+        });
+
+
+        let conn = document.getElementById("tweetss")
+        conn.innerHTML = ""
+        conn.innerHTML = tweet;
+
 
     }
 
     async function latestPostHandeler() {
-        let tweet = await data("/explore/latestTweet")
+
+        async function getdata(search) {
+            let url = window.location.origin + "/explore/username"
+            let bodyargs = { searchbox: search }
+            let data1 = await fetch(url, {
+                method: 'post',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(bodyargs)
+            })
+            data1 = await data1.json()
+            console.log("data is ", data1.username);
+            return data1.username;
+        }
+
+
+        let data1 = await getdata(search.value.trim())
+
+        let tweet = ``
+
+        if (data1.length > 0) {
+            tweet += `<div class="heading mt-2 text-2xl ml-5" id="head">
+                <h2>Pepole</h2>
+            </div>
+    `;
+
+        }
+
+        data1.forEach(element => {
+            tweet += `   <div class="flex flex-shrink-0 ">
+                <div class="flex-1">
+                    <div class="flex items-center w-48">
+                        <div>
+                            <img class="inline-block h-10 w-auto rounded-full ml-4 mt-2"
+                                src="https://pbs.twimg.com/profile_images/1121328878142853120/e-rpjoJi_bigger.png"
+                                alt="">
+                        </div>
+                        <div class="ml-3 mt-3">
+                            <p class="text-base leading-6 font-medium ">
+                                ${element.name}
+                            </p>
+                            <p
+                                class="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 transition ease-in-out duration-150">
+                                @ ${element.username}
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="flex-1 px-4 py-2 m-2">
+                    <a href="" class=" float-right">
+                        <button class="font-semibold text-white bg-black py-2 px-4 rounded-full">
+                            Follow
+                        </button>
+                    </a>
+
+                </div>
+            </div>
+`
+
+        });
+
+        tweet += await data("/explore/latestTweet", { search: search.value.trim() })
         let conn = document.getElementById("tweetss")
         conn.innerHTML = ""
         conn.innerHTML = tweet;
-        alert("latest post")
+
 
     }
 
@@ -420,7 +653,6 @@
             return data.media;
 
         }
-
 
         let search = document.getElementById("search").value
         let data = await getdata(search);
@@ -461,7 +693,7 @@
         console.log('connected to server ' + socket.id);
 
         socket.emit('user-connected', senderId);
-        socket.emit('getUnreadMessages', senderId);     
+        socket.emit('getUnreadMessages', senderId);
     });
 
     socket.on('unreadMessages', (data) => {
