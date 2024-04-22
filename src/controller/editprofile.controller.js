@@ -29,10 +29,12 @@ exports.postUpdateProfile = async (req, res) => {
   try {
     const { username, bio, dob, userId } = req.body;
     console.log(req.body);
+    console.log(req.files);
     const coverPhoto = req.files['coverPhoto'][0];
     console.log("coverPhoto", coverPhoto);
     const displayPhoto = req.files['displayPhoto'][0]; 
     console.log("displayPhoto", displayPhoto);
+    
 
     const update_detail = 'UPDATE users SET username = ?, bio = ?, date_of_birth = ?, cover_img_url = ?, profile_img_url = ? WHERE id = ?';
     const [update_detail_data] = await connection.query(update_detail, [username, bio, dob, coverPhoto.filename, displayPhoto.filename, userId]);

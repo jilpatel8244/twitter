@@ -4,13 +4,10 @@ const logger = require('../../logger/logger');
 exports.getProfile = async (req, res) => {
   try {
     let id = req.user[0][0].id;
-    // const { id } = req.query;
-    // console.log(id);
     logger.info(id);
 
     const profileQuery = `SELECT * FROM users WHERE id=?`;
     const [userProfileData] = await connection.query(profileQuery, [id]);
-    // console.log(userProfileData);
 
     if (userProfileData) {
 
@@ -24,19 +21,43 @@ exports.getProfile = async (req, res) => {
 
         const twitCount = `SELECT count(*) as t FROM tweets WHERE user_id = ?`;
         const [twitCountData] = await connection.query(twitCount, [id]);
-        // console.log(twitCountData[0]);
-        let profileData, replyData, tweetData, commentData;
-        let allLikedTweet=[];
-        res.render("../views/pages/profile", { user: req.user[0][0],userProfileData,postData, profileData, allLikedTweet, twitCountData, replyData, tweetData, commentData });
-      
-        } else {
-          let replyData, tweetData, commentData, postData;
-          let allLikedTweet =[];
-          res.render('../views/pages/profile', { user: req.user[0][0],userProfileData, profileData, allLikedTweet, twitCountData, replyData, tweetData, commentData, postData });
-        }
+
+        const following_detail = `select count(*) as following from followers where following_id=? and is_blocked =0 and current_status='1' `;
+        const [following_detail_data] = await connection.query(following_detail, [id]);
+        console.log(following_detail_data[0]);
+
+        const follower_detail = `select count(*) as follower from followers where follower_id=? and is_blocked =0 and current_status='1'`;
+        const [follower_detail_data] = await connection.query(follower_detail, [id]);
+        console.log("Hello");
+        console.log(follower_detail_data[0]);
+
+        let profileData, replyData, tweetData, commentData ;
+        res.render("../views/pages/profile", { user: req.user[0][0], userProfileData,following_detail_data, follower_detail_data, profileData,  twitCountData, replyData, postData, tweetData, commentData });
+
+      }else{
+
+        const following_detail = `select count(*) as following from followers where following_id=? and is_blocked =0 and current_status='1' `;
+        const [following_detail_data] = await connection.query(following_detail, [id]);
+        console.log(following_detail_data[0]);
+
+        const follower_detail = `select count(*) as follower from followers where follower_id=? and is_blocked =0 and current_status='1'`;
+        const [follower_detail_data] = await connection.query(follower_detail, [id]);
+        console.log("Hello");
+        console.log(follower_detail_data[0]);
+
+        let profileData, replyData, tweetData,postData, commentData, twitCountData;
+        res.render("../views/pages/profile", { user: req.user[0][0], userProfileData,following_detail_data, follower_detail_data, profileData,  twitCountData, replyData, postData, tweetData, commentData });
       }
-      
+    } else {
+
+      let profileData, twitCountData, replyData, tweetData, commentData;
+      let following_detail_data = [];
+      let follower_detail_data = [];
+      res.render("../views/pages/profile", { user: req.user[0][0], userProfileData,following_detail_data, follower_detail_data, profileData,  twitCountData, replyData, tweetData, commentData });
+
     }
+
+  }
   catch (error) {
     console.log(error);
   }
