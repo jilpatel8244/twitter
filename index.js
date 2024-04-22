@@ -34,9 +34,9 @@ app.use("/explore", exploreRoute);
 app.use(authRouter);
 app.use(getTimeZone);
 app.use(notification);
-// app.use("/editprofile", editprofile);
+app.use("/editprofile", editprofile);
 
-// app.use('/profile', passport.authenticate('jwt', { session: false}), getProfileRouter);
+app.use('/profile', passport.authenticate('jwt', { session: false,  failureRedirect: "/login"}), getProfileRouter);
 app.use('/like', passport.authenticate('jwt', { session: false }), likeRoute);
 app.use('/bookmark', passport.authenticate('jwt', { session: false }), bookmarkRoute);
 app.use('/messages', passport.authenticate('jwt', { session: false }), messagesRoute);

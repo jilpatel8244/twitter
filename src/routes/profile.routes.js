@@ -7,5 +7,8 @@ const {getLikes} = require('../controller/profile.like.controller');
 const router = express.Router();
 
 router.get("/",getProfile);
+router.get("/post",getPosts);
+router.get("/reply",getReplies);
+router.get("/like",getLikes);
 
 module.exports = router;  

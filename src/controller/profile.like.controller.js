@@ -1,16 +1,28 @@
 const connection = require('../../config/connection');
 
-exports.getLikes = async (req,res) =>{
-  try{
-    let id=req.user[0][0].id;
+exports.getLikes = async (req, res) => {
+  try {
+    let id = req.user[0][0].id;
     console.log(id);
 
-    const likesDataQuery = `SELECT * FROM users as u INNER JOIN tweet_likes as tl ON u.id = tl.user_id WHERE u.id = ? `;
-    const [likesData] = await connection.query(likesDataQuery, [id]);
-    console.log(likesData[0]);
-    return res.json({likesData});
-    
-  }catch(error){
+    let likesDataQuery = `	select tweets.id as tweet_id, tweets.content, tweets.created_at, users.name, 
+    users.username, users.profile_img_url as profileImage, bookmarks.status as isBookmarked, medias.media_url from tweet_likes 
+    left join tweets on tweet_likes.tweet_id = tweets.id
+    left join users on tweets.user_id = users.id
+    left join bookmarks on tweet_likes.tweet_id = bookmarks.tweet_id   and 
+  tweet_likes.user_id = bookmarks.user_id 
+    left join medias on tweet_likes.tweet_id = medias.tweet_id 
+    where tweet_likes.user_id = ? and tweet_likes.status = '1';`
+    let [likesData] = await connection.query(likesDataQuery, [id]);
+
+    likedElement = likesData.map((element) => {
+      element.isLiked = 1;
+      return element;
+    });
+ 
+    return res.json(likedElement);
+
+  } catch (error) {
     console.log(error);
   }
 }
