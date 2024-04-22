@@ -38,9 +38,9 @@ app.use("/explore", exploreRoute);
 app.use(authRouter);
 app.use(getTimeZone);
 app.use(notification);
-// app.use("/editprofile", editprofile);
+ app.use("/editprofile", editprofile);
 
-// app.use('/profile', passport.authenticate('jwt', { session: false}), getProfileRouter);
+app.use('/profile', passport.authenticate('jwt', { session: false}), getProfileRouter);
 
 
 

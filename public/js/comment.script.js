@@ -1,31 +1,4 @@
-// function submitComment(tweetId) {
-//     console.log("bls");
-//     let commentInput = document.querySelector(`.comments_${tweetId} textarea[name="comment"]`);
-//     let commentText = commentInput.value;
-//     commentInput.value = '';
-
-//     if (!commentText == '') {
-//         console.log("ok");
-//         fetch('/post_comments', {
-//             method: 'POST',
-//             headers: {
-//                 'Content-Type': 'application/json',
-//             },
-//             body: JSON.stringify({
-//                 tweetId: tweetId,
-//                 comment: commentText,
-//             }),
-//         })
-//             .then(response => response.json());
-//         document.querySelector(`.comments_${tweetId}`).style.display = 'none';
-//     }
-//     else {
-//         Swal.fire("Please write your Comment!");
-//     }
-// }
-
 function Comment(tweetId) {
-    console.log("bls");
     let commentText = document.querySelector('#comments');
     if (commentText.value !== '') {
         console.log("ok");
@@ -42,7 +15,7 @@ function Comment(tweetId) {
         .then(response => response.json())
         .then(data => {
             commentText.value = '';
-            // location.reload();
+            location.reload();
         })
         .catch(error => console.error('Error:', error));
        

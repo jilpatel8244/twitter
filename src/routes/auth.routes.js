@@ -9,7 +9,7 @@ const bookmarkRoute = require("./bookmark.routes");
 const messagesRoute = require("./messages.routes");
 
 const exploreroute = require("../routes/explore.routes");
-const { get_registration, post_registration } = require("../controller/registration");
+const { get_registration, post_registration,USER_NAME_EXIST } = require("../controller/registration");
 const { getPassword, setPassword } = require("../controller/password");
 const { login, loginHandler, logoutHandler } = require("../controller/auth.controller");
 const { resetPassword, set_password, verify } = require("../controller/resetpassword");
@@ -21,6 +21,7 @@ router.get("/", (req, res) => {
 });
 
 router.get("/registration", get_registration);
+
 router.post("/registration", post_registration);
 router.get("/createPassword", getPassword);
 router.post("/createPassword", setPassword);
@@ -32,8 +33,7 @@ router.post("/activeCode", getActivecode)
 router.get("/resetPassword", resetPassword)
 router.post("/setPassword", set_password);
 router.get("/logout", logoutHandler);
-
-
+router.post("/isUserExist",USER_NAME_EXIST);
 router.use('/home', homeRoute);
 
 
