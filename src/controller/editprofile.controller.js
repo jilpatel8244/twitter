@@ -27,22 +27,43 @@ exports.getEditprofile = async (req, res) => {
 
 exports.postUpdateProfile = async (req, res) => {
   try {
-    const { username, bio, dob, userId } = req.body;
-    console.log(req.body);
-    console.log(req.files);
-    const coverPhoto = req.files['coverPhoto'][0];
-    console.log("coverPhoto", coverPhoto);
-    const displayPhoto = req.files['displayPhoto'][0]; 
-    console.log("displayPhoto", displayPhoto);
-    
+      const { username, bio, dob, userId } = req.body;
 
-    const update_detail = 'UPDATE users SET username = ?, bio = ?, date_of_birth = ?, cover_img_url = ?, profile_img_url = ? WHERE id = ?';
-    const [update_detail_data] = await connection.query(update_detail, [username, bio, dob, coverPhoto.filename, displayPhoto.filename, userId]);
+      let coverPhotoUrl = null;
+      let displayPhotoUrl = null;
+
+      if (req.files['coverPhoto']) {
+          const coverPhoto = req.files['coverPhoto'][0];
+          coverPhotoUrl = coverPhoto.filename;
+      }
+
+      if (req.files['displayPhoto']) {
+          const displayPhoto = req.files['displayPhoto'][0];
+          displayPhotoUrl = displayPhoto.filename;
+      }
+
+      if (coverPhotoUrl && displayPhotoUrl) {
+        const updateDetail = 'UPDATE users SET username = ?, bio = ?, date_of_birth = ?, cover_img_url = ?, profile_img_url = ? WHERE id = ?';
+        await connection.query(updateDetail, [username, bio, dob, coverPhotoUrl, displayPhotoUrl, userId]);
+      } else if (coverPhotoUrl) {
+        const updateDetail = 'UPDATE users SET username = ?, bio = ?, date_of_birth = ?, cover_img_url = ? WHERE id = ?';
+        await connection.query(updateDetail, [username, bio, dob, coverPhotoUrl, userId]);
+      } else if (displayPhotoUrl) {
+        const updateDetail = 'UPDATE users SET username = ?, bio = ?, date_of_birth = ?, profile_img_url = ? WHERE id = ?';
+        await connection.query(updateDetail, [username, bio, dob, displayPhotoUrl, userId]);
+      }
+      else
+      {
+          console.log("hello world");
+        const updateDetail = 'UPDATE users SET username = ?, bio = ?, date_of_birth = ?WHERE id = ?';
+        await connection.query(updateDetail, [username, bio, dob,  userId]);
+      }
     
-    console.log('Profile data updated successfully for user ID:', userId);
-    res.send('Profile data updated successfully');
+      res.redirect("/profile");
   } catch (error) {
-    res.json({ error: error });
+      console.error('Error updating profile data:', error);
+      res.json({ error: error });
   }
 };
+
 

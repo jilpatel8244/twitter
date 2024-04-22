@@ -39,16 +39,16 @@ exports.set_password = async (req, res) => {
 
     async function update_email(inputEmail, inputPassword) {
 
+        
+
 
         let sql = ` UPDATE users SET password ='${inputPassword}'  WHERE email = '${inputEmail}'
         `
-
         let [result] = await connection.query(sql)
-
         return result;
     }
 
-    await update_email(inputEmail, inputPassword);
+     await update_email(inputEmail, inputPassword);
 
 
     return res.json({ isvalidate_user: true })

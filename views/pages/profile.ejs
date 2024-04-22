@@ -234,9 +234,7 @@
     let like = document.getElementById("like");
 
     async function fetchPosts() {
-      tab.innerHTML = "";
-
-      tab.innerHTML = "";
+      tab.innerHTML="";
       let postDetails = await fetch('/profile/post', {
         method: "GET"
       }).then((value) => {
@@ -377,4 +375,3 @@
 </body>
 
 </html>
-
