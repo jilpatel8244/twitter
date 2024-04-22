@@ -72,7 +72,7 @@ async function fetchNotificatons() {
         <div
             class="block w-full px-4 py-2 border-b border-gray-200 cursor-pointer hover:bg-gray-100 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
           >
-          <a href="/home/?tweet_id=${notification.tweet_id}"> 
+          <a href="/get_comments/${notification.tweet_id}"> 
             <div class="flex">
               
               <img
@@ -120,7 +120,7 @@ async function fetchNotificatons() {
   <div
     class="block w-full px-4 py-2 border-b border-gray-200 cursor-pointer hover:bg-gray-100 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
   >
-  <a href="/home/?tweet_id=${notification.tweet_id}"> 
+  <a href="/get_comments/${notification.tweet_id}"> 
     <div class="flex">
       <img
         class="w-15 h-10 p-1 rounded-full"
@@ -147,7 +147,7 @@ async function fetchNotificatons() {
   <div
     class="block w-full px-4 py-2 border-b border-gray-200 cursor-pointer hover:bg-gray-100 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
   >
-  <a href="/home/?tweet_id=${notification.tweet_id}"> 
+  <a href="/get_comments/${notification.tweet_id}"> 
     <div class="flex">
       <img
         class="w-10 h-10 p-1 rounded-full"
@@ -172,7 +172,7 @@ async function fetchNotificatons() {
           notificationHTML = ` <div
     class="block w-full px-4 py-2 border-b border-gray-200 cursor-pointer hover:bg-gray-100 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
   >
-  <a href="/home/?tweet_id=${notification.tweet_id}"> 
+  <a href="/get_comments/${notification.tweet_id}"> 
     <div class="flex">
       <img
         class="w-15 h-10 p-1 rounded-full"
@@ -271,7 +271,7 @@ async function fetchNotificatons() {
             verifiedHTML = `<div
             class="block w-full px-4 py-2 border-b border-gray-200 cursor-pointer hover:bg-gray-100 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
           >
-          <a href="/home/?tweet_id=${verifiednotification.tweet_id}">
+          <a href="/get_comments/${verifiednotification.tweet_id}">
             <div class="flex">
               <img
                 class="w-15 h-10 p-1 rounded-full"
@@ -327,7 +327,7 @@ async function fetchNotificatons() {
               <div
                 class="block w-full px-4 py-2 border-b border-gray-200 cursor-pointer hover:bg-gray-100 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
               >
-              <a href="/home/?tweet_id=${verifiednotification.tweet_id}">
+              <a href="/get_comments/${verifiednotification.tweet_id}">
                 <div class="flex">
                   <img
                     class="w-15 h-10 p-1 rounded-full"
@@ -354,7 +354,7 @@ async function fetchNotificatons() {
               <div
                 class="block w-full px-4 py-2 border-b border-gray-200 cursor-pointer hover:bg-gray-100 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
               >
-              <a href="/home/?tweet_id=${verifiednotification.tweet_id}">
+              <a href="/get_comments/${verifiednotification.tweet_id}">
                 <div class="flex">
                   <img
                     class="w-10 h-10 p-1 rounded-full"
@@ -379,7 +379,7 @@ async function fetchNotificatons() {
             verifiedHTML = ` <div
                 class="block w-full px-4 py-2 border-b border-gray-200 cursor-pointer hover:bg-gray-100 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
               >
-              <a href="/home/?tweet_id=${verifiednotification.tweet_id}">
+              <a href="/get_comments/${verifiednotification.tweet_id}">
                 <div class="flex">
                   <img
                     class="w-15 h-10 p-1 rounded-full"
@@ -405,7 +405,7 @@ async function fetchNotificatons() {
             verifiedHTML = `<div
                 class="block w-full px-4 py-2 border-b border-gray-200 cursor-pointer hover:bg-gray-100 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
               >
-              <a href="/home/?tweet_id=${verifiednotification.tweet_id}">
+              <a href="/get_comments/${verifiednotification.tweet_id}">
                 <div class="flex">
 
                   <img
@@ -450,7 +450,7 @@ async function fetchNotificatons() {
         mentionHTML = `<div
       class="block w-full px-4 py-2 border-b border-gray-200 cursor-pointer hover:bg-gray-100 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
     >
-    <a href="/home/?tweet_id=${mentionNotification.tweet_id}"> 
+    <a href="/get_comments/${mentionNotification.tweet_id}"> 
       <div class="flex">
         
         <img
