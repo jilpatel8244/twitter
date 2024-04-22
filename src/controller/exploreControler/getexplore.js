@@ -2,7 +2,7 @@ const connection = require("../../../config/connection");
 const ShortUniqueId = require("short-unique-id");
 
 exports.getExplorePage = async (req, res) => {
-    res.render("pages/explore", {user: req.user[0][0]});
+    res.render("pages/explore", { user: req.user[0][0] });
 };
 // api for the get all usename and hatag based in search box on change event 
 exports.getUsernameOrHastagOnchage = async (req, res) => {
@@ -42,6 +42,7 @@ exports.getUsernameOrHastagOnchage = async (req, res) => {
 
 
 exports.getTopTweetAndHastag = async (req, res) => {
+    let search = req.body.search;
 
     try {
 
@@ -74,12 +75,12 @@ exports.getTopTweetAndHastag = async (req, res) => {
           JOIN tweets ON users.id = tweets.user_id
           LEFT JOIN medias ON tweets.id = medias.tweet_id
           LEFT JOIN tweet_comments ON tweet_comments.user_id = tweets.id 
-          WHERE tweets.content LIKE '%demo%' OR tweets.id IN (
+          WHERE tweets.content LIKE '%${search}%' OR tweets.id IN (
                   SELECT tweet_id FROM hashtag_tweet WHERE hashtag_id IN (
-                      SELECT id FROM hashtag_lists WHERE hashtag_name LIKE '%demo%'
+                      SELECT id FROM hashtag_lists WHERE hashtag_name LIKE '%${search}%'
                   )
               ) OR tweets.user_id IN (
-                  SELECT id FROM users WHERE username LIKE '%demo%'
+                  SELECT id FROM users WHERE username LIKE '%${search}%'
               )
               ORDER BY (
                   SELECT COUNT(*) FROM tweet_likes WHERE tweet_likes.tweet_id = tweets.id AND tweet_likes.status = 1
@@ -121,17 +122,33 @@ exports.getHastag = async (req, res) => {
 
 exports.getUsername = async (req, res) => {
 
-    let searchbox = "mihir"
-    if (!searchbox) {
-        return res.json({ msg: "not found" })
+
+    let search = req.body.searchbox;
+
+    if (!search) {
+        search = ""
     }
 
+    if (search.charAt(0) == "#") {
+        search = search.substring(1)
+    }
     try {
-        let sql = `      
+
+        if (req.body.type == 0) {
+            let sql = `         
       
-        SELECT * FROM users WHERE username LIKE '%demo%' and is_active = 1;`
-        let [result] = await connection.query(sql);
-        res.json({ username: result })
+            SELECT * FROM users WHERE username LIKE '%${search}%' and is_active = 1 limit 3;`
+            let [result] = await connection.query(sql);
+            res.json({ username: result })
+        }
+        else {
+            let sql = `         
+      
+            SELECT * FROM users WHERE username LIKE '%${search}%' and is_active = 1;`
+            let [result] = await connection.query(sql);
+            res.json({ username: result })
+        }
+
     } catch (error) {
         return res.json({ error: error })
     }
@@ -167,15 +184,15 @@ exports.getMedia = async (req, res) => {
 
 };
 
-
-
 exports.getLatestTweet = async (req, res) => {
 
-    let searchbox = "mihir"
-    if (!searchbox) {
+    let search = req.body.search;
+
+    console.log(search);
+    if (!search) {
         return res.json({ msg: "not found" })
     }
-    if (searchbox.charAt(0) == "#") {
+    if (search.charAt(0) == "#") {
         try {
             let sql = `
             SELECT users.username,
@@ -208,7 +225,7 @@ exports.getLatestTweet = async (req, res) => {
               LEFT JOIN tweet_comments ON tweet_comments.user_id = tweets.id 
               JOIN hashtag_tweet ON tweets.id = hashtag_tweet.tweet_id 
               JOIN hashtag_lists ON hashtag_tweet.hashtag_id = hashtag_lists.id
-              WHERE  hashtag_lists.hashtag_name like '%${searchbox.substring(1)}%'
+              WHERE  hashtag_lists.hashtag_name like '%${search.substring(1)}%'
               ORDER BY tweets.created_at DESC
               ;`
 
@@ -249,10 +266,12 @@ exports.getLatestTweet = async (req, res) => {
             JOIN tweets ON users.id = tweets.user_id
             LEFT JOIN medias ON tweets.id = medias.tweet_id
             LEFT JOIN tweet_comments ON tweet_comments.user_id = tweets.id 
-            WHERE  tweets.content LIKE '%demo%' OR users.username LIKE '%demo%' OR users.name LIKE '%demo%'
+            WHERE  tweets.content LIKE '%${search}%' OR users.username LIKE '%${search}%' OR users.name LIKE '%${search}%'
                   ORDER BY tweets.created_at DESC
           `
             let [result] = await connection.query(sql);
+
+            console.log(result);
             return res.json({ resultTweet: result })
 
         } catch (error) {
