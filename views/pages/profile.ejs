@@ -171,25 +171,27 @@
                             </span></span>
                         </div>
                       </div>
-                     <%if(!follower_detail_data[0] && !following_detail_data[0]){%>
-                      <div class="pt-3 flex justify-start items-start w-full divide-x divide-gray-800 divide-solid">
-                        <div class="text-center pr-3"><span class="font-bold text-black">
-                            
-                          </span><span class="text-gray-600"> Following</span></div>
-                        <div class="text-center px-3"><span class="font-bold text-black">
-                            
-                          </span><span class="text-gray-600"> Followers</span></div>
-                      </div>
-                      <%}%>
-                      <%if(follower_detail_data[0]){%>
-                      <div class="pt-3 flex justify-start items-start w-full divide-x divide-gray-800 divide-solid">
-                        <div class="text-center pr-3"><span class="font-bold text-black">
-                            <%=following_detail_data[0].following %>
-                          </span><span class="text-gray-600"> Following</span></div>
-                        <div class="text-center px-3"><span class="font-bold text-black">
-                            <%=follower_detail_data[0].follower %>
-                          </span><span class="text-gray-600"> Followers</span></div>
-                      </div><%}%>
+                      <%if(!follower_detail_data[0] && !following_detail_data[0]){%>
+                        <div class="pt-3 flex justify-start items-start w-full divide-x divide-gray-800 divide-solid">
+                          <div class="text-center pr-3"><span class="font-bold text-black">
+
+                            </span><span class="text-gray-600"> Following</span></div>
+                          <div class="text-center px-3"><span class="font-bold text-black">
+
+                            </span><span class="text-gray-600"> Followers</span></div>
+                        </div>
+                        <%}%>
+                          <%if(follower_detail_data[0]){%>
+                            <div
+                              class="pt-3 flex justify-start items-start w-full divide-x divide-gray-800 divide-solid">
+                              <div class="text-center pr-3"><span class="font-bold text-black">
+                                  <%=following_detail_data[0].following %>
+                                </span><span class="text-gray-600"> Following</span></div>
+                              <div class="text-center px-3"><span class="font-bold text-black">
+                                  <%=follower_detail_data[0].follower %>
+                                </span><span class="text-gray-600"> Followers</span></div>
+                            </div>
+                            <%}%>
                     </div>
                   </div>
 
@@ -237,6 +239,7 @@
     let like = document.getElementById("like");
 
     async function fetchPosts() {
+      tab.innerHTML = "";
 
       let postDetails = await fetch('/profile/post', {
         method: "GET"
@@ -244,7 +247,7 @@
         return value.json();
       }).then((value2) => {
         console.log(value2.postData);
-        for (let i = 0; i < value2.postData.length ; i++) {
+        for (let i = 0; i < value2.postData.length; i++) {
           tab.innerHTML += `<%- include('../partials/post.ejs')%>`;
         }
         let postName = document.getElementsByClassName("name");
