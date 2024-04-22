@@ -7,6 +7,8 @@ exports.getMessagesPage = async (req, res) => {
 
         let [allFollowers] = await connection.query(sql);
 
+        // logger.info(allFollowers);
+
         res.render('pages/messages.ejs', {
             allFollowers: allFollowers,
             user: req.user[0][0]

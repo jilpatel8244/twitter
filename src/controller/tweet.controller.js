@@ -1,6 +1,7 @@
 const logger = require("../../logger/logger");
 const conn = require('../../config/connection.js')
 const cookieParser = require("cookie-parser");
+const { use } = require("passport");
 
 
 module.exports.tweetCreate = (req, res) => {
@@ -41,7 +42,7 @@ module.exports.insertTweet = async (req, res) => {
         var usersDetails = await getUsersByUsernames(mentionedUsers);
         if (usersDetails) {
           usersDetails.forEach(async (mention) => {
-            notification = await insertNotification([userId, lastInsertedId, 'Mention', mention.id]);
+            notification = await insertNotification([ mention.id, lastInsertedId, 'Mention',userId]);
           })
         }
         if (notification.error) {
@@ -147,7 +148,7 @@ exports.tweetUpdate = async (req, res) => {
         var usersDetails = await getUsersByUsernames(mentionedUsers);
         if (usersDetails) {
           usersDetails.forEach(async (mention) => {
-            notification = await insertNotification([userId, tweetId, 'Mention', mention.id]);
+            notification = await insertNotification([ mention.id, tweetId, 'Mention',userId]);
           })
         }
         if (notification.error) {
@@ -250,4 +251,16 @@ const extractHashtag = (content) => {
     return hashTags.map((hashTag) => hashTag.substring(1))
   }
   return [];
+}
+
+exports.getProfileImage = async(req,res) =>{
+  let userId=req.user[0][0].id;
+  try{
+    let sql=`select profile_img_url as profileImg from users where id=?`;
+    let [profile] = await conn.query(sql,userId);
+    return res.status(200).json({'profileImg':profile[0].profileImg})
+  }
+  catch(error){
+    return res.status(422).json({'error':'ProfileImage-error'+error});
+  }
 }
