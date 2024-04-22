@@ -41,7 +41,6 @@ async function fetchNotificatons() {
       throw new Error("Failed to fetch notifications");
     }
     const notifications = await response.json();
-    console.log(notifications);
     diplayNotifications(notifications);
   } catch (error) {
     console.error("Error while fetching notifications", error);
@@ -80,14 +79,18 @@ async function fetchNotificatons() {
           >
           <a href="/get_comments/${notification.tweet_id}"> 
             <div class="flex">
-             <img
-            class="w-10 h-10 p-1 rounded-full"
-            src="/assets/user-icon.png"
-            alt="Bordered avatar"
-             />
+            <img
+            class="w-10 h-10 ml-2 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500"
+             if (${notification.profile_img_url}) {  
+               src="./uploads/${notification.profile_img_url}"
+            } else { 
+              src="/assets/profile.png"
+            }                  
+            alt="user img"
+          />
               <div class="notification ml-2 flex flex-col mt-2">
                 <span><strong>${notification.related_user_name} </strong>
-                  Mentioned you</span>
+                  Mentioned you ~ ${notification.time}</span>
               </div>
             </div>
             <div class="ml-2 mt-2"> ${notification.tweet_content}</div>
@@ -102,17 +105,21 @@ async function fetchNotificatons() {
     <a href="/profile/?id=${notification.user_id}"> 
       <div class="flex">
       <img
-        class="w-10 h-10 p-1 rounded-full"
-        src="/assets/user-icon.png"
+        class="w-10 h-10 ml-2 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500"
+        src="/assets/userProfile.png"
         alt="Bordered avatar"
       />
       <img
-        class="w-10 h-10 ml-2 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500"
-        src="/assets/user.png"
-        alt="Bordered avatar"
-      />
+      class="w-10 h-10 ml-2 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500"
+      if (${notification.profile_img_url}) {  
+         src="./uploads/${notification.profile_img_url}"
+      } else { 
+        src="/assets/profile.png"
+      }                  
+      alt="user img"
+    />
       <div class="notification mt-2 flex flex-col ml-2">
-        <span>${notification.related_username} followed you</span>
+        <span>${notification.related_username} followed you ~ ${notification.time}</span>
       </div>
      </div>
     </a>
@@ -126,19 +133,23 @@ async function fetchNotificatons() {
   >
   <a href="/get_comments/${notification.tweet_id}"> 
     <div class="flex">
-      <img
-        class="w-15 h-10 p-1 rounded-full"
-        src="/assets/message.png"
-        alt="like icon"
-      />
-      <img
-        class="w-10 h-10 ml-2 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500"
-        src="/assets/user.png"
-        alt="Bordered avatar"
-      />
+    <img
+    class="w-10 h-10 ml-2 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500"
+    src="/assets/message.png"
+    alt="Bordered avatar"
+  />
 
+    <img
+    class="w-10 h-10 ml-2 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500"
+    if (${notification.profile_img_url}) {  
+       src="./uploads/${notification.profile_img_url}"
+    } else { 
+      src="/assets/profile.png"
+    }                  
+    alt="user img"
+  />
       <div class="notification ml-2 flex flex-col mt-2">
-        <span>${notification.related_username} commented on your post</span>
+        <span>${notification.related_username} commented on your post ~ ${notification.time}</span>
       </div>
     </div>
     <div class="ml-2 mt-2"> ${notification.tweet_content}</div>
@@ -153,19 +164,22 @@ async function fetchNotificatons() {
   >
   <a href="/get_comments/${notification.tweet_id}"> 
     <div class="flex">
-      <img
-        class="w-10 h-10 p-1 rounded-full"
-        src="/assets/heart_like.png"
-        alt="like icon"
-      />
-      <img
-        class="w-10 h-10 ml-2 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500"
-        src="/assets/user.png"
-        alt="Bordered avatar"
-      />
-
+    <img
+    class="w-10 h-10 ml-2 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500"
+    src="/assets/heart_like.png"
+    alt="Bordered avatar"
+  />
+    <img
+    class="w-10 h-10 ml-2 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500"
+    if (${notification.profile_img_url}) {  
+       src="./uploads/${notification.profile_img_url}"
+    } else { 
+      src="/assets/profile.png"
+    }                  
+    alt="user img"
+  />
       <div class="ml-2 flex flex-col mt-2">
-        <span>${notification.related_username} liked your post</span>
+        <span>${notification.related_username} liked your post ~ ${notification.time}</span>
       </div>
     </div>
     <div class="ml-2 mt-2">${notification.tweet_content}</div>
@@ -178,19 +192,23 @@ async function fetchNotificatons() {
   >
   <a href="/get_comments/${notification.tweet_id}"> 
     <div class="flex">
-      <img
-        class="w-15 h-10 p-1 rounded-full"
-        src="/assets/retweet.jpg"
-        alt="retweet icon"
-      />
-      <img
-        class="w-10 h-10 ml-2 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500"
-        src="/assets/user.png"
-        alt="Bordered avatar"
-      />
-
+    <img
+    class="w-10 h-10 ml-2 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500"
+    src="/assets/retweet.jpg"
+    alt="Bordered avatar"
+  />
+    <img
+    class="w-10 h-10 ml-2 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500"
+    if (${notification.profile_img_url}) {  
+       src="./uploads/${notification.profile_img_url}"
+    } else { 
+      src="/assets/profile.png"
+    }                  
+    alt="user img"
+  />
+  
       <div class="notification ml-2 flex flex-col mt-2">
-        <span>${notification.related_username} retweet your post</span>
+        <span>${notification.related_username} retweet your post ~ ${notification.time}</span>
       </div>
     </div>
     <div class="ml-2 mt-2"> ${notification.tweet_content}</div>
@@ -199,7 +217,7 @@ async function fetchNotificatons() {
 `;
             break;
           default:
-            console.warn(`Unknown notification type: ${notification.type}`);
+            console.error(`Unknown notification type: ${notification.type}`);
         }
         notificationContainer.innerHTML += notificationHTML;
       });
@@ -245,7 +263,7 @@ async function fetchNotificatons() {
   </div>`;
           break;
         default:
-          console.warn(`Unknown notification type: ${lognotification.type}`);
+          console.error(`Unknown notification type: ${lognotification.type}`);
       }
       // notificationContainer.innerHTML += loginHTML;
     });
@@ -284,13 +302,16 @@ async function fetchNotificatons() {
                 alt="like icon"
               />
               <img
-                class="w-10 h-10 ml-2 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500"
-                src="/assets/user.png"
-                alt="Bordered avatar"
-              />
-    
+              class="w-10 h-10 ml-2 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500"
+              if (${verifiednotification.profile_img_url}) {  
+                 src="./uploads/${verifiednotification.profile_img_url}"
+              } else { 
+                src="/assets/profile.png"
+              }                  
+              alt="user img"
+            />
               <div class="notification ml-2 flex flex-col mt-2">
-                <span><strong>${verifiednotification.username} </strong> post a tweet</span>
+                <span><strong>${verifiednotification.username} </strong> post a tweet ~ ${verifiednotification.time}</span>
               </div>
             </div>
             <div class="ml-2 mt-2"> ${verifiednotification.tweet_content}</div>
@@ -305,22 +326,21 @@ async function fetchNotificatons() {
                 <a href="/profile/?id=${verifiednotification.user_id}">
                   <div class="flex">
                   <img
-                    class="w-10 h-10 p-1 rounded-full"
-                    src="/assets/user-icon.png"
-                    alt="Bordered avatar"
-                  />                  
-                  <img
-                    class="w-10 h-10 ml-2 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500"
-                    src="/assets/user.png"
-                    alt="Bordered avatar"
-                  />
-                  <img
-                    class="w-10 h-10 p-1 rounded-full"
-                    src="/assets/Twitter_Verified.png"
-                    alt="Bordered avatar"
-                  />
+                  class="w-10 h-10 ml-2 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500"
+                  src="/assets/userProfile.png"
+                  alt="Bordered avatar"
+                />
+                <img
+                class="w-10 h-10 ml-2 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500"
+                if (${verifiednotification.profile_img_url}) {   
+                   src="./uploads/${verifiednotification.profile_img_url}"
+                } else { 
+                  src="/assets/profile.png"
+                }                  
+                alt="user img"
+              />
                   <div class="notification mt-2 flex flex-col ml-2">
-                    <span><strong>${verifiednotification.related_user_name} </strong> followed  <strong> ${verifiednotification.username}</strong></span>
+                    <span><strong>${verifiednotification.related_user_name} </strong> followed  <strong> ${verifiednotification.username}</strong>~ ${verifiednotification.time}</span>
                   </div>
                  </div>
                 </a>
@@ -334,19 +354,24 @@ async function fetchNotificatons() {
               >
               <a href="/get_comments/${verifiednotification.tweet_id}">
                 <div class="flex">
-                  <img
-                    class="w-15 h-10 p-1 rounded-full"
-                    src="/assets/message.png"
-                    alt="like icon"
-                  />
-                  <img
-                    class="w-10 h-10 ml-2 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500"
-                    src="/assets/user.png"
-                    alt="Bordered avatar"
-                  />
+                <img
+                class="w-10 h-10 ml-2 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500"
+                src="/assets/message.png"
+                alt="Bordered avatar"
+              />
+            
+                <img
+                class="w-10 h-10 ml-2 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500"
+                if (${verifiednotification.profile_img_url}) {  
+                   src="./uploads/${verifiednotification.profile_img_url}"
+                } else { 
+                  src="/assets/profile.png"
+                }                  
+                alt="user img"
+              />
 
                   <div class="notification ml-2 flex flex-col mt-2">
-                    <span><strong>${verifiednotification.related_user_name} </strong> commented on <strong> ${verifiednotification.username}'s</strong> post</span>
+                    <span><strong>${verifiednotification.related_user_name} </strong> commented on <strong> ${verifiednotification.username}'s</strong> post ~ ${verifiednotification.time}</span>
                   </div>
                 </div>
                 <div class="ml-2 mt-2"> ${verifiednotification.tweet_content}</div>
@@ -367,13 +392,17 @@ async function fetchNotificatons() {
                     alt="like icon"
                   />
                   <img
-                    class="w-10 h-10 ml-2 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500"
-                    src="/assets/user.png"
-                    alt="Bordered avatar"
-                  />
+                  class="w-10 h-10 ml-2 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500"
+                  if (${verifiednotification.profile_img_url}) {  
+                     src="./uploads/${verifiednotification.profile_img_url}"
+                  } else { 
+                    src="/assets/profile.png"
+                  }                  
+                  alt="user img"
+                />
 
                   <div class="ml-2 flex flex-col mt-2">
-                    <span><strong>${verifiednotification.related_user_name} </strong> liked  <strong> ${verifiednotification.username}'s</strong> post</span>
+                    <span><strong>${verifiednotification.related_user_name} </strong> liked  <strong> ${verifiednotification.username}'s</strong> post ~ ${verifiednotification.time}</span>
                   </div>
                 </div>
                 <div class="ml-2 mt-2">${verifiednotification.tweet_content}</div>
@@ -392,13 +421,16 @@ async function fetchNotificatons() {
                     alt="retweet icon"
                   />
                   <img
-                    class="w-10 h-10 ml-2 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500"
-                    src="/assets/user.png"
-                    alt="Bordered avatar"
-                  />
-
+                  class="w-10 h-10 ml-2 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500"
+                  if (${verifiednotification.profile_img_url}) {  
+                     src="./uploads/${verifiednotification.profile_img_url}"
+                  } else { 
+                    src="/assets/profile.png"
+                  }                  
+                  alt="user img"
+                />
                   <div class="notification ml-2 flex flex-col mt-2">
-                    <span><strong>${verifiednotification.related_user_name} </strong> retweet  <strong> ${verifiednotification.username}'s</strong> post</span>
+                    <span><strong>${verifiednotification.related_user_name} </strong> retweet  <strong> ${verifiednotification.username}'s</strong> post  ~ ${verifiednotification.time}</span>
                   </div>
                 </div>
                 <div class="ml-2 mt-2"> ${verifiednotification.tweet_content}</div>
@@ -413,12 +445,15 @@ async function fetchNotificatons() {
               <a href="/get_comments/${verifiednotification.tweet_id}">
                 <div class="flex">
 
-                  <img
-                    class="w-10 h-10 ml-2 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500"
-                    src="/assets/user.png"
-                    alt="Bordered avatar"
-                  />
-
+                <img
+                class="w-10 h-10 ml-2 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500"
+                if (${verifiednotification.profile_img_url}) {  
+                   src="./uploads/${verifiednotification.profile_img_url}"
+                } else { 
+                  src="/assets/profile.png"
+                }                  
+                alt="user img"
+              />
                   <div class="notification ml-2 flex flex-col">
                     <span><strong>${verifiednotification.related_user_name} </strong>
                       @${verifiednotification.related_username} ~ ${verifiednotification.time}</span>
@@ -430,7 +465,7 @@ async function fetchNotificatons() {
               </div>`;
             break;
           default:
-            console.warn(
+            console.error(
               `Unknown notification type: ${verifiednotification.type}`
             );
         }
@@ -458,11 +493,15 @@ async function fetchNotificatons() {
     <a href="/get_comments/${mentionNotification.tweet_id}"> 
       <div class="flex">
         
-        <img
-          class="w-10 h-10 ml-2 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500"
-          src="/assets/user.png"
-          alt="Bordered avatar"
-        />
+      <img
+      class="w-10 h-10 ml-2 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500"
+      if (${mentionNotification.profile_img_url}) {  
+         src="./uploads/${mentionNotification.profile_img_url}"
+      } else { 
+        src="/assets/profile.png"
+      }                  
+      alt="user img"
+    />
   
         <div class="notification ml-2 flex flex-col mt-2">
           <span><strong>${mentionNotification.related_user_name} </strong>
@@ -480,18 +519,3 @@ async function fetchNotificatons() {
 
 // window.addEventListener("load", fetchNotificatons);
 window.addEventListener("DOMContentLoaded", fetchNotificatons);
-
-
-
-
-
-              // <img
-              //   class="w-10 h-10 ml-2 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500"
-              //    if (notification.profile_img_url) {  
-              //      src="/uploads/${notification.profile_img_url}"
-              //   } else { 
-              //     src="https://cdni.iconscout.com/illustration/premium/thumb/female-user-image-8110250-6515859.png?f=webp"
-              //   }                  
-              //   alt="user img"
-              // />
-        
