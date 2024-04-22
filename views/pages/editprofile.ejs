@@ -131,60 +131,73 @@
 
 <body>
   <!-- <div class="max-w-[600px] bg-white shadow-[0_0_10px_rgba(0,0,0,0.1)] mx-auto my-5 p-5 rounded-lg;"> -->
-    <div class="container">
-      <h1>Edit Profile</h1>
-      <form action="/editprofile/updateProfile" method="POST" enctype=multipart/form-data>
-      <p>user id: <%= profileData.id %> </p>
+  <div class="container">
+    <h1>Edit Profile</h1>
+    <form action="/editprofile/updateProfile" method="POST" enctype=multipart/form-data id="editprofile"
+      onsubmit="return editprofilevalidate()" name="editprofile">
+      <p>user id: <%= profileData.id %>
+      </p>
       <input id="userId" name="userId" value="<%= profileData.id %>" type="text">
-    
-        <div class="profile-section">
-          <div class="cover-photo">
-            <label for="coverPhoto">Cover Photo</label>
-          
-            
-            <img src="./uploads/<%= profileData.cover_img_url %>" alt="Cover Photo Preview" id="coverPhotoPreview"/>
-            <input type="file" id="coverPhoto" name="coverPhoto" accept="image/*"
-              onchange="previewImage('coverPhoto', 'coverPhotoPreview')" style="display: none" multiple />
-            <button type="button" onclick="document.getElementById('coverPhoto').click()">
-              change
-            </button>
-          </div>
-          <div class="display-photo">
-            <label for="displayPhoto">Display Photo</label>
-            <input type="file" id="displayPhoto" name="displayPhoto" accept="image/*"
-              onchange="previewImage('displayPhoto', 'displayPhotoPreview')" style="display: none" />
-            <img src="./uploads/<%= profileData.profile_img_url %>" alt="Display Photo Preview" id="displayPhotoPreview"/>
-            <button type="button" onclick="document.getElementById('displayPhoto').click()">
-              change
-            </button>
-          </div>
+
+      <div class="profile-section">
+        <div class="cover-photo">
+          <label for="coverPhoto">Cover Photo</label>
+
+          <% if (profileData.cover_img_url) { %>
+            <img src="./uploads/<%= profileData.cover_img_url %>" alt="Cover Photo Preview" id="coverPhotoPreview" />
+            <% } %>
+              <input type="file" id="coverPhoto" name="coverPhoto" accept="image/*"
+                onchange="previewImage('coverPhoto', 'coverPhotoPreview')" style="display: none" multiple />
+              <button type="button" onclick="document.getElementById('coverPhoto').click()">
+                change
+              </button>
         </div>
-        <div class="w-full mt-4">
-          <input
-            class="block w-full px-4 py-2 mt-2 text-gray-800 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-black dark:focus:border-black focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-gray-300"
-            type="text" placeholder="Username" id="username" aria-addlabel="Username" name="username" value="<%= profileData.username %>"/>
+        <div class="display-photo">
+          <label for="displayPhoto">Display Photo</label>
+          <input type="file" id="displayPhoto" name="displayPhoto" accept="image/*"
+            onchange="previewImage('displayPhoto', 'displayPhotoPreview')" style="display: none" />
+          <% if (profileData.profile_img_url) { %>
+            <img src="./uploads/<%= profileData.profile_img_url %>" alt="Display Photo Preview"
+              id="displayPhotoPreview" />
+            <% } %>
+              <button type="button" onclick="document.getElementById('displayPhoto').click()">
+                change
+              </button>
         </div>
-        <br />
-        <div class="w-full mt-4">
-          <input
-            class="block w-full px-4 py-2 mt-2 text-gray-800 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-black dark:focus:border-black focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-gray-300"
-            type="text" placeholder="Bio" id="bio" aria-addlabel="bio" name="bio" value="<%= profileData.bio %>"/>
-        </div>
-        <br />
-        <div class="w-full mt-4">
-          <input
-            class="block w-full px-4 py-2 mt-2 text-gray-800 placeholder-gray-500 bg-white border rounded-lg focus:border-black dark:focus:border-black focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-white"
-            placeholder="Date Of Birth" class="textbox-n" type="text" onfocus="(this.type='date')"
-            onblur="(this.type='text')" id="dob" aria-label="date" name="dob"  value="<%= JSON.stringify(profileData.date_of_birth).slice(1,11) %>" onclick="checkDOB()"/>
-        </div>
-        <button type="submit">Save</button>
-       
-      </form>
-    </div>
+      </div>
+      <div class="w-full mt-4">
+        <input
+          class="block w-full px-4 py-2 mt-2 text-gray-800 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-black dark:focus:border-black focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-gray-300"
+          type="text" placeholder="Username" id="username" aria-addlabel="Username" name="username"
+          value="<%= profileData.username %>" />
+      </div>
+      <span class="text-red-500" id="usernamevalidation"></span class="text-red-500">
+      <br />
+      <div class="w-full mt-4">
+        <input
+          class="block w-full px-4 py-2 mt-2 text-gray-800 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-black dark:focus:border-black focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-gray-300"
+          type="text" placeholder="Bio" id="bio" aria-addlabel="bio" name="bio" value="<%= profileData.bio %>" />
+      </div>
+      <br />
+      <div class="w-full mt-4">
+        <input
+          class="block w-full px-4 py-2 mt-2 text-gray-800 placeholder-gray-500 bg-white border rounded-lg focus:border-black dark:focus:border-black focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-white"
+          placeholder="Date Of Birth" class="textbox-n" type="text" onfocus="(this.type='date')"
+          onblur="(this.type='text')" id="dob" aria-label="date" name="dob"
+          value="<%= JSON.stringify(profileData.date_of_birth).slice(1,11) %>" onclick="checkDOB()" />
+      </div>
+      <button type="submit">Save</button>
 
     </form>
   </div>
+
+  </form>
+  </div>
   <script>
+
+
+    let isValid = false;
+
     function previewImage(inputId, imgId) {
       const input = document.getElementById(inputId);
       const img = document.getElementById(imgId);
@@ -203,6 +216,57 @@
         img.src = "#";
       }
     }
+
+    async function editprofilevalidate() {
+
+     let val = false
+      if (isValid == true) {
+        val = true ;
+
+          return val;
+
+      }
+      else
+      {
+        val = false
+        return val;
+
+      }
+
+
+    }
+
+
+    let username = document.getElementById("username")
+      ;
+
+
+    username.addEventListener("keyup", async (username) => {
+      // console.log(username);
+      let usernamevalidation = document.getElementById("usernamevalidation");
+      let response = await fetch("/isUserExist", {
+        method: "POST",
+        body: new URLSearchParams(
+          new FormData(document.forms["editprofile"])
+        ),
+      });
+      let result = await response.json();
+      console.log("result is ", result);
+
+      if (result.isValid == true) {
+        usernamevalidation.innerHTML = "";
+        return isValid = true;
+
+      }
+      else {
+        usernamevalidation.style.color = "red";
+        usernamevalidation.innerHTML = "Change the Username";
+        return isValid = false;
+
+      }
+
+
+    });
 
 
   </script>
