@@ -36,7 +36,8 @@
                 </span></a>
             <a href="/messages"
                 class="mt-1 group flex items-center px-2 py-4 text-base leading-6 font-medium rounded-full hover:bg-gray-200 relative">
-                <div class="h-5 w-5 text-xs text-white flex justify-center items-center absolute" style="background-color: rgb(14 165 233); border: 1px solid white; border-radius: 50px; top: 10px; left: 20px; display: none;">
+                <div class="h-5 w-5 text-xs text-white flex justify-center items-center absolute"
+                    style="background-color: rgb(14 165 233); border: 1px solid white; border-radius: 50px; top: 10px; left: 20px; display: none;">
                     <span id="messageCount"></span>
                 </div>
                 <svg class="mr-4 h-6 w-6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -99,15 +100,13 @@
                     <span class="flex-shrink-0 group block">
                         <div class="flex items-center">
                             <div>
-                                <img class="inline-block h-10 w-10 rounded-full"
-
-                                    <% if (user.profile_img_url) { %>
-                                        src="/uploads/<%= user.profile_img_url %>"
+                                <img class="inline-block h-10 w-10 rounded-full" <% if (user.profile_img_url) { %>
+                                src="/uploads/<%= user.profile_img_url %>"
                                     <% } else { %>
                                         src="https://cdni.iconscout.com/illustration/premium/thumb/female-user-image-8110250-6515859.png?f=webp"
-                                    <% } %>
+                                        <% } %>
 
-                                    alt="">
+                                            alt="">
                             </div>
                             <div class="ml-3">
                                 <p class="text-base leading-6 font-medium ">

@@ -128,6 +128,11 @@
         .margmain {
             margin-top: 12%;
         }
+
+        .follow {
+            max-width: 100px;
+            float: right;
+        }
     </style>
     <script src="/js/tweetgenrate.js"></script>
 
@@ -294,8 +299,9 @@
                         alt="">
                         </div>
                         <div class="ml-3 mt-3 check">
+
                         <p class="text-base leading-6 font-medium check">
-                        ${element.name}
+                        <a href="/profile?id=${element.id}">${element.name}</a>
                         </p>
                         <p
                         class="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 transition ease-in-out duration-150 check">
@@ -404,14 +410,12 @@
                             </div>
 
                         </div>
-                        <div class="flex-1 px-4 py-2 m-2">
-                            <a href="" class=" float-right">
-                                <button class="font-semibold text-white bg-black py-2 px-4 rounded-full">
-                                    Follow
-                                </button>
-                            </a>
-
-                        </div>
+                        <div class="flex-1 px-4 py-2 m-2" id="followbtn">
+                    <p class="font-semibold text-white bg-black py-2 px-4 rounded-full follow" id='btnfollow_${element.id}'  onclick="foollowhandel(${element.id})">
+                            Follow
+                            </p>
+                    
+                </div>
                     </div>
 `
 
@@ -473,13 +477,11 @@
                     </div>
 
                 </div>
-                <div class="flex-1 px-4 py-2 m-2">
-                    <a href="" class=" float-right">
-                        <button class="font-semibold text-white bg-black py-2 px-4 rounded-full">
+                <div class="flex-1 px-4 py-2 m-2" id="followbtn">
+                    <p class="font-semibold text-white bg-black py-2 px-4 rounded-full follow" id='btnfollow_${element.id}'  onclick="foollowhandel(${element.id})">
                             Follow
-                        </button>
-                    </a>
-
+                            </p>
+                    
                 </div>
             </div>
 `
@@ -546,13 +548,11 @@
                     </div>
 
                 </div>
-                <div class="flex-1 px-4 py-2 m-2">
-                    <a href="" class=" float-right">
-                        <button class="font-semibold text-white bg-black py-2 px-4 rounded-full">
+                <div class="flex-1 px-4 py-2 m-2" id="followbtn">
+                    <p class="font-semibold text-white bg-black py-2 px-4 rounded-full follow" id='btnfollow_${element.id}'  onclick="foollowhandel(${element.id})">
                             Follow
-                        </button>
-                    </a>
-
+                            </p>
+                    
                 </div>
             </div>
 `
@@ -599,10 +599,13 @@
             tweet += `   <div class="flex flex-shrink-0 ">
                 <div class="flex-1">
                     <div class="flex items-center w-48">
+                        
                         <div>
+                            <a href="/profile?id=${element.id}">
                             <img class="inline-block h-10 w-auto rounded-full ml-4 mt-2"
                                 src="https://pbs.twimg.com/profile_images/1121328878142853120/e-rpjoJi_bigger.png"
                                 alt="">
+                                </a>
                         </div>
                         <div class="ml-3 mt-3">
                             <p class="text-base leading-6 font-medium ">
@@ -614,15 +617,13 @@
                             </p>
                         </div>
                     </div>
-
-                </div>
-                <div class="flex-1 px-4 py-2 m-2">
-                    <a href="" class=" float-right">
-                        <button class="font-semibold text-white bg-black py-2 px-4 rounded-full">
-                            Follow
-                        </button>
                     </a>
-
+                </div>
+                <div class="flex-1 px-4 py-2 m-2" id="followbtn">
+                    <p class="font-semibold text-white bg-black py-2 px-4 rounded-full follow" id='btnfollow_${element.id}'  onclick="foollowhandel(${element.id})">
+                            Follow
+                            </p>
+                    
                 </div>
             </div>
 `
@@ -670,6 +671,36 @@
         conn.innerHTML = mediacon;
 
     }
+
+
+    function foollowhandel(id) {
+
+
+        let follow = document.getElementById(`btnfollow_${id}`);
+
+
+        let followdiv = document.getElementById(`followbtn`);
+
+
+        if (follow.innerHTML == "following") {
+            follow.innerText = "Follow"
+            follow.style.backgroundColor = "blue"
+            follow.style.backgroundColor = "black"
+
+        }
+        else {
+            follow.innerText = "following"
+
+
+        }
+
+
+
+    }
+
+
+
+
 </script>
 <script src="/js/like.script.js"></script>
 <script src="/js/bookmark.script.js"></script>
@@ -681,7 +712,7 @@
 
 
 <!-- socket.io script that (new message ave to count display karva mate che) -->
-
+foollowhandel
 <script src="/socket.io/socket.io.js"></script>
 <script>
 
@@ -702,4 +733,9 @@
             document.getElementById('messageCount').innerHTML = `${data.length}`;
         }
     });
+
+
+
+
+
 </script>

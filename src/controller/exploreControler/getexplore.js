@@ -184,8 +184,6 @@ exports.getMedia = async (req, res) => {
 
 };
 
-
-
 exports.getLatestTweet = async (req, res) => {
 
     let search = req.body.search;
