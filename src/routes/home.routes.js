@@ -8,7 +8,7 @@ const { getHome, get_comment, post_comment,get_notification,post_notification } 
 router.get("/", (req, res) => {
   res.render("pages/index");
 });
-router.get("/home", passport.authenticate('jwt', { session: false }), getHome);
+router.get("/home", passport.authenticate('jwt', { session: false, failureRedirect: "/login" }), getHome);
 router.get("/get_notification", passport.authenticate('jwt', { session: false, failureRedirect: "/login"  }),get_notification)
 router.post("/post_notification", passport.authenticate('jwt', { session: false, failureRedirect: "/login"  }),post_notification)
 

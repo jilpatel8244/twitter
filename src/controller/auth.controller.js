@@ -13,7 +13,7 @@ exports.loginHandler = async (req, res) => {
 		if (!userExist.length) {
 			return res.status(401).json({
 				success: false,
-				message: "user not exists",
+				message: "sorry, we couldn't find your account",
 			});
 		}
 
@@ -22,19 +22,16 @@ exports.loginHandler = async (req, res) => {
 
 			return res.status(401).json({
 				success: false,
-				message: "user not activated",
+				message: "please activate your account",
 			});
 		}
-
-		console.log(md5(password + userExist[0].salt));
-		console.log(userExist[0].password);
 
 		if (userExist[0].password !== md5(password + userExist[0].salt)) {
 			await connection.query("insert into logs (user_id, is_successfull) values (?, ?)", [userExist[0].id, 0]);
 
 			return res.status(401).json({
 				success: false,
-				message: "password not match",
+				message: "please fill valid data",
 			});
 		}
 
@@ -78,3 +75,26 @@ exports.login = (req, res) => {
 	res.render("pages/login");
 };
 
+exports.USER_NAME_EXIST = async (req, res) => {
+	let { username } = req.body;
+	if (username.trim() == "" || username.trim().length < 3) {
+		return res
+			.status(422)
+			.json({ error: "Please enter Username more than 3 letters" });
+	} else {
+		let sql = "select count(*) as count from users where username = ?";
+		let [findUser] = await conn.query(sql, username);
+
+		logger.info(findUser[0].count);
+		if (findUser[0].count > 0) {
+			return res.status(422).json({ isValid: false });
+		} else {
+			return res.status(200).json({ isValid: true });
+		}
+	}
+};
+
+
+exports.logoutHandler = (req, res) => {
+    res.clearCookie('token').render('pages/login');
+}

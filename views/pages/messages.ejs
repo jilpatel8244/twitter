@@ -39,7 +39,7 @@
 <body>
     <div class="p-relative h-screen" style="background-color: white">
         <div class="flex justify-center">
-            <header class=" h-12 py-4 h-auto">
+            <header class=" py-4 h-auto">
                 <!-- Side Navbar (left side) -->
                 <%- include('../partials/sidebar.ejs') %>
             </header>
@@ -89,7 +89,7 @@
                                         <div class="flex items-center relative">
                                             <div>
                                                 <label for="img-message">
-                                                    <a class="-1 group flex items-center text-blue-400 px-2 py-2 text-base leading-6 font-medium rounded-full hover:bg-opacity-20 hover:bg-[#8fa2c4] hover:text-blue-600">
+                                                    <a class="-1 group flex items-center text-blue-400 px-2 py-2 text-base leading-6 font-medium rounded-full hover:bg-opacity-20 hover:bg-[#8fa2c4]">
                                                         <svg class="text-center h-7 w-6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" stroke="currentColor" viewBox="0 0 24 24">
                                                             <path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z">
                                                             </path>
@@ -100,7 +100,7 @@
                                             </div>
                                             <div>
                                                 <label for="img-message">
-                                                    <a class="-1 group flex items-center text-blue-400 px-2 py-2 text-base leading-6 font-medium rounded-full hover:bg-opacity-20 hover:bg-[#8fa2c4] hover:text-blue-600">
+                                                    <a class="-1 group flex items-center text-blue-400 px-2 py-2 text-base leading-6 font-medium rounded-full hover:bg-opacity-20 hover:bg-[#8fa2c4]">
                                                         <img src="./assets/gif.png" alt="" srcset="" height="50px" width="50px" class="outline-1 select-none">
                                                     </a>
                                                 </label>
@@ -162,28 +162,31 @@
         }
     </style>
 
-    <script src="/socket.io/socket.io.js"></script>
+    
+
+    <!-- <script src="/socket.io/socket.io.js"></script> -->
 
     <script>
-        let socket = io();
+        // let socket = io();
 
-        document.getElementById('img-message').value = '';
+        // let senderId = '<%= user.id %>';
 
-        let senderId = '<%= user.id %>';
         let reciverId;
 
-        socket.on('connect', () => {
-            console.log('connected to server ' + socket.id);
+        // remove selected image
+        document.getElementById('img-message').value = '';
 
-            socket.emit('user-connected', senderId);
-            socket.emit('getUnreadMessages', senderId);     
-        });
+
+        // socket.on('connect', () => {
+        //     console.log('connected to server ' + socket.id);
+
+        //     socket.emit('user-connected', senderId);
+        //     socket.emit('getUnreadMessages', senderId);     
+        // });
 
         socket.on('unreadMessages', (data) => {
-            // console.log(data);
 
             data.forEach((element, index) => {
-                console.log(document.getElementById(`${element.sender_id}`).querySelector('.unreadMessageCount'));
                 document.getElementById(`${element.sender_id}`).querySelector('.unreadMessageCount').parentElement.style.display = 'flex';
                 document.getElementById(`${element.sender_id}`).querySelector('.unreadMessageCount').innerHTML = `${element.count}`;
             });
@@ -197,6 +200,20 @@
         function openMessageBox(followerId, reciverName, reciverUsername, reciverImgUrl) {
             reciverId = followerId;
 
+            // remove image, preview and message
+            document.getElementById('message').value = "";
+
+            if (document.getElementById('img-message').value) {
+                document.getElementById('preview_img').parentElement.remove();
+            }
+
+            document.getElementById('img-message').value = '';
+            
+            // desable send btn
+            document.getElementById("messageSendBtn").disabled = true;
+            document.getElementById("messageSendBtn").style.opacity = 0.5;
+
+            // remove active status (basically background color) from all users and added on the reciver id
             let allUsers = Array.from(document.querySelectorAll('ul li'));
             allUsers.forEach((element) => {
                 element.classList.remove('active-user');
@@ -204,17 +221,22 @@
 
             document.getElementById(followerId).parentElement.classList.add('active-user');
 
-
+            // fill the values of reciver on chat section 
             document.getElementById('selectedUserName').innerHTML = reciverName;
             document.getElementById('selectedUserUsername').innerHTML = `@`+reciverUsername;
             document.getElementById('selectedUserName1').innerHTML = reciverName;
 
+            // open the chat box
             document.getElementById('prev-chat-section').style.display = 'none';
             document.getElementById('chat-section').style.display = 'block';
 
+            // load old messages
             socket.emit('existingChats', {senderId: senderId, reciverId: reciverId});
+
+            // make read status 1
             socket.emit('messageRead', {senderId: senderId, reciverId: reciverId});
 
+            // remove unread message count
             let unreadSpanTag = document.getElementById(`${reciverId}`).querySelector('.unreadMessageCount');
 
             if (parseInt(unreadSpanTag.innerHTML) > 0) {
@@ -258,7 +280,13 @@
                     if (imgFile) {
                         newDiv.innerHTML = `<img src="/uploads/${response.message.message}" alt="img" class="border rounded-xl" style="height: 300px; width: 300px">`;
                     } else {
-                        newDiv.innerHTML = `<span>${response.message.message}</span>`;
+                        let newSpan = document.createElement('span');
+                        // newSpan.classList.add('');
+                        newSpan.textContent = `${response.message.message}`;
+                        newSpan.style.lineBreak = 'anywhere';
+                        newSpan.style.maxWidth = '85%';
+                        newDiv.appendChild(newSpan);
+                        // newDiv.innerHTML = `<span style="line-break: anywhere; max-width: 85%;">${response.message.message}</span>`;
                     }
 
                     document.getElementById('chat-container').appendChild(newDiv);
@@ -274,6 +302,9 @@
                     // remove selected image
                     document.getElementById('img-message').value = '';
 
+                    document.getElementById("messageSendBtn").disabled = true;
+                    document.getElementById("messageSendBtn").style.opacity = 0.5;
+
                     scrollToBottom('user-display-and-chatting');
 
                     socket.emit('send-private-message', response.message);
@@ -283,13 +314,18 @@
 
         // receive private messages
         socket.on('receive-private-message', (data) => {
-            console.log(data);
 
             let newDiv = document.createElement('div');
             newDiv.classList.add('reciver-chat', 'flex', 'justify-start');
 
             if (data.content_type == 'text') {
-                newDiv.innerHTML = `<span>${data.message}</span>`;
+                let newSpan = document.createElement('span');
+                // newSpan.classList.add('');
+                newSpan.textContent = `${data.message}`;
+                newSpan.style.lineBreak = 'anywhere';
+                newSpan.style.maxWidth = '85%';
+                newDiv.appendChild(newSpan);
+                // newDiv.innerHTML = `<span style="line-break: anywhere; max-width: 85%;">${data.message}</span>`;
             } else {
                 newDiv.innerHTML = `<img src="/uploads/${data.message}" alt="img" class="border rounded-xl" style="height: 300px; width: 300px">`;
             }
@@ -297,7 +333,6 @@
             document.getElementById('chat-container').appendChild(newDiv);  
 
             scrollToBottom('user-display-and-chatting');
-
 
             if (data.senderId === reciverId) {
                 socket.emit('messageRead', {senderId: senderId, reciverId: data.senderId});
@@ -312,7 +347,13 @@
                 let newDiv = document.createElement('div');
 
                 if (element.content_type == 'text') {
-                    newDiv.innerHTML = `<span>${element.content}</span>`;
+                    let newSpan = document.createElement('span');
+                    // newSpan.classList.add('');
+                    newSpan.textContent = `${element.content}`;
+                    newSpan.style.lineBreak = 'anywhere';
+                    newSpan.style.maxWidth = '85%';
+                    newDiv.appendChild(newSpan);
+                    // newDiv.textContent = `<span style="line-break: anywhere; max-width: 85%;">${element.content}</span>`;
                 } else {
                     newDiv.innerHTML = `<img src="/uploads/${element.content}" alt="img" class="border rounded-xl" style="height: 300px; width: 300px">`;
                 }
@@ -337,10 +378,8 @@
 
         const checkMessageBox = () => {
             let message = document.getElementById('message').value;
-            let imgMessage = document.getElementById('img-message').value;
 
-            // check it
-            if (message.length === 0 || message.length > 250) {
+            if ( message.trim().length == 0 || message.trim().length > 65000) {
                 document.getElementById("messageSendBtn").disabled = true;
                 document.getElementById("messageSendBtn").style.opacity = 0.5;
             } else {
@@ -369,7 +408,15 @@
                 URL.revokeObjectURL(output.src) // free memory
             }
 
-            // checkMessageBox();
+            let imgMessage = document.getElementById('img-message').value;
+            if (imgMessage) {
+                document.getElementById("messageSendBtn").disabled = false;
+                document.getElementById("messageSendBtn").style.opacity = 1;
+            } else {
+                document.getElementById("messageSendBtn").disabled = true;
+                document.getElementById("messageSendBtn").style.opacity = 0.5;
+            }
+
         }
     </script>
 </body>

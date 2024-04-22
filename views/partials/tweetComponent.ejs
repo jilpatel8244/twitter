@@ -3,8 +3,13 @@
         <a href="#" class="flex-shrink-0 group block">
             <div class="flex items-center">
                 <div>
-                    <img class="inline-block h-10 w-10 rounded-full"
-                        src="https://pbs.twimg.com/profile_images/1121328878142853120/e-rpjoJi_bigger.png" alt="" />
+                    <% if(singleTweet.profile_img_url) { %>
+                        <img class="inline-block h-10 w-10 rounded-full"
+                            src="/uploads/<%= singleTweet.profile_img_url %>" alt="" />
+                    <% } else { %>
+                        <img class="inline-block h-10 w-10 rounded-full"
+                            src="/assets/profile.png" alt="" />
+                    <% } %>
                 </div>
                 <div class="ml-3">
                     <p class="text-base leading-6 font-medium text-black">
@@ -26,8 +31,7 @@
 
         <% if(singleTweet.media_url) {%>
             <div class="md:flex-shrink pr-6 pt-3">
-                <div class="bg-cover bg-no-repeat bg-center rounded-lg w-full h-64"
-                    style="height: 200px;">
+                <div class="bg-cover bg-no-repeat bg-center rounded-lg size-fit">
                     <img class="w-full h-full"
                         src="/uploads/<%=singleTweet.media_url%>"
                         alt="missing">
@@ -39,18 +43,23 @@
                     <div class="w-full">
                         <div class="flex items-center">
                             <!-- comment span tag -->
-                            <div class="flex-1 text-center">
-                                <span
-                                    class="w-12 mt-1 group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full  hover:text-blue-300">
-                                    <svg class="text-center h-6 w-6" fill="none" stroke-linecap="round"
-                                        stroke-linejoin="round" stroke-width="2" stroke="currentColor"
-                                        viewBox="0 0 24 24">
-                                        <path
-                                            d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z">
-                                        </path>
-                                    </svg>
-                                </span>
-                            </div>
+                            <input type="hidden" name="tweet_id" value="<%= singleTweet.tweet_id %>">
+                            <a href="/get_comments/<%= singleTweet.tweet_id %>" class="flex-1 text-center py-2 m-2">
+
+                                <div class="flex-1 text-center" data-modal-target="crud-modal"
+                                    data-modal-toggle="crud-modal">
+                                    <span
+                                        class="w-12 mt-1 group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full  hover:text-blue-400">
+                                        <svg class="text-center h-6 w-6" fill="none" stroke-linecap="round"
+                                            stroke-linejoin="round" stroke-width="2" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path
+                                                d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z">
+                                            </path>
+                                        </svg>
+                                    </span>
+                                </div>
+                            </a>
 
                                 <!-- retweet span tag -->
                                 <div class="flex-1 text-center py-2 m-2">

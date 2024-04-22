@@ -210,6 +210,7 @@ WHERE tweets.id = ?;
   res.render('../views/pages/comments', {
     user: req.user[0][0],
     tweetId: tweetId,
+    user: req.user[0][0],
     message: '',
     tweet : tweet[0],
     comments: result.map(comment => {
