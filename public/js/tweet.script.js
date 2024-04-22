@@ -231,7 +231,7 @@ const sendDraft = async (tweetId, tweetContent) => {
   }
   if (image != undefined) {
     let { media_url } = image;
-    images.innerHTML = '<img class="w-[25rem] h-[25rem] m-2" src="/uploads/' + media_url + '">';
+    images.innerHTML = '<img class="h-80 m-2" src="/uploads/' + media_url + '">';
   }
   document.getElementById('select-modal').style.display = 'none';
   content.innerText = tweetContent;
