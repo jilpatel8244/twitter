@@ -226,9 +226,11 @@ exports.deleteDraft = async (req, res) => {
 }
 function extractMentionedUsernames(tweetContent) {
   const regex = /@(\w+)/g;
-  const matches = tweetContent.match(regex);
-  if (matches) {
-    return matches.map((match) => match.substring(1));
+  if(tweetContent != undefined){
+    const matches = tweetContent.match(regex);
+    if (matches) {
+      return matches.map((match) => match.substring(1));
+    }
   }
   return [];
 }
@@ -246,9 +248,11 @@ async function getUsersByUsernames(usernames) {
 
 const extractHashtag = (content) => {
   let regx = /#(\w+)/g;
-  let hashTags = content.match(regx);
-  if (hashTags) {
-    return hashTags.map((hashTag) => hashTag.substring(1))
+  if(content != undefined){
+    let hashTags = content.match(regx);
+    if (hashTags) {
+      return hashTags.map((hashTag) => hashTag.substring(1))
+    }
   }
   return [];
 }
