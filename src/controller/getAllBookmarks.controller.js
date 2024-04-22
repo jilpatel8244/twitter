@@ -3,9 +3,8 @@ const logger = require("../../logger/logger");
 
 exports.getAllBookmarks = async (req, res) => {
     try {
-        // console.log(req.user);
-
-        let sql = `select tweets.id as tweet_id, tweets.content, users.name, users.username, tweet_likes.status as isLiked, medias.media_url,
+        
+        let sql = `select tweets.id as tweet_id, tweets.content, users.name, users.username, users.profile_img_url, tweet_likes.status as isLiked, medias.media_url,
         CASE
             WHEN TIMESTAMPDIFF(SECOND, tweets.created_at, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(SECOND, tweets.created_at, NOW()), ' seconds ago')
             WHEN TIMESTAMPDIFF(MINUTE, tweets.created_at, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(MINUTE, tweets.created_at, NOW()), ' minutes ago')
