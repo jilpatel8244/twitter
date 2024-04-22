@@ -41,7 +41,7 @@ async function fetchNotificatons() {
       throw new Error("Failed to fetch notifications");
     }
     const notifications = await response.json();
-    // console.log(notifications);
+    console.log(notifications);
     diplayNotifications(notifications);
   } catch (error) {
     console.error("Error while fetching notifications", error);
@@ -52,35 +52,39 @@ async function fetchNotificatons() {
     const mentionContainer = document.getElementById("mentioncontent");
     const verifiedContainer = document.getElementById("verifiedcontent");
 
-    // console.log(notifications.countNotification);
-    const allcount = document.getElementById("allusercount");
-    allcount.innerHTML = notifications.countNotification - 1 + "+";
-    
     let simpleData = notifications.notifications;
-    simpleData.forEach((notification) => {
-      let notificationHTML = "";
-      notificationHTML = `<div class="mt-2 flex items-center justify-center flex-col">
+    if (simpleData.length < 1) {
+      let noHTML = "";
+      noHTML = ` <div class="mt-2 flex items-center justify-center flex-col">
+      <span class="mt-2 font-medium text-2xl">Nothing to see here — yet</span>
+      <span class="mt-2 font-medium text-sm">
+        When notificatins arrive, you’ll find it here.
+      </span>
+    </div>`;
+      notificationContainer.innerHTML += noHTML;
+    } else {
+      simpleData.forEach((notification) => {
+        let notificationHTML = "";
+        notificationHTML = `<div class="mt-2 flex items-center justify-center flex-col">
           <span class="mt-2 font-medium text-2xl">Nothing to see here — yet</span>
           <span class="mt-2 font-medium text-sm">
             When some notification arrive, you’ll find it here.
           </span>
         </div>`;
-      notificationHTML = "";
-      switch (notification.type) {
-        case "Mention":
-          notificationHTML = `
+        notificationHTML = "";
+        switch (notification.type) {
+          case "Mention":
+            notificationHTML = `
         <div
             class="block w-full px-4 py-2 border-b border-gray-200 cursor-pointer hover:bg-gray-100 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
           >
           <a href="/home/?tweet_id=${notification.tweet_id}"> 
             <div class="flex">
-              
-              <img
-                class="w-10 h-10 ml-2 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500"
-                src="/assets/user.png"
-                alt="Bordered avatar"
-              />
-        
+             <img
+            class="w-10 h-10 p-1 rounded-full"
+            src="/assets/user-icon.png"
+            alt="Bordered avatar"
+             />
               <div class="notification ml-2 flex flex-col mt-2">
                 <span><strong>${notification.related_user_name} </strong>
                   Mentioned you</span>
@@ -89,9 +93,9 @@ async function fetchNotificatons() {
             <div class="ml-2 mt-2"> ${notification.tweet_content}</div>
             </a>
         </div>`;
-          break;
-        case "Follow":
-          notificationHTML = `
+            break;
+          case "Follow":
+            notificationHTML = `
   <div
     class="  w-full px-4 py-2 border-b border-gray-200 cursor-pointer hover:bg-gray-100 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
   >
@@ -113,9 +117,9 @@ async function fetchNotificatons() {
      </div>
     </a>
   </div>`;
-          break;
-        case "Comment":
-          notificationHTML = `
+            break;
+          case "Comment":
+            notificationHTML = `
         
   <div
     class="block w-full px-4 py-2 border-b border-gray-200 cursor-pointer hover:bg-gray-100 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
@@ -141,9 +145,9 @@ async function fetchNotificatons() {
     </a>
   </div>
     `;
-          break;
-        case "Like":
-          notificationHTML = `
+            break;
+          case "Like":
+            notificationHTML = `
   <div
     class="block w-full px-4 py-2 border-b border-gray-200 cursor-pointer hover:bg-gray-100 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
   >
@@ -167,9 +171,9 @@ async function fetchNotificatons() {
     <div class="ml-2 mt-2">${notification.tweet_content}</div>
     </a>
   </div>`;
-          break;
-        case "Retweet":
-          notificationHTML = ` <div
+            break;
+          case "Retweet":
+            notificationHTML = ` <div
     class="block w-full px-4 py-2 border-b border-gray-200 cursor-pointer hover:bg-gray-100 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
   >
   <a href="/home/?tweet_id=${notification.tweet_id}"> 
@@ -193,12 +197,13 @@ async function fetchNotificatons() {
     </a>
   </div>
 `;
-          break;
-        default:
-          console.warn(`Unknown notification type: ${notification.type}`);
-      }
-      notificationContainer.innerHTML += notificationHTML;
-    });
+            break;
+          default:
+            console.warn(`Unknown notification type: ${notification.type}`);
+        }
+        notificationContainer.innerHTML += notificationHTML;
+      });
+    }
     let loginData = notifications.logNotification;
     loginData.forEach((lognotification) => {
       let loginHTML = "";
@@ -242,7 +247,7 @@ async function fetchNotificatons() {
         default:
           console.warn(`Unknown notification type: ${lognotification.type}`);
       }
-      notificationContainer.innerHTML += loginHTML;
+      // notificationContainer.innerHTML += loginHTML;
     });
 
     let verifiedData = notifications.verifiedNotification;
@@ -475,3 +480,18 @@ async function fetchNotificatons() {
 
 // window.addEventListener("load", fetchNotificatons);
 window.addEventListener("DOMContentLoaded", fetchNotificatons);
+
+
+
+
+
+              // <img
+              //   class="w-10 h-10 ml-2 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500"
+              //    if (notification.profile_img_url) {  
+              //      src="/uploads/${notification.profile_img_url}"
+              //   } else { 
+              //     src="https://cdni.iconscout.com/illustration/premium/thumb/female-user-image-8110250-6515859.png?f=webp"
+              //   }                  
+              //   alt="user img"
+              // />
+        
