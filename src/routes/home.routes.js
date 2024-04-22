@@ -8,7 +8,8 @@ const { getHome, get_comment, post_comment } = require('../controller/home.contr
 router.get("/", (req, res) => {
   res.render("pages/index");
 });
-router.get("/home", passport.authenticate('jwt', { session: false }), getHome);
+
+router.get("/home", passport.authenticate('jwt', { session: false, failureRedirect: "/login" }), getHome);
 
 
 // router.post("/home", getHome);

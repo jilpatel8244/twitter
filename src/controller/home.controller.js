@@ -100,6 +100,7 @@ ORDER BY tc.created_at DESC  ;
   let [result] = await connection.execute(sql, [tweetId]);
   res.render('../views/pages/comments', {
     tweetId: tweetId,
+    user: req.user[0][0],
     message: '',
     comments: result.map(comment => {
       if (comment && comment.profile_img_url) {

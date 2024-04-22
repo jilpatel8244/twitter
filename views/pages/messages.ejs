@@ -39,7 +39,7 @@
 <body>
     <div class="p-relative h-screen" style="background-color: white">
         <div class="flex justify-center">
-            <header class=" h-12 py-4 h-auto">
+            <header class=" py-4 h-auto">
                 <!-- Side Navbar (left side) -->
                 <%- include('../partials/sidebar.ejs') %>
             </header>
@@ -162,30 +162,31 @@
         }
     </style>
 
-    <script src="/socket.io/socket.io.js"></script>
+    
+
+    <!-- <script src="/socket.io/socket.io.js"></script> -->
 
     <script>
-        let socket = io();
+        // let socket = io();
 
-        let senderId = '<%= user.id %>';
+        // let senderId = '<%= user.id %>';
+
         let reciverId;
 
         // remove selected image
         document.getElementById('img-message').value = '';
 
 
-        socket.on('connect', () => {
-            console.log('connected to server ' + socket.id);
+        // socket.on('connect', () => {
+        //     console.log('connected to server ' + socket.id);
 
-            socket.emit('user-connected', senderId);
-            socket.emit('getUnreadMessages', senderId);     
-        });
+        //     socket.emit('user-connected', senderId);
+        //     socket.emit('getUnreadMessages', senderId);     
+        // });
 
         socket.on('unreadMessages', (data) => {
-            // console.log(data);
 
             data.forEach((element, index) => {
-                console.log(document.getElementById(`${element.sender_id}`).querySelector('.unreadMessageCount'));
                 document.getElementById(`${element.sender_id}`).querySelector('.unreadMessageCount').parentElement.style.display = 'flex';
                 document.getElementById(`${element.sender_id}`).querySelector('.unreadMessageCount').innerHTML = `${element.count}`;
             });
@@ -279,7 +280,13 @@
                     if (imgFile) {
                         newDiv.innerHTML = `<img src="/uploads/${response.message.message}" alt="img" class="border rounded-xl" style="height: 300px; width: 300px">`;
                     } else {
-                        newDiv.innerHTML = `<span>${response.message.message}</span>`;
+                        let newSpan = document.createElement('span');
+                        // newSpan.classList.add('');
+                        newSpan.textContent = `${response.message.message}`;
+                        newSpan.style.lineBreak = 'anywhere';
+                        newSpan.style.maxWidth = '85%';
+                        newDiv.appendChild(newSpan);
+                        // newDiv.innerHTML = `<span style="line-break: anywhere; max-width: 85%;">${response.message.message}</span>`;
                     }
 
                     document.getElementById('chat-container').appendChild(newDiv);
@@ -312,7 +319,13 @@
             newDiv.classList.add('reciver-chat', 'flex', 'justify-start');
 
             if (data.content_type == 'text') {
-                newDiv.innerHTML = `<span>${data.message}</span>`;
+                let newSpan = document.createElement('span');
+                // newSpan.classList.add('');
+                newSpan.textContent = `${data.message}`;
+                newSpan.style.lineBreak = 'anywhere';
+                newSpan.style.maxWidth = '85%';
+                newDiv.appendChild(newSpan);
+                // newDiv.innerHTML = `<span style="line-break: anywhere; max-width: 85%;">${data.message}</span>`;
             } else {
                 newDiv.innerHTML = `<img src="/uploads/${data.message}" alt="img" class="border rounded-xl" style="height: 300px; width: 300px">`;
             }
@@ -334,7 +347,13 @@
                 let newDiv = document.createElement('div');
 
                 if (element.content_type == 'text') {
-                    newDiv.innerHTML = `<span>${element.content}</span>`;
+                    let newSpan = document.createElement('span');
+                    // newSpan.classList.add('');
+                    newSpan.textContent = `${element.content}`;
+                    newSpan.style.lineBreak = 'anywhere';
+                    newSpan.style.maxWidth = '85%';
+                    newDiv.appendChild(newSpan);
+                    // newDiv.textContent = `<span style="line-break: anywhere; max-width: 85%;">${element.content}</span>`;
                 } else {
                     newDiv.innerHTML = `<img src="/uploads/${element.content}" alt="img" class="border rounded-xl" style="height: 300px; width: 300px">`;
                 }
