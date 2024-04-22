@@ -13,7 +13,7 @@ exports.loginHandler = async (req, res) => {
 		if (!userExist.length) {
 			return res.status(401).json({
 				success: false,
-				message: "user not exists",
+				message: "sorry, we couldn't find your account",
 			});
 		}
 
@@ -22,19 +22,16 @@ exports.loginHandler = async (req, res) => {
 
 			return res.status(401).json({
 				success: false,
-				message: "user not activated",
+				message: "please activate your account",
 			});
 		}
-
-		console.log(md5(password + userExist[0].salt));
-		console.log(userExist[0].password);
 
 		if (userExist[0].password !== md5(password + userExist[0].salt)) {
 			await connection.query("insert into logs (user_id, is_successfull) values (?, ?)", [userExist[0].id, 0]);
 
 			return res.status(401).json({
 				success: false,
-				message: "password not match",
+				message: "please fill valid data",
 			});
 		}
 
@@ -96,3 +93,8 @@ exports.USER_NAME_EXIST = async (req, res) => {
 		}
 	}
 };
+
+
+exports.logoutHandler = (req, res) => {
+    res.clearCookie('token').render('pages/login');
+}

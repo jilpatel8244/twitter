@@ -1,15 +1,15 @@
 const { createLogger, format, transports } = require('winston');
-const { combine, timestamp, printf } = format;
+const { combine, timestamp, printf, prettyPrint, json } = format;
 
-const myFormat = printf(({ level, message, timestamp }) => {
-    return `${timestamp} [${level}] ${message}`;
-});
+// const myFormat = printf(({ level, message, timestamp }) => {
+//     return `${timestamp} [${level}] ${JSON.stringify(message)}`;
+// });
 
 
 const developmentLogger = () => {
     return createLogger({
         level: 'debug',
-        format: combine(format.colorize(), timestamp({format : "HH:mm:ss"}), myFormat),
+        format: combine(timestamp({format : "HH:mm:ss"}), prettyPrint()),
         // defaultMeta: { service: 'user-service' },
         transports: [new transports.Console()],
     });

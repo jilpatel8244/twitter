@@ -1,6 +1,7 @@
 
 let content = document.getElementById('content');
 let post = document.getElementById('post');
+let profileImgHolder=document.getElementById('profile_img')
 let save = document.getElementById('save');
 let discard = document.getElementById('discard');
 let media = document.getElementById('media')
@@ -20,21 +21,22 @@ document.addEventListener("DOMContentLoaded", function (event) {
 
   document.getElementById('defaultModalButton').onclick = () => {
     clearImages();
-    document.getElementById('defaultModal').style.display = 'block'
+    document.getElementById('defaultModal').style.display = 'block';
+    getProfileImage();
     content.focus();
   };
 
 });
 document.getElementById('close').onclick = () => {
   if (images.childNodes[0] != undefined) {
-    if (content.value.trim() != '' || images.childNodes[0].tagName == 'IMG') {
+    if (content.innerText.trim() != '' || images.childNodes[0].tagName == 'IMG') {
       document.getElementById('popup-modal').style.display = 'block'
     } else {
       document.getElementById('defaultModal').style.display = 'none';
     }
   }
   else {
-    if (content.value.trim() != '') {
+    if (content.innerText.trim() != '') {
       document.getElementById('popup-modal').style.display = 'block'
     } else {
       document.getElementById('defaultModal').style.display = 'none';
@@ -42,7 +44,7 @@ document.getElementById('close').onclick = () => {
   }
 }
 content.oninput = () => {
-  if (content.value.trim() != '') {
+  if (content.innerText.trim() != '') {
     post.style.opacity = '1'
     post.style.cursor = 'pointer'
   }
@@ -51,9 +53,25 @@ content.oninput = () => {
     post.style.cursor = 'default'
   }
 }
+
+const getProfileImage = ()=>{
+  fetch('/tweetPost/profileImage',{
+    method:'GET'
+  })
+  .then((response)=>response.json())
+  .then(profile=>{
+    let profileImg= profile.profileImg;
+    if(profileImg){
+      profileImgHolder.setAttribute('src',"/uploads/"+profileImg)
+    }else{
+      profileImgHolder.setAttribute('src',"/assets/userProfile.png")
+    }
+  })
+}
+
 const tweetInsert = async (status) => {
-  if (content.value.trim() != '' || images.childNodes[0].tagName == 'IMG') {
-    let contentText = content.value;
+  if (content.innerText.trim() != '' || images.childNodes[0].tagName == 'IMG') {
+    let contentText = content.innerText;
     let form = new FormData();
     form.append('content', contentText);
     form.append('media', media.files[0]);
@@ -108,8 +126,7 @@ discard.onclick = () => {
 
 media.onchange = () => {
   getImages();
-  alert(images.childNodes[0].tagName);
-  if (content.value.trim() != '' || images.childNodes[0].tagName == 'IMG') {
+  if (content.innerText.trim() != '' || images.childNodes[0].tagName == 'IMG') {
     post.style.opacity = '1'
     post.style.cursor = 'pointer'
   }
@@ -127,7 +144,7 @@ const getImages = () => {
     fileReader.addEventListener('load', function () {
       post.style.opacity = '1'
       post.style.cursor = 'pointer'
-      photos += '<img class="w-[25rem] h-[25rem] m-2" src="' + this.result + '"/>'
+      photos += '<img class="h-80 m-2" src="' + this.result + '"/>'
       images.style.display = 'block';
       images.innerHTML = photos
     });
@@ -136,6 +153,7 @@ const getImages = () => {
 }
 const clearImages = () => {
   images.innerHTML = "";
+  content.innerText='';
 }
 
 drafts.onclick = () => {
@@ -153,7 +171,6 @@ const displayDraft = async () => {
     return alert(error);
   }
   let list = ""
-  console.log(draftTweet.length);
   if (draftTweet.length == 0) {
     draftList.innerHTML = `<li>
     <p class="text-black text-2xl">Hold that thought</p> 
@@ -174,7 +191,7 @@ const displayDraft = async () => {
       <div class="flex" >
         <input type="checkbox" id="draftRow${number}" name="draftRow${number}" class="hidden" />
         <input type="text" id="${draft.id}" class="hidden" />
-        <div class="w-full text-lg px-2 font-semibold select-none">${draft.content}</div>
+        <div class="w-full text-lg px-2 font-semibold select-none">${draft.content == "" ? "Image" : draft.content }</div>
       </div>
     </label>
   </li>`;
@@ -205,7 +222,6 @@ closeDraft.onclick = () => {
 
 const sendDraft = async (tweetId, tweetContent) => {
   hiddenId.value = tweetId;
-  alert(hiddenId.value);
   let response = await fetch('/tweetPost/displayImage/?id=' + tweetId, {
     method: 'GET'
   })
@@ -215,16 +231,16 @@ const sendDraft = async (tweetId, tweetContent) => {
   }
   if (image != undefined) {
     let { media_url } = image;
-    images.innerHTML = '<img class="w-[25rem] h-[25rem] m-2" src="./uploads/' + media_url + '">';
+    images.innerHTML = '<img class="w-[25rem] h-[25rem] m-2" src="/uploads/' + media_url + '">';
   }
   document.getElementById('select-modal').style.display = 'none';
-  content.value = tweetContent;
+  content.innerText = tweetContent;
   post.style.opacity = '1'
   post.style.cursor = 'pointer'
 }
 
 const tweetUpdate = async (action) => {
-  if (content.value.trim() != '' || images.childNodes[0].tagName == 'IMG') {
+  if (content.innerText.trim() != '' || images.childNodes[0].tagName == 'IMG') {
     let form = new FormData(document.forms[0]);
     form.append('action', action);
     const response = await fetch('/tweetPost/tweetUpdate', {
@@ -384,7 +400,6 @@ finalDelete.onclick = async () => {
     deselect();
     document.getElementById('delete-modal').style.display = 'none';
   }
-  alert(msg);
   selectAll.innerText = 'Select all';
   document.getElementById('delete-modal').style.display = 'none';
   document.getElementById('select-modal').style.display = 'block';

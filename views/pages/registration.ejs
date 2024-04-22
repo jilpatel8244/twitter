@@ -80,7 +80,7 @@
 
     link.style.display = "none"
 
-    function registervalidate() {
+   async function registervalidate() {
       let name = document.getElementById("name").value;
       let username = document.getElementById("username").value;
       let email = document.getElementById("email").value;
@@ -110,18 +110,18 @@
       //   username:username
       // }
 
-      // let status= await isUserExist(usernamedata)
-      // usernamevalidation.innerHTML = "";
-      // if(typeof status =="boolean")
-      // {
-      //   if(!status){
-      //     usernamevalidation.style.color = "red";
-      //     usernamevalidation.innerHTML="change the username";
-      //   }
-      // }
-      // else{
-      //   usernamevalidation.innerHTML=status;
-      // }
+      let status= await isUserExist()
+      usernamevalidation.innerHTML = "";
+      if(typeof status =="boolean")
+      {
+        if(!status){
+          usernamevalidation.style.color = "red";
+          usernamevalidation.innerHTML="change the username";
+        }
+      }
+      else{
+        usernamevalidation.innerHTML=status;
+      }
 
       let emailvalidation1 = document.getElementById("emailvalidation");
 
@@ -202,21 +202,20 @@
         }
       }
     }
-    // console.log(document.forms["registerForm"]["username"]);
-    // let isUserExist = async (username) => {
-    //   console.log(username);
-    //   let response = await fetch("/userExist", {
-    //     method: "POST",
-    //     body: new URLSearchParams(
-    //       new FormData(document.forms["registerForm"])
-    //     ),
-    //   });
-    //   let { isValid, error } = await response.json();
-    //   if (error != undefined) {
-    //     return error;
-    //   }
-    //   return isValid;
-    // };
+    let isUserExist = async (username) => {
+      console.log(username);
+      let response = await fetch("/isUserExist", {
+        method: "POST",
+        body: new URLSearchParams(
+          new FormData(document.forms["registerForm"])
+        ),
+      });
+      let { isValid, error } = await response.json();
+      if (error != undefined) {
+        return error;
+      }
+      return isValid;
+    };
   </script>
 </body>
 

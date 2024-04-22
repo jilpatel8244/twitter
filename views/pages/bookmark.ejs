@@ -68,32 +68,8 @@
 
     <script src="/js/bookmark.script.js"></script>
     <script src="/js/like.script.js"></script>
+    <script src="/js/comment.script"></script>
 </body>
 
 </html>
 
-
-
-<!-- socket.io script that (new message ave to count display karva mate che) -->
-
-<script src="/socket.io/socket.io.js"></script>
-<script>
-
-    let socket = io();
-
-    let senderId = '<%= user.id %>';
-
-    socket.on('connect', () => {
-        console.log('connected to server ' + socket.id);
-
-        socket.emit('user-connected', senderId);
-        socket.emit('getUnreadMessages', senderId);     
-    });
-
-    socket.on('unreadMessages', (data) => {
-        if (data.length) {
-            document.getElementById('messageCount').parentElement.style.display = "flex";
-            document.getElementById('messageCount').innerHTML = `${data.length}`;
-        }
-    });
-</script>
