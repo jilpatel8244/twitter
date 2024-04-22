@@ -39,7 +39,9 @@ exports.post_registration = async (req, res) => {
   }
 }
 exports.USER_NAME_EXIST = async (req, res) => {
+
 	let { username } = req.body;
+ 
 	if (username.trim() == "" || username.trim().length < 3) {
 		return res
 			.status(422)
