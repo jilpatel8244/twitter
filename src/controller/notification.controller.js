@@ -54,7 +54,7 @@ exports.getNotifications = async (req, res) => {
 
 async function getAllNotifications(userId) {
   const [notifications] = await connection.query(
-    `SELECT n.*, u.username AS username, u2.name AS related_user_name, u2.username AS related_username, t.*, t.content AS tweet_content,
+    `SELECT n.*, u.username AS username, u2.name AS related_user_name, u2.username AS related_username,u.profile_img_url, t.*, t.content AS tweet_content,
     n.created_at,
     CASE
       WHEN TIMESTAMPDIFF(SECOND, n.created_at, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(SECOND, n.created_at, NOW()), ' seconds ago')
@@ -71,12 +71,13 @@ async function getAllNotifications(userId) {
     ORDER BY n.created_at DESC;`,
     [userId]
   );
+  console.log(notifications);
   return notifications;
 }
 
 async function getVerifiedNotifications(userId) {
   const [notifications] = await connection.query(
-    `SELECT  f.current_status, n.*, u.username AS username, u2.name AS related_user_name, u2.username AS related_username, t.*, t.content AS tweet_content, n.created_at,
+    `SELECT  f.current_status, n.*, u.username AS username,u.profile_img_url,  u2.name AS related_user_name, u2.username AS related_username, t.*, t.content AS tweet_content, n.created_at,
     CASE
     WHEN TIMESTAMPDIFF(SECOND, t.created_at, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(SECOND, t.created_at, NOW()), ' seconds ago')
     WHEN TIMESTAMPDIFF(MINUTE, t.created_at, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(MINUTE, t.created_at, NOW()), ' minutes ago')
@@ -98,7 +99,7 @@ async function getVerifiedNotifications(userId) {
 
 async function getMentionNotifications(userId) {
   const [mentionNotifications] = await connection.query(
-    `SELECT f.current_status, n.*, u.username AS username, u2.name AS related_user_name, u2.username AS related_username, t.*, t.content AS tweet_content, 
+    `SELECT f.current_status, n.*, u.username AS username,u.profile_img_url,  u2.name AS related_user_name, u2.username AS related_username, t.*, t.content AS tweet_content, 
     CASE
         WHEN TIMESTAMPDIFF(SECOND, n.created_at, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(SECOND, n.created_at, NOW()), ' seconds ago')
         WHEN TIMESTAMPDIFF(MINUTE, n.created_at, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(MINUTE, n.created_at, NOW()), ' minutes ago')

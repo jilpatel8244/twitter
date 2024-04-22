@@ -43,6 +43,27 @@ exports.getHome = async (req, res) => {
   const [rows] = await connection.execute(sql);
   res.render('../views/pages/home', { tweets: rows, user: req.user[0][0] });
 }
+
+
+exports.get_notification = async (req,res) =>{
+  const [notificationCount] = await connection.query(`select count(*) as notificationCount from notifications where user_id = ? and  is_read = 0 and related_user_id != ? ;`,[req.user[0][0].id,req.user[0][0].id]);
+  res.status(200).json({
+      success: true,
+      notificationCount
+  });
+}
+
+exports.post_notification = async(req,res)=>{
+  let {is_read} = req.body;
+  console.log("is read " + is_read);
+  const [count] = await connection.query(`update notifications set is_read = ? where user_id = ?`,[is_read,req.user[0][0].id]);
+  console.log(count);
+  res.status(200).json({
+    success: true,
+    count : count[0],
+});
+}
+
 exports.post_comment = async (req, res) => {
   let { tweetId, comment } = req.body;
 
