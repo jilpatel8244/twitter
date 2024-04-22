@@ -75,7 +75,7 @@ CREATE TABLE `direct_messages` (
   `sender_id` INT NOT NULL,
   `receiver_id` INT NOT NULL,
   `content_type` VARCHAR(255),
-  `content` VARCHAR(255),
+  `content` text,
   `created_at` TIMESTAMP DEFAULT (CURRENT_TIMESTAMP),
   `updated_at` TIMESTAMP on update CURRENT_TIMESTAMP,
   `deleted_at` TIMESTAMP
