@@ -1,0 +1,10 @@
+h1{
+    color: aquamarine;
+    
+}
+
+.sidebar
+{
+    display: flex;
+    flex-direction: column;
+}
