@@ -1,7 +1,7 @@
 function Comment(tweetId) {
     let commentText = document.querySelector('#comments');
     if (commentText.value !== '') {
-        console.log("ok");
+
         fetch('/post_comments', {
             method: 'POST',
             headers: {
@@ -24,12 +24,11 @@ function Comment(tweetId) {
         Swal.fire("Please add your comment!");
     }
 }
-
 function Reply(comment_id) {
     console.log("OK");
     let commentText = document.querySelector('#reply');
     if (commentText.value !== '') {
-        console.log("ok");
+
         fetch('/post_reply', {
             method: 'POST',
             headers: {
@@ -48,7 +47,6 @@ function Reply(comment_id) {
     }
 
 }
-
 
 function show(tweetId) {
     document.querySelector(`.comments_${tweetId}`).style.display = 'block';

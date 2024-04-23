@@ -5,13 +5,6 @@ async function gettweet(route, bodyargs = {}) {
 
     async function getdata(route, bodyargs) {
         let url = window.location.origin + route
-
-
-
-
-        console.log(bodyargs);
-
-
         let data = await fetch(url, {
             method: 'post',
             headers: { 'Content-Type': 'application/json' },
@@ -103,29 +96,24 @@ async function gettweet(route, bodyargs = {}) {
     </span>
     </p>
     </div>
-                </div>
-            </a>
-        </div>
-            <div class="pl-16">
-        <a href="/get_comments/${tweets.tweet_id}">
-                <p class="text-base width-auto font-medium" style="word-wrap: break-word; overflow-wrap: break-word; white-space: normal;"
+    </div>
+    </a>
+    </div>
+    <div class="pl-16">
+    <a href="/get_comments/${tweets.tweet_id}">
+    <p class="text-base width-auto font-medium" style="word-wrap: break-word; overflow-wrap: break-word; white-space: normal;">
+    ${tweets.content}
+    </p>
+    <div class="size-fit pr-6 pt-3">
+    <div class="">
+    <img class="rounded" src="./uploads/${tweets.media_url}" alt="">
+    </div></div></a>
+    <div class="w-full">
+    <div class="flex items-center py-4">
+    <input type="hidden" name="tweet_id" value="${tweets.tweet_id}">
+    <!-- comments span tag -->
 
-                >
-                    ${tweets.content}
-                </p>
-                <div class="size-fit pr-6 pt-3">
-                    <div class="">
-                        <img class="rounded" src="./uploads/${tweets.media_url}" alt="">
-                    </div>
-                </div>
-                </a>
-
-                <div class="w-full">
-                    <div class="flex items-center py-4">
-                        <input type="hidden" name="tweet_id" value="${tweets.tweet_id}">
-                        <!-- comments span tag -->
-
-                        <div onclick="show('${tweets.tweet_id}')" class="flex-1 text-center"
+    <div onclick="show('${tweets.tweet_id}')" class="flex-1 text-center"
                             data-modal-target="crud-modal" data-modal-toggle="crud-modal">
                             <span
                                 class="w-12 mt-1 group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full  hover:text-blue-400">
