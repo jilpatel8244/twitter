@@ -57,11 +57,10 @@ async function getAllNotifications(userId) {
     FROM notifications n
     LEFT JOIN users u ON n.user_id = u.id
     LEFT JOIN users u2 ON n.related_user_id = u2.id
-    LEFT JOIN followers f ON u.id = f.following_id AND u2.id = f.follower_id 
     LEFT JOIN tweets t ON n.tweet_id = t.id
-    WHERE n.user_id = ? AND f.current_status = 1
+    WHERE n.user_id = ? and n.related_user_id != ? 
     ORDER BY n.created_at DESC;`,
-    [userId]
+    [userId, userId]
   );
   // console.log(notifications);
   return notifications;
@@ -91,7 +90,7 @@ async function getVerifiedNotifications(userId) {
 
 async function getMentionNotifications(userId) {
   const [mentionNotifications] = await connection.query(
-    `SELECT f.current_status, n.*, u.username AS username, u2.profile_img_url,  u2.name AS related_user_name, u2.username AS related_username, t.*, t.content AS tweet_content, 
+    ` SELECT f.current_status, n.*, u.username AS username, u2.profile_img_url,  u2.name AS related_user_name, u2.username AS related_username, t.*, t.content AS tweet_content, 
     CASE
         WHEN TIMESTAMPDIFF(SECOND, n.created_at, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(SECOND, n.created_at, NOW()), ' seconds ago')
         WHEN TIMESTAMPDIFF(MINUTE, n.created_at, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(MINUTE, n.created_at, NOW()), ' minutes ago')
@@ -101,10 +100,10 @@ async function getMentionNotifications(userId) {
     FROM notifications n
     LEFT JOIN users u ON n.user_id = u.id
     LEFT JOIN users u2 ON n.related_user_id = u2.id
-    LEFT JOIN followers f ON n.related_user_id = f.follower_id
+    LEFT JOIN followers f ON u.id = f.follower_id AND u2.id = f.following_id 
     LEFT JOIN tweets t ON n.tweet_id = t.id
-    WHERE n.user_id = ? AND u.username IN  (u.username) AND n.type = "Mention" 
-    AND n.user_id = f.following_id  AND n.related_user_id = f.follower_id AND f.is_blocked = 0
+    WHERE n.user_id = 1 AND u.username IN  (u.username) AND n.type = "Mention" 
+    AND f.is_blocked = 0
     ORDER BY n.created_at DESC;`,
     [userId]
   );
