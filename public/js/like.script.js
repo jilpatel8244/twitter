@@ -14,13 +14,22 @@ async function likeHandler(tweetId) {
     if (response.success == true) {
         let likeImg = document.querySelector(`.like_${tweetId}`);
 
-
+        let likeCount = document.getElementById('likeCount'+tweetId);
+        
         if (response.likeStatus) {
+            likeCount.innerHTML = parseInt(likeCount.innerHTML) + 1;
             likeImg.classList.add('fill-red-600', 'text-red-600');
         } else {
+            likeCount.innerHTML = parseInt(likeCount.innerHTML) - 1;
             likeImg.classList.remove('fill-red-600', 'text-red-600');
         }
 
+        if (parseInt(likeCount.innerHTML)) {
+            likeCount.style.display = "block";
+        } else {
+            likeCount.style.display = "none";
+        }
+        
     } else {
 
     }
