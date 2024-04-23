@@ -203,7 +203,7 @@ exports.displayImage = async (req, res) => {
     let result = await conn.query(sql, id);
     let contentSql= "select * from tweets where id=?";
     let [draftContent]=await conn.query(contentSql,id);
-    return res.status(200).json({ 'image': result[0][0] })
+    return res.status(200).json({ 'image': result[0][0],'draftContent':draftContent[0].content})
   }
   catch (err) {
     return res.status(422).json({ 'error': "Image-" + err })
