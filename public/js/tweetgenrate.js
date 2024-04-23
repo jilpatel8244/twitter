@@ -28,31 +28,81 @@ async function gettweet(route, bodyargs = {}) {
     let data = await getdata(route, bodyargs);
 
 
+
+
+
+
+
     let tweet = ""
     data.forEach(tweets => {
+
+        let time = "hello";
+
+        let date1 = new Date(tweets.time);
+        var currentdate = new Date();
+
+        date1 = currentdate - date1;
+        console.log(date1 / 1000 / 60 / 60);
+
+        if ((date1 / 1000 / 60 / 60 / 24) >= 1) {
+            time = ``;
+            time += `${Math.floor(date1 / 1000 / 60 / 60 / 24)}`
+            time += 'Days ago'
+        }
+        else if ((date1 / 1000 / 60 / 60) >= 1) {
+            time = ``;
+            time += `${Math.floor(date1 / 1000 / 60 / 60)}`
+            time += ' Hours ago'
+        }
+        else if ((date1 / 1000 / 60) <= 60) {
+            time = ``;
+            time += `${Math.floor(date1 / 1000 / 60)}`
+            time += ' Minutes ago'
+        }
+        else if ((date1 / 1000) <= 60) {
+            time = '';
+            time += `${Math.floor(date1 / 1000)}`
+            time += ' Seconds ago'
+        }
+
+
+        // if (date1.get()) {
+        //     time = ``;
+        //     time += `${date1.getDay()}`;
+        //     time += ` Days`;
+
+        // }
+        // else if (date1.getHours()) {
+        //     time = ``;
+        //     time += `${date1.getHours()}`;
+        //     time += `Hours`;
+
+        // }
+        // else {
+        //     time = ``;
+        //     time += `${date1.getMinutes()}`;
+        //     time += `minit`;
+        // }
 
 
         tweet += `<li>
     <!--second tweet-->
     <article class="hover:bg-gray-100 transition duration-350 ease-in-out">
-        <div class="flex flex-shrink-0 p-4 pb-0">
-            <a href="#" class="flex-shrink-0 group block">
-                <div class="flex items-center">
-                    <div>
-                        <img class="inline-block h-10 w-10 rounded-full" src="${tweets.profile_img_url}"
-                            alt="">
-                    </div>
-                    <div class="ml-3">
-                        <p class="text-base leading-6 font-medium">
-                        ${tweets.name}<span class="text-gray-400">
-                                   @ ${tweets.username}
-                                </span>
-                                <span
-                                    class="text-sm leading-5 font-medium text-gray-400  transition ease-in-out duration-150">
-                                    ${tweets.time}
-                                </span>
-                        </p>
-                    </div>
+    <div class="flex flex-shrink-0 p-4 pb-0">
+    <a href="#" class="flex-shrink-0 group block">
+    <div class="flex items-center">
+    <div>
+    <img class="inline-block h-10 w-10 rounded-full" src="${tweets.profile_img_url}" alt="">
+    </div>
+    <div class="ml-3">
+    <p class="text-base leading-6 font-medium"> ${tweets.name}<span class="text-gray-400"> @ ${tweets.username}
+    </span>
+    <span
+    class="text-sm leading-5 font-medium text-gray-400  transition ease-in-out duration-150">
+    ${time}
+    </span>
+    </p>
+    </div>
                 </div>
             </a>
         </div>
@@ -142,18 +192,6 @@ async function gettweet(route, bodyargs = {}) {
 
 
 
-
-
-
-
-
-                        
-
-
-
-
-
-
                         <!-- like span tag -->
                         <div class="flex-1 text-center py-2 m-2">
 
@@ -183,27 +221,18 @@ async function gettweet(route, bodyargs = {}) {
 
         }
 
-
-
-
-
-
-
-
-
-
         tweet += ` </span> </div>`
 
 
 
-        tweet += `                                    <!-- share span tag -->
+        tweet += `       <!-- share span tag -->
                         <div class="flex-1 text-center py-2 m-2">
-                            <span
-                                class="w-12 mt-1 group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full  hover:text-blue-400">
-                                <svg class="text-center h-7 w-6" fill="none" stroke-linecap="round"
-                                    stroke-linejoin="round" stroke-width="2" stroke="currentColor"
-                                    viewBox="0 0 24 24">
-                                    <path
+                        <span
+                        class="w-12 mt-1 group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full  hover:text-blue-400">
+                        <svg class="text-center h-7 w-6" fill="none" stroke-linecap="round"
+                        stroke-linejoin="round" stroke-width="2" stroke="currentColor"
+                        viewBox="0 0 24 24">
+                        <path
                                         d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12">
                                     </path>
                                 </svg>

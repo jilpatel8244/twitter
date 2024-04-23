@@ -136,6 +136,7 @@
     <form action="/editprofile/updateProfile" method="POST" enctype=multipart/form-data id="editprofile"
       onsubmit="return editprofilevalidate()" name="editprofile">
       <input id="userId" name="userId" value="<%= profileData.id %>" type="hidden">
+
       <div class="profile-section">
         <div class="cover-photo">
           <label for="coverPhoto">Cover Photo</label>
@@ -216,15 +217,14 @@
 
     async function editprofilevalidate() {
 
-     let val = false
+      let val = false
       if (isValid == true) {
-        val = true ;
+        val = true;
 
-          return val;
+        return val;
 
       }
-      else
-      {
+      else {
         val = false
         return val;
 
@@ -261,11 +261,7 @@
         return isValid = false;
 
       }
-
-
     });
-
-
   </script>
 </body>
 
