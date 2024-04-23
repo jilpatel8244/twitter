@@ -135,9 +135,7 @@ exports.post_comment = async (req, res) => {
 
   let [result] = await connection.execute(sql, [user_id, tweetId, comment]);
   let [comment_mention] = await connection.execute(`SELECT * FROM tweet_comments WHERE tweet_id = ? order by created_at desc`, [tweetId])
-  console.log(comment_mention[0].content);
   const mentionedUsernames = extractMentionedUsernames(comment_mention[0].content);
-  console.log(mentionedUsernames);
   const mentionedUsers = await getUsersByUsernames(mentionedUsernames);
 
   let [tweet_user_id] = await connection.execute(`SELECT user_id FROM tweets WHERE id = ?`, [tweetId])
@@ -148,6 +146,7 @@ exports.post_comment = async (req, res) => {
     await connection.execute(`INSERT INTO notifications (user_id, tweet_id, type, related_user_id)
     VALUES (?, ?, 'Mention', ?);`, [mentionedUsers[0].id, tweetId, user_id]);
   }
+  
   res.json({
     success: result.affectedRows > 0,
     comment: {
