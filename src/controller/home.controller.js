@@ -139,6 +139,8 @@ VALUES (?, ?, ?)
   if (mentionedUsers.length >= 1) {
     let [tweet_user_id] = await connection.execute(`SELECT user_id FROM tweets WHERE id = ?`, [tweetId])
     await connection.execute(`INSERT INTO notifications (user_id, tweet_id, type, related_user_id)
+    VALUES (?, ?, 'Comment', ?);`, [tweet_user_id[0].user_id, tweetId, user_id]);
+    await connection.execute(`INSERT INTO notifications (user_id, tweet_id, type, related_user_id)
 VALUES (?, ?, 'Mention', ?);`, [mentionedUsers[0].id, tweetId, user_id]);
   }
   res.json({

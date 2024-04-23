@@ -105,9 +105,9 @@
                     <!-- Avatar -->
                     <div class="flex flex-1">
                       <div style="margin-top: -6rem;">
-                        <div style="height:9rem; width:9rem;" class="md rounded-full relative avatar">
+                        <div style="height:9rem; width:9rem;" class="md rounded-full avatar">
                           <img style="height:9rem; width:9rem;"
-                            class="md rounded-full relative border-4 border-gray-900"
+                            class="md rounded-full -z-1 border-4 border-gray-900"
                             src="./uploads/<%=userProfileData[0].profile_img_url%>" alt="">
                           <div class="absolute"></div>
                         </div>
@@ -116,7 +116,7 @@
                     <!-- Follow Button -->
                     <div class="flex flex-col text-right">
                       <div
-                        class="flex justify-center  max-h-max whitespace-nowrap focus:outline-none  focus:ring  max-w-max border bg-transparent border-blue-500 text-blue-500 hover:border-blue-800  items-center hover:shadow-lg font-bold py-2 px-4 rounded-full mr-0 ml-auto">
+                        class="flex justify-center -z-1  max-h-max whitespace-nowrap focus:outline-none  focus:ring  max-w-max border bg-transparent border-blue-500 text-blue-500 hover:border-blue-800  items-center hover:shadow-lg font-bold py-2 px-4 rounded-full mr-0 ml-auto">
                         <a href="editprofile?id=<%=userProfileData[0].id%>">Edit Profile</a>
                       </div>
 
@@ -248,6 +248,7 @@
         let postUsername = document.getElementsByClassName("username");
         let profileImage = document.getElementsByClassName("profileImage");
         let postCreatedAt = document.getElementsByClassName("created_at");
+        let media = document.getElementsByClassName("media");
         let postContent = document.getElementsByClassName("content");
         console.log(postName, postUsername, postCreatedAt, postContent);
 
@@ -256,6 +257,7 @@
           postName[i].innerText = value2.postData[i].name;
           postUsername[i].innerText = value2.postData[i].username;
           profileImage[i].setAttribute("src", "./uploads/" + value2.postData[i].profileImage);
+          media[i].setAttribute("src", "./uploads/"+value2.postData[i].media);
           postCreatedAt[i].innerText = value2.postData[i].created_at;
           postContent[i].innerText = value2.postData[i].content;
         }
@@ -291,12 +293,14 @@
         let name = document.getElementsByClassName("name");
         let username = document.getElementsByClassName("username");
         let profileImage = document.getElementsByClassName("profileImage");
+        let media = document.getElementsByClassName("userMedia");
         let createdAt = document.getElementsByClassName("created_at");
         let content = document.getElementsByClassName("content");
 
         let replyerName = document.getElementsByClassName("replyerName");
         let replyerUsername = document.getElementsByClassName("replyerUsername");
-        let retweeterProfileImage = document.getElementsByClassName("retweeterProfileImage");
+        let retweeterProfileImage = document.getElementsByClassName("replyerProfileImage");
+        let retweeterMedia = document.getElementsByClassName("replyerMedia");
         let replyerTweetDate = document.getElementsByClassName("replyerTweetDate");
         let replyerRetweetMessage = document.getElementsByClassName("replyerRetweetMessage");
 
@@ -307,12 +311,14 @@
           name[i].innerText = value1.repliesData[0][i].name;
           username[i].innerText = value1.repliesData[0][i].username;
           profileImage[i].setAttribute("src", "./uploads/" + value1.repliesData[0][i].profileImage);
+          media[i].setAttribute("src", "./uploads/"+ value1.repliesData[0][i].media);
           createdAt[i].innerText = value1.repliesData[0][i].created_at;
           content[i].innerText = value1.repliesData[0][i].content;
 
           replyerName[i].innerText = value1.repliesData[1][i].retweeterName;
           replyerUsername[i].innerText = value1.repliesData[1][i].retweeterUsername;
           retweeterProfileImage[i].setAttribute("src", "./uploads/" + value1.repliesData[1][i].retweeterProfileImage);
+          retweeterMedia[i].setAttribute("src", "./uploads/"+value1.repliesData[1][i].retweeterMedia);
           replyerTweetDate[i].innerText = value1.repliesData[1][i].retweetDate;
           replyerRetweetMessage[i].innerText = value1.repliesData[1][i].retweeterMessage;
 
