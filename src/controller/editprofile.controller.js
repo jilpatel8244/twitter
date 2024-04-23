@@ -27,7 +27,7 @@ exports.getEditprofile = async (req, res) => {
 
 exports.postUpdateProfile = async (req, res) => {
   try {
-      const { username, bio, dob, userId } = req.body;
+      const { name, bio, dob, userId } = req.body;
 
       let coverPhotoUrl = null;
       let displayPhotoUrl = null;
@@ -43,20 +43,20 @@ exports.postUpdateProfile = async (req, res) => {
       }
 
       if (coverPhotoUrl && displayPhotoUrl) {
-        const updateDetail = 'UPDATE users SET username = ?, bio = ?, date_of_birth = ?, cover_img_url = ?, profile_img_url = ? WHERE id = ?';
-        await connection.query(updateDetail, [username, bio, dob, coverPhotoUrl, displayPhotoUrl, userId]);
+        const updateDetail = 'UPDATE users SET name = ?, bio = ?, date_of_birth = ?, cover_img_url = ?, profile_img_url = ? WHERE id = ?';
+        await connection.query(updateDetail, [name, bio, dob, coverPhotoUrl, displayPhotoUrl, userId]);
       } else if (coverPhotoUrl) {
-        const updateDetail = 'UPDATE users SET username = ?, bio = ?, date_of_birth = ?, cover_img_url = ? WHERE id = ?';
-        await connection.query(updateDetail, [username, bio, dob, coverPhotoUrl, userId]);
+        const updateDetail = 'UPDATE users SET name = ?, bio = ?, date_of_birth = ?, cover_img_url = ? WHERE id = ?';
+        await connection.query(updateDetail, [name, bio, dob, coverPhotoUrl, userId]);
       } else if (displayPhotoUrl) {
-        const updateDetail = 'UPDATE users SET username = ?, bio = ?, date_of_birth = ?, profile_img_url = ? WHERE id = ?';
-        await connection.query(updateDetail, [username, bio, dob, displayPhotoUrl, userId]);
+        const updateDetail = 'UPDATE users SET name = ?, bio = ?, date_of_birth = ?, profile_img_url = ? WHERE id = ?';
+        await connection.query(updateDetail, [name, bio, dob, displayPhotoUrl, userId]);
       }
       else
       {
           console.log("hello world");
-        const updateDetail = 'UPDATE users SET username = ?, bio = ?, date_of_birth = ?WHERE id = ?';
-        await connection.query(updateDetail, [username, bio, dob,  userId]);
+        const updateDetail = 'UPDATE users SET name = ?, bio = ?, date_of_birth = ?WHERE id = ?';
+        await connection.query(updateDetail, [name, bio, dob,  userId]);
       }
     
       res.redirect("/profile");
