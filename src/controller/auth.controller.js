@@ -3,6 +3,7 @@ const connection = require("../../config/connection");
 require("dotenv").config();
 const jwt = require("jsonwebtoken");
 const md5 = require("md5");
+const { log } = require("console");
 
 exports.loginHandler = async (req, res) => {
 	let { email, password } = req.body;
@@ -77,6 +78,8 @@ exports.login = (req, res) => {
 
 exports.USER_NAME_EXIST = async (req, res) => {
 	let { username } = req.body;
+
+	console.log("data is " ,req.body);
 	if (username.trim() == "" || username.trim().length < 3) {
 		return res
 			.status(422)

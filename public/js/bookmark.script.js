@@ -10,7 +10,6 @@ async function bookmarkHandler(tweetId) {
     });
 
     let response = await data.json();
-
     if (response.success == true) {
         let bookmarkImg = document.querySelector(`.bookmark_${tweetId}`);
         if (response.bookmarkStatus) {
@@ -28,7 +27,7 @@ async function bookmarkHandler(tweetId) {
                 let allTweets = document.getElementById('allTweets');
                 let newDiv = document.createElement('div');
                 newDiv.innerHTML = `<div class="w-3/5 mx-auto my-8">
-                                        <div class="mb-3">
+                <div class="mb-3">
                                             <h2 class="font-bold text-3xl">Save posts for later</h2>
                                         </div>
                                         <div class="mb-3">

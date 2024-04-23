@@ -12,13 +12,13 @@ function Comment(tweetId) {
                 comment: commentText.value,
             }),
         })
-        .then(response => response.json())
-        .then(data => {
-            commentText.value = '';
-            location.reload();
-        })
-        .catch(error => console.error('Error:', error));
-       
+            .then(response => response.json())
+            .then(data => {
+                commentText.value = '';
+                location.reload();
+            })
+            .catch(error => console.error('Error:', error));
+
     }
     else {
         Swal.fire("Please add your comment!");
@@ -40,13 +40,13 @@ function Reply(comment_id) {
                 comment: commentText.value,
             }),
         })
-        .then(response => response.json())
-        .then(data => {
-        })
-        .catch(error => console.error('Error:', error));
-       
+            .then(response => response.json())
+            .then(data => {
+            })
+            .catch(error => console.error('Error:', error));
+
     }
-    
+
 }
 
 
