@@ -46,7 +46,6 @@ exports.getHome = async (req, res) => {
 `;
 
   const [rows] = await connection.execute(sql);
-  console.log(rows[0]);
 
   let followingSql = `
 SELECT users.username,
@@ -106,9 +105,7 @@ exports.get_notification = async (req, res) => {
 
 exports.post_notification = async (req, res) => {
   let { is_read } = req.body;
-  console.log("is read " + is_read);
   const [count] = await connection.query(`update notifications set is_read = ? where user_id = ?`, [is_read, req.user[0][0].id]);
-  console.log(count);
   res.status(200).json({
     success: true,
     count: count[0],
@@ -126,7 +123,6 @@ exports.post_comment = async (req, res) => {
     return;
   }
 
-  console.log(req.body);
   let user_id = req.user[0][0].id
   let sql = `
         INSERT INTO tweet_comments (user_id, tweet_id, content)
@@ -135,9 +131,7 @@ exports.post_comment = async (req, res) => {
 
   let [result] = await connection.execute(sql, [user_id, tweetId, comment]);
   let [comment_mention] = await connection.execute(`SELECT * FROM tweet_comments WHERE tweet_id = ? order by created_at desc`, [tweetId])
-  console.log(comment_mention[0].content);
   const mentionedUsernames = extractMentionedUsernames(comment_mention[0].content);
-  console.log(mentionedUsernames);
   const mentionedUsers = await getUsersByUsernames(mentionedUsernames);
 
   let [tweet_user_id] = await connection.execute(`SELECT user_id FROM tweets WHERE id = ?`, [tweetId])
@@ -247,7 +241,6 @@ async function getUsersByUsernames(usernames) {
 
 
 exports.post_reply = async (req, res) => {
-  console.log("b;a");
   let comment = req.body;
   let comment_id = req.body.comment_id;
 
@@ -259,7 +252,6 @@ exports.post_reply = async (req, res) => {
     return;
   }
 
-  console.log(req.body);
   let user_id = req.user[0][0].id
   let sql = `
         INSERT INTO reply_comments (user_id, comment_id, content)
@@ -267,7 +259,6 @@ exports.post_reply = async (req, res) => {
     `;
 
   let [result] = await connection.execute(sql, [user_id, comment_id, comment]);
-  console.log(result);
   res.json({
     success: result.affectedRows > 0,
     comment: {
