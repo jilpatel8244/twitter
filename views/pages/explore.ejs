@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
         integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="/sweetalert2.all.min.js"></script>
     <title>X</title>
     <style>
         #bla:after {
@@ -152,6 +153,7 @@
                     <div style="max-width: 600px;" class="margmain">
 
                         <%- include('../partials/explore.ejs')%>
+
 
                     </div>
 
@@ -391,6 +393,7 @@
         }
 
         data1.forEach(element => {
+
             tweet += `   <div class="flex flex-shrink-0 ">
                         <div class="flex-1">
                             <div class="flex items-center w-48">
@@ -401,7 +404,7 @@
                                 </div>
                                 <div class="ml-3 mt-3">
                                     <p class="text-base leading-6 font-medium ">
-                                        ${element.name}
+                                        ${element.name} 
                                     </p>
                                     <p
                                         class="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 transition ease-in-out duration-150">
@@ -681,11 +684,7 @@
 
 
         let follow = document.getElementById(`btnfollow_${id}`);
-
-
         let followdiv = document.getElementById(`followbtn`);
-
-
         if (follow.innerHTML == "following") {
             follow.innerText = "Follow"
             follow.style.backgroundColor = "blue"
@@ -697,13 +696,24 @@
 
 
         }
-
-
-
     }
 
+    // let retweet = document.getElementById("retweet");
+
+    // console.log(retweet);
+
+    // retweet.addEventListener("click", retweethandeler)
 
 
+
+
+
+
+    function retweetgenrate(id) {
+
+
+        alert("RETWEETED")
+    }
 
 </script>
 <script src="/js/like.script.js"></script>

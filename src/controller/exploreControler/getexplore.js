@@ -73,6 +73,8 @@ exports.getTopTweetAndHastag = async (req, res) => {
         ;
       `
         let [result1] = await connection.query(TopTweet);
+        console.log("object", result1);;
+
 
         return res.json({ resultTweet: result1 })
 

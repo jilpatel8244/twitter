@@ -45,8 +45,7 @@ exports.getHome = async (req, res) => {
     END DESC;
 `;
 
-  const [rows] = await connection.execute(sql);
-  console.log(rows[0]);
+  const [rows] = await connection.query(sql);
 
   let followingSql = `
 SELECT users.username,
@@ -90,7 +89,7 @@ ORDER BY
   END DESC;
 `;
 
-  const [result] = await connection.execute(followingSql);
+  const [result] = await connection.query(followingSql);
 
   res.render('../views/pages/home', { tweets: rows, user: req.user[0][0], following: result });
 }
@@ -106,9 +105,7 @@ exports.get_notification = async (req, res) => {
 
 exports.post_notification = async (req, res) => {
   let { is_read } = req.body;
-  console.log("is read " + is_read);
   const [count] = await connection.query(`update notifications set is_read = ? where user_id = ?`, [is_read, req.user[0][0].id]);
-  console.log(count);
   res.status(200).json({
     success: true,
     count: count[0],
@@ -126,21 +123,19 @@ exports.post_comment = async (req, res) => {
     return;
   }
 
-  console.log(req.body);
   let user_id = req.user[0][0].id
   let sql = `
         INSERT INTO tweet_comments (user_id, tweet_id, content)
         VALUES (?, ?, ?)
     `;
 
-  let [result] = await connection.execute(sql, [user_id, tweetId, comment]);
-  let [comment_mention] = await connection.execute(`SELECT * FROM tweet_comments WHERE tweet_id = ? order by created_at desc`, [tweetId])
+  let [result] = await connection.query(sql, [user_id, tweetId, comment]);
+  let [comment_mention] = await connection.query(`SELECT * FROM tweet_comments WHERE tweet_id = ? order by created_at desc`, [tweetId])
   const mentionedUsernames = extractMentionedUsernames(comment_mention[0].content);
   const mentionedUsers = await getUsersByUsernames(mentionedUsernames);
-
-  let [tweet_user_id] = await connection.execute(`SELECT user_id FROM tweets WHERE id = ?`, [tweetId])
-
-  await connection.execute(`INSERT INTO notifications (user_id, tweet_id, type, related_user_id)
+  
+  let [tweet_user_id] = await connection.query(`SELECT user_id FROM tweets WHERE id = ?`, [tweetId])
+  await connection.query(`INSERT INTO notifications (user_id, tweet_id, type, related_user_id)
     VALUES (?, ?, 'Comment', ?);`, [tweet_user_id[0].user_id, tweetId, user_id]);
   if (mentionedUsers.length >= 1) {
     await connection.execute(`INSERT INTO notifications (user_id, tweet_id, type, related_user_id)
@@ -209,10 +204,10 @@ LEFT JOIN tweet_likes ON tweet_likes.tweet_id = tweets.id AND tweet_likes.user_i
 WHERE tweets.id = ?;
 ;
 `;
-  let [tweet] = await connection.execute(tweetSql, [tweetId]);
+  let [tweet] = await connection.query(tweetSql, [tweetId]);
 
 
-  let [result] = await connection.execute(sql, [tweetId]);
+  let [result] = await connection.query(sql, [tweetId]);
   res.render('../views/pages/comments', {
     user: req.user[0][0],
     tweetId: tweetId,
@@ -246,7 +241,6 @@ async function getUsersByUsernames(usernames) {
 
 
 exports.post_reply = async (req, res) => {
-  console.log("b;a");
   let comment = req.body;
   let comment_id = req.body.comment_id;
 
@@ -258,15 +252,13 @@ exports.post_reply = async (req, res) => {
     return;
   }
 
-  console.log(req.body);
   let user_id = req.user[0][0].id
   let sql = `
         INSERT INTO reply_comments (user_id, comment_id, content)
         VALUES (?, ?, ?)
     `;
 
-  let [result] = await connection.execute(sql, [user_id, comment_id, comment]);
-  console.log(result);
+  let [result] = await connection.query(sql, [user_id, comment_id, comment]);
   res.json({
     success: result.affectedRows > 0,
     comment: {
@@ -293,7 +285,7 @@ exports.post_reply = async (req, res) => {
 // ORDER BY tc.created_at DESC  ;
 //   `;
 
-//   let [result] = await connection.execute(sql, [tweetId]);
+//   let [result] = await connection.query(sql, [tweetId]);
 //   res.render('../views/pages/comments', {
 //     tweetId: tweetId,
 //     message: '',
