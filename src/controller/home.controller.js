@@ -144,8 +144,6 @@ exports.post_comment = async (req, res) => {
     VALUES (?, ?, 'Comment', ?);`, [tweet_user_id[0].user_id, tweetId, user_id]);
   if (mentionedUsers.length >= 1) {
     await connection.execute(`INSERT INTO notifications (user_id, tweet_id, type, related_user_id)
-    VALUES (?, ?, 'Comment', ?);`, [tweet_user_id[0].user_id, tweetId, user_id]);
-    await connection.execute(`INSERT INTO notifications (user_id, tweet_id, type, related_user_id)
 VALUES (?, ?, 'Mention', ?);`, [mentionedUsers[0].id, tweetId, user_id]);
   }
   
