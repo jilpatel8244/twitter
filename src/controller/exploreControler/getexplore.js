@@ -53,8 +53,8 @@ exports.getTopTweetAndHastag = async (req, res) => {
           users.profile_img_url as profile_img_url, 
           tweets.content,
           tweets.id as tweet_id,
-          tweet_comments.content as comments, 
-         
+          tweet_comments.content as comments,
+          tweets.created_at as time, 
           medias.media_url as media_url
           FROM users
           JOIN tweets ON users.id = tweets.user_id
@@ -187,7 +187,6 @@ exports.getLatestTweet = async (req, res) => {
               tweets.content,
               tweets.id as tweet_id,
               tweet_comments.content as comments, 
-             
               medias.media_url as media_url
               FROM users
               JOIN tweets ON users.id = tweets.user_id
@@ -215,7 +214,6 @@ exports.getLatestTweet = async (req, res) => {
             tweets.content,
             tweets.id as tweet_id,
             tweet_comments.content as comments, 
-           
             medias.media_url as media_url
             FROM users
             JOIN tweets ON users.id = tweets.user_id

@@ -135,9 +135,9 @@
     <h1>Edit Profile</h1>
     <form action="/editprofile/updateProfile" method="POST" enctype=multipart/form-data id="editprofile"
       onsubmit="return editprofilevalidate()" name="editprofile">
-      <p>user id: <%= profileData.id %>
-      </p>
-      <input id="userId" name="userId" value="<%= profileData.id %>" type="text">
+
+
+      <input id="userId" name="userId" value="<%= profileData.id %>" type="hiddj">
 
       <div class="profile-section">
         <div class="cover-photo">
@@ -219,15 +219,14 @@
 
     async function editprofilevalidate() {
 
-     let val = false
+      let val = false
       if (isValid == true) {
-        val = true ;
+        val = true;
 
-          return val;
+        return val;
 
       }
-      else
-      {
+      else {
         val = false
         return val;
 
