@@ -1,5 +1,5 @@
-const connection = require("../../config/connection");
 const logger = require("../../logger/logger");
+const connection = require("../../config/connection");
 
 exports.notification = async (req, res) => {
   res.render("pages/notification", { user: req.user[0][0] });
@@ -22,7 +22,7 @@ exports.getNotifications = async (req, res) => {
     );
 
     let [notificationCount] = await connection.execute(
-      `select count(*) as count from notifications where user_id = ? and  is_read = 0;`,
+      `select count(*) as count from notifications where user_id = 1 and  is_read = 0 and  type != "Login";`,
       [logger_id]
     );
     let countNotification = notificationCount[0].count;

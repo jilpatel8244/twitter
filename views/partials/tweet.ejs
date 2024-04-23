@@ -1,8 +1,8 @@
 <!-- Main modal -->
 <div id="defaultModal" tabindex="-1" class="hidden top-0 -right-40 z-50 absolute inset-0 items-center w-full md:inset-0 h-screen md:h-screen">
-  <div class="fixed mt-20  top-[30%] p-4 z-[999]  backdrop-blur-sm  left-[50%] w-full flex  justify-center  -translate-x-[50%] -translate-y-[50%] ">
+  <div class="fixed mt-20 top-[30%] p-4 z-[9] backdrop-blur-sm  left-[50%] w-full flex justify-center -translate-x-[53%] -translate-y-[50%] ">
     <!-- Modal content -->
-    <div class=" p-4 bg-white rounded-lg shadow-2xl dark:bg-white sm:p-5 max-w-[500px]  w-[500px]">
+    <div class=" p-4 bg-white rounded-lg shadow-2xl dark:bg-white sm:p-5 max-w-[700px]  w-[592px]">
       <!-- Modal header -->
       <div class="justify-between flex items-center rounded-t  ">
         <p id="close" data-modal-target="popup-modal" data-modal-toggle="popup-modal" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900  rounded-full text-sm p-1.5  inline-flex items-center  " data-modal-toggle="defaultModal" id="close">
@@ -14,7 +14,6 @@
         <p data-modal-target="select-modal" data-modal-toggle="select-modal" id="drafts" class="text-lg hover:bg-opacity-20 rounded-3xl cursor-pointer p-2.5 w-28 px-8 hover:bg-[#8fa2c4] font-semibold text-blue-900 dark:text-blue-500 select-none">
           Drafts
         </p>
-
       </div>
 
 
@@ -28,7 +27,8 @@
             <img id="profile_img" class="inline-block h-10 w-10 rounded-full select-none " src="" alt="">
           </div>
           <div class="flex-1 px-2 pt-2 mt-2">
-            <pre class=" bg-transparent text-gray-700 outline-none font-[Trebuchet MS, sans-serif] font-bold text-xl h-28 font-serif  w-full" placeholder="What is happening?!" name="content" id="content" contenteditable="true"></pre>
+            <pre style="word-wrap: break-word; overflow-wrap: break-word; white-space: normal;"
+            class="max-w-80 text-balance overflow-hidden bg-transparent text-gray-700 outline-none font-[Trebuchet MS, sans-serif] font-bold text-xl h-28 font-serif  w-full" placeholder="What is happening?!" name="content" id="content" contenteditable="true" ></pre>
             <br>
             <div id="images" class="inline-flex"></div>
           </div>
