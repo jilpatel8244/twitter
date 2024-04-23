@@ -20,6 +20,9 @@ const bookmarkRoute = require("./src/routes/bookmark.routes");
 const likeRoute = require("./src/routes/like.routes");
 const messagesRoute = require("./src/routes/messages.routes");
 
+const adminroute = require("./src/routes/admin.routes");
+
+
 const PORT = process.env.PORT || 3000;
 const tweetCreate = require('./src/routes/tweet.routes');
 const logger = require("./logger/logger");
@@ -29,6 +32,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 app.use(express.static("public"));
+app.use(express.static("node_modules/sweetalert2/dist"));
+app.use("/admin", adminroute);
 
 app.use(homeRouter);
 app.use(likeRoute);
@@ -40,7 +45,7 @@ app.use(getTimeZone);
 app.use(notification);
 app.use("/editprofile", editprofile);
 
-app.use('/profile', passport.authenticate('jwt', { session: false,  failureRedirect: "/login"}), getProfileRouter);
+app.use('/profile', passport.authenticate('jwt', { session: false, failureRedirect: "/login" }), getProfileRouter);
 app.set("view engine", "ejs");
 
 app.use("/tweetPost", tweetCreate);
@@ -49,8 +54,8 @@ let connectedUser = {};
 
 //Whenever someone connects this gets executed
 io.on('connection', async function (socket) {
-  logger.info('A user connected : '+ socket.id);
-  
+  logger.info('A user connected : ' + socket.id);
+
   // store userId and socketId when user connects
   socket.on('user-connected', async (userId) => {
     connectedUser[userId] = socket.id;
@@ -105,7 +110,7 @@ io.on('connection', async function (socket) {
   socket.on('existingChats', async (data) => {
     try {
       let sql = `select * from direct_messages where (sender_id = '${data.senderId}' and receiver_id = '${data.reciverId}') or (sender_id = '${data.reciverId}' and receiver_id = '${data.senderId}') order by created_at;`;
-    
+
       let [oldchats] = await connection.query(sql);
 
       socket.emit('loadChats', { oldchats: oldchats });
