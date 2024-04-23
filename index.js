@@ -41,12 +41,6 @@ app.use(notification);
 app.use("/editprofile", editprofile);
 
 app.use('/profile', passport.authenticate('jwt', { session: false,  failureRedirect: "/login"}), getProfileRouter);
-app.use('/like', passport.authenticate('jwt', { session: false }), likeRoute);
-app.use('/bookmark', passport.authenticate('jwt', { session: false }), bookmarkRoute);
-app.use('/messages', passport.authenticate('jwt', { session: false }), messagesRoute);
-
-
-
 app.set("view engine", "ejs");
 
 app.use("/tweetPost", tweetCreate);

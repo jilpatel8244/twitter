@@ -93,7 +93,7 @@ async function fetchNotificatons() {
                   Mentioned you ~ ${notification.time}</span>
               </div>
             </div>
-            <div class="ml-2 mt-2"> ${notification.tweet_content}</div>
+            <pre class="ml-2 mt-2 text-balance font-[Trebuchet MS, sans-serif] font-bold">${notification.tweet_content}</pre>
             </a>
         </div>`;
             break;
@@ -152,7 +152,7 @@ async function fetchNotificatons() {
         <span>${notification.related_username} commented on your post ~ ${notification.time}</span>
       </div>
     </div>
-    <div class="ml-2 mt-2"> ${notification.tweet_content}</div>
+    <pre class="ml-2 mt-2 text-balance font-[Trebuchet MS, sans-serif] font-bold">${notification.tweet_content}</pre>
     </a>
   </div>
     `;
@@ -182,7 +182,7 @@ async function fetchNotificatons() {
         <span>${notification.related_username} liked your post ~ ${notification.time}</span>
       </div>
     </div>
-    <div class="ml-2 mt-2">${notification.tweet_content}</div>
+    <pre class="ml-2 mt-2 text-balance font-[Trebuchet MS, sans-serif] font-bold">${notification.tweet_content}</pre>
     </a>
   </div>`;
             break;
@@ -211,7 +211,7 @@ async function fetchNotificatons() {
         <span>${notification.related_username} retweet your post ~ ${notification.time}</span>
       </div>
     </div>
-    <div class="ml-2 mt-2"> ${notification.tweet_content}</div>
+    <pre class="ml-2 mt-2 text-balance font-[Trebuchet MS, sans-serif] font-bold">${notification.tweet_content}</pre>
     </a>
   </div>
 `;
@@ -314,7 +314,7 @@ async function fetchNotificatons() {
                 <span><strong>${verifiednotification.username} </strong> post a tweet ~ ${verifiednotification.time}</span>
               </div>
             </div>
-            <div class="ml-2 mt-2"> ${verifiednotification.tweet_content}</div>
+            <pre class="ml-2 mt-2 text-balance font-[Trebuchet MS, sans-serif] font-bold">${verifiednotification.tweet_content}</pre>
             </a>
           </div>`;
             break;
@@ -374,7 +374,7 @@ async function fetchNotificatons() {
                     <span><strong>${verifiednotification.related_user_name} </strong> commented on <strong> ${verifiednotification.username}'s</strong> post ~ ${verifiednotification.time}</span>
                   </div>
                 </div>
-                <div class="ml-2 mt-2"> ${verifiednotification.tweet_content}</div>
+                <pre class="ml-2 mt-2 text-balance font-[Trebuchet MS, sans-serif] font-bold">${verifiednotification.tweet_content}</pre>
                 </a>
               </div>
                 `;
@@ -405,7 +405,7 @@ async function fetchNotificatons() {
                     <span><strong>${verifiednotification.related_user_name} </strong> liked  <strong> ${verifiednotification.username}'s</strong> post ~ ${verifiednotification.time}</span>
                   </div>
                 </div>
-                <div class="ml-2 mt-2">${verifiednotification.tweet_content}</div>
+                <pre class="ml-2 mt-2 text-balance font-[Trebuchet MS, sans-serif] font-bold">${verifiednotification.tweet_content}</pre>
                 </a>
               </div>`;
             break;
@@ -433,7 +433,7 @@ async function fetchNotificatons() {
                     <span><strong>${verifiednotification.related_user_name} </strong> retweet  <strong> ${verifiednotification.username}'s</strong> post  ~ ${verifiednotification.time}</span>
                   </div>
                 </div>
-                <div class="ml-2 mt-2"> ${verifiednotification.tweet_content}</div>
+                <pre class="ml-2 mt-2 text-balance font-[Trebuchet MS, sans-serif] font-bold">${verifiednotification.tweet_content}</pre>
                 </a>
               </div>
          `;
@@ -460,7 +460,7 @@ async function fetchNotificatons() {
                       <span> <strong>Mentioned ${verifiednotification.username}</strong> in their tweet </span>
                   </div>
                 </div>
-                <div class="ml-4 mt-4"> ${verifiednotification.tweet_content}</div>
+                <pre class="ml-2 mt-2 text-balance font-[Trebuchet MS, sans-serif] font-bold">${verifiednotification.tweet_content}</pre>
                 </a>
               </div>`;
             break;
@@ -498,7 +498,7 @@ async function fetchNotificatons() {
       if (${mentionNotification.profile_img_url}) {  
          src="./uploads/${mentionNotification.profile_img_url}"
       } else { 
-        src="/assets/profile.png"
+        src="/assets/userProfile.png"
       }                  
       alt="user img"
     />
@@ -508,7 +508,7 @@ async function fetchNotificatons() {
             @${mentionNotification.related_username} ~ ${mentionNotification.time}</span>
         </div>
       </div>
-      <div class="ml-2 mt-2"> ${mentionNotification.tweet_content}</div>
+      <pre class="ml-2 mt-2 text-balance font-[Trebuchet MS, sans-serif] font-bold">${mentionNotification.tweet_content}</pre>
       </a>
 </div>`;
         mentionContainer.innerHTML += mentionHTML;
