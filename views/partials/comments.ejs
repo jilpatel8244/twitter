@@ -47,12 +47,8 @@
                 </p>
                 <div class="size-fit pr-6 pt-3">
                     <div>
-                        <% if(tweet.profile_img_url) { %>
-                            <img class="inline-block h-10 w-10 rounded-full" src="/uploads/<%= tweet.profile_img_url %>"
+                            <img class="" src="/uploads/<%= tweet.media_url %>"
                                 alt="" />
-                            <% } else { %>
-                                <img class="inline-block h-10 w-10 rounded-full" src="/assets/profile.png" alt="" />
-                                <% } %>
                     </div>
                 </div>
             </a>
@@ -168,9 +164,6 @@
     <div class="border">
         <input type="hidden" name="tweet_id" value="<%= tweetId %>">
         <div class="bg-slate-100 flex p-4">
-            <div class="w-20">
-                <img class="inline-block h-10 w-10 rounded-full" src=" <%= tweet.profile_img_url %>" alt="">
-            </div>
             <textarea name="comment" id="comments" cols="55" rows="2" placeholder="Post your reply"
                 class="w-full bg-slate-100"></textarea>
             <div class="flex items-end">
@@ -196,12 +189,12 @@
     <a href=" #" class=" group block w-full">
                                 <div class="flex items-center relative my-1">
                                     <div>
-                                        <% if(tweet.profile_img_url) { %>
+                                        <% if(comment.profile_img_url) { %>
                                             <img class="inline-block h-10 w-10 rounded-full"
-                                                src="/uploads/<%= tweet.profile_img_url %>" alt="" />
+                                                src="/uploads/<%= comment.profile_img_url %>" alt="" />
                                             <% } else { %>
-                                                <img class="inline-block h-10 w-10 rounded-full" src="/assets/profile.png"
-                                                    alt="" />
+                                                <img class="inline-block h-10 w-10 rounded-full"
+                                                    src="/assets/profile.png" alt="" />
                                                 <% } %>
                                     </div>
                                     <div class="ml-10 w-[80%]">
@@ -219,19 +212,6 @@
                                             <%= comment.content %>
                                         </p>
                                     </div>
-                                    <!-- <div class="bg-slate-100 flex">
-    <textarea name="comment" id="reply" cols="55" rows="2"
-    placeholder="Comment here" class="w-full bg-slate-100"></textarea>
-    <div class="flex items-end">
-    <div class="w-fit flex text-center rounded-full"
-    onclick="Reply('<%= comment.id %>'); return false;">
-    <span
-    class="text-white cursor-pointer inline-flex items-center bg-sky-500 hover:bg-sky-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm px-3 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-    <i class="fa-solid fa-arrow-up"></i></span>
-    </div>
-    
-    </div>
-    </div> -->
                                 </div>
                                 </a>
                             </div>
