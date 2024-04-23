@@ -58,7 +58,9 @@ async function gettweet(route, bodyargs = {}) {
         </div>
             <div class="pl-16">
         <a href="/get_comments/${tweets.tweet_id}">
-                <p class="text-base width-auto font-medium">
+                <p class="text-base width-auto font-medium" style="word-wrap: break-word; overflow-wrap: break-word; white-space: normal;"
+
+                >
                     ${tweets.content}
                 </p>
                 <div class="size-fit pr-6 pt-3">

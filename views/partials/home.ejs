@@ -11,8 +11,7 @@
                 <span>Following</span>
             </div>
             <div class="text-gray-700 w-16 flex font-bold hover:bg-gray-200 hover:text-black p-3"><svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 512 512">
+                    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                     <path
                         d="M495.9 166.6c3.2 8.7 .5 18.4-6.4 24.6l-43.3 39.4c1.1 8.3 1.7 16.8 1.7 25.4s-.6 17.1-1.7 25.4l43.3 39.4c6.9 6.2 9.6 15.9 6.4 24.6c-4.4 11.9-9.7 23.3-15.8 34.3l-4.7 8.1c-6.6 11-14 21.4-22.1 31.2c-5.9 7.2-15.7 9.6-24.5 6.8l-55.7-17.7c-13.4 10.3-28.2 18.9-44 25.4l-12.5 57.1c-2 9.1-9 16.3-18.2 17.8c-13.8 2.3-28 3.5-42.5 3.5s-28.7-1.2-42.5-3.5c-9.2-1.5-16.2-8.7-18.2-17.8l-12.5-57.1c-15.8-6.5-30.6-15.1-44-25.4L83.1 425.9c-8.8 2.8-18.6 .3-24.5-6.8c-8.1-9.8-15.5-20.2-22.1-31.2l-4.7-8.1c-6.1-11-11.4-22.4-15.8-34.3c-3.2-8.7-.5-18.4 6.4-24.6l43.3-39.4C64.6 273.1 64 264.6 64 256s.6-17.1 1.7-25.4L22.4 191.2c-6.9-6.2-9.6-15.9-6.4-24.6c4.4-11.9 9.7-23.3 15.8-34.3l4.7-8.1c6.6-11 14-21.4 22.1-31.2c5.9-7.2 15.7-9.6 24.5-6.8l55.7 17.7c13.4-10.3 28.2-18.9 44-25.4l12.5-57.1c2-9.1 9-16.3 18.2-17.8C227.3 1.2 241.5 0 256 0s28.7 1.2 42.5 3.5c9.2 1.5 16.2 8.7 18.2 17.8l12.5 57.1c15.8 6.5 30.6 15.1 44 25.4l55.7-17.7c8.8-2.8 18.6-.3 24.5 6.8c8.1 9.8 15.5 20.2 22.1 31.2l4.7 8.1c6.1 11 11.4 22.4 15.8 34.3zM256 336a80 80 0 1 0 0-160 80 80 0 1 0 0 160z" />
                 </svg></div>
@@ -88,7 +87,7 @@
             </div>
 
             <div class="flex-1" id="myButton">
-                <button class="bg-sky-500 hover:bg-sky-600 mt-5  font-bold py-2 px-8 rounded-full mr-8 float-right">
+                <button class="bg-sky-500 hover:bg-sky-600 mt-5 font-bold py-2 px-8 rounded-full mr-8 float-right">
                     <span class="text-white"> Post</span>
                 </button>
             </div>
@@ -96,7 +95,6 @@
 
         <hr class="border-gray-200">
     </aside>
-
 
     <ul class="list-none">
         <% tweets.forEach(function(tweet){ %>
@@ -107,8 +105,13 @@
                         <a href="#" class="flex-shrink-0 group block">
                             <div class="flex items-center">
                                 <div>
-                                    <img class="inline-block h-10 w-10 rounded-full" src="/uploads/<%= tweet.profile_img_url %>"
-                                        alt="">
+                                    <% if(tweet.profile_img_url) { %>
+                                        <img class="inline-block h-10 w-10 rounded-full"
+                                            src="/uploads/<%= tweet.profile_img_url %>" alt="" />
+                                        <% } else { %>
+                                            <img class="inline-block h-10 w-10 rounded-full" src="/assets/profile.png"
+                                                alt="" />
+                                            <% } %>
                                 </div>
                                 <div class="ml-3">
                                     <p class="text-base leading-6 font-medium">
@@ -116,7 +119,7 @@
                                                 <%= tweet.username %> .
                                             </span>
                                             <span
-                                                class="text-sm leading-5 font-medium text-gray-400  transition ease-in-out duration-150">
+                                                class="text-sm leading-5 font-medium text-gray-400 transition ease-in-out duration-150">
                                                 <%= tweet.time %>
                                             </span>
                                     </p>
@@ -126,7 +129,8 @@
                     </div>
                     <div class="pl-16">
                         <a href="/get_comments/<%= tweet.tweet_id %>">
-                            <p class="mr-3 text-base width-auto font-medium text-wrap" style="word-wrap: break-word; overflow-wrap: break-word; white-space: normal;">
+                            <p class="mr-3 text-base width-auto font-medium text-wrap"
+                                style="word-wrap: break-word; overflow-wrap: break-word; white-space: normal;">
                                 <%= tweet.content %>
                             </p>
                             <div class="size-fit pr-6 pt-3">
@@ -145,7 +149,7 @@
                                         <div class="flex-1 text-center" data-modal-target="crud-modal"
                                             data-modal-toggle="crud-modal">
                                             <span
-                                                class="w-12 mt-1 group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full  hover:text-blue-400">
+                                                class="w-12 mt-1 group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full hover:text-blue-400">
                                                 <svg class="text-center h-6 w-6" fill="none" stroke-linecap="round"
                                                     stroke-linejoin="round" stroke-width="2" stroke="currentColor"
                                                     viewBox="0 0 24 24">
@@ -161,7 +165,7 @@
                                 <!-- like span tag -->
                                 <div class="flex-1 text-center py-2 m-2">
                                     <span
-                                        class="w-12 mt-1 group flex items-center px-3 py-2 text-base leading-6 font-medium rounded-full  hover:text-red-300">
+                                        class="w-12 mt-1 group flex items-center px-3 py-2 text-base leading-6 font-medium rounded-full hover:text-red-300">
                                         <% if(tweet.isLiked) { %>
                                             <svg class="text-center h-7 w-6 fill-red-600 text-red-600 like_<%= tweet.tweet_id %>"
                                                 fill="none" stroke-linecap="round" stroke-linejoin="round"
@@ -187,7 +191,7 @@
                                 <!-- share span tag -->
                                 <div class="flex-1 text-center py-2 m-2">
                                     <span
-                                        class="w-12 mt-1 group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full  hover:text-blue-300">
+                                        class="w-12 mt-1 group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full hover:text-blue-300">
                                         <svg class="text-center h-7 w-6" fill="none" stroke-linecap="round"
                                             stroke-linejoin="round" stroke-width="2" stroke="currentColor"
                                             viewBox="0 0 24 24">
@@ -197,13 +201,12 @@
                                     </span>
                                 </div>
 
-
                                 <!-- done -->
 
                                 <!-- bookmark span tag -->
                                 <div class="flex-1 text-center py-2 m-2 ">
                                     <span
-                                        class="w-12 mt-1 group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full  hover:text-blue-300">
+                                        class="w-12 mt-1 group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full hover:text-blue-300">
                                         <% if(tweet.isBookmarked) { %>
                                             <svg class="text-center h-7 w-6 fill-blue-300 text-blue-800 bookmark_<%= tweet.tweet_id %>"
                                                 fill="none" stroke-linecap="round" stroke-linejoin="round"
@@ -229,7 +232,7 @@
                                 <!-- views span tag -->
                                 <div class="flex-1 text-center py-2 m-2">
                                     <span href="#"
-                                        class="w-12 mt-1 group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full  hover:text-blue-300">
+                                        class="w-12 mt-1 group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full hover:text-blue-300">
                                         <svg class="text-center h-7 w-6" fill="none" stroke-linecap="round"
                                             stroke-linejoin="round" stroke-width="2" stroke="currentColor"
                                             viewBox="0 0 24 24">
@@ -241,7 +244,6 @@
                                 </div>
                             </div>
                         </div>
-
 
                     </div>
 
@@ -267,13 +269,11 @@
                 <span>Following</span>
             </div>
             <div class="text-gray-700 w-16 flex font-bold hover:bg-gray-200 hover:text-black p-3"><svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 512 512">
-                <path
-                    d="M495.9 166.6c3.2 8.7 .5 18.4-6.4 24.6l-43.3 39.4c1.1 8.3 1.7 16.8 1.7 25.4s-.6 17.1-1.7 25.4l43.3 39.4c6.9 6.2 9.6 15.9 6.4 24.6c-4.4 11.9-9.7 23.3-15.8 34.3l-4.7 8.1c-6.6 11-14 21.4-22.1 31.2c-5.9 7.2-15.7 9.6-24.5 6.8l-55.7-17.7c-13.4 10.3-28.2 18.9-44 25.4l-12.5 57.1c-2 9.1-9 16.3-18.2 17.8c-13.8 2.3-28 3.5-42.5 3.5s-28.7-1.2-42.5-3.5c-9.2-1.5-16.2-8.7-18.2-17.8l-12.5-57.1c-15.8-6.5-30.6-15.1-44-25.4L83.1 425.9c-8.8 2.8-18.6 .3-24.5-6.8c-8.1-9.8-15.5-20.2-22.1-31.2l-4.7-8.1c-6.1-11-11.4-22.4-15.8-34.3c-3.2-8.7-.5-18.4 6.4-24.6l43.3-39.4C64.6 273.1 64 264.6 64 256s.6-17.1 1.7-25.4L22.4 191.2c-6.9-6.2-9.6-15.9-6.4-24.6c4.4-11.9 9.7-23.3 15.8-34.3l4.7-8.1c6.6-11 14-21.4 22.1-31.2c5.9-7.2 15.7-9.6 24.5-6.8l55.7 17.7c13.4-10.3 28.2-18.9 44-25.4l12.5-57.1c2-9.1 9-16.3 18.2-17.8C227.3 1.2 241.5 0 256 0s28.7 1.2 42.5 3.5c9.2 1.5 16.2 8.7 18.2 17.8l12.5 57.1c15.8 6.5 30.6 15.1 44 25.4l55.7-17.7c8.8-2.8 18.6-.3 24.5 6.8c8.1 9.8 15.5 20.2 22.1 31.2l4.7 8.1c6.1 11 11.4 22.4 15.8 34.3zM256 336a80 80 0 1 0 0-160 80 80 0 1 0 0 160z" />
-            </svg></div>
+                    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                    <path
+                        d="M495.9 166.6c3.2 8.7 .5 18.4-6.4 24.6l-43.3 39.4c1.1 8.3 1.7 16.8 1.7 25.4s-.6 17.1-1.7 25.4l43.3 39.4c6.9 6.2 9.6 15.9 6.4 24.6c-4.4 11.9-9.7 23.3-15.8 34.3l-4.7 8.1c-6.6 11-14 21.4-22.1 31.2c-5.9 7.2-15.7 9.6-24.5 6.8l-55.7-17.7c-13.4 10.3-28.2 18.9-44 25.4l-12.5 57.1c-2 9.1-9 16.3-18.2 17.8c-13.8 2.3-28 3.5-42.5 3.5s-28.7-1.2-42.5-3.5c-9.2-1.5-16.2-8.7-18.2-17.8l-12.5-57.1c-15.8-6.5-30.6-15.1-44-25.4L83.1 425.9c-8.8 2.8-18.6 .3-24.5-6.8c-8.1-9.8-15.5-20.2-22.1-31.2l-4.7-8.1c-6.1-11-11.4-22.4-15.8-34.3c-3.2-8.7-.5-18.4 6.4-24.6l43.3-39.4C64.6 273.1 64 264.6 64 256s.6-17.1 1.7-25.4L22.4 191.2c-6.9-6.2-9.6-15.9-6.4-24.6c4.4-11.9 9.7-23.3 15.8-34.3l4.7-8.1c6.6-11 14-21.4 22.1-31.2c5.9-7.2 15.7-9.6 24.5-6.8l55.7 17.7c13.4-10.3 28.2-18.9 44-25.4l12.5-57.1c2-9.1 9-16.3 18.2-17.8C227.3 1.2 241.5 0 256 0s28.7 1.2 42.5 3.5c9.2 1.5 16.2 8.7 18.2 17.8l12.5 57.1c15.8 6.5 30.6 15.1 44 25.4l55.7-17.7c8.8-2.8 18.6-.3 24.5 6.8c8.1 9.8 15.5 20.2 22.1 31.2l4.7 8.1c6.1 11 11.4 22.4 15.8 34.3zM256 336a80 80 0 1 0 0-160 80 80 0 1 0 0 160z" />
+                </svg></div>
         </div>
-
 
 
 
@@ -348,7 +348,7 @@
             </div>
 
             <div class="flex-1" id="myButton">
-                <button class="bg-sky-500 hover:bg-sky-600 mt-5  font-bold py-2 px-8 rounded-full mr-8 float-right">
+                <button class="bg-sky-500 hover:bg-sky-600 mt-5 font-bold py-2 px-8 rounded-full mr-8 float-right">
                     <span class="text-white"> Post</span>
                 </button>
             </div>
@@ -356,7 +356,6 @@
 
         <hr class="border-gray-200">
     </aside>
-
 
     <ul class="list-none">
         <% following.forEach(function(tweet){ %>
@@ -367,8 +366,13 @@
                         <a href="#" class="flex-shrink-0 group block">
                             <div class="flex items-center">
                                 <div>
-                                    <img class="inline-block h-10 w-10 rounded-full" src=" <%= tweet.profile_img_url %>"
-                                        alt="">
+                                    <% if(tweet.profile_img_url) { %>
+                                        <img class="inline-block h-10 w-10 rounded-full"
+                                            src="/uploads/<%= tweet.profile_img_url %>" alt="" />
+                                        <% } else { %>
+                                            <img class="inline-block h-10 w-10 rounded-full" src="/assets/profile.png"
+                                                alt="" />
+                                            <% } %>
                                 </div>
                                 <div class="ml-3">
                                     <p class="text-base leading-6 font-medium">
@@ -376,7 +380,7 @@
                                                 <%= tweet.username %> .
                                             </span>
                                             <span
-                                                class="text-sm leading-5 font-medium text-gray-400  transition ease-in-out duration-150">
+                                                class="text-sm leading-5 font-medium text-gray-400 transition ease-in-out duration-150">
                                                 <%= tweet.time %>
                                             </span>
                                     </p>
@@ -386,7 +390,8 @@
                     </div>
                     <div class="pl-16">
                         <a href="/get_comments/<%= tweet.tweet_id %>">
-                            <p class="mr-3 text-base font-medium text-wrap" style="word-wrap: break-word; overflow-wrap: break-word; white-space: normal;">
+                            <p class="mr-3 text-base font-medium text-wrap"
+                                style="word-wrap: break-word; overflow-wrap: break-word; white-space: normal;">
                                 <%= tweet.content %>
                             </p>
                             <div class="size-fit pr-6 pt-3">
@@ -405,7 +410,7 @@
                                         <div class="flex-1 text-center" data-modal-target="crud-modal"
                                             data-modal-toggle="crud-modal">
                                             <span
-                                                class="w-12 mt-1 group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full  hover:text-blue-400">
+                                                class="w-12 mt-1 group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full hover:text-blue-400">
                                                 <svg class="text-center h-6 w-6" fill="none" stroke-linecap="round"
                                                     stroke-linejoin="round" stroke-width="2" stroke="currentColor"
                                                     viewBox="0 0 24 24">
@@ -421,7 +426,7 @@
                                 <!-- like span tag -->
                                 <div class="flex-1 text-center py-2 m-2">
                                     <span
-                                        class="w-12 mt-1 group flex items-center px-3 py-2 text-base leading-6 font-medium rounded-full  hover:text-red-300">
+                                        class="w-12 mt-1 group flex items-center px-3 py-2 text-base leading-6 font-medium rounded-full hover:text-red-300">
                                         <% if(tweet.isLiked) { %>
                                             <svg class="text-center h-7 w-6 fill-red-600 text-red-600 like_<%= tweet.tweet_id %>"
                                                 fill="none" stroke-linecap="round" stroke-linejoin="round"
@@ -447,7 +452,7 @@
                                 <!-- share span tag -->
                                 <div class="flex-1 text-center py-2 m-2">
                                     <span
-                                        class="w-12 mt-1 group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full  hover:text-blue-300">
+                                        class="w-12 mt-1 group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full hover:text-blue-300">
                                         <svg class="text-center h-7 w-6" fill="none" stroke-linecap="round"
                                             stroke-linejoin="round" stroke-width="2" stroke="currentColor"
                                             viewBox="0 0 24 24">
@@ -457,13 +462,12 @@
                                     </span>
                                 </div>
 
-
                                 <!-- done -->
 
                                 <!-- bookmark span tag -->
                                 <div class="flex-1 text-center py-2 m-2 ">
                                     <span
-                                        class="w-12 mt-1 group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full  hover:text-blue-300">
+                                        class="w-12 mt-1 group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full hover:text-blue-300">
                                         <% if(tweet.isBookmarked) { %>
                                             <svg class="text-center h-7 w-6 fill-blue-300 text-blue-800 bookmark_<%= tweet.tweet_id %>"
                                                 fill="none" stroke-linecap="round" stroke-linejoin="round"
@@ -489,7 +493,7 @@
                                 <!-- views span tag -->
                                 <div class="flex-1 text-center py-2 m-2">
                                     <span href="#"
-                                        class="w-12 mt-1 group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full  hover:text-blue-300">
+                                        class="w-12 mt-1 group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full hover:text-blue-300">
                                         <svg class="text-center h-7 w-6" fill="none" stroke-linecap="round"
                                             stroke-linejoin="round" stroke-width="2" stroke="currentColor"
                                             viewBox="0 0 24 24">
@@ -502,7 +506,6 @@
                             </div>
                         </div>
 
-
                     </div>
 
                     <hr class="border-gray-200">
@@ -511,7 +514,6 @@
 
             <% }); %>
     </ul>
-
 
 </section>
 <script src="/js/bookmark.script.js"></script>
