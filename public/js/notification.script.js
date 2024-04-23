@@ -1,12 +1,10 @@
 let alluserBtn = document.getElementById("alluser");
 let alluserContent = document.getElementById("allusercontent");
-
 let verifiedBtn = document.getElementById("verified");
 let verifiedContent = document.getElementById("verifiedcontent");
 let mentionBtn = document.getElementById("mention");
 let mentionContent = document.getElementById("mentioncontent");
 alluserBtn.style.color = "blue";
-
 alluserBtn.addEventListener("click", function () {
   alluserContent.style.display = "block";
   mentionContent.style.display = "none";

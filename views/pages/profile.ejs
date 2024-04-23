@@ -101,7 +101,7 @@
 
                 </div>
                 <div class="w-full p-4">
-                  <div class=" flex w-full">
+                  <div class="flex w-full">
                     <!-- Avatar -->
                     <div class="flex flex-1">
                       <div style="margin-top: -6rem;">
@@ -116,7 +116,7 @@
                     <!-- Follow Button -->
                     <div class="flex flex-col text-right">
                       <div
-                        class="flex justify-center -z-1  max-h-max whitespace-nowrap focus:outline-none  focus:ring  max-w-max border bg-transparent border-blue-500 text-blue-500 hover:border-blue-800  items-center hover:shadow-lg font-bold py-2 px-4 rounded-full mr-0 ml-auto">
+                        class="flex justify-center -z-1 max-h-max whitespace-nowrap focus:outline-none  focus:ring  max-w-max border bg-transparent border-blue-500 text-blue-500 hover:border-blue-800  items-center hover:shadow-lg font-bold py-2 px-4 rounded-full mr-0 ml-auto">
                         <a href="editprofile?id=<%=userProfileData[0].id%>">Edit Profile</a>
                       </div>
 
@@ -234,7 +234,7 @@
     let like = document.getElementById("like");
 
     async function fetchPosts() {
-      tab.innerHTML="";
+      tab.innerHTML = " ";
       let postDetails = await fetch('/profile/post', {
         method: "GET"
       }).then((value) => {
@@ -242,6 +242,7 @@
       }).then((value2) => {
         console.log(value2.postData);
         for (let i = 0; i < value2.postData.length; i++) {
+          console.log(i);
           tab.innerHTML += `<%- include('../partials/post.ejs')%>`;
         }
         let postName = document.getElementsByClassName("name");
@@ -250,9 +251,11 @@
         let postCreatedAt = document.getElementsByClassName("created_at");
         let media = document.getElementsByClassName("media");
         let postContent = document.getElementsByClassName("content");
+        let postIdElement = document.getElementsByClassName("comment");
         console.log(postName, postUsername, postCreatedAt, postContent);
+        console.log("comment href",postIdElement);
+        console.log("Data length",value2.postData.length);
 
-        // console.log(postCount);
         for (let i = 0; i < value2.postData.length; i++) {
           postName[i].innerText = value2.postData[i].name;
           postUsername[i].innerText = value2.postData[i].username;
@@ -260,6 +263,8 @@
           media[i].setAttribute("src", "./uploads/"+value2.postData[i].media);
           postCreatedAt[i].innerText = value2.postData[i].created_at;
           postContent[i].innerText = value2.postData[i].content;
+          postIdElement[i].setAttribute("href", "get_comments/"+value2.postData[i].id);
+                   
         }
       });
 
