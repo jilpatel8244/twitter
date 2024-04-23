@@ -242,6 +242,7 @@ const sendDraft = async (tweetId, tweetContent) => {
 const tweetUpdate = async (action) => {
   if (content.innerText.trim() != '' || images.childNodes[0].tagName == 'IMG') {
     let form = new FormData(document.forms[0]);
+    form.append('content',content.innerText);
     form.append('action', action);
     const response = await fetch('/tweetPost/tweetUpdate', {
       method: 'POST',
