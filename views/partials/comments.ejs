@@ -18,7 +18,12 @@
             <a href="#" class="flex-shrink-0 group block">
                 <div class="flex items-center">
                     <div>
-                        <img class="inline-block h-10 w-10 rounded-full" src=" <%= tweet.profile_img_url %>" alt="">
+                        <% if(tweet.profile_img_url) { %>
+                            <img class="inline-block h-10 w-10 rounded-full" src="/uploads/<%= tweet.profile_img_url %>"
+                                alt="" />
+                            <% } else { %>
+                                <img class="inline-block h-10 w-10 rounded-full" src="/assets/profile.png" alt="" />
+                                <% } %>
                     </div>
                     <div class="ml-3">
                         <p class="text-base leading-6 font-medium">
@@ -26,7 +31,7 @@
                                     <%= tweet.username %> .
                                 </span>
                                 <span
-                                    class="text-sm leading-5 font-medium text-gray-400  transition ease-in-out duration-150">
+                                    class="text-sm leading-5 font-medium text-gray-400 transition ease-in-out duration-150">
                                     <%= tweet.time %>
                                 </span>
                         </p>
@@ -36,12 +41,18 @@
         </div>
         <div class="pl-16">
             <a href="/get_comments/<%= tweet.tweet_id %>">
-                <p class="text-base width-auto font-medium">
+                <p class="text-base width-auto font-medium"
+                    style="word-wrap: break-word; overflow-wrap: break-word; white-space: normal;">
                     <%= tweet.content %>
                 </p>
                 <div class="size-fit pr-6 pt-3">
-                    <div class="">
-                        <img class="rounded" src="/uploads/<%= tweet.media_url %>" alt="">
+                    <div>
+                        <% if(tweet.profile_img_url) { %>
+                            <img class="inline-block h-10 w-10 rounded-full" src="/uploads/<%= tweet.profile_img_url %>"
+                                alt="" />
+                            <% } else { %>
+                                <img class="inline-block h-10 w-10 rounded-full" src="/assets/profile.png" alt="" />
+                                <% } %>
                     </div>
                 </div>
             </a>
@@ -55,7 +66,7 @@
                             <div class="flex-1 text-center" data-modal-target="crud-modal"
                                 data-modal-toggle="crud-modal">
                                 <span
-                                    class="w-12 mt-1 group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full  hover:text-blue-400">
+                                    class="w-12 mt-1 group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full hover:text-blue-400">
                                     <svg class="text-center h-6 w-6" fill="none" stroke-linecap="round"
                                         stroke-linejoin="round" stroke-width="2" stroke="currentColor"
                                         viewBox="0 0 24 24">
@@ -71,7 +82,7 @@
                     <!-- like span tag -->
                     <div class="flex-1 text-center py-2 m-2">
                         <span
-                            class="w-12 mt-1 group flex items-center px-3 py-2 text-base leading-6 font-medium rounded-full  hover:text-red-300">
+                            class="w-12 mt-1 group flex items-center px-3 py-2 text-base leading-6 font-medium rounded-full hover:text-red-300">
                             <% if(tweet.isLiked) { %>
                                 <svg class="text-center h-7 w-6 fill-red-600 text-red-600 like_<%= tweet.tweet_id %>"
                                     fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -97,7 +108,7 @@
                     <!-- share span tag -->
                     <div class="flex-1 text-center py-2 m-2">
                         <span
-                            class="w-12 mt-1 group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full  hover:text-blue-300">
+                            class="w-12 mt-1 group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full hover:text-blue-300">
                             <svg class="text-center h-7 w-6" fill="none" stroke-linecap="round" stroke-linejoin="round"
                                 stroke-width="2" stroke="currentColor" viewBox="0 0 24 24">
                                 <path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12">
@@ -106,13 +117,12 @@
                         </span>
                     </div>
 
-
                     <!-- done -->
 
                     <!-- bookmark span tag -->
                     <div class="flex-1 text-center py-2 m-2 ">
                         <span
-                            class="w-12 mt-1 group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full  hover:text-blue-300">
+                            class="w-12 mt-1 group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full hover:text-blue-300">
                             <% if(tweet.isBookmarked) { %>
                                 <svg class="text-center h-7 w-6 fill-blue-300 text-blue-800 bookmark_<%= tweet.tweet_id %>"
                                     fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -138,7 +148,7 @@
                     <!-- views span tag -->
                     <div class="flex-1 text-center py-2 m-2">
                         <span href="#"
-                            class="w-12 mt-1 group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full  hover:text-blue-300">
+                            class="w-12 mt-1 group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full hover:text-blue-300">
                             <svg class="text-center h-7 w-6" fill="none" stroke-linecap="round" stroke-linejoin="round"
                                 stroke-width="2" stroke="currentColor" viewBox="0 0 24 24">
                                 <path
@@ -149,7 +159,6 @@
                     </div>
                 </div>
             </div>
-
 
         </div>
 
@@ -168,7 +177,7 @@
                 <div class="w-fit flex text-center rounded-full" onclick="Comment('<%= tweetId %>'); return false;">
                     <span
                         class="text-white cursor-pointer inline-flex items-center bg-sky-500 hover:bg-sky-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm px-3 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                Reply
+                        Reply
                     </span>
                 </div>
             </div>
@@ -184,40 +193,46 @@
                         <% comments.forEach(function(comment) { %>
                             <input type="hidden" name="tweet_id" value="<%= comment.id %>">
                             <div class="flex flex-shrink-0 p-4 pb-0 border hover:bg-gray-100 transition duration-350 ease-in-out"">
-                                <a href="#" class=" group block w-full">
-                                    <div class="flex items-center relative my-1">
-                                        <div class="flex align-top absolute top-0">
-                                            <img class="inline-block h-8 w-8 rounded-full"
-                                                src="<%= comment.profile_img_url %>" alt="Profile Photo">
-                                        </div>
-                                        <div class="ml-10 w-[80%]">
-                                            <p class="font-bold text-lg text-wrap">
-                                                <%= comment.name %> <span class="font-medium text-sm text-gray-400">
-                                                        <%= comment.username %> .
-                                                    </span>
-                                                    <span
-                                                        class="text-sm leading-5 font-medium text-gray-400 transition ease-in-out duration-150">
-                                                        <%= comment.time %>
-                                                    </span>
-                                            </p>
-                                            <p class="text-base leading-6 font-normal text-wrap">
-                                                <%= comment.content %>
-                                            </p>
-                                        </div>
-                                        <!-- <div class="bg-slate-100 flex">
-                                            <textarea name="comment" id="reply" cols="55" rows="2"
-                                                placeholder="Comment here" class="w-full bg-slate-100"></textarea>
-                                            <div class="flex items-end">
-                                                <div class="w-fit flex text-center rounded-full"
-                                                    onclick="Reply('<%= comment.id %>'); return false;">
-                                                    <span
-                                                        class="text-white cursor-pointer inline-flex items-center bg-sky-500 hover:bg-sky-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm px-3 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                                                        <i class="fa-solid fa-arrow-up"></i></span>
-                                                </div>
-
-                                            </div>
-                                        </div> -->
+    <a href=" #" class=" group block w-full">
+                                <div class="flex items-center relative my-1">
+                                    <div>
+                                        <% if(tweet.profile_img_url) { %>
+                                            <img class="inline-block h-10 w-10 rounded-full"
+                                                src="/uploads/<%= tweet.profile_img_url %>" alt="" />
+                                            <% } else { %>
+                                                <img class="inline-block h-10 w-10 rounded-full" src="/assets/profile.png"
+                                                    alt="" />
+                                                <% } %>
                                     </div>
+                                    <div class="ml-10 w-[80%]">
+                                        <p class="font-bold text-lg text-wrap">
+                                            <%= comment.name %> <span class="font-medium text-sm text-gray-400">
+                                                    <%= comment.username %> .
+                                                </span>
+                                                <span
+                                                    class="text-sm leading-5 font-medium text-gray-400 transition ease-in-out duration-150">
+                                                    <%= comment.time %>
+                                                </span>
+                                        </p>
+                                        <p class="my-2 text-base font-normal text-wrap"
+                                            style="word-wrap: break-word; overflow-wrap: break-word; white-space: normal;">
+                                            <%= comment.content %>
+                                        </p>
+                                    </div>
+                                    <!-- <div class="bg-slate-100 flex">
+    <textarea name="comment" id="reply" cols="55" rows="2"
+    placeholder="Comment here" class="w-full bg-slate-100"></textarea>
+    <div class="flex items-end">
+    <div class="w-fit flex text-center rounded-full"
+    onclick="Reply('<%= comment.id %>'); return false;">
+    <span
+    class="text-white cursor-pointer inline-flex items-center bg-sky-500 hover:bg-sky-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm px-3 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+    <i class="fa-solid fa-arrow-up"></i></span>
+    </div>
+    
+    </div>
+    </div> -->
+                                </div>
                                 </a>
                             </div>
                             <% }); %>
