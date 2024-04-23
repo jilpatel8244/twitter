@@ -407,3 +407,6 @@ finalDelete.onclick = async () => {
   displayDraft();
   deselect();
 }
+const editImg=()=>{
+  
+}
