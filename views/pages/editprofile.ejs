@@ -135,9 +135,7 @@
     <h1>Edit Profile</h1>
     <form action="/editprofile/updateProfile" method="POST" enctype=multipart/form-data id="editprofile"
       onsubmit="return editprofilevalidate()" name="editprofile">
-
-
-      <input id="userId" name="userId" value="<%= profileData.id %>" type="hiddj">
+      <input id="userId" name="userId" value="<%= profileData.id %>" type="hidden">
 
       <div class="profile-section">
         <div class="cover-photo">

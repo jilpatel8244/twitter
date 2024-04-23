@@ -221,27 +221,18 @@ async function gettweet(route, bodyargs = {}) {
 
         }
 
-
-
-
-
-
-
-
-
-
         tweet += ` </span> </div>`
 
 
 
-        tweet += `                                    <!-- share span tag -->
+        tweet += `       <!-- share span tag -->
                         <div class="flex-1 text-center py-2 m-2">
-                            <span
-                                class="w-12 mt-1 group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full  hover:text-blue-400">
-                                <svg class="text-center h-7 w-6" fill="none" stroke-linecap="round"
-                                    stroke-linejoin="round" stroke-width="2" stroke="currentColor"
-                                    viewBox="0 0 24 24">
-                                    <path
+                        <span
+                        class="w-12 mt-1 group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full  hover:text-blue-400">
+                        <svg class="text-center h-7 w-6" fill="none" stroke-linecap="round"
+                        stroke-linejoin="round" stroke-width="2" stroke="currentColor"
+                        viewBox="0 0 24 24">
+                        <path
                                         d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12">
                                     </path>
                                 </svg>
