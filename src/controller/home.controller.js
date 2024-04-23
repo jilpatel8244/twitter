@@ -45,9 +45,10 @@ exports.getHome = async (req, res) => {
     END DESC;
 `;
 
-const [rows] = await connection.execute(sql);
+  const [rows] = await connection.execute(sql);
+  console.log(rows[0]);
 
-let followingSql = `
+  let followingSql = `
 SELECT users.username,
 users.id as user_id, 
 users.name, 
@@ -88,30 +89,30 @@ ORDER BY
     ELSE tweets.created_at
   END DESC;
 `;
- 
-const [result] = await connection.execute(followingSql);
 
-  res.render('../views/pages/home', { tweets: rows, user: req.user[0][0],following: result });
+  const [result] = await connection.execute(followingSql);
+
+  res.render('../views/pages/home', { tweets: rows, user: req.user[0][0], following: result });
 }
 
 
-exports.get_notification = async (req,res) =>{
-  const [notificationCount] = await connection.query(`select count(*) as notificationCount from notifications where user_id = ? and  is_read = 0 and related_user_id != ? ;`,[req.user[0][0].id,req.user[0][0].id]);
+exports.get_notification = async (req, res) => {
+  const [notificationCount] = await connection.query(`select count(*) as notificationCount from notifications where user_id = ? and  is_read = 0 and related_user_id != ? ;`, [req.user[0][0].id, req.user[0][0].id]);
   res.status(200).json({
-      success: true,
-      notificationCount
+    success: true,
+    notificationCount
   });
 }
 
-exports.post_notification = async(req,res)=>{
-  let {is_read} = req.body;
+exports.post_notification = async (req, res) => {
+  let { is_read } = req.body;
   console.log("is read " + is_read);
-  const [count] = await connection.query(`update notifications set is_read = ? where user_id = ?`,[is_read,req.user[0][0].id]);
+  const [count] = await connection.query(`update notifications set is_read = ? where user_id = ?`, [is_read, req.user[0][0].id]);
   console.log(count);
   res.status(200).json({
     success: true,
-    count : count[0],
-});
+    count: count[0],
+  });
 }
 
 exports.post_comment = async (req, res) => {
@@ -137,11 +138,10 @@ exports.post_comment = async (req, res) => {
   const mentionedUsernames = extractMentionedUsernames(comment_mention[0].content);
   const mentionedUsers = await getUsersByUsernames(mentionedUsernames);
 
-  let [tweet_user_id] = await connection.execute(`SELECT user_id FROM tweets WHERE id = ?`, [tweetId]); 
+  let [tweet_user_id] = await connection.execute(`SELECT user_id FROM tweets WHERE id = ?`, [tweetId])
 
   await connection.execute(`INSERT INTO notifications (user_id, tweet_id, type, related_user_id)
-  VALUES (?, ?, 'Comment', ?);`, [tweet_user_id[0].user_id, tweetId, user_id]);
-
+    VALUES (?, ?, 'Comment', ?);`, [tweet_user_id[0].user_id, tweetId, user_id]);
   if (mentionedUsers.length >= 1) {
     await connection.execute(`INSERT INTO notifications (user_id, tweet_id, type, related_user_id)
     VALUES (?, ?, 'Mention', ?);`, [mentionedUsers[0].id, tweetId, user_id]);
@@ -211,20 +211,15 @@ WHERE tweets.id = ?;
 `;
   let [tweet] = await connection.execute(tweetSql, [tweetId]);
 
+
   let [result] = await connection.execute(sql, [tweetId]);
   res.render('../views/pages/comments', {
     user: req.user[0][0],
     tweetId: tweetId,
     user: req.user[0][0],
     message: '',
-    tweet : tweet[0],
-    comments: result.map(comment => {
-      if (comment && comment.profile_img_url) {
-        return comment;
-      } else {
-        return { ...comment, profile_img_url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTOFx557XPIXXmnhk7joe2Pq2uQhb1iCJ688RgQZzH5ZA&s' };
-      }
-    })
+    tweet: tweet[0],
+    comments: result
   });
 
 }

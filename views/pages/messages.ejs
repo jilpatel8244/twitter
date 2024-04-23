@@ -225,7 +225,11 @@
             document.getElementById('selectedUserName').innerHTML = reciverName;
             document.getElementById('selectedUserUsername').innerHTML = `@`+reciverUsername;
             document.getElementById('selectedUserName1').innerHTML = reciverName;
-            document.getElementById('profileImg').src = '/uploads/' + reciverImgUrl;
+            if (reciverImgUrl) {
+                document.getElementById('profileImg').src = '/uploads/' + reciverImgUrl;
+            } else {
+                document.getElementById('profileImg').src = '/assets/profile.png';
+            }
 
             // open the chat box
             document.getElementById('prev-chat-section').style.display = 'none';

@@ -10,7 +10,7 @@ const getToken = (req) => {
     return req.cookies.token;
 }
 
-let opts = {}
+let opts = {};
 
 // opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
 opts.jwtFromRequest = getToken;

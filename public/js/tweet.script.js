@@ -1,7 +1,7 @@
 
 let content = document.getElementById('content');
 let post = document.getElementById('post');
-let profileImgHolder=document.getElementById('profile_img')
+let profileImgHolder = document.getElementById('profile_img')
 let save = document.getElementById('save');
 let discard = document.getElementById('discard');
 let media = document.getElementById('media')
@@ -54,19 +54,19 @@ content.oninput = () => {
   }
 }
 
-const getProfileImage = ()=>{
-  fetch('/tweetPost/profileImage',{
-    method:'GET'
+const getProfileImage = () => {
+  fetch('/tweetPost/profileImage', {
+    method: 'GET'
   })
-  .then((response)=>response.json())
-  .then(profile=>{
-    let profileImg= profile.profileImg;
-    if(profileImg){
-      profileImgHolder.setAttribute('src',"/uploads/"+profileImg)
-    }else{
-      profileImgHolder.setAttribute('src',"/assets/userProfile.png")
-    }
-  })
+    .then((response) => response.json())
+    .then(profile => {
+      let profileImg = profile.profileImg;
+      if (profileImg) {
+        profileImgHolder.setAttribute('src', "/uploads/" + profileImg)
+      } else {
+        profileImgHolder.setAttribute('src', "/assets/userProfile.png")
+      }
+    })
 }
 
 const tweetInsert = async (status) => {
@@ -153,7 +153,7 @@ const getImages = () => {
 }
 const clearImages = () => {
   images.innerHTML = "";
-  content.innerText='';
+  content.innerText = '';
 }
 
 drafts.onclick = () => {
@@ -182,16 +182,15 @@ const displayDraft = async () => {
   else {
     editDraftBlock.style.display = 'block';
   }
-  console.log(draftTweet);
   let number = 1;
   draftTweet.forEach(draft => {
 
     list += `<li>
-    <label for="draftRow${number}"  class="inline-flex items-center justify-between w-full p-5 text-gray-900 bg-white border border-gray-200 rounded-lg cursor-pointer draftList hover:text-gray-900 hover:bg-gray-100 " onclick='sendDraft(${draft.id} , "${draft.content}")'>
+    <label for="draftRow${number}"  class="inline-flex items-center justify-between w-full p-5 text-gray-900 bg-white border border-gray-200 rounded-lg cursor-pointer draftList hover:text-gray-900 hover:bg-gray-100 " onclick='sendDraft(${draft.id})'>
       <div class="flex" >
         <input type="checkbox" id="draftRow${number}" name="draftRow${number}" class="hidden" />
         <input type="text" id="${draft.id}" class="hidden" />
-        <div class="w-full text-lg px-2 font-semibold select-none">${draft.content == "" ? "Image" : draft.content }</div>
+        <div class="w-full text-lg px-2 font-semibold select-none text-balance max-w-80 overflow-hidden">${draft.content == "" ? "Image" : draft.content}</div>
       </div>
     </label>
   </li>`;
@@ -220,12 +219,12 @@ closeDraft.onclick = () => {
   }
 }
 
-const sendDraft = async (tweetId, tweetContent) => {
+const sendDraft = async (tweetId) => {
   hiddenId.value = tweetId;
   let response = await fetch('/tweetPost/displayImage/?id=' + tweetId, {
     method: 'GET'
   })
-  let { image, error } = await response.json();
+  let { image, error, draftContent } = await response.json();
   if (error) {
     return alert(error);
   }
@@ -234,7 +233,7 @@ const sendDraft = async (tweetId, tweetContent) => {
     images.innerHTML = '<img class="h-80 m-2" src="/uploads/' + media_url + '">';
   }
   document.getElementById('select-modal').style.display = 'none';
-  content.innerText = tweetContent;
+  content.innerText = draftContent;
   post.style.opacity = '1'
   post.style.cursor = 'pointer'
 }
@@ -242,7 +241,7 @@ const sendDraft = async (tweetId, tweetContent) => {
 const tweetUpdate = async (action) => {
   if (content.innerText.trim() != '' || images.childNodes[0].tagName == 'IMG') {
     let form = new FormData(document.forms[0]);
-    form.append('content',content.innerText);
+    form.append('content', content.innerText);
     form.append('action', action);
     const response = await fetch('/tweetPost/tweetUpdate', {
       method: 'POST',
@@ -295,7 +294,6 @@ editDraft.onclick = () => {
         if (!checks.checked) {
           unSelected.push(checks);
         }
-        console.log(unSelected);
         if (checksForDelete.length == unSelected.length) {
           selectAll.innerText = 'Select all';
           deleteBtn.disabled = true
