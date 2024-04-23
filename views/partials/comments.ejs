@@ -47,8 +47,7 @@
                 </p>
                 <div class="size-fit pr-6 pt-3">
                     <div>
-                            <img class="" src="/uploads/<%= tweet.media_url %>"
-                                alt="" />
+                        <img class="" src="/uploads/<%= tweet.media_url %>" alt="" />
                     </div>
                 </div>
             </a>
@@ -186,13 +185,14 @@
                         <% comments.forEach(function(comment) { %>
                             <input type="hidden" name="tweet_id" value="<%= comment.id %>">
                             <div class="flex flex-shrink-0 p-4 pb-0 border hover:bg-gray-100 transition duration-350 ease-in-out"">
-    <a href=" #" class=" group block w-full">
+                                <a href=" #" class=" group block w-full">
                                 <div class="flex items-center relative my-1">
                                     <div>
                                         <% if(comment.profile_img_url) { %>
                                             <img class="inline-block h-10 w-10 rounded-full"
                                                 src="/uploads/<%= comment.profile_img_url %>" alt="" />
                                             <% } else { %>
+
                                                 <img class="inline-block h-10 w-10 rounded-full"
                                                     src="/assets/profile.png" alt="" />
                                                 <% } %>
