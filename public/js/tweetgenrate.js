@@ -167,7 +167,7 @@ async function gettweet(route, bodyargs = {}) {
                                 </div>
                             </div>
                         </div>
-                        <div class=" flex-1 text-center py-2 m-2" id="defaultModalButton">
+                        <div class=" flex-1 text-center py-2 m-2" id="retweet" onclick="retweetgenrate(${tweets.tweet_id})">
                             <span
                                 class="w-12 mt-1 group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full  hover:text-green-600">
                                 <svg class="text-center h-7 w-6" fill="none" stroke-linecap="round"
