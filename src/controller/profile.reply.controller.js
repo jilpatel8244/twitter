@@ -16,14 +16,17 @@ exports.getReplies = async (req, res) => {
     const repliesPostDataQuery = `SELECT u.name, u.username, u.profile_img_url as profileImage, t.created_at, t.content,  m.media_url as media, t.id as id FROM users as u INNER JOIN tweets as t ON u.id = t.user_id LEFT JOIN medias as m ON t.id = m.tweet_id WHERE t.id =?`;
     let repliesPostData = [];
     for (let i = 0; i < tweetId.length; i++) {
-      let [[data]] = await connection.query(repliesPostDataQuery, [tweetId[i]]);
+      let [[data]] = await connection.query(repliesPostDataQuery, [tweetId[i]])
       repliesPostData.push(data);
     }
     
 
-    let repliesData = [repliesPostData, replyerData];
-    console.log("\n\n\n\n\n\n\n\n replies data",repliesData);
-    return res.json({ repliesData });
+    let repliesData = [repliesPostData, retweeterData];
+    
+    return res.status(200).json({
+      success: true,
+      message: repliesData
+    });
 
   } catch (error) {
     console.log(error);

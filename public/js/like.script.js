@@ -10,7 +10,7 @@ async function likeHandler(tweetId) {
     });
 
     let response = await data.json();
-
+    
     if (response.success == true) {
         let likeImg = document.querySelector(`.like_${tweetId}`);
 
@@ -31,6 +31,6 @@ async function likeHandler(tweetId) {
         }
         
     } else {
-
+        console.log(response.message);
     }
 }
