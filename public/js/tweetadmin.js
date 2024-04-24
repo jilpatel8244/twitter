@@ -1,7 +1,7 @@
 
-async function getuserpage() {
+async function gettweets() {
     async function getdata() {
-        let url = window.location.origin + "/admin/getusers"
+        let url = window.location.origin + "/admin/gettweet"
         let data = await fetch(url)
         data = await data.json()
         return data.data;
@@ -38,18 +38,24 @@ async function getuserpage() {
             <tr>
 
                 <th scope="col" class="px-6 py-3">
-                    Name
+                    tweet id
                 </th>
                 <th scope="col" class="px-6 py-3">
-                    Username
+                    content
                 </th>
                 <th scope="col" class="px-6 py-3">
-                Email
+                   name   
             </th>
+                <th scope="col" class="px-6 py-3">
+                    username
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Media
+                </th>
               
                 <th scope="col" class="px-6 py-3">
-                    Action
-                </th>
+                Action
+            </th>
             </tr>
         </thead>
         <tbody>`
@@ -60,33 +66,42 @@ async function getuserpage() {
 
         <th scope="row"
             class="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
-            <img src="/assets/user-regular.svg" alt=""
-            class="w-6 h-6 ml-2 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500">
+          
             <div class="ps-3">
 
-                <div class="font-normal text-gray-500">${element.name}</div>
+                <div class="font-normal text-gray-500">${element.id}</div>
             </div>
         </th>
+        <td class="px-6 py-4">
+        ${element.content}
+        </td>
+        <td class="px-6 py-4">
+        <div class="iconname">
+        <img src="/assets/user-regular.svg" alt=""
+        class="w-6 h-6 ml-2 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500">
+        ${element.name}
+        </div>
+        </td>
         <td class="px-6 py-4">
         ${element.username}
         </td>
         <td class="px-6 py-4">
-        ${element.email}
+        <img src="/uploads/${element.media_url}"  class="w-16 md:w-32 max-w-full max-h-full" alt="Media not Avi">
         </td>`
 
-        if (element.is_active == 1) {
+        if (1) {
             user += `<td class="px-6 py-4">
-            <div onclick="userhandel(${element.id})" id="green">
-            <img src="/assets/green.png" >
-       </div>
+            <div>
+                 <img src="/assets/green.png" >
+            </div>
         </td>
-      
+        
     </tr>`
 
         }
         else {
             user += `<td class="px-6 py-4">
-            <div  id="red">
+            <div>
             <img src="/assets/red.png" >
        </div>
         </td>

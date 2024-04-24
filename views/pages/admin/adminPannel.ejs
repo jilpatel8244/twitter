@@ -7,9 +7,14 @@
     <title>Document</title>
     <link href="/css/admin.css" rel="stylesheet" />
     <link href="/css/output.css" rel="stylesheet" />
+
+    <script src="/js/user.admin.js"></script>
+    <script src="/js/tweetadmin.js"></script>
+    <script src="/js/hastag.admin.js"></script>
+
 </head>
 
-<body>
+<body onload="usershandeler()">
 
     <div class="main-container">
         <div class="sidebar">
@@ -57,6 +62,11 @@
 
         </div>
         <div class="content" id="content">
+
+
+
+
+
         </div>
     </div>
 </body>
@@ -69,27 +79,37 @@
     let hastags = document.getElementById("hastags");
     let verification = document.getElementById("verification");
     let support = document.getElementById("support");
+
     users.addEventListener("click", usershandeler)
     tweets.addEventListener("click", tweetshandeler)
     hastags.addEventListener("click", hastagshandeler)
     verification.addEventListener("click", verifyhandeler)
     support.addEventListener("click", supporthandeler)
 
-    function usershandeler() {
+    async function usershandeler() {
 
         document.querySelectorAll(".active").forEach(el => el.classList.remove("active"));
         users.classList.add("active");
         let content = document.getElementById("content");
         console.log(content);
-        content.innerHTML = `<h2> hello </h2>`
+
+        let userscontent = await getuserpage();
+
+        content.innerHTML = userscontent;
+
     }
-    function tweetshandeler() {
+    async function tweetshandeler() {
         document.querySelectorAll(".active").forEach(el => el.classList.remove("active"));
         tweets.classList.add("active");
+        let tweetcontent = await gettweets();
+        content.innerHTML = tweetcontent;
     }
-    function hastagshandeler() {
+    async function hastagshandeler() {
         document.querySelectorAll(".active").forEach(el => el.classList.remove("active"));
         hastags.classList.add("active");
+        let hashcontain = await gethastag();
+        content.innerHTML = hashcontain;
+
     }
     function verifyhandeler() {
         document.querySelectorAll(".active").forEach(el => el.classList.remove("active"));
@@ -98,6 +118,19 @@
     function supporthandeler() {
         document.querySelectorAll(".active").forEach(el => el.classList.remove("active"));
         support.classList.add("active");
+    }
+
+
+
+    function hastagverification() {
+        alert("hello")
+    }
+
+
+    function userhandel(id) {
+
+        
+
     }
 </script>
 

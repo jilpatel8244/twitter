@@ -88,7 +88,10 @@ exports.updateVerify = async (req, res) => {
 exports.getTweets = async (req, res) => {
 
     try {
-        let sql = "select * from tweets"
+        let sql = `
+        select users.name , users.username , tweets.content , tweets.id,medias.media_url  from tweets 
+        left join users on tweets.user_id = users.id
+        left join medias on tweets.id = medias.tweet_id where tweets.is_posted = 1 ; `
         let [result] = await connection.query(sql)
 
         res.json({ data: result })

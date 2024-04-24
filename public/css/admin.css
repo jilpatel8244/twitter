@@ -86,3 +86,33 @@ h1
     margin-top: 10%;
     margin-bottom: -10%;
 }   
+.search-box 
+{
+    width: 25%;
+    text-align: center;
+    border: 1px solid black;
+
+
+}
+
+input
+{
+        width: 100%;
+}
+
+.btn
+{
+    font-size: xx-large;
+}
+
+.tabal
+{
+    max-height: 100%;
+}
+img{
+    margin-right: 10px;
+}
+.iconname
+{
+    display: flex;
+}

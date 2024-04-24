@@ -1,5 +1,6 @@
 
-async function getuserpage() {
+
+async function gethastag() {
     async function getdata() {
         let url = window.location.origin + "/admin/getusers"
         let data = await fetch(url)
@@ -38,14 +39,14 @@ async function getuserpage() {
             <tr>
 
                 <th scope="col" class="px-6 py-3">
-                    Name
+                    Hastag
                 </th>
                 <th scope="col" class="px-6 py-3">
-                    Username
+                    total Tweets
                 </th>
                 <th scope="col" class="px-6 py-3">
-                Email
-            </th>
+                    total users
+            </th>   
               
                 <th scope="col" class="px-6 py-3">
                     Action
@@ -76,7 +77,7 @@ async function getuserpage() {
 
         if (element.is_active == 1) {
             user += `<td class="px-6 py-4">
-            <div onclick="userhandel(${element.id})" id="green">
+            <div onclick="hastagverification()">
             <img src="/assets/green.png" >
        </div>
         </td>
@@ -86,7 +87,7 @@ async function getuserpage() {
         }
         else {
             user += `<td class="px-6 py-4">
-            <div  id="red">
+            <div>
             <img src="/assets/red.png" >
        </div>
         </td>
