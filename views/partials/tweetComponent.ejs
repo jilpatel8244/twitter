@@ -100,7 +100,7 @@
                                                 <% } %>
                                     </span>
                                     <span class="px-1 py-2" id="likeCount<%= singleTweet.tweet_id %>">
-                                        <%= allBookmarkTweetsLikeCount[index].likeCount %>
+                                        <%= singleTweet.likeCount %>
                                     </span>
                                     <script>
                                         if (parseInt(document.getElementById('likeCount'+'<%= singleTweet.tweet_id %>').innerHTML)) {
