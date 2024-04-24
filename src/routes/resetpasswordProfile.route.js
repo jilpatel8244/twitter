@@ -9,13 +9,13 @@ const {
 } = require("../controller/resetpasswordProfile.controller");
 
 router.get(
-  "/resetprofilepassword",
+  "/profilepasswordreset",
   passport.authenticate("jwt", { session: false, failureRedirect: "/login" }),
   resetpassword
 );
 
 router.post(
-  "/resetprofilepassword",
+  "/profilepasswordreset",
   passport.authenticate("jwt", { session: false, failureRedirect: "/login" }),
   reset_password
 );
