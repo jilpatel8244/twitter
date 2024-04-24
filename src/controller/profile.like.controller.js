@@ -6,7 +6,7 @@ exports.getLikes = async (req, res) => {
     console.log(id);
 
     let likesDataQuery = `	select tweets.id as tweet_id, tweets.content, tweets.created_at, users.name, 
-    users.username, users.profile_img_url as profileImage, bookmarks.status as isBookmarked, medias.media_url from tweet_likes 
+    users.username, users.profile_img_url as profileImage, bookmarks.status as isBookmarked, medias.media_url as media from tweet_likes 
     left join tweets on tweet_likes.tweet_id = tweets.id
     left join users on tweets.user_id = users.id
     left join bookmarks on tweet_likes.tweet_id = bookmarks.tweet_id   and 
@@ -20,6 +20,7 @@ exports.getLikes = async (req, res) => {
       return element;
     });
  
+    console.log("\nHello this is what it is: ",likedElement);
     return res.json(likedElement);
 
   } catch (error) {
