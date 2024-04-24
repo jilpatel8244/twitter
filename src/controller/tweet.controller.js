@@ -107,10 +107,11 @@ const insertTweetImage = async (data, res) => {
 
 exports.showDrafts = async (req, res) => {
   try {
-    let sql = 'select * from tweets where deleted_at IS NULL and is_drafted=1 and user_id= ' + req.user[0][0].id;
-    let result = await conn.execute(sql)
+    let sql = 'select * from medias right join tweets on tweets.id = medias.tweet_id where tweets.deleted_at IS NULL and tweets.is_drafted=1 and tweets.user_id= ? order by tweets.created_at desc' ;
+    let result = await conn.execute(sql,[req.user[0][0].id])
     return res.status(200).json({ 'draftTweet': result[0] })
   } catch (err) {
+    console.log(err)
     return res.status(422).json({ 'error': "somethin went wrong" + err })
   }
 }

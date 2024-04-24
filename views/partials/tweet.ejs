@@ -1,9 +1,9 @@
-<!-- Main modal -->
-<div id="defaultModal" tabindex="-1" class="hidden top-0 -right-40 z-50 absolute inset-0 items-center w-full md:inset-0 h-screen md:h-screen">
-  <div class="fixed mt-20 top-[30%] p-4 z-[9] backdrop-blur-sm  left-[50%] w-full flex justify-center -translate-x-[53%] -translate-y-[50%] ">
-    <!-- Modal content -->
+<!-- tweet generate modal -->
+<div id="defaultModal" tabindex="-1" class="hidden  z-[1]  absolute inset-0 items-center w-full md:inset-0 h-full pt-44  md:h-screen">
+  <div class="fixed pt-44 z-[9]  left-[50%] w-full flex justify-center -translate-x-[53%] -translate-y-[50%] ">
+    <!-- tweet generate content -->
     <div class=" p-4 bg-white rounded-lg shadow-2xl dark:bg-white sm:p-5 max-w-[700px]  w-[592px]">
-      <!-- Modal header -->
+      <!-- tweet generate header -->
       <div class="justify-between flex items-center rounded-t  ">
         <p id="close" data-modal-target="popup-modal" data-modal-toggle="popup-modal" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900  rounded-full text-sm p-1.5  inline-flex items-center  " data-modal-toggle="defaultModal" id="close">
           <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -19,7 +19,7 @@
 
 
 
-      <!-- Modal body -->
+      <!-- tweet generate body -->
       <form id="tweet" name="tweet" enctype="multipart/form-data">
         <input type="hidden" id="tweetId" name="tweetId">
         <div class="flex">
@@ -49,7 +49,7 @@
                     </svg>
                   </a>
                 </label>
-                <input type="file" name="media" id="media" accept="image/png, image/gif, image/jpeg, image/jpg, image/webp" class="hidden" multiple="multiple">
+                <input type="file" name="media" id="media" accept="image/png, image/gif, image/jpeg, image/jpg, image/webp" class="hidden" >
               </div>
 
               <div class="flex-1 text-center py-2 m-2">
@@ -68,16 +68,23 @@
               </div>
 
               <div class="flex-1 text-center py-2 m-2">
-                <a href="#" class="mt-1 group flex items-center text-blue-400 px-2 py-2 text-base leading-6 font-medium rounded-full hover:bg-opacity-20 hover:bg-[#8fa2c4] hover:text-blue-600">
+                <a id="emojiBtn" data-modal-target="emojiPicker" data-modal-toggle="emojiPicker"  class="mt-1 group flex items-center text-blue-400 px-2 py-2 text-base leading-6 font-medium rounded-full hover:bg-opacity-20 hover:bg-[#8fa2c4] hover:text-blue-600">
                   <svg class="text-center h-7 w-6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" stroke="currentColor" viewBox="0 0 24 24">
                     <path d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z">
                     </path>
                   </svg>
                 </a>
+                <div id="emojiPicker">
+
+                </div>
+                
+              </div>
+              <div id="removeEmoji" style="display: none;z-index: 10; position: absolute; top:0;left:0;width: 100vw;height: 100vh;">
+
               </div>
             </div>
           </div>
-
+          <script type="module" src="https://cdn.jsdelivr.net/npm/emoji-picker-element@^1/index.js"></script>
           <div class="flex-1 ">
             <p class="bg-blue-400 opacity-25 hover:bg-blue-500 mt-5 text-white font-bold py-2 px-8 rounded-full mr-8 float-right select-none" id="post">
               Post
@@ -92,8 +99,8 @@
 
 
 
-<div id="popup-modal" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0  right-0 left-0 z-50 justify-center  items-center w-full md:inset-0 h-[calc(100%-1rem)] mt-44 max-h-full">
-<div class=" p-4  mx-auto max-w-fit backdrop-blur-sm max-h-screen">
+<div id="popup-modal" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0  right-0 left-0 z-50 justify-center  items-center w-full md:inset-0 backdrop-blur-sm h-full pt-44 max-h-full">
+<div class=" p-4  mx-auto max-w-fit  max-h-screen">
   <div class=" bg-white rounded-2xl shadow-2xl">
     <div class="p-4 md:p-5 ">
 
@@ -110,12 +117,12 @@
 </div>
 </div>
 
-<!-- Main modal -->
-<div id="select-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed  z-50 justify-center items-center w-full  md:inset-0 h-[calc(100%-1rem)] max-h-full">
-<div class=" p-4 w-[40rem] mt-20 mx-auto backdrop-blur-sm max-w-md max-h-full">
-  <!-- Modal content -->
+<!--draft modal -->
+<div id="select-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed  z-50 justify-center items-center w-full backdrop-blur-sm  md:inset-0 h-[calc(100%-1rem)] pt-25 max-h-full">
+<div class=" p-4 w-[40rem] mt-20 mx-auto  max-w-md max-h-full">
+  <!-- draft content -->
   <div class=" bg-white rounded-lg shadow-2xl">
-    <!-- Modal header -->
+    <!-- draft header -->
     <div class="flex items-center justify-between p-4  border-b rounded-t dark:border-gray-600">
       <div class="flex gap-2 ">
         <p class="text-gray-700 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-3xl text-sm h-8 w-8 ms-auto inline-flex justify-center items-center" data-modal-toggle="select-modal" id="closeDraft">
@@ -134,7 +141,7 @@
         </p>
       </div>
     </div>
-    <!-- Modal body -->
+    <!-- draft body -->
     <div class="p-4 md:p-5">
 
       <ul class="space-y-4 mb-4" id='draftList'>
@@ -158,8 +165,8 @@
 </div>
 </div>
 
-<div id="delete-modal" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center  items-center w-full md:inset-0 h-[calc(100%-1rem)] mt-44 max-h-full">
-<div class=" p-4  mx-auto max-w-fit backdrop-blur-sm max-h-screen">
+<div id="delete-modal" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center  items-center w-full backdrop-blur-sm md:inset-0 h-full pt-44 max-h-full">
+<div class=" p-4  mx-auto max-w-fit  max-h-screen">
   <div class=" bg-white rounded-2xl shadow-2xl">
     <div class="p-4 md:p-5 ">
       <h3 class=" text-lg font-normal text-black dark:text-black">Discard unsent posts</h3>

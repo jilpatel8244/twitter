@@ -5,6 +5,7 @@
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "ejs": "^3.1.9",
+    "emoji-picker-element": "^1.21.3",
     "express": "^4.19.2",
     "jsonwebtoken": "^9.0.2",
     "logger": "^0.0.1",
