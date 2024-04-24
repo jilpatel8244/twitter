@@ -114,15 +114,6 @@ exports.post_notification = async (req, res) => {
 
 exports.post_comment = async (req, res) => {
   let { tweetId, comment } = req.body;
-
-  if (comment.length > 255) {
-    res.json({
-      success: false,
-      message: 'Comment is too long',
-    });
-    return;
-  }
-
   let user_id = req.user[0][0].id
   let sql = `
         INSERT INTO tweet_comments (user_id, tweet_id, content)
@@ -130,18 +121,18 @@ exports.post_comment = async (req, res) => {
     `;
 
   let [result] = await connection.query(sql, [user_id, tweetId, comment]);
-  let [comment_mention] = await connection.query(`SELECT * FROM tweet_comments WHERE tweet_id = ? order by created_at desc`, [tweetId])
-  const mentionedUsernames = extractMentionedUsernames(comment_mention[0].content);
-  const mentionedUsers = await getUsersByUsernames(mentionedUsernames);
-  
-  let [tweet_user_id] = await connection.query(`SELECT user_id FROM tweets WHERE id = ?`, [tweetId])
-  await connection.query(`INSERT INTO notifications (user_id, tweet_id, type, related_user_id)
-    VALUES (?, ?, 'Comment', ?);`, [tweet_user_id[0].user_id, tweetId, user_id]);
-  if (mentionedUsers.length >= 1) {
-    await connection.execute(`INSERT INTO notifications (user_id, tweet_id, type, related_user_id)
-VALUES (?, ?, 'Mention', ?);`, [mentionedUsers[0].id, tweetId, user_id]);
-  }
-  
+  //   let [comment_mention] = await connection.query(`SELECT * FROM tweet_comments WHERE tweet_id = ? order by created_at desc`, [tweetId])
+  //   const mentionedUsernames = extractMentionedUsernames(comment_mention[0].content);
+  //   const mentionedUsers = await getUsersByUsernames(mentionedUsernames);
+
+  //   let [tweet_user_id] = await connection.query(`SELECT user_id FROM tweets WHERE id = ?`, [tweetId])
+  //   await connection.query(`INSERT INTO notifications (user_id, tweet_id, type, related_user_id)
+  //     VALUES (?, ?, 'Comment', ?);`, [tweet_user_id[0].user_id, tweetId, user_id]);
+  //   if (mentionedUsers.length >= 1) {
+  //     await connection.execute(`INSERT INTO notifications (user_id, tweet_id, type, related_user_id)
+  // VALUES (?, ?, 'Mention', ?);`, [mentionedUsers[0].id, tweetId, user_id]);
+  //   }
+
   res.json({
     success: result.affectedRows > 0,
     comment: {
@@ -153,7 +144,7 @@ VALUES (?, ?, 'Mention', ?);`, [mentionedUsers[0].id, tweetId, user_id]);
 
 exports.get_comment = async (req, res) => {
   let tweetId = req.params.id;
-  let sql = `SELECT tc.id, tc.user_id, tc.tweet_id, tc.content, tc.created_at, tc.updated_at, tc.deleted_at, u.username, u.name,  u.profile_img_url , t.id as tweet_id,
+  let commentSql = `SELECT tc.id, tc.user_id, tc.tweet_id, tc.content, tc.created_at, tc.updated_at, tc.deleted_at, u.username, u.name,  u.profile_img_url , t.id as tweet_id,
   CASE
       WHEN TIMESTAMPDIFF(SECOND, tc.created_at, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(SECOND, tc.created_at, NOW()+1), ' seconds ago')
       WHEN TIMESTAMPDIFF(MINUTE, tc.created_at, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(MINUTE, tc.created_at, NOW()), ' minutes ago')
@@ -167,6 +158,8 @@ WHERE tc.tweet_id = ?
 ORDER BY tc.created_at DESC  ;
   `;
 
+  let [result] = await connection.query(commentSql, [tweetId]);
+  // console.log(result);
 
   let tweetSql = `
 SELECT users.username,
@@ -206,19 +199,59 @@ WHERE tweets.id = ?;
 `;
   let [tweet] = await connection.query(tweetSql, [tweetId]);
 
-
-  let [result] = await connection.query(sql, [tweetId]);
   res.render('../views/pages/comments', {
-    user: req.user[0][0],
     tweetId: tweetId,
     user: req.user[0][0],
     message: '',
     tweet: tweet[0],
     comments: result
   });
-
 }
 
+exports.post_reply = async (req, res) => {
+  let content = req.body.content;
+  console.log("comment", content);
+
+  let comment_id = req.body.comment_id;
+  console.log("comment_id", comment_id);
+  let user_id = req.user[0][0].id
+  let sql = `
+        INSERT INTO reply_comments (user_id, comment_id, content)
+        VALUES (?, ?, ?)
+    `;
+
+  let [result] = await connection.query(sql, [user_id, comment_id, content]);
+  console.log("result", result);
+  res.json({
+    success: result.affectedRows > 0,
+    comment: {
+      id: result.insertId,
+      comment_id: comment_id,
+      content: content,
+    },
+  });
+}
+
+exports.get_reply = async (req, res) => {
+
+  let comment_id = req.body.comment_id;
+  let sql = `SELECT rc.*, u.username, u.name, u.profile_img_url, t.id as tweet_id,CASE
+
+  WHEN TIMESTAMPDIFF(SECOND, rc.created_at, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(SECOND, rc.created_at, NOW()+1), ' seconds ago')
+  WHEN TIMESTAMPDIFF(MINUTE, rc.created_at, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(MINUTE, rc.created_at, NOW()), ' minutes ago')
+  WHEN TIMESTAMPDIFF(HOUR, rc.created_at, NOW()) < 24 THEN CONCAT(TIMESTAMPDIFF(HOUR, rc.created_at, NOW()), ' hours ago')
+  ELSE CONCAT(DATE_FORMAT(rc.created_at, '%d'), ' ', DATE_FORMAT(rc.created_at, '%M'))
+END as time 
+from reply_comments rc join users u on rc.user_id = u.id
+join tweet_comments t on rc.comment_id = t.id
+WHERE rc.comment_id = ?
+ORDER BY rc.created_at DESC  ;
+  `;
+
+  let [replies] = await connection.query(sql,[comment_id]);
+  res.json({ replies: replies });
+
+}
 function extractMentionedUsernames(tweetContent) {
   const regex = /@(\w+)/g;
   const matches = tweetContent.match(regex);
@@ -238,64 +271,3 @@ async function getUsersByUsernames(usernames) {
   );
   return users;
 }
-
-
-exports.post_reply = async (req, res) => {
-  let comment = req.body;
-  let comment_id = req.body.comment_id;
-
-  if (comment.length > 255) {
-    res.json({
-      success: false,
-      message: 'Comment is too long',
-    });
-    return;
-  }
-
-  let user_id = req.user[0][0].id
-  let sql = `
-        INSERT INTO reply_comments (user_id, comment_id, content)
-        VALUES (?, ?, ?)
-    `;
-
-  let [result] = await connection.query(sql, [user_id, comment_id, comment]);
-  res.json({
-    success: result.affectedRows > 0,
-    comment: {
-      id: result.insertId,
-      comment_id: comment_id,
-      content: comment,
-    },
-  });
-}
-
-// exports.get_reply = async (req, res) => {
-//   let tweetId = req.params.id;
-//   let sql = `SELECT tc.id, tc.user_id, tc.tweet_id, tc.content, tc.created_at, tc.updated_at, tc.deleted_at, u.username, u.name, u.profile_img_url, t.id as tweet_id,
-//   CASE
-//       WHEN TIMESTAMPDIFF(SECOND, tc.created_at, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(SECOND, tc.created_at, NOW()+1), ' seconds ago')
-//       WHEN TIMESTAMPDIFF(MINUTE, tc.created_at, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(MINUTE, tc.created_at, NOW()), ' minutes ago')
-//       WHEN TIMESTAMPDIFF(HOUR, tc.created_at, NOW()) < 24 THEN CONCAT(TIMESTAMPDIFF(HOUR, tc.created_at, NOW()), ' hours ago')
-//       ELSE CONCAT(DATE_FORMAT(tc.created_at, '%d'), ' ', DATE_FORMAT(tc.created_at, '%M'))
-//   END as time
-// FROM reply_comments tc
-// JOIN users u ON tc.user_id = u.id 
-// JOIN tweets t ON tc.tweet_id = t.id
-// WHERE tc.tweet_id = ?
-// ORDER BY tc.created_at DESC  ;
-//   `;
-
-//   let [result] = await connection.query(sql, [tweetId]);
-//   res.render('../views/pages/comments', {
-//     tweetId: tweetId,
-//     message: '',
-//     comments: result.map(comment => {
-//       if (comment && comment.profile_img_url) {
-//         return comment;
-//       } else {
-//         return { ...comment, profile_img_url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTOFx557XPIXXmnhk7joe2Pq2uQhb1iCJ688RgQZzH5ZA&s' };
-//       }
-//     })
-//   });
-
-// }
