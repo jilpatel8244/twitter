@@ -163,13 +163,13 @@
     <div class="border">
         <input type="hidden" name="tweet_id" value="<%= tweetId %>">
         <div class="bg-slate-100 flex p-4">
-            <textarea name="comment" id="comments" cols="55" rows="2" placeholder="Post your reply"
+            <textarea name="comment" id="comments" cols="55" rows="2" placeholder="Post your Comment"
                 class="w-full bg-slate-100"></textarea>
             <div class="flex items-end">
                 <div class="w-fit flex text-center rounded-full" onclick="Comment('<%= tweetId %>'); return false;">
                     <span
                         class="text-white cursor-pointer inline-flex items-center bg-sky-500 hover:bg-sky-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm px-3 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                        Reply
+                        Post
                     </span>
                 </div>
             </div>
@@ -183,47 +183,63 @@
                 <% if (comments.length>0) {%>
                     <article>
                         <% comments.forEach(function(comment) { %>
-                            <input type="hidden" name="tweet_id" value="<%= comment.id %>">
+                            <input type="hidden" name="comment_id" value="<%= comment.id %>">
                             <div class="flex flex-shrink-0 p-4 pb-0 border hover:bg-gray-100 transition duration-350 ease-in-out"">
-                                <a href=" #" class=" group block w-full">
-                                <div class="flex items-center relative my-1">
-                                    <div>
-                                        <% if(comment.profile_img_url) { %>
-                                            <img class="inline-block h-10 w-10 rounded-full"
-                                                src="/uploads/<%= comment.profile_img_url %>" alt="" />
-                                            <% } else { %>
+                                <div class=" flex items-center relative my-1">
+                                <div>
+                                    <% if(comment.profile_img_url) { %>
+                                        <img class="inline-block h-10 w-10 rounded-full"
+                                            src="/uploads/<%= comment.profile_img_url %>" alt="" />
+                                        <% } else { %>
 
-                                                <img class="inline-block h-10 w-10 rounded-full"
-                                                    src="/assets/profile.png" alt="" />
-                                                <% } %>
-                                    </div>
-                                    <div class="ml-10 w-[80%]">
-                                        <p class="font-bold text-lg text-wrap">
-                                            <%= comment.name %> <span class="font-medium text-sm text-gray-400">
-                                                    <%= comment.username %> .
-                                                </span>
-                                                <span
-                                                    class="text-sm leading-5 font-medium text-gray-400 transition ease-in-out duration-150">
-                                                    <%= comment.time %>
-                                                </span>
-                                        </p>
+                                            <img class="inline-block h-10 w-10 rounded-full" src="/assets/profile.png"
+                                                alt="" />
+                                            <% } %>
+                                </div>
+                                <div class="ml-10 w-[80%]">
+                                    <p class="font-bold text-lg text-wrap">
+                                        <%= comment.name %> <span class="font-medium text-sm text-gray-400">
+                                                <%= comment.username %> .
+                                            </span>
+                                            <span
+                                                class="text-sm leading-5 font-medium text-gray-400 transition ease-in-out duration-150">
+                                                <%= comment.time %>
+                                            </span>
+                                    </p>
+                                    <div class="">
                                         <p class="my-2 text-base font-normal text-wrap"
                                             style="word-wrap: break-word; overflow-wrap: break-word; white-space: normal;">
                                             <%= comment.content %>
+                                                <div><button onclick="showReply('<%= comment.id %>')"
+                                                    class="text-blue-700 font-bold">reply</button></div>
                                         </p>
                                     </div>
                                 </div>
-                                </a>
                             </div>
-                            <% }); %>
-                    </article>
-                    <%} else {%>
-                        <div class="text-center m-10">
-                            <p class="font-medium">No comments Yet !</p>
-                            <p class="font-normal">Say somthing to start the conversation</p>
-                        </div>
-                        <%} %>
+
     </div>
+
+    <div class="hidden showreply_<%= comment.id %>" id="showReply">
+        <textarea placeholder="reply" name="" id="reply" cols="30" rows="1" class="w-full bg-slate-100 reply_<%= comment.id %>"></textarea>
+        <div class="flex items-end">
+            <div class="w-fit flex text-center rounded-full" onclick="Reply('<%= comment.id %>'); return false;">
+                <span
+                    class="text-white cursor-pointer inline-flex items-center bg-sky-500 hover:bg-sky-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm px-3 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                    Reply
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class="replies_<%= comment.id %>"></div>
+    <% }); %>
+        </article>
+        <%} else {%>
+            <div class="text-center m-10">
+                <p class="font-medium">No comments Yet !</p>
+                <p class="font-normal">Say somthing to start the conversation</p>
+            </div>
+            <%} %>
+                </div>
 </section>
 
 <script src="/js/bookmark.script.js"></script>
