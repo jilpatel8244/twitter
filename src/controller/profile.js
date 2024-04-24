@@ -6,6 +6,7 @@ exports.getExploreProfile = async (req, res) => {
     let id = req.query.id;
     let userId = req.user[0][0].id;
     logger.info(id);
+    
 
     const profileQuery = `SELECT * FROM users WHERE id=?`;
     const [userProfileData] = await connection.query(profileQuery, [id]);

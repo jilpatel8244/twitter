@@ -27,7 +27,7 @@
                     <% allBookmarkTweets.forEach((element, index)=> { %>
                     <li>
                         <article class=" transition duration-350 ease-in-out">
-                            <%- include('../partials/tweetComponent.ejs', {singleTweet: element, index}) %>
+                            <%- include('../partials/tweetComponent.ejs', {singleTweet: element}) %>
                         </article>
                     </li>
                     <% }) %>
