@@ -52,17 +52,20 @@ exports.getAllBookmarks = async (req, res) => {
             allBookmarkTweetsLikeCount.forEach((likeCountElement, index) => {
                 if (bookmarkElement.tweet_id == likeCountElement.tweet_id) {
                     bookmarkElement['likeCount'] = likeCountElement.likeCount;
-                }s
+                }
             })
         })
 
-        console.log(allBookmarkTweets);
 
+        // res.render('pages/bookmark.ejs', {
+        //     allBookmarkTweets: allBookmarkTweets,
+        //     user: req.user[0][0]
+        // });
 
-        res.render('pages/bookmark.ejs', {
-            allBookmarkTweets: allBookmarkTweets,
-            user: req.user[0][0]
-        });
+        res.status(200).json({
+            success: true,
+            message: allBookmarkTweets
+        })
     } catch (error) {
         console.log(error);
         res.status(500).json({

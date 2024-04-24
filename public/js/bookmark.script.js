@@ -6,7 +6,7 @@ async function bookmarkHandler(tweetId) {
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify({ 'tweetId': tweetId }), // body data type must match "Content-Type" header
+        body: JSON.stringify({ 'tweetId': tweetId }),
     });
 
     let response = await data.json();
@@ -20,14 +20,13 @@ async function bookmarkHandler(tweetId) {
 
         // bookmark ma hase to entry ni display none jo bookmark remove kare to but in home page its not the case
         if ((window.location.href).includes('bookmark')) {
-            // document.getElementById(tweetId).style.display = 'none';
             document.getElementById(tweetId).parentElement.parentElement.remove();
 
             if (!document.getElementById('allTweets').querySelector('ul').childElementCount) {
                 let allTweets = document.getElementById('allTweets');
                 let newDiv = document.createElement('div');
-                newDiv.innerHTML = `<div class="w-3/5 mx-auto my-8">
-                <div class="mb-3">
+                newDiv.innerHTML = `<div class="w-3/5" style="margin: 50px auto">
+                                        <div class="mb-3">
                                             <h2 class="font-bold text-3xl">Save posts for later</h2>
                                         </div>
                                         <div class="mb-3">
@@ -37,7 +36,6 @@ async function bookmarkHandler(tweetId) {
                 allTweets.appendChild(newDiv);
             }
         }
-        // console.log(response);
     } else {
         console.log(response.message);
     }

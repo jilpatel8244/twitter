@@ -2,7 +2,7 @@ const { log } = require("winston");
 const connection = require("../../config/connection");
 const logger = require('../../logger/logger');
 
-exports.getHome = async (req, res) => {
+exports.getHomeForyou = async (req, res) => {
   let sql = `
   SELECT users.username,
   users.id as user_id, 
@@ -45,53 +45,63 @@ exports.getHome = async (req, res) => {
     END DESC;
 `;
 
-  const [rows] = await connection.query(sql);
+  const [rows] = await connection.execute(sql);
 
+  res.status(200).json({
+    success: true,
+    message: rows
+  })
+}
+
+exports.getHomeFollowing = async (req, res) => {
   let followingSql = `
-SELECT users.username,
-users.id as user_id, 
-users.name, 
-users.profile_img_url as profile_img_url, 
-tweets.content,
-tweets.id as tweet_id,
-tweet_comments.content as comments, 
-CASE
-  WHEN tweets.updated_at IS NOT NULL THEN
-    CASE
-      WHEN TIMESTAMPDIFF(SECOND, tweets.updated_at, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(SECOND, tweets.updated_at, NOW()+1), ' seconds ago')
-      WHEN TIMESTAMPDIFF(MINUTE, tweets.updated_at, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(MINUTE, tweets.updated_at, NOW()), ' minutes ago')
-      WHEN TIMESTAMPDIFF(HOUR, tweets.updated_at, NOW()) < 24 THEN CONCAT(TIMESTAMPDIFF(HOUR, tweets.updated_at, NOW()), ' hours ago')
-      ELSE CONCAT(DATE_FORMAT(tweets.updated_at, '%d'), ' ', DATE_FORMAT(tweets.updated_at, '%M'))
-    END
-  ELSE
-    CASE
-      WHEN TIMESTAMPDIFF(SECOND, tweets.created_at, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(SECOND, tweets.created_at, NOW()+1), ' seconds ago')
-      WHEN TIMESTAMPDIFF(MINUTE, tweets.created_at, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(MINUTE, tweets.created_at, NOW()), ' minutes ago')
-      WHEN TIMESTAMPDIFF(HOUR, tweets.created_at, NOW()) < 24 THEN CONCAT(TIMESTAMPDIFF(HOUR, tweets.created_at, NOW()), ' hours ago')
-      ELSE CONCAT(DATE_FORMAT(tweets.created_at, '%d'), ' ', DATE_FORMAT(tweets.created_at, '%M'))
-    END
-END as time,
-medias.media_url as media_url,
-bookmarks.status as isBookmarked,
-tweet_likes.status as isLiked
-FROM users
-JOIN tweets ON users.id = tweets.user_id
-LEFT JOIN medias ON tweets.id = medias.tweet_id
-LEFT JOIN tweet_comments ON tweet_comments.user_id = tweets.id 
-LEFT JOIN bookmarks ON bookmarks.tweet_id = tweets.id AND bookmarks.user_id = ${req.user[0][0].id}
-LEFT JOIN tweet_likes ON tweet_likes.tweet_id = tweets.id AND tweet_likes.user_id = ${req.user[0][0].id}
-JOIN followers ON followers.following_id = users.id AND followers.follower_id = ${req.user[0][0].id}
-WHERE users.is_active = 1 AND tweets.is_posted = 1 AND tweets.deleted_at IS NULL
-ORDER BY 
+  SELECT users.username,
+  users.id as user_id, 
+  users.name, 
+  users.profile_img_url as profile_img_url, 
+  tweets.content,
+  tweets.id as tweet_id,
+  tweet_comments.content as comments, 
   CASE
-    WHEN tweets.updated_at IS NOT NULL THEN tweets.updated_at
-    ELSE tweets.created_at
-  END DESC;
-`;
+    WHEN tweets.updated_at IS NOT NULL THEN
+      CASE
+        WHEN TIMESTAMPDIFF(SECOND, tweets.updated_at, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(SECOND, tweets.updated_at, NOW()+1), ' seconds ago')
+        WHEN TIMESTAMPDIFF(MINUTE, tweets.updated_at, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(MINUTE, tweets.updated_at, NOW()), ' minutes ago')
+        WHEN TIMESTAMPDIFF(HOUR, tweets.updated_at, NOW()) < 24 THEN CONCAT(TIMESTAMPDIFF(HOUR, tweets.updated_at, NOW()), ' hours ago')
+        ELSE CONCAT(DATE_FORMAT(tweets.updated_at, '%d'), ' ', DATE_FORMAT(tweets.updated_at, '%M'))
+      END
+    ELSE
+      CASE
+        WHEN TIMESTAMPDIFF(SECOND, tweets.created_at, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(SECOND, tweets.created_at, NOW()+1), ' seconds ago')
+        WHEN TIMESTAMPDIFF(MINUTE, tweets.created_at, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(MINUTE, tweets.created_at, NOW()), ' minutes ago')
+        WHEN TIMESTAMPDIFF(HOUR, tweets.created_at, NOW()) < 24 THEN CONCAT(TIMESTAMPDIFF(HOUR, tweets.created_at, NOW()), ' hours ago')
+        ELSE CONCAT(DATE_FORMAT(tweets.created_at, '%d'), ' ', DATE_FORMAT(tweets.created_at, '%M'))
+      END
+  END as time,
+  medias.media_url as media_url,
+  bookmarks.status as isBookmarked,
+  tweet_likes.status as isLiked
+  FROM users
+  JOIN tweets ON users.id = tweets.user_id
+  LEFT JOIN medias ON tweets.id = medias.tweet_id
+  LEFT JOIN tweet_comments ON tweet_comments.user_id = tweets.id 
+  LEFT JOIN bookmarks ON bookmarks.tweet_id = tweets.id AND bookmarks.user_id = ${req.user[0][0].id}
+  LEFT JOIN tweet_likes ON tweet_likes.tweet_id = tweets.id AND tweet_likes.user_id = ${req.user[0][0].id}
+  JOIN followers ON followers.following_id = users.id AND followers.follower_id = ${req.user[0][0].id}
+  WHERE users.is_active = 1 AND tweets.is_posted = 1 AND tweets.deleted_at IS NULL
+  ORDER BY 
+    CASE
+      WHEN tweets.updated_at IS NOT NULL THEN tweets.updated_at
+      ELSE tweets.created_at
+    END DESC;
+  `;
 
-  const [result] = await connection.query(followingSql);
+  const [rows] = await connection.execute(followingSql);
 
-  res.render('../views/pages/home', { tweets: rows, user: req.user[0][0], following: result });
+  res.status(200).json({
+    success: true,
+    message: rows
+  })
 }
 
 
@@ -105,7 +115,9 @@ exports.get_notification = async (req, res) => {
 
 exports.post_notification = async (req, res) => {
   let { is_read } = req.body;
+  console.log("is read " + is_read);
   const [count] = await connection.query(`update notifications set is_read = ? where user_id = ?`, [is_read, req.user[0][0].id]);
+  console.log(count);
   res.status(200).json({
     success: true,
     count: count[0],
@@ -123,25 +135,24 @@ exports.post_comment = async (req, res) => {
     return;
   }
 
+  console.log(req.body);
   let user_id = req.user[0][0].id
   let sql = `
         INSERT INTO tweet_comments (user_id, tweet_id, content)
         VALUES (?, ?, ?)
     `;
 
-  let [result] = await connection.query(sql, [user_id, tweetId, comment]);
-  let [comment_mention] = await connection.query(`SELECT * FROM tweet_comments WHERE tweet_id = ? order by created_at desc`, [tweetId])
+  let [result] = await connection.execute(sql, [user_id, tweetId, comment]);
+  let [comment_mention] = await connection.execute(`SELECT * FROM tweet_comments WHERE tweet_id = ? order by created_at desc`, [tweetId])
+  console.log(comment_mention[0].content);
   const mentionedUsernames = extractMentionedUsernames(comment_mention[0].content);
+  console.log(mentionedUsernames);
   const mentionedUsers = await getUsersByUsernames(mentionedUsernames);
-  
-  let [tweet_user_id] = await connection.query(`SELECT user_id FROM tweets WHERE id = ?`, [tweetId])
-  await connection.query(`INSERT INTO notifications (user_id, tweet_id, type, related_user_id)
-    VALUES (?, ?, 'Comment', ?);`, [tweet_user_id[0].user_id, tweetId, user_id]);
   if (mentionedUsers.length >= 1) {
+    let [tweet_user_id] = await connection.execute(`SELECT user_id FROM tweets WHERE id = ?`, [tweetId])
     await connection.execute(`INSERT INTO notifications (user_id, tweet_id, type, related_user_id)
-VALUES (?, ?, 'Mention', ?);`, [mentionedUsers[0].id, tweetId, user_id]);
+    VALUES (?, ?, 'Mention', ?);`, [mentionedUsers[0].id, tweetId, user_id]);
   }
-  
   res.json({
     success: result.affectedRows > 0,
     comment: {
@@ -204,17 +215,22 @@ LEFT JOIN tweet_likes ON tweet_likes.tweet_id = tweets.id AND tweet_likes.user_i
 WHERE tweets.id = ?;
 ;
 `;
-  let [tweet] = await connection.query(tweetSql, [tweetId]);
+  let [tweet] = await connection.execute(tweetSql, [tweetId]);
 
-
-  let [result] = await connection.query(sql, [tweetId]);
+  let [result] = await connection.execute(sql, [tweetId]);
   res.render('../views/pages/comments', {
     user: req.user[0][0],
     tweetId: tweetId,
     user: req.user[0][0],
     message: '',
     tweet: tweet[0],
-    comments: result
+    comments: result.map(comment => {
+      if (comment && comment.profile_img_url) {
+        return comment;
+      } else {
+        return { ...comment, profile_img_url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTOFx557XPIXXmnhk7joe2Pq2uQhb1iCJ688RgQZzH5ZA&s' };
+      }
+    })
   });
 
 }
@@ -241,6 +257,7 @@ async function getUsersByUsernames(usernames) {
 
 
 exports.post_reply = async (req, res) => {
+  console.log("b;a");
   let comment = req.body;
   let comment_id = req.body.comment_id;
 
@@ -252,13 +269,15 @@ exports.post_reply = async (req, res) => {
     return;
   }
 
+  console.log(req.body);
   let user_id = req.user[0][0].id
   let sql = `
         INSERT INTO reply_comments (user_id, comment_id, content)
         VALUES (?, ?, ?)
     `;
 
-  let [result] = await connection.query(sql, [user_id, comment_id, comment]);
+  let [result] = await connection.execute(sql, [user_id, comment_id, comment]);
+  console.log(result);
   res.json({
     success: result.affectedRows > 0,
     comment: {
@@ -285,7 +304,7 @@ exports.post_reply = async (req, res) => {
 // ORDER BY tc.created_at DESC  ;
 //   `;
 
-//   let [result] = await connection.query(sql, [tweetId]);
+//   let [result] = await connection.execute(sql, [tweetId]);
 //   res.render('../views/pages/comments', {
 //     tweetId: tweetId,
 //     message: '',
