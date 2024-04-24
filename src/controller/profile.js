@@ -3,8 +3,12 @@ const logger = require('../../logger/logger');
 
 exports.getExploreProfile = async (req, res) => {
   try {
-    let id = req.query.id;
+    let user = req.query.id;
+   
+
+    let id = req.user[0][0].id;
     logger.info(id);
+    
 
     const profileQuery = `SELECT * FROM users WHERE id=?`;
     const [userProfileData] = await connection.query(profileQuery, [id]);
@@ -32,7 +36,7 @@ exports.getExploreProfile = async (req, res) => {
         console.log(follower_detail_data[0]);
 
         let profileData, replyData, tweetData, commentData ;
-        res.render("../views/pages/profile", { user: req.query.id, userProfileData,following_detail_data, follower_detail_data, profileData,  twitCountData, replyData, postData, tweetData, commentData });
+        res.render("../views/pages/profile", { id: req.query.id, user: req.user[0][0],id,user, userProfileData,following_detail_data, follower_detail_data, profileData,  twitCountData, replyData, postData, tweetData, commentData });
 
       }else{
 
@@ -46,14 +50,14 @@ exports.getExploreProfile = async (req, res) => {
         console.log(follower_detail_data[0]);
 
         let profileData, replyData, tweetData,postData, commentData, twitCountData;
-        res.render("../views/pages/profile", { user: req.query.id, userProfileData,following_detail_data, follower_detail_data, profileData,  twitCountData, replyData, postData, tweetData, commentData });
+        res.render("../views/pages/profile", { id: req.query.id, user: req.user[0][0],id,user, userProfileData,following_detail_data, follower_detail_data, profileData,  twitCountData, replyData, postData, tweetData, commentData });
       }
     } else {
 
       let profileData, twitCountData, replyData, tweetData, commentData;
       let following_detail_data = [];
       let follower_detail_data = [];
-      res.render("../views/pages/profile", { user: req.query.id, userProfileData,following_detail_data, follower_detail_data, profileData,  twitCountData, replyData, tweetData, commentData });
+      res.render("../views/pages/profile", { id: req.query.id, user: req.user[0][0],id,user, userProfileData,following_detail_data, follower_detail_data, profileData,  twitCountData, replyData, tweetData, commentData });
 
     }
 
