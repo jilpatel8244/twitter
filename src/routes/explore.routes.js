@@ -16,7 +16,7 @@ router.post("/getMedia", getMedia)
 router.post("/hastag", getHastag);
 router.post("/searchboxdata", getUsernameOrHastagOnchage);
 
-router.get("/profile", getExploreProfile);
+router.get("/profile", passport.authenticate('jwt', { session: false }),  getExploreProfile);
 
 
 module.exports = router;

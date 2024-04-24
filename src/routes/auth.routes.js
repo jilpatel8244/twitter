@@ -9,6 +9,7 @@ const bookmarkRoute = require("./bookmark.routes");
 const messagesRoute = require("./messages.routes");
 
 const exploreroute = require("../routes/explore.routes");
+const followRoute = require("../routes/follow.route");
 const { get_registration, post_registration,USER_NAME_EXIST } = require("../controller/registration");
 const { getPassword, setPassword } = require("../controller/password");
 const { login, loginHandler, logoutHandler } = require("../controller/auth.controller");

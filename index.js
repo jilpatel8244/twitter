@@ -26,6 +26,7 @@ const adminroute = require("./src/routes/admin.routes");
 const PORT = process.env.PORT || 3000;
 const tweetCreate = require('./src/routes/tweet.routes');
 const logger = require("./logger/logger");
+const { followUnfollowHandler } = require("./src/controller/getFollow.controller");
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 // app.use(bodyParser.urlencoded({ extended: true }));
@@ -44,7 +45,7 @@ app.use(authRouter);
 app.use(getTimeZone);
 app.use(notification);
 app.use("/editprofile", editprofile);
-
+app.use("/follow", followUnfollowHandler);
 app.use('/profile', passport.authenticate('jwt', { session: false, failureRedirect: "/login" }), getProfileRouter);
 app.set("view engine", "ejs");
 

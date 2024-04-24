@@ -113,14 +113,25 @@
                         </div>
                       </div>
                     </div>
-                    <!-- Follow Button -->
-                    <div class="flex flex-col text-right">
-                      <div
+
+
+                    
+                <% if (id !== userProfileData[0].id) { %>
+                 
+                  
+                    <!-- Render Follow button if not following this profile -->
+                    <div
+                    class="flex justify-center -z-1 max-h-max whitespace-nowrap focus:outline-none  focus:ring  max-w-max border bg-transparent border-blue-500 text-blue-500 hover:border-blue-800  items-center hover:shadow-lg font-bold py-2 px-4 rounded-full mr-0 ml-auto" id="followButton" onclick="toggleFollow('<%= userProfileData[0].id %>', 'follow')">Follow</div>
+                   
+                  
+                  <% } %>
+                  <% if (id === userProfileData[0].id) { %>
+                    <div
                         class="flex justify-center -z-1 max-h-max whitespace-nowrap focus:outline-none  focus:ring  max-w-max border bg-transparent border-blue-500 text-blue-500 hover:border-blue-800  items-center hover:shadow-lg font-bold py-2 px-4 rounded-full mr-0 ml-auto">
                         <a href="editprofile?id=<%=userProfileData[0].id%>">Edit Profile</a>
                       </div>
+                  <% } %>
 
-                    </div>
                   </div>
 
                   <!-- Profile info -->
@@ -379,6 +390,47 @@
       tab.removeAttribute("hidden");
       console.log("Hello From the Likes section");
     }
+
+    async function toggleFollow(id, action) {
+    try {
+      // Create request body
+      const body = {
+        id: id,
+        action: action
+      };
+
+      // Send POST request to server
+      const response = await fetch('/follow', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(body)
+      });
+
+      // Parse response JSON
+      const responseData = await response.json();
+
+      // Check if request was successful
+      if (response.ok) {
+        // Update button text and action based on response
+        if (action === 'follow') {
+          document.getElementById('followButton').innerText = 'Following';
+          document.getElementById('followButton').setAttribute('onclick', `toggleFollow('${id}', 'unfollow')`);
+          document.getElementById('followButton').id = 'unfollowButton';
+        } else {
+          document.getElementById('unfollowButton').innerText = 'Follow';
+          document.getElementById('unfollowButton').setAttribute('onclick', `toggleFollow('${id}', 'follow')`);
+          document.getElementById('unfollowButton').id = 'followButton';
+        }
+        console.log('Follow/unfollow request successful');
+      } else {
+        console.error('Follow/unfollow request failed:', responseData.message);
+      }
+    } catch (error) {
+      console.error( error.message);
+    }
+  }
   </script>
 
   <script src="/js/bookmark.script.js"></script>

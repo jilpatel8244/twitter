@@ -4,7 +4,10 @@ exports.followUnfollowHandler = async (req, res) => {
     try {
         // Assign user IDs directly
         let userIdToFollow = req.query.id;
-        let followerId = req.user[0][0].id;
+        console.log("userIdToFollow",userIdToFollow);
+        // let followerId = req.user[0][0].id;
+
+        let followerId = 11;
 
         // Execute the SQL query to check the current status of the relationship
         let [result] = await connection.query(`
