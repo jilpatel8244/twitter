@@ -21,7 +21,7 @@ const likeRoute = require("./src/routes/like.routes");
 const messagesRoute = require("./src/routes/messages.routes");
 
 const adminroute = require("./src/routes/admin.routes");
-const reserpasswordProfile = require("./src/routes/reserpasswordProfile.route");
+const resetpasswordProfile = require("./src/routes/resetpasswordProfile.route");
 
 const PORT = process.env.PORT || 3000;
 const tweetCreate = require("./src/routes/tweet.routes");
@@ -45,6 +45,7 @@ app.use(authRouter);
 app.use(getTimeZone);
 app.use(notification);
 app.use("/editprofile", editprofile);
+app.use(resetpasswordProfile)
 app.use("/follow", followUnfollowHandler);
 app.use('/profile', passport.authenticate('jwt', { session: false, failureRedirect: "/login" }), getProfileRouter);
 app.set("view engine", "ejs");

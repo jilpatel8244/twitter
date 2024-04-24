@@ -52,7 +52,7 @@ exports.getAllBookmarks = async (req, res) => {
             allBookmarkTweetsLikeCount.forEach((likeCountElement, index) => {
                 if (bookmarkElement.tweet_id == likeCountElement.tweet_id) {
                     bookmarkElement['likeCount'] = likeCountElement.likeCount;
-                }s
+                }
             })
         })
 
