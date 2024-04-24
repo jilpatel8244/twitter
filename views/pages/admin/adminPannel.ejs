@@ -7,23 +7,131 @@
     <title>Document</title>
     <link href="/css/admin.css" rel="stylesheet" />
     <link href="/css/output.css" rel="stylesheet" />
+
+    <script src="/js/user.admin.js"></script>
+    <script src="/js/tweetadmin.js"></script>
+    <script src="/js/hastag.admin.js"></script>
+
 </head>
 
-<body>
+<body onload="usershandeler()">
+
+    <div class="main-container">
+        <div class="sidebar">
+            <div class="admin">
+                <img src="/assets/x-twitterblue.svg" alt="" class="w-16 h-16 ml-2 p-1 ring-gray-300 dark:ring-gray-500">
+            </div>
+            <div class="admin-txt">
+                <h1
+                    class="text-2xl md:text-3xl pl-2 my-2 border-l-4  font-sans font-bold border-teal-400  dark:text-gray-200">
+                    Admin Panel
+                </h1>
+
+            </div>
+            <div class="features">
+                <div class="img-icon" id="users">
+                    <img src="/assets/user-regular.svg" alt=""
+                        class="w-10 h-10 ml-2 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500">
+                    <p class="tweet">Users</p>
+                </div>
+                <div class="img-icon" id="tweets">
+                    <img src="/assets/twitter.svg" alt=""
+                        class="w-10 h-10 ml-2 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500">
+                    <p class="tweet">tweets</p>
+                </div>
+
+                <div class="img-icon" id="hastags">
+                    <img src="/assets/hashtag-solid.svg" alt=""
+                        class="w-10 h-10 ml-2 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500">
+                    <p class="tweet">hastags</p>
+                </div>
+
+                <div class="img-icon" id="verification">
+                    <img src="/assets/check-solid.svg" alt=""
+                        class="w-10 h-10 ml-2 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500">
+                    <p class="tweet">verification</p>
+                </div>
+
+                <div class="img-icon" id="support">
+                    <img src="/assets/circle-question-regular.svg" alt=""
+                        class="w-10 h-10 ml-2 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500">
+                    <p class="tweet">support</p>
+                </div>
+
+            </div>
+
+        </div>
+        <div class="content" id="content">
 
 
 
 
-    <div class="sidebar">
 
-
-        <p class="sideitem">Users</p>
-        <p class="sideitem">Side</p>
-        <p class="sideitem"></p>
-        <p class="sideitem"></p>
-        <p class="sideitem"></p>
-
+        </div>
     </div>
 </body>
+
+
+<script>
+
+    let users = document.getElementById("users");
+    let tweets = document.getElementById("tweets");
+    let hastags = document.getElementById("hastags");
+    let verification = document.getElementById("verification");
+    let support = document.getElementById("support");
+
+    users.addEventListener("click", usershandeler)
+    tweets.addEventListener("click", tweetshandeler)
+    hastags.addEventListener("click", hastagshandeler)
+    verification.addEventListener("click", verifyhandeler)
+    support.addEventListener("click", supporthandeler)
+
+    async function usershandeler() {
+
+        document.querySelectorAll(".active").forEach(el => el.classList.remove("active"));
+        users.classList.add("active");
+        let content = document.getElementById("content");
+        console.log(content);
+
+        let userscontent = await getuserpage();
+
+        content.innerHTML = userscontent;
+
+    }
+    async function tweetshandeler() {
+        document.querySelectorAll(".active").forEach(el => el.classList.remove("active"));
+        tweets.classList.add("active");
+        let tweetcontent = await gettweets();
+        content.innerHTML = tweetcontent;
+    }
+    async function hastagshandeler() {
+        document.querySelectorAll(".active").forEach(el => el.classList.remove("active"));
+        hastags.classList.add("active");
+        let hashcontain = await gethastag();
+        content.innerHTML = hashcontain;
+
+    }
+    function verifyhandeler() {
+        document.querySelectorAll(".active").forEach(el => el.classList.remove("active"));
+        verification.classList.add("active");
+    }
+    function supporthandeler() {
+        document.querySelectorAll(".active").forEach(el => el.classList.remove("active"));
+        support.classList.add("active");
+    }
+
+
+
+    function hastagverification() {
+        alert("hello")
+    }
+
+
+    function userhandel(id) {
+
+        
+
+    }
+</script>
 
 </html>
