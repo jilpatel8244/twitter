@@ -1,4 +1,3 @@
-
 let content = document.getElementById('content');
 let post = document.getElementById('post');
 let profileImgHolder = document.getElementById('profile_img')
@@ -17,6 +16,9 @@ let selectAll = document.getElementById('selectAll')
 let deleteBtn = document.getElementById('delete');
 let deleteCancle = document.getElementById('deleteCancle');
 let finalDelete = document.getElementById('finalDelete');
+let emojiBtn = document.getElementById('emojiBtn');
+let emojiPicker = document.getElementById('emojiPicker');
+let allScreen = document.getElementById('allScreen');
 document.addEventListener("DOMContentLoaded", function (event) {
 
   document.getElementById('defaultModalButton').onclick = () => {
@@ -68,6 +70,32 @@ const getProfileImage = () => {
       }
     })
 }
+let removeEmoji = document.getElementById('removeEmoji');
+
+emojiBtn.onclick = () => {
+  removeEmoji.style.display = 'block';
+  emojiPicker.innerHTML = `<emoji-picker tabindex="-1" class="overflow-y-auto overflow-x-hidden fixed z-50 justify-center items-center w-[500px] backdrop-blur-sm rounded-t-md md:inset-0  pt-25 max-h-full" style="left: 40%;width: 400px;height: 400px;top:98%" ></emoji-picker>`;
+  document.querySelector('emoji-picker')
+    .addEventListener('emoji-click', event => {
+      let emoji = event.detail.unicode;
+      content.innerText += emoji;
+      if (content.innerText.trim() != '') {
+        post.style.opacity = '1'
+        post.style.cursor = 'pointer'
+      }
+      else {
+        post.style.opacity = '0.25'
+        post.style.cursor = 'default'
+      }
+    });
+}
+
+removeEmoji.addEventListener('click', () => {
+  emojiPicker.innerHTML= '';
+  if( emojiPicker.innerHTML==''){
+    removeEmoji.style.display='none';
+  }
+})
 
 const tweetInsert = async (status) => {
   if (content.innerText.trim() != '' || images.childNodes[0].tagName == 'IMG') {
@@ -103,6 +131,7 @@ post.onclick = () => {
 save.onclick = () => {
   if (hiddenId.value != '') {
     tweetUpdate('draft')
+    hiddenId.value = "";
   }
   else {
     tweetInsert('draft')
@@ -144,7 +173,7 @@ const getImages = () => {
     fileReader.addEventListener('load', function () {
       post.style.opacity = '1'
       post.style.cursor = 'pointer'
-      photos += '<img class="h-80 m-2" src="' + this.result + '"/>'
+      photos += '<img style="height:200px;width:170px" class="m-2" src="' + this.result + '"/>'
       images.style.display = 'block';
       images.innerHTML = photos
     });
@@ -183,15 +212,20 @@ const displayDraft = async () => {
     editDraftBlock.style.display = 'block';
   }
   let number = 1;
-  draftTweet.forEach(draft => {
+  draftTweet.forEach(async (draft) => {
 
     list += `<li>
     <label for="draftRow${number}"  class="inline-flex items-center justify-between w-full p-5 text-gray-900 bg-white border border-gray-200 rounded-lg cursor-pointer draftList hover:text-gray-900 hover:bg-gray-100 " onclick='sendDraft(${draft.id})'>
       <div class="flex" >
         <input type="checkbox" id="draftRow${number}" name="draftRow${number}" class="hidden" />
-        <input type="text" id="${draft.id}" class="hidden" />
-        <div class="w-full text-lg px-2 font-semibold select-none text-balance max-w-80 overflow-hidden">${draft.content == "" ? "Image" : draft.content}</div>
+        <input type="text" id="${draft.id}" value="" class="hidden" />
+        <div class="flex justify-between ">
+        <div class="w-full text-lg px-2 font-semibold select-none text-balance max-w-80 overflow-hidden">${draft.content == "" ? "" : draft.content}</div>
+        </div>
       </div>
+      <div>
+        ${draft.media_url ? "<img class='h-16 w-16' src='/uploads/" + draft.media_url + "'>" : ""}
+        </div>
     </label>
   </li>`;
     number++;
@@ -230,7 +264,7 @@ const sendDraft = async (tweetId) => {
   }
   if (image != undefined) {
     let { media_url } = image;
-    images.innerHTML = '<img class="h-80 m-2" src="/uploads/' + media_url + '">';
+    images.innerHTML = '<img style="height:200px;width:170px" class="m-2" src="/uploads/' + media_url + '">';
   }
   document.getElementById('select-modal').style.display = 'none';
   content.innerText = draftContent;
@@ -407,6 +441,6 @@ finalDelete.onclick = async () => {
   displayDraft();
   deselect();
 }
-const editImg=()=>{
-  
+const editImg = () => {
+
 }
