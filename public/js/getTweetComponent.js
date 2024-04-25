@@ -70,8 +70,9 @@ function getTweetComponent(data) {
 
 
                                             <!-- retweet span tag -->
-                                            <div class="flex text-center py-2 m-2">
+                                            <div  class="flex text-center py-2 m-2">
                                                 <span
+                                                    onclick=retweet(${tweets.tweet_id},this)
                                                     class="group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full  hover:text-blue-300">
                                                     <svg class="text-center h-7 w-6" fill="none" stroke-linecap="round"
                                                         stroke-linejoin="round" stroke-width="2" stroke="currentColor"
