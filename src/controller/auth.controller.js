@@ -65,6 +65,7 @@ exports.loginHandler = async (req, res) => {
 			success: false,
 			message: "something went wrong",
 		});
+		
 	}
 };
 

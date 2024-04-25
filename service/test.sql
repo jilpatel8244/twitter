@@ -96,6 +96,7 @@ ALTER TABLE `unread_messages` ADD FOREIGN KEY (`message_id`) REFERENCES `direct_
 
 
 
+
 --  in controller 
 const mentionedUsernames = extractMentionedUsernames(
   -- notification.tweet_content
@@ -130,4 +131,17 @@ async function getUsersByUsernames(usernames) {
 -- changes in notifications table
 alter table notifications add column is_read tinyint default 0;
 
+--changes in users table
+alter table users add column profession varchar(255);
 
+alter table users add column prof_desc varchar(255);
+
+alter table users drop column is_private; 
+
+alter table users add column is_private tinyint default 1;
+
+
+-- for profession data will add like this
+-- by switching to profesaional, your account will no longer private. if private
+update users set is_private = 0, profession = "Programmer",
+prof_desc = "I'm a passinate developer who always willing to learn, and apply those things in practice" where id = 1;
