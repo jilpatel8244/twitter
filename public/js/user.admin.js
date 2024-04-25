@@ -14,7 +14,7 @@ async function getuserpage() {
     let user = `
     <div class="relative overflow-x-auto overflow-y-auto shadow-md sm:rounded-lg tabal">
     <div
-        class="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 bg-white dark:bg-gray-900">
+        class="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 bg-white dark:bg-gray-900" >
         <div>
 
             
@@ -76,8 +76,8 @@ async function getuserpage() {
 
         if (element.is_active == 1) {
             user += `<td class="px-6 py-4">
-            <div onclick="userhandel(${element.id})" id="green">
-            <img src="/assets/green.png" >
+            <div id="green">
+            <img src="/assets/green.png" class="green-btn"  onclick="userstatushandel(${element.id},${element.is_active})">
        </div>
         </td>
       
@@ -87,7 +87,7 @@ async function getuserpage() {
         else {
             user += `<td class="px-6 py-4">
             <div  id="red">
-            <img src="/assets/red.png" >
+            <img src="/assets/red.png" class="red-btn"  onclick="userstatushandel(${element.id},${element.is_active})" >
        </div>
         </td>
        
@@ -111,3 +111,19 @@ async function getuserpage() {
 
 }
 
+
+
+async function statushandeluser(userid, active) {
+    let url = window.location.origin + '/admin/updateStatusUser';
+
+    let data = await fetch(url, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ 'userId': userid, 'active': active }),
+    });
+
+
+
+}

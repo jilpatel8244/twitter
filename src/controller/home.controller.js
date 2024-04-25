@@ -219,7 +219,7 @@ WHERE tweets.id = ?;
 `;
   let [tweet] = await connection.execute(tweetSql, [tweetId]);
 
-  let [result] = await connection.execute(sql, [tweetId]);
+  // let [result] = await connection.execute(sql, [tweetId]);
   res.render('../views/pages/comments', {
     tweetId: tweetId,
     user: req.user[0][0],
@@ -275,7 +275,7 @@ WHERE rc.comment_id = ?
 ORDER BY rc.created_at DESC  ;
   `;
 
-  let [replies] = await connection.query(sql,[comment_id]);
+  let [replies] = await connection.query(sql, [comment_id]);
   res.json({ replies: replies });
 
 }

@@ -1,7 +1,7 @@
 
-async function gettweets() {
+async function verify_request() {
     async function getdata() {
-        let url = window.location.origin + "/admin/gettweet"
+        let url = window.location.origin + "/admin/getVerifyRequest"
         let data = await fetch(url)
         data = await data.json()
         return data.data;
@@ -33,9 +33,7 @@ async function gettweets() {
             <th scope="col" class="px-6 py-3">
             tweet id
             </th>
-            <th scope="col" class="px-6 py-3">
-            content
-            </th>
+           
             <th scope="col" class="px-6 py-3">
             name   
             </th>
@@ -43,10 +41,13 @@ async function gettweets() {
             username
             </th>
             <th scope="col" class="px-6 py-3">
-            Media
+            profile photo
             </th>
             <th scope="col" class="px-6 py-3">
-            Action
+            Profession
+            </th>
+            <th scope="col" class="px-6 py-3">
+            Action 
             </th>
             </tr>
         </thead>
@@ -61,27 +62,27 @@ async function gettweets() {
         <div class="font-normal text-gray-500">${element.id}</div>
         </div>
         </th>
-        <td class="px-6 py-4">
-        ${element.content}
-        </td>
+     
         <td class="px-6 py-4">
         <div class="iconname">
-        <img src="/assets/user-regular.svg" alt=""
-        class="w-6 h-6 ml-2 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500">
+        
         ${element.name}
         </div>
         </td>
         <td class="px-6 py-4">
-        ${element.username}
+        @${element.username}
         </td>
         <td class="px-6 py-4">
-        <img src="/uploads/${element.media_url}"  class="w-16 md:w-32 max-w-full max-h-full" alt="Media not Avi">
+        <img src="/uploads/${element.profile_img_url}"  class="w-16 md:w-32 max-w-full max-h-full" alt="profile photo not availlable">
+        </td>
+        <td class="px-6 py-4">
+        Cricketer
         </td>`
 
-        if (element.is_ristricted == 0) {
+        if (element.request == 1) {
             user += `<td class="px-6 py-4">
             <div>
-                 <img src="/assets/green.png" onclick="tweetristric(${element.id},${element.is_ristricted})">
+            <img src="/assets/green.png" onclick="verifyhandel(${element.id},${element.request},${element.reqid})">
             </div>
         </td>
         
@@ -90,7 +91,8 @@ async function gettweets() {
         }
         else {
             user += `<td class="px-6 py-4">
-            <div> <img src="/assets/red.png" onclick="tweetristric(${element.id},${element.is_ristricted})">
+            <div>   
+            <img src="/assets/red.png" onclick="verifyhandel(${element.id},${element.request},${element.reqid})">
             </div>
         </td> </tr>`
 
@@ -103,14 +105,13 @@ async function gettweets() {
 
 }
 
-
-async function ristric(tweetId, ristric) {
-    let url = window.location.origin + '/admin/ristrictweet';
+async function vrified(userId, request, reqid) {
+    let url = window.location.origin + '/admin/updateverify';
     let data = await fetch(url, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify({ 'tweetId': tweetId, 'ristric': ristric }),
+        body: JSON.stringify({ 'userId': userId, 'request': request, 'requestid': reqid }),
     });
 }

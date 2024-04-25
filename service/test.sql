@@ -131,3 +131,13 @@ async function getUsersByUsernames(usernames) {
 alter table notifications add column is_read tinyint default 0;
 
 
+CREATE TABLE `temp_twitter`.`verification_requests` (
+  `id` INT NOT NULL,
+  `user_id` INT NOT NULL,
+  `request` TINYINT NULL DEFAULT 0,
+  PRIMARY KEY (`id`, `user_id`));
+
+
+  ALTER TABLE `verification_requests` ADD FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
+
+

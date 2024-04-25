@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="/css/verify.css" rel="stylesheet" />
+    <link href="/css/output.css" rel="stylesheet" />
+</head>
+
+<body>
+    <div class="relative h-screen" id="main" style="background-color: white">
+        <div class="flex justify-center">
+            <header class=" py-4 h-auto">
+                <!-- Side Navbar (left side) -->
+                <%- include('../../partials/sidebar.ejs') %>
+            </header>
+            <main role="main">
+                <div class="flex" style="width: 990px;">
+
+                    <div style="max-width: 600px;" class="margmain">
+
+                        <div
+                            class="w-full max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-6 md:p-8 dark:bg-gray-800 dark:border-gray-700 main-div">
+
+
+                            <form action="#">
+
+                                <input type="text" placeholder="enter your name ">
+                            </form>
+                        </div>
+
+
+                    </div>
+
+                    <!-- right sidebar -->
+                    <%- include('../partials/aside.ejs')%>
+                </div>
+            </main>
+        </div>
+    </div>
+
+
+
+</body>
+
+</html>

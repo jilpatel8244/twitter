@@ -2,10 +2,11 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link href="./css/output.css" rel="stylesheet" />
-    <title>Twitter Login</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>adminlogin</title>
+    <link href="/css/adminlogin.css" rel="stylesheet" />
+    <link href="/css/output.css" rel="stylesheet" />
 </head>
 
 <body>
@@ -16,24 +17,13 @@
                     <img class="rounded-full w-14 h-10" src="/assets/x-logo.png" alt="x logo" />
                 </div>
                 <p class="mt-1 text-center text-black dark:text-gray-400">
-                    Sign in to X
+                    Admin Login
                 </p>
             </div>
-            <div class="flex justify-center border rounded-full border-slate-300 w-full mb-2 hover:bg-gray-100 mt-2">
-                <div id="signup-google" class="flex items-center px-10 py-2">
-                    <img class="size-4 mr-2" src="./assets/google-logo.png" alt="" /><span class="text-sm">Sign up with
-                        Google</span>
-                </div>
-            </div>
-            <div class="flex justify-center border rounded-full border-slate-300 w-full hover:bg-gray-100 mt-2">
-                <div id="signup-google" class="flex items-center px-10 py-2">
-                    <img class="size-4 mr-2" src="./assets/apple-logo.png" alt="" /><span class="text-sm">Sign up with
-                        Apple</span>
-                </div>
-            </div>
+
             <div class="flex items-center justify-center w-full mt-2">
                 <hr class="w-[100px] h-[1px] bg-slate-200 border-0 rounded" />
-                <span class="px-3">or</span>
+
                 <hr class="w-[100px] h-[1px] bg-slate-200 border-0 rounded" />
             </div>
 
@@ -41,7 +31,7 @@
                 <div class="mt-2 sm:mx-auto sm:w-full sm:max-w-sm">
                     <div>
                         <div class="mt-2">
-                            <input id="email" name="email" type="email" placeholder="abc123@email.com"
+                            <input id="email" name="email" type="email" placeholder="admin@email.com"
                                 autocomplete="email"
                                 class="w-full block px-4 py-2 mt-2 text-gray-800 placeholder-gray-500 bg-white border rounded-lg focus:border-black dark:focus:border-black focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-gray-300" />
                             <span class="text-red-500" id="checkmail"></span>
@@ -50,28 +40,24 @@
 
                     <div>
                         <div class="flex items-center justify-between"></div>
-                        <div class="mt-2">
+                        <div class="mt-5">
                             <input id="password" name="password" type="password" placeholder=" Password"
                                 autocomplete="current-password"
                                 class="block w-full px-4 py-2 mt-2 text-gray-800 placeholder-gray-500 bg-white border rounded-lg focus:border-black dark:focus:border-black focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-gray-300" />
 
                             <span class="text-red-500" id="checkpassword"></span>
                         </div>
-                        <div class="text-sm mt-2">
-                            <a href="/forgotpassword" class="font-semibold text-sky-500 hover:text-sky-700">Forgot
-                                password?</a>
-                        </div>
+
                     </div>
 
-                    <div class="mt-3 flex justify-center border rounded-full border-slate-300 w-full hover:bg-gray-100">
+                    <div class="mt-5 flex justify-center border rounded-full border-slate-300 w-full hover:bg-gray-100">
                         <input name="signin" id="signin" type="button"
                             class="flex w-full justify-center cursor-pointer rounded-full bg-white px-3 py-1.5 leading-6 shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600 text-sm text-sky-500 font-bold"
                             value="Sign in" onclick="return validateAndSubmit()" />
                     </div>
                     <div class="text-sm mt-4">
-                        Don't have an account?
-                        <a href="/registration" class="font-semibold text-sky-500 hover:text-sky-600">
-                            Sign up</a>
+
+
                     </div>
                 </div>
                 <span id="errorMessage" class="text-red-500 text-sm block text-center"></span>
@@ -109,7 +95,7 @@
         }
 
         try {
-            let url = window.location.origin + "/login";
+            let url = window.location.origin + "/admin/adminlogin";
             let login_data = {
                 email,
                 password,
@@ -125,7 +111,7 @@
             login_response = await login_response.json();
             console.log(login_response);
             if (login_response.success === true) {
-                url = window.location.replace(window.location.origin + "/home");
+                url = window.location.replace(window.location.origin + "/admin/adminPannel");
                 // Redirect to home page upon successful login
                 // url = window.location.origin + "/home";
             } else {
@@ -139,5 +125,7 @@
         }
     };
 </script>
+
+
 
 </html>
