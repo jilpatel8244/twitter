@@ -19,6 +19,26 @@ let finalDelete = document.getElementById('finalDelete');
 let emojiBtn = document.getElementById('emojiBtn');
 let emojiPicker = document.getElementById('emojiPicker');
 let allScreen = document.getElementById('allScreen');
+var imgToRemove;
+const removeImg = (id)=>{
+  imgToRemove = document.getElementById(id);
+  if(imgToRemove){
+    imgToRemove.remove();
+    
+    media.value=null;
+    let closeImg = document.getElementById('closeImg');
+    closeImg.remove();
+    imgToRemove = undefined;
+    if (content.innerText.trim() != '' || imgToRemove != undefined ) {
+      post.style.opacity = '1'
+      post.style.cursor = 'pointer'
+    }
+    else {
+      post.style.opacity = '0.25'
+      post.style.cursor = 'default'
+    }
+  }
+}
 document.addEventListener("DOMContentLoaded", function (event) {
 
   document.getElementById('defaultModalButton').onclick = () => {
@@ -30,8 +50,8 @@ document.addEventListener("DOMContentLoaded", function (event) {
 
 });
 document.getElementById('close').onclick = () => {
-  if (images.childNodes[0] != undefined) {
-    if (content.innerText.trim() != '' || images.childNodes[0].tagName == 'IMG') {
+  if (imgToRemove != undefined) {
+    if (content.innerText.trim() != '' || imgToRemove != undefined ) {
       document.getElementById('popup-modal').style.display = 'block'
     } else {
       document.getElementById('defaultModal').style.display = 'none';
@@ -46,7 +66,7 @@ document.getElementById('close').onclick = () => {
   }
 }
 content.oninput = () => {
-  if (content.innerText.trim() != '') {
+  if (content.innerText.trim() != '' || imgToRemove != undefined ) {
     post.style.opacity = '1'
     post.style.cursor = 'pointer'
   }
@@ -79,7 +99,7 @@ emojiBtn.onclick = () => {
     .addEventListener('emoji-click', event => {
       let emoji = event.detail.unicode;
       content.innerText += emoji;
-      if (content.innerText.trim() != '') {
+      if (content.innerText.trim() != '' || imgToRemove != undefined) {
         post.style.opacity = '1'
         post.style.cursor = 'pointer'
       }
@@ -98,11 +118,11 @@ removeEmoji.addEventListener('click', () => {
 })
 
 const tweetInsert = async (status) => {
-  if (content.innerText.trim() != '' || images.childNodes[0].tagName == 'IMG') {
+  if (content.innerText.trim() != '' || imgToRemove != undefined) {
     let contentText = content.innerText;
     let form = new FormData();
     form.append('content', contentText);
-    form.append('media', media.files[0]);
+    form.append('media', media.files[0] || []);
     const response = await fetch('/tweetPost/insertTweet/?status=' + status, {
       method: 'POST',
       body: form
@@ -143,7 +163,6 @@ save.onclick = () => {
   post.style.cursor = 'default'
   document.forms['tweet'].reset();
 }
-
 discard.onclick = () => {
   document.getElementById('popup-modal').style.display = 'none'
   document.getElementById('defaultModal').style.display = 'none';
@@ -155,7 +174,7 @@ discard.onclick = () => {
 
 media.onchange = () => {
   getImages();
-  if (content.innerText.trim() != '' || images.childNodes[0].tagName == 'IMG') {
+  if (content.innerText.trim() != '' || imgToRemove != undefined) {
     post.style.opacity = '1'
     post.style.cursor = 'pointer'
   }
@@ -171,15 +190,27 @@ const getImages = () => {
     const fileReader = new FileReader();
     fileReader.readAsDataURL(files[i]);
     fileReader.addEventListener('load', function () {
-      post.style.opacity = '1'
-      post.style.cursor = 'pointer'
-      photos += '<img style="height:200px;width:170px" class="m-2" src="' + this.result + '"/>'
+      post.style.opacity = '1';
+      post.style.cursor = 'pointer';
+      let temp = Date.now();
+      photos += `
+      <div class='relative w-fit'>
+      <img id='${temp}' style="height:200px;width:170px" class="m-2" src="${this.result}"/>
+      <div id="closeImg"  class='absolute' style="right: 9px;top: 3px;" onclick="removeImg('${temp}')">
+      <p class="text-white hover:bg-gray-600 bg-black  cursor-pointer  rounded-3xl text-sm h-8 w-8 ms-auto inline-flex justify-center items-center" data-modal-toggle="${temp}" >
+      <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+      </svg>
+      <span class="sr-only">Close modal</span>
+      </p>
+      </div>`
       images.style.display = 'block';
       images.innerHTML = photos
+      imgToRemove=document.getElementById(temp)
     });
   }
-
 }
+
 const clearImages = () => {
   images.innerHTML = "";
   content.innerText = '';
@@ -255,28 +286,43 @@ closeDraft.onclick = () => {
 
 const sendDraft = async (tweetId) => {
   hiddenId.value = tweetId;
-  let response = await fetch('/tweetPost/displayImage/?id=' + tweetId, {
+  let response = await fetch('/tweetPost/displayImage/?id=' + tweetId , {
     method: 'GET'
   })
   let { image, error, draftContent } = await response.json();
   if (error) {
     return alert(error);
   }
+  var temp;
   if (image != undefined) {
     let { media_url } = image;
-    images.innerHTML = '<img style="height:200px;width:170px" class="m-2" src="/uploads/' + media_url + '">';
+    temp=Date.now();
+    images.innerHTML = `
+    <div class='relative w-fit'>
+    <img id='${temp}' style="height:200px;width:170px" class="m-2" src="/uploads/${media_url}"/>
+    <div id="closeImg"  class='absolute' style="right: 9px;top: 9px;" onclick="removeImg('${temp}')">
+    <p class="text-white hover:bg-gray-600 bg-black  cursor-pointer  rounded-3xl text-sm h-8 w-8 ms-auto inline-flex justify-center items-center" data-modal-toggle="${temp}" >
+    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+      <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+    </svg>
+    <span class="sr-only">Close modal</span>
+    </p>
+    </div>`
   }
   document.getElementById('select-modal').style.display = 'none';
   content.innerText = draftContent;
   post.style.opacity = '1'
   post.style.cursor = 'pointer'
+  imgToRemove=document.getElementById(temp);
 }
 
 const tweetUpdate = async (action) => {
-  if (content.innerText.trim() != '' || images.childNodes[0].tagName == 'IMG') {
+  
+  if (content.innerText.trim() != '' || imgToRemove != undefined) {
     let form = new FormData(document.forms[0]);
     form.append('content', content.innerText);
     form.append('action', action);
+    form.append('isImg',imgToRemove || null);
     const response = await fetch('/tweetPost/tweetUpdate', {
       method: 'POST',
       body: form
