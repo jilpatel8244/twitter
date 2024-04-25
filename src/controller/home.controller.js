@@ -219,7 +219,7 @@ WHERE tweets.id = ?;
 `;
   let [tweet] = await connection.execute(tweetSql, [tweetId]);
 
-  let [result] = await connection.execute(sql, [tweetId]);
+  // let [result] = await connection.execute(sql, [tweetId]);
   res.render('../views/pages/comments', {
     tweetId: tweetId,
     user: req.user[0][0],
