@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const passport = require("passport");
-const {get_comment, post_comment,get_notification,post_notification, getHomeForyou, getHomeFollowing, post_reply,get_reply  } = require('../controller/home.controller');
+const {get_comment, post_comment,delete_comment,edit_comment,get_notification,post_notification, getHomeForyou, getHomeFollowing, post_reply,get_reply  } = require('../controller/home.controller');
 
 
 
@@ -24,6 +24,8 @@ router.post("/post_notification", passport.authenticate('jwt', { session: false,
 // router.post("/home", getHome);
 router.get('/get_comments/:id', passport.authenticate('jwt', { session: false }), get_comment);
 router.post('/post_comments', passport.authenticate('jwt', { session: false }), post_comment);
+router.post('/delete_comment/:id',passport.authenticate('jwt', { session: false }), delete_comment);
+router.post('/edit_comment/:id',passport.authenticate('jwt', { session: false }), edit_comment);
 router.post('/post_reply', passport.authenticate('jwt', { session: false }), post_reply);
 router.post('/get_reply', passport.authenticate('jwt', { session: false }), get_reply);
 

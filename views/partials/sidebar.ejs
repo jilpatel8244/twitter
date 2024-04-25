@@ -84,11 +84,12 @@
                     Profile
                 </span></a>
             <a href="#"
-                class="mt-1 group flex items-center px-2 py-4 text-base leading-6 font-medium rounded-full hover:bg-gray-200 ">
+                class="mt-1 group flex items-center px-2 py-4 text-base leading-6 font-medium rounded-full hover:bg-gray-200 "
+                onclick="ResetPassToggle()">
                 <svg class="mr-4 h-6 w-6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                     stroke="currentColor" viewBox="0 0 24 24">
                     <path d="M8 12h.01M12 12h.01M16 12h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                </svg> <span class="text-xl ">
+                </svg> <span class="text-xl" >
                     More
                 </span></a>
             <div id="defaultModalButton" data-modal-target="defaultModal" data-modal-toggle="defaultModal"
@@ -140,6 +141,19 @@
                             <p>Log out @<%= user.username %></p>
                         </div>
                     </a>
+
+                    <div id="resetpass" style="display: none; bottom: 400px; left: 15px;" class="absolute p-4 border shadow-lg rounded-xl bg-gray-200 w-48 text-center cursor-pointer" >
+                       
+                        <div>
+                            <a href="/profilepasswordreset" class="mt-2">
+                                <p>Reset Password</p> 
+                            </a>
+                            <hr class="border-black">
+                            <a href="" class="mt-2">
+                              <p>Get Verified</p>
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -181,5 +195,15 @@
             logoutDiv.style.display = "none"
         }
     }
+
+    function ResetPassToggle() {
+        let logoutDiv = document.getElementById('resetpass');
+        if (logoutDiv.style.display == "none") {
+            logoutDiv.style.display = "block";
+        } else {
+            logoutDiv.style.display = "none"
+        }
+    }
+    
 </script>
 <script src="/js/notificationCount.script.js"></script>
