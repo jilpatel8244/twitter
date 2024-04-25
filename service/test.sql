@@ -141,6 +141,16 @@ alter table users drop column is_private;
 alter table users add column is_private tinyint default 1;
 
 
+CREATE TABLE `temp_twitter`.`verification_requests` (
+  `id` INT NOT NULL,
+  `user_id` INT NOT NULL,
+  `request` TINYINT NULL DEFAULT 0,
+  PRIMARY KEY (`id`, `user_id`));
+
+
+  ALTER TABLE `verification_requests` ADD FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
+
+
 -- for profession data will add like this
 -- by switching to profesaional, your account will no longer private. if private
 update users set is_private = 0, profession = "Programmer",

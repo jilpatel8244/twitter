@@ -311,7 +311,7 @@ WHERE rc.comment_id = ?
 ORDER BY rc.created_at DESC  ;
   `;
 
-  let [replies] = await connection.query(sql,[comment_id]);
+  let [replies] = await connection.query(sql, [comment_id]);
   res.json({ replies: replies });
 
 }

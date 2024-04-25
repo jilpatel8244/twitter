@@ -11,12 +11,13 @@
     <script src="/js/user.admin.js"></script>
     <script src="/js/tweetadmin.js"></script>
     <script src="/js/hastag.admin.js"></script>
+    <script src="/js/verify.admin.js"></script>
 
 </head>
 
 <body onload="usershandeler()">
 
-    <div class="main-container">
+    <div class="main-container" id="main-container">
         <div class="sidebar">
             <div class="admin">
                 <img src="/assets/x-twitterblue.svg" alt="" class="w-16 h-16 ml-2 p-1 ring-gray-300 dark:ring-gray-500">
@@ -111,9 +112,12 @@
         content.innerHTML = hashcontain;
 
     }
-    function verifyhandeler() {
+    async function verifyhandeler() {
         document.querySelectorAll(".active").forEach(el => el.classList.remove("active"));
         verification.classList.add("active");
+        let verification1 = await verify_request();
+        content.innerHTML = verification1
+
     }
     function supporthandeler() {
         document.querySelectorAll(".active").forEach(el => el.classList.remove("active"));
@@ -123,15 +127,53 @@
 
 
     function hastagverification() {
-        alert("hello")
+
+    }
+    async function verifyhandel(userid, req1, reqid) {
+
+        await vrified(userid, req1, reqid)
+        let verification1 = await verify_request();
+        content.innerHTML = verification1
+
+
+    }
+
+    async function tweetristric(tweetid, isristricted) {
+        await ristric(tweetid, isristricted);
     }
 
 
-    function userhandel(id) {
+    async function userstatushandel(id, active) {
 
-        
+
+        await statushandeluser(id, active);
+
 
     }
+
+    let main = document.getElementById("content");
+
+
+    main.addEventListener("click", mainhandel)
+
+
+
+    function mainhandel(e) {
+
+        if (e.target.src == window.location.origin + "/assets/red.png") {
+
+            e.target.src = "/assets/green.png"
+
+
+        }
+        else if (e.target.src == window.location.origin + "/assets/green.png") {
+            e.target.src = "/assets/red.png"
+
+        }
+    }
+
+
+
 </script>
 
 </html>
