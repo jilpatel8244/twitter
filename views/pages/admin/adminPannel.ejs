@@ -62,14 +62,14 @@
             </div>
 
         </div>
+
+
+
+
         <div class="content" id="content">
 
 
-
-
-
         </div>
-    </div>
 </body>
 
 
@@ -94,60 +94,160 @@
         document.querySelectorAll(".active").forEach(el => el.classList.remove("active"));
         users.classList.add("active");
         let content = document.getElementById("content");
-        console.log(content);
 
-        let userscontent = await getuserpage();
+        userscontent = `  
+        <div class="flex gap-8" >
+            <div class="pagination">
+                <p class="pagebtn">
+                    < </p>  
+                        <div class="flex">
+                        <p>page &nbsp</p>
+                        <p> 1</p>
+                        </div>
+                <p class="pagebtn">></p>
+            </div>
 
+        <div class="ml-20">
+                <label for="table-search" class="sr-only">Search</label>
+                <div class="relative">
+                    <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
+                        <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+                        </svg>
+                    </div>
+                    <input type="text" id="table-search-users"
+                        class="block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        placeholder="Search for users">
+                </div>
+            </div>
+            </div>`
+        userscontent += await getuserpage();
         content.innerHTML = userscontent;
 
     }
     async function tweetshandeler() {
         document.querySelectorAll(".active").forEach(el => el.classList.remove("active"));
         tweets.classList.add("active");
-        let tweetcontent = await gettweets();
+        let tweetcontent = `<div class="flex gap-8" >
+            <div class="pagination">
+            <p class="pagebtn">
+            < </p>  
+            <div class="flex">
+            <p>page &nbsp</p>
+            <p> 1</p>
+            </div>
+            <p class="pagebtn">></p>
+            </div>
+
+            <div class="ml-20">
+            <label for="table-search" class="sr-only">Search</label>
+            <div class="relative">
+            <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
+            <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+            </svg>
+            </div>
+            <input type="text" id="table-search-users"
+            class="block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            placeholder="Search for users">
+            </div>
+            </div>
+            </div>`
+        tweetcontent += await gettweets();
         content.innerHTML = tweetcontent;
     }
     async function hastagshandeler() {
         document.querySelectorAll(".active").forEach(el => el.classList.remove("active"));
         hastags.classList.add("active");
-        let hashcontain = await gethastag();
+        let hashcontain = `<div class="flex gap-8" >
+            <div class="pagination">
+            <p class="pagebtn">
+            < </p>  
+            <div class="flex">
+            <p>page &nbsp</p>
+            <p> 1</p>
+            </div>
+            <p class="pagebtn">></p>
+            </div>
+            <div class="ml-20">
+            <label for="table-search" class="sr-only">Search</label>
+            <div class="relative">
+            <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
+            <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+            </svg>
+            </div>
+            <input type="text" id="table-search-users"
+            class="block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            placeholder="Search for users">
+            </div>
+            </div>
+            </div>`
+        hashcontain += await gethastag();
         content.innerHTML = hashcontain;
 
     }
+
     async function verifyhandeler() {
         document.querySelectorAll(".active").forEach(el => el.classList.remove("active"));
         verification.classList.add("active");
-        let verification1 = await verify_request();
+        let verification1 = `<div class="flex gap-8" >
+            <div class="pagination">
+            <p class="pagebtn">
+            < </p>  
+            <div class="flex">
+            <p>page &nbsp</p>
+            <p> 1</p>
+            </div>
+            <p class="pagebtn">></p>
+            </div>
+            <div class="ml-20">
+            <label for="table-search" class="sr-only">Search</label>
+            <div class="relative">
+            <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
+            <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+            </svg>
+            </div>
+            <input type="text" id="table-search-users"
+            class="block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            placeholder="Search for users">
+            </div>
+            </div>
+            </div>`
+        verification1 += await verify_request();
         content.innerHTML = verification1
 
     }
+
     function supporthandeler() {
         document.querySelectorAll(".active").forEach(el => el.classList.remove("active"));
         support.classList.add("active");
     }
 
-
-
     function hastagverification() {
 
     }
-    async function verifyhandel(userid, req1, reqid) {
 
+    async function verifyhandel(userid, req1, reqid) {
         await vrified(userid, req1, reqid)
         let verification1 = await verify_request();
         content.innerHTML = verification1
-
-
     }
 
     async function tweetristric(tweetid, isristricted) {
         await ristric(tweetid, isristricted);
     }
 
-
     async function userstatushandel(id, active) {
-
-
         await statushandeluser(id, active);
 
 
@@ -155,23 +255,34 @@
 
     let main = document.getElementById("content");
 
-
     main.addEventListener("click", mainhandel)
 
-
-
     function mainhandel(e) {
-
         if (e.target.src == window.location.origin + "/assets/red.png") {
-
             e.target.src = "/assets/green.png"
-
-
         }
         else if (e.target.src == window.location.origin + "/assets/green.png") {
             e.target.src = "/assets/red.png"
 
         }
+
+
+        if (e.target.id == "table-search-users") {
+            let tableSearchUsers = document.getElementById("table-search-users");
+
+            tableSearchUsers.addEventListener("keydown", searchhandel)
+            let debouncing;
+
+            function searchhandel(e) {
+                clearTimeout(debouncing)
+                debouncing = setTimeout(async () => {
+                    console.log(e.target);
+
+                }, 600)
+
+            }
+        }
+
     }
 
 

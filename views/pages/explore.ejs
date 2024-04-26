@@ -225,75 +225,80 @@
         popup.style.display = "block"
     }
     //done
+    let debouncing;
     async function searchOnchange() {
-        let hastag = document.getElementById("hastag")
-        let username = document.getElementById("username")
-        let simpale = document.getElementById("simpal")
-        username.style.display = "none";
-        hastag.style.display = "none";
-        popup.style.display = "block"
-        async function getdata(search) {
-            let url = window.location.origin + "/explore/searchboxdata"
-            let bodyargs = { searchbox: search }
-            console.log(bodyargs);
-            let data = await fetch(url, {
-                method: 'post',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(bodyargs)
-            })
-            data = await data.json()
-            return data;
 
-        }
+        clearTimeout(debouncing)
 
-
-        let search = document.getElementById("search");
-
-
-        search.addEventListener("keypress", handelclick)
-        let data = await getdata(search.value);
-
-        function handelclick(e) {
-            if (e.key == "Enter") {
-
-                let btncon = document.getElementById("btncon")
-                btncon.style.display = "flex"
-                let popup = document.getElementById("popup")
-                let search = document.getElementById("search").blur();
-
-
-
-                popup.style.display = "none"
-
-                topPostHandeler()
-            }
-        }
-        if (data.type == 0) {
-
-
-
-
-            let tag = ``
-
-            data.result.forEach(element => {
-
-                tag += `  <h2 class="px-4 ml-2 w-48 font-bold ">#${element.hashtag_name}</h2>`
-
-            });
-            hastag.innerHTML = tag
-            hastag.style.display = "block";
-            simpale.style.display = "none";
+        debouncing = setTimeout(async () => {
+            let hastag = document.getElementById("hastag")
+            let username = document.getElementById("username")
+            let simpale = document.getElementById("simpal")
             username.style.display = "none";
+            hastag.style.display = "none";
+            popup.style.display = "block"
+            async function getdata(search) {
+                let url = window.location.origin + "/explore/searchboxdata"
+                let bodyargs = { searchbox: search }
+                console.log(bodyargs);
+                let data = await fetch(url, {
+                    method: 'post',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(bodyargs)
+                })
+                data = await data.json()
+                return data;
 
-        }
-        else if (data.type == 1) {
+            }
+
+
+            let search = document.getElementById("search");
+
+
+            search.addEventListener("keypress", handelclick)
+            let data = await getdata(search.value);
+
+            function handelclick(e) {
+                if (e.key == "Enter") {
+
+                    let btncon = document.getElementById("btncon")
+                    btncon.style.display = "flex"
+                    let popup = document.getElementById("popup")
+                    let search = document.getElementById("search").blur();
 
 
 
-            let con = ``
-            data.result.forEach(element => {
+                    popup.style.display = "none"
 
-                con += `<div class="flex flex-shrink-0 check ">
+                    topPostHandeler()
+                }
+            }
+            if (data.type == 0) {
+
+
+
+
+                let tag = ``
+
+                data.result.forEach(element => {
+
+                    tag += `  <h2 class="px-4 ml-2 w-48 font-bold ">#${element.hashtag_name}</h2>`
+
+                });
+                hastag.innerHTML = tag
+                hastag.style.display = "block";
+                simpale.style.display = "none";
+                username.style.display = "none";
+
+            }
+            else if (data.type == 1) {
+
+
+
+                let con = ``
+                data.result.forEach(element => {
+
+                    con += `<div class="flex flex-shrink-0 check ">
                         <div class="flex-1 check">
                         <div class="flex items-center w-48 check">
                         <div>
@@ -310,21 +315,24 @@
                         class="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 transition ease-in-out duration-150 check">
                         @${element.username}
                         </p></div></div></div></div>`
-            });
+                });
 
 
-            hastag.style.display = "none";
-            simpale.style.display = "none";
-            username.innerHTML = con;
+                hastag.style.display = "none";
+                simpale.style.display = "none";
+                username.innerHTML = con;
 
-            username.style.display = "block";
-        }
-        else {
+                username.style.display = "block";
+            }
+            else {
 
-            hastag.style.display = "none";
-            simpale.style.display = "block";
-            username.style.display = "none";
-        }
+                hastag.style.display = "none";
+                simpale.style.display = "block";
+                username.style.display = "none";
+            }
+
+
+        }, 600)
 
     }
 
