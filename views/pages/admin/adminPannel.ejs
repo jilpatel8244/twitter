@@ -65,11 +65,7 @@
         <div class="content" id="content">
 
 
-
-
-
         </div>
-    </div>
 </body>
 
 
@@ -87,65 +83,64 @@
     verification.addEventListener("click", verifyhandeler)
     support.addEventListener("click", supporthandeler)
 
-    async function usershandeler() {
+    async function usershandeler(search = "", page = "none", curpage = "none") {
 
         document.querySelectorAll(".active").forEach(el => el.classList.remove("active"));
         users.classList.add("active");
         let content = document.getElementById("content");
-        console.log(content);
 
-        let userscontent = await getuserpage();
 
+        let userscontent = await getuserpage(search, page, curpage);
         content.innerHTML = userscontent;
 
     }
-    async function tweetshandeler() {
+
+    async function tweetshandeler(search = "") {
         document.querySelectorAll(".active").forEach(el => el.classList.remove("active"));
         tweets.classList.add("active");
-        let tweetcontent = await gettweets();
+
+        let tweetcontent = await gettweets(search);
         content.innerHTML = tweetcontent;
     }
-    async function hastagshandeler() {
+
+    async function hastagshandeler(search = "") {
         document.querySelectorAll(".active").forEach(el => el.classList.remove("active"));
         hastags.classList.add("active");
-        let hashcontain = await gethastag();
+
+        let hashcontain = await gethastag(search);
         content.innerHTML = hashcontain;
 
     }
-    async function verifyhandeler() {
+
+    async function verifyhandeler(search = "") {
         document.querySelectorAll(".active").forEach(el => el.classList.remove("active"));
         verification.classList.add("active");
-        let verification1 = await verify_request();
+
+        let verification1 = await verify_request(search);
         content.innerHTML = verification1
 
     }
+
     function supporthandeler() {
         document.querySelectorAll(".active").forEach(el => el.classList.remove("active"));
         support.classList.add("active");
     }
 
-
-
     function hastagverification() {
 
     }
-    async function verifyhandel(userid, req1, reqid) {
 
+    async function verifyhandel(userid, req1, reqid) {
         await vrified(userid, req1, reqid)
         let verification1 = await verify_request();
         content.innerHTML = verification1
-
-
     }
 
     async function tweetristric(tweetid, isristricted) {
         await ristric(tweetid, isristricted);
     }
 
-
     async function userstatushandel(id, active) {
-
-
         await statushandeluser(id, active);
 
 
@@ -153,23 +148,62 @@
 
     let main = document.getElementById("content");
 
-
     main.addEventListener("click", mainhandel)
 
-
-
-    function mainhandel(e) {
-
+    async function mainhandel(e) {
         if (e.target.src == window.location.origin + "/assets/red.png") {
-
             e.target.src = "/assets/green.png"
-
-
         }
         else if (e.target.src == window.location.origin + "/assets/green.png") {
             e.target.src = "/assets/red.png"
 
         }
+        let pagenumber = document.getElementById("pagenumber").innerText
+        if (e.target.classList[0] == "gtuser") {
+            await usershandeler("", pagenumber, Number(pagenumber) + 1)
+
+        }
+
+
+
+        if (e.target.id == "table-search-users") {
+            let tableSearchUsers = document.getElementById("table-search-users");
+
+            tableSearchUsers.addEventListener("keydown", searchhandel)
+            let debouncing;
+
+            function searchhandel(e) {
+                clearTimeout(debouncing)
+                debouncing = setTimeout(async () => {
+                    let search1 = tableSearchUsers.value;
+
+                    console.log(e.target.classList[0]);
+
+                    if (e.target.classList[0] == "user") {
+
+                        let pagenumber = document.getElementById("pagenumber").innerText;
+                        console.log("page number is ", pagenumber);
+                        await usershandeler(search1, pagenumber)
+                    }
+                    else if (e.target.classList[0] == "hashtag") {
+                        await hastagshandeler(search1)
+                    }
+                    else if (e.target.classList[0] == "tweet") {
+                        tableSearchUsers.focus()
+                        await tweetshandeler(search1)
+                    }
+                    else if (e.target.classList[0] == "verify") {
+                        await verifyhandel(search1)
+                    }
+
+
+
+
+                }, 1200)
+
+            }
+        }
+
     }
 
 
