@@ -181,7 +181,7 @@ WHERE tc.tweet_id = ?
 ORDER BY tc.created_at DESC  ;
   `;
 
-  let [result1] = await connection.query(commentSql, [tweetId]);
+  let [result] = await connection.query(commentSql, [tweetId]);
   // console.log(result);
 
   let tweetSql = `
