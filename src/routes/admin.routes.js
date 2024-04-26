@@ -9,10 +9,10 @@ require("../middleware/passport");
 const router = express.Router();
 router.get("/adminlogin", getAdminLogin)
 router.post("/adminlogin", adminLoginHandler)
-router.get("/getusers", getUsers)
-router.get("/getVerifyRequest", getVerifiedRequest);
+router.post("/getusers", getUsers)
+router.post("/getVerifyRequest", getVerifiedRequest);
 router.get("/verify", getverifypage);
-router.get("/gettweet", getTweets);
+router.post("/gettweet", getTweets);
 router.post("/updateStatusUser", manageUserActivation);
 router.post("/ristrictweet", ristricTweet);
 router.post("/updateverify", updateverify);

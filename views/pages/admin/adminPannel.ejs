@@ -62,10 +62,6 @@
             </div>
 
         </div>
-
-
-
-
         <div class="content" id="content">
 
 
@@ -81,149 +77,46 @@
     let verification = document.getElementById("verification");
     let support = document.getElementById("support");
 
-
-
     users.addEventListener("click", usershandeler)
     tweets.addEventListener("click", tweetshandeler)
     hastags.addEventListener("click", hastagshandeler)
     verification.addEventListener("click", verifyhandeler)
     support.addEventListener("click", supporthandeler)
 
-    async function usershandeler() {
+    async function usershandeler(search = "", page = "none", curpage = "none") {
 
         document.querySelectorAll(".active").forEach(el => el.classList.remove("active"));
         users.classList.add("active");
         let content = document.getElementById("content");
 
-        userscontent = `  
-        <div class="flex gap-8" >
-            <div class="pagination">
-                <p class="pagebtn">
-                    < </p>  
-                        <div class="flex">
-                        <p>page &nbsp</p>
-                        <p> 1</p>
-                        </div>
-                <p class="pagebtn">></p>
-            </div>
 
-        <div class="ml-20">
-                <label for="table-search" class="sr-only">Search</label>
-                <div class="relative">
-                    <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
-                        <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
-                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
-                        </svg>
-                    </div>
-                    <input type="text" id="table-search-users"
-                        class="block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        placeholder="Search for users">
-                </div>
-            </div>
-            </div>`
-        userscontent += await getuserpage();
+        let userscontent = await getuserpage(search, page, curpage);
         content.innerHTML = userscontent;
 
     }
-    async function tweetshandeler() {
+
+    async function tweetshandeler(search = "") {
         document.querySelectorAll(".active").forEach(el => el.classList.remove("active"));
         tweets.classList.add("active");
-        let tweetcontent = `<div class="flex gap-8" >
-            <div class="pagination">
-            <p class="pagebtn">
-            < </p>  
-            <div class="flex">
-            <p>page &nbsp</p>
-            <p> 1</p>
-            </div>
-            <p class="pagebtn">></p>
-            </div>
 
-            <div class="ml-20">
-            <label for="table-search" class="sr-only">Search</label>
-            <div class="relative">
-            <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
-            <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
-            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-            d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
-            </svg>
-            </div>
-            <input type="text" id="table-search-users"
-            class="block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder="Search for users">
-            </div>
-            </div>
-            </div>`
-        tweetcontent += await gettweets();
+        let tweetcontent = await gettweets(search);
         content.innerHTML = tweetcontent;
     }
-    async function hastagshandeler() {
+
+    async function hastagshandeler(search = "") {
         document.querySelectorAll(".active").forEach(el => el.classList.remove("active"));
         hastags.classList.add("active");
-        let hashcontain = `<div class="flex gap-8" >
-            <div class="pagination">
-            <p class="pagebtn">
-            < </p>  
-            <div class="flex">
-            <p>page &nbsp</p>
-            <p> 1</p>
-            </div>
-            <p class="pagebtn">></p>
-            </div>
-            <div class="ml-20">
-            <label for="table-search" class="sr-only">Search</label>
-            <div class="relative">
-            <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
-            <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
-            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-            d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
-            </svg>
-            </div>
-            <input type="text" id="table-search-users"
-            class="block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder="Search for users">
-            </div>
-            </div>
-            </div>`
-        hashcontain += await gethastag();
+
+        let hashcontain = await gethastag(search);
         content.innerHTML = hashcontain;
 
     }
 
-    async function verifyhandeler() {
+    async function verifyhandeler(search = "") {
         document.querySelectorAll(".active").forEach(el => el.classList.remove("active"));
         verification.classList.add("active");
-        let verification1 = `<div class="flex gap-8" >
-            <div class="pagination">
-            <p class="pagebtn">
-            < </p>  
-            <div class="flex">
-            <p>page &nbsp</p>
-            <p> 1</p>
-            </div>
-            <p class="pagebtn">></p>
-            </div>
-            <div class="ml-20">
-            <label for="table-search" class="sr-only">Search</label>
-            <div class="relative">
-            <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
-            <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
-            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-            d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
-            </svg>
-            </div>
-            <input type="text" id="table-search-users"
-            class="block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder="Search for users">
-            </div>
-            </div>
-            </div>`
-        verification1 += await verify_request();
+
+        let verification1 = await verify_request(search);
         content.innerHTML = verification1
 
     }
@@ -257,7 +150,7 @@
 
     main.addEventListener("click", mainhandel)
 
-    function mainhandel(e) {
+    async function mainhandel(e) {
         if (e.target.src == window.location.origin + "/assets/red.png") {
             e.target.src = "/assets/green.png"
         }
@@ -265,6 +158,12 @@
             e.target.src = "/assets/red.png"
 
         }
+        let pagenumber = document.getElementById("pagenumber").innerText
+        if (e.target.classList[0] == "gtuser") {
+            await usershandeler("", pagenumber, Number(pagenumber) + 1)
+
+        }
+
 
 
         if (e.target.id == "table-search-users") {
@@ -276,9 +175,31 @@
             function searchhandel(e) {
                 clearTimeout(debouncing)
                 debouncing = setTimeout(async () => {
-                    console.log(e.target);
+                    let search1 = tableSearchUsers.value;
 
-                }, 600)
+                    console.log(e.target.classList[0]);
+
+                    if (e.target.classList[0] == "user") {
+
+                        let pagenumber = document.getElementById("pagenumber").innerText;
+                        console.log("page number is ", pagenumber);
+                        await usershandeler(search1, pagenumber)
+                    }
+                    else if (e.target.classList[0] == "hashtag") {
+                        await hastagshandeler(search1)
+                    }
+                    else if (e.target.classList[0] == "tweet") {
+                        tableSearchUsers.focus()
+                        await tweetshandeler(search1)
+                    }
+                    else if (e.target.classList[0] == "verify") {
+                        await verifyhandel(search1)
+                    }
+
+
+
+
+                }, 1200)
 
             }
         }
