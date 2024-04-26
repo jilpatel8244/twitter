@@ -7,7 +7,7 @@ function getTweetComponent(data) {
                         <article class="hover:bg-gray-100 transition duration-350 ease-in-out">
                             <div id="${tweets.tweet_id}">
                                 <div class="flex flex-shrink-0 p-4 pb-0">
-                                    <a href="#" class="flex-shrink-0 group block">
+                                    <a href="" class="flex-shrink-0 group block">
                                         <div class="flex items-center">
                                             <div>`
 
@@ -31,6 +31,7 @@ function getTweetComponent(data) {
                                 </div>
 
                                 <div class="pl-16">
+                                    <a href="/get_comments/${tweets.tweet_id}">
                                     <pre class="mr-3 text-base width-auto font-normal text-balance overflow-hidden" style="word-wrap: break-word; overflow-wrap: break-word; font-family: sans-serif;">${tweets.content}</pre>
                                     `
 
@@ -39,6 +40,7 @@ function getTweetComponent(data) {
                                                     <div class="bg-cover bg-no-repeat bg-center rounded-lg size-fit">
                                                         <img class="" src="/uploads/${tweets.media_url}" alt="missing">
                                                     </div>
+                                                    </a>
                                                 </div>`
         }
 
@@ -134,9 +136,11 @@ function getTweetComponent(data) {
 
 
                                             <!-- share span tag -->
-                                            <div class="flex text-center py-2 m-2">
+                                            <div class="flex py-2 m-2 relative">
                                                 <span
-                                                    class="group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full  hover:text-blue-300">
+                                                    class="group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full  hover:text-blue-300"
+                                                    onclick="shareToggle(${tweets.tweet_id})"
+                                                    >
                                                     <svg class="text-center h-7 w-6" fill="none" stroke-linecap="round"
                                                         stroke-linejoin="round" stroke-width="2" stroke="currentColor"
                                                         viewBox="0 0 24 24">
@@ -144,6 +148,15 @@ function getTweetComponent(data) {
                                                         </path>
                                                     </svg>
                                                 </span>
+
+                                                <div id="shareOptions${tweets.tweet_id}" style="width: 220px; display: none; top: 45px; left: -100px;" class="absolute p-4 border shadow-lg rounded-xl cursor-pointer bg-white">
+                                                    <div onclick="shareLinkHandler(${tweets.tweet_id})">
+                                                        <p class="text-left">Copy link</p>
+                                                    </div>
+                                                    <div>
+                                                        <p class="text-left">Send via Direct Message</p>
+                                                    </div>
+                                                </div>
                                             </div>
 
 
@@ -193,7 +206,6 @@ function getTweetComponent(data) {
                                     </div>
                                 </div>
                             </div>
-
                             <hr class="border-gray-200">
                         </article>
                     </li > `
@@ -201,5 +213,14 @@ function getTweetComponent(data) {
 
     tweet += `</ul>`;
 
-    return tweet;
+            return tweet;
+}
+
+function shareToggle(tweet_id) {
+    let shareOptionsDiv = document.getElementById(`shareOptions`+ tweet_id);
+    if (shareOptionsDiv.style.display == "none") {
+        shareOptionsDiv.style.display = "block";
+    } else {
+        shareOptionsDiv.style.display = "none"
+    }
 }
