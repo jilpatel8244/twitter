@@ -4,6 +4,7 @@ const passport = require("passport");
 const {get_comment, post_comment,delete_comment,edit_comment,get_notification,post_notification, getHomeForyou, getHomeFollowing, post_reply,get_reply  } = require('../controller/home.controller');
 
 
+const {retweet} =require('../controller/retweet.controller');
 
 router.get("/", (req, res) => {
   res.render("pages/index");
@@ -28,6 +29,8 @@ router.post('/delete_comment/:id',passport.authenticate('jwt', { session: false 
 router.post('/edit_comment/:id',passport.authenticate('jwt', { session: false }), edit_comment);
 router.post('/post_reply', passport.authenticate('jwt', { session: false }), post_reply);
 router.post('/get_reply', passport.authenticate('jwt', { session: false }), get_reply);
+
+router.post("/retweet",passport.authenticate('jwt', { session: false, failureRedirect: "/login" }),retweet)
 
 
 module.exports = router;

@@ -1,32 +1,67 @@
 const connection = require("../../../config/connection");
 const logger = require("../../../logger/logger");
-
-
-
 require("dotenv").config();
 const jwt = require("jsonwebtoken");
 const md5 = require("md5");
 const { log } = require("console");
+const { search } = require("../../routes/admin.routes");
+
+
+
+
+
 
 exports.getAdminLogin = async (req, res) => {
 
     res.render("pages/admin/adminlogin");
 
 };
-exports.getAdminPannel = async (req, res) => {
-
-    res.render("pages/admin/adminPannel");
-};
 
 exports.getUsers = async (req, res) => {
 
     try {
-        let sql = "select * from users"
+
+        let search = req.body.search;
+        let page = req.body.page;
+        let curpage = req.body.curpage;
+
+
+        if (page == "none") {
+            page = 1;
+        }
+
+
+        const resultpage = 2;
+        if (typeof search == "object") {
+
+            search = ""
+        }
+
+        let sql = `select count(*) as total from (select * from users where name LIKE '%${search}%') as h`
+
         let [result] = await connection.query(sql)
 
-        res.json({ data: result })
+        console.log(result);
+        const numOfResults = result[0].total;
+        const numberOfPages = Math.ceil(numOfResults / resultpage);
+        page = page ? Number(page) : 1;
+        const startingLimit = (page - 1) * resultpage;
+        console.log("start limit is ", startingLimit);
+        console.log("reslt page is", resultpage);
+
+
+        let sql1 = `select * from users where name LIKE '%${search}%' limit ${startingLimit},${resultpage}`
+        console.log(sql1);
+        let [result1] = await connection.query(sql1)
+        console.log(result1);
+
+
+
+
+        res.json({ data: result1, "curpage": curpage, "totalpage": numberOfPages })
 
     } catch (error) {
+        console.log(error);
         res.json({ error: error })
     }
 
@@ -101,9 +136,15 @@ exports.getHastag = async (req, res) => {
 exports.getVerifiedRequest = async (req, res) => {
 
     try {
+        let search = req.body.search;
+        if (typeof search == "object") {
+
+            search = ""
+        }
+
         let sql = `select users.id ,  users.name , users.username , users.profile_img_url ,
         verification_requests.request ,verification_requests.id as reqid from verification_requests 
-         left join users on verification_requests.user_id = users.id where verification_requests.request =1 ;
+         left join users on verification_requests.user_id = users.id where verification_requests.request =1   and users.name LIKE '%${search}%';
         `
         let [result] = await connection.query(sql)
         res.json({ data: result })
@@ -147,10 +188,16 @@ exports.updateverify = async (req, res) => {
 exports.getTweets = async (req, res) => {
 
     try {
+
+        let search = req.body.search
+        if (typeof search == "object") {
+
+            search = ""
+        }
         let sql = `
         select users.name , users.username , tweets.content , tweets.is_ristricted, tweets.id,medias.media_url  from tweets 
         left join users on tweets.user_id = users.id
-        left join medias on tweets.id = medias.tweet_id where tweets.is_posted = 1 ; `
+        left join medias on tweets.id = medias.tweet_id where tweets.is_posted = 1  and  users.name LIKE '%${search}%' ; `
         let [result] = await connection.query(sql)
 
 
@@ -229,4 +276,11 @@ exports.adminLoginHandler = async (req, res) => {
             message: "something went wrong",
         });
     }
+};
+
+
+
+exports.getAdminPannel = async (req, res) => {
+
+    res.render("pages/admin/adminPannel");
 };

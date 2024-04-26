@@ -32,12 +32,14 @@ exports.getHomeForyou = async (req, res) => {
   bookmarks.status as isBookmarked,
   tweet_likes.status as isLiked,
   (SELECT COUNT(*) FROM tweet_likes WHERE tweet_likes.tweet_id = tweets.id) as likeCount
+  ,(select count(*) From retweets where retweets.tweet_id=tweets.id) as repostCount
   FROM users
   JOIN tweets ON users.id = tweets.user_id
   LEFT JOIN medias ON tweets.id = medias.tweet_id
   LEFT JOIN tweet_comments ON tweet_comments.user_id = tweets.id 
   LEFT JOIN bookmarks ON bookmarks.tweet_id = tweets.id AND bookmarks.user_id = ${req.user[0][0].id}
   LEFT JOIN tweet_likes ON tweet_likes.tweet_id = tweets.id AND tweet_likes.user_id = ${req.user[0][0].id}
+  left join retweets on retweets.tweet_id=tweets.id and retweets.user_id = ${req.user[0][0].id}
   WHERE users.is_active = 1 AND tweets.is_posted = 1 AND tweets.deleted_at IS NULL
   ORDER BY 
     CASE

@@ -2,7 +2,8 @@ const express = require("express");
 const router = express.Router();
 const logger = require("../../logger/logger");
 const passport = require("passport");
-require("../middleware/passport");
+require("../middleware/permission");
+
 const homeRoute = require("./home.routes");
 const bookmarkRoute = require("./bookmark.routes");
 // const likeRoute = require("./like.routes");
@@ -10,7 +11,7 @@ const messagesRoute = require("./messages.routes");
 
 const exploreroute = require("../routes/explore.routes");
 const followRoute = require("../routes/follow.route");
-const { get_registration, post_registration,USER_NAME_EXIST } = require("../controller/registration");
+const { get_registration, post_registration, USER_NAME_EXIST } = require("../controller/registration");
 const { getPassword, setPassword } = require("../controller/password");
 const { login, loginHandler, logoutHandler } = require("../controller/auth.controller");
 const { resetPassword, set_password, verify } = require("../controller/resetpassword");
@@ -34,7 +35,7 @@ router.post("/activeCode", getActivecode)
 router.get("/resetPassword", resetPassword)
 router.post("/setPassword", set_password);
 router.get("/logout", logoutHandler);
-router.post("/isUserExist",USER_NAME_EXIST);
+router.post("/isUserExist", USER_NAME_EXIST);
 router.use('/home', homeRoute);
 
 

@@ -1,8 +1,8 @@
 function getTweetComponent(data) {
     let tweet = `<ul class="list-none">`;
 
-            data.forEach(tweets => {
-                tweet += `
+    data.forEach(tweets => {
+        tweet += `
                     <li>
                         <article class="hover:bg-gray-100 transition duration-350 ease-in-out">
                             <div id="${tweets.tweet_id}">
@@ -10,13 +10,13 @@ function getTweetComponent(data) {
                                     <a href="" class="flex-shrink-0 group block">
                                         <div class="flex items-center">
                                             <div>`
-                                            
-                                                if(tweets.profile_img_url) {
-                                                    tweet += `<img class="inline-block h-10 w-10 rounded-full" src="/uploads/${tweets.profile_img_url}" alt="" />`
-                                                } else {
-                                                    tweet += `<img class="inline-block h-10 w-10 rounded-full" src="/assets/profile.png" alt="" />`
-                                                }
-                                            tweet +=    `</div>
+
+        if (tweets.profile_img_url) {
+            tweet += `<img class="inline-block h-10 w-10 rounded-full" src="/uploads/${tweets.profile_img_url}" alt="" />`
+        } else {
+            tweet += `<img class="inline-block h-10 w-10 rounded-full" src="/assets/profile.png" alt="" />`
+        }
+        tweet += `</div>
                                             <div class="ml-3">
                                                 <p class="text-base leading-6 font-medium text-black">
                                                     ${tweets.name}
@@ -35,16 +35,16 @@ function getTweetComponent(data) {
                                     <pre class="mr-3 text-base width-auto font-normal text-balance overflow-hidden" style="word-wrap: break-word; overflow-wrap: break-word; font-family: sans-serif;">${tweets.content}</pre>
                                     `
 
-                                    if(tweets.media_url) {
-                                        tweet += `<div class="md:flex-shrink pr-6 pt-3">
+        if (tweets.media_url) {
+            tweet += `<div class="md:flex-shrink pr-6 pt-3">
                                                     <div class="bg-cover bg-no-repeat bg-center rounded-lg size-fit">
                                                         <img class="" src="/uploads/${tweets.media_url}" alt="missing">
                                                     </div>
                                                     </a>
                                                 </div>`
-                                    }
+        }
 
-                                tweet += `
+        tweet += `
                                 <div class="flex">
                                     <div class="w-full">
                                         <div class="flex items-center justify-around pr-6">
@@ -72,26 +72,38 @@ function getTweetComponent(data) {
 
 
                                             <!-- retweet span tag -->
-                                            <div  class="flex text-center py-2 m-2">
+                                            <div  class="flex text-center py-2 m-2 cursor-pointer">
                                                 <span
-                                                    onclick=retweet(${tweets.tweet_id},this)
-                                                    class="group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full  hover:text-blue-300">
+                                                    data-dropdown-toggle="";
+                                                    id="retweetBtn"
+                                                    onclick=retweet(${tweets.tweet_id},this);
+                                                    class="group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full  hover:text-blue-600">
                                                     <svg class="text-center h-7 w-6" fill="none" stroke-linecap="round"
                                                         stroke-linejoin="round" stroke-width="2" stroke="currentColor"
                                                         viewBox="0 0 24 24">
                                                         <path d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"></path>
                                                     </svg>
+                                                    <span id="totalRepost" class="group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full">
+                                                    ${tweets.repostCount ? tweets.repostCount : "" }
                                                 </span>
-                                            </div>
+                                                </span>
+                                                
+                                            </div><div id="retweetBox" class="overflow-y-auto overflow-x-hidden  z-30  md:inset-0  h-full  max-h-full" style="z-index: 25;"></div>
 
+                                            
+
+
+                                            <div id="removeRepostBox"  style="display: none;z-index: 15; position: absolute; top:0;left:0;width:99vw; height:300vh">
+
+                                            </div>
 
 
                                             <!-- like span tag -->
                                             <div class="flex items-center text-center py-2 m-2">
                                                 <span
                                                     class="group flex items-center px-1 py-2 text-base leading-6 font-medium rounded-full  hover:text-red-300">`
-                                                    if(tweets.isLiked) {
-                                                        tweet += `<svg class="text-center h-7 w-6 fill-red-600 text-red-600 like_${tweets.tweet_id}"
+        if (tweets.isLiked) {
+            tweet += `<svg class="text-center h-7 w-6 fill-red-600 text-red-600 like_${tweets.tweet_id}"
                                                                 fill="none" stroke-linecap="round" stroke-linejoin="round"
                                                                 stroke-width="2" stroke="currentColor" viewBox="0 0 24 24"
                                                                 onclick="likeHandler('${tweets.tweet_id}')">
@@ -99,8 +111,8 @@ function getTweetComponent(data) {
                                                                         d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z">
                                                                     </path>
                                                             </svg>`
-                                                    } else {
-                                                        tweet += `<svg class="text-center h-7 w-6 text-gray-500 like_${tweets.tweet_id}"
+        } else {
+            tweet += `<svg class="text-center h-7 w-6 text-gray-500 like_${tweets.tweet_id}"
                                                                 fill="none" stroke-linecap="round" stroke-linejoin="round"
                                                                 stroke-width="2" stroke="currentColor" viewBox="0 0 24 24"
                                                                 onclick="likeHandler('${tweets.tweet_id}')">
@@ -108,8 +120,8 @@ function getTweetComponent(data) {
                                                                         d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z">
                                                                     </path>
                                                             </svg>`
-                                                    }
-                                        tweet += `</span>
+        }
+        tweet += `</span>
                                                 <span class="px-1 py-2" id="likeCount${tweets.tweet_id}">
                                                     ${tweets.likeCount}
                                                 </span>
@@ -152,8 +164,8 @@ function getTweetComponent(data) {
                                             <div class="flex text-center py-2 m-2 ">
                                                 <span
                                                     class="group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full  hover:text-blue-300">`
-                                                    if(tweets.isBookmarked) {
-                                                        tweet += `<svg class="text-center h-7 w-6 fill-blue-300 text-blue-800 bookmark_${tweets.tweet_id}"
+        if (tweets.isBookmarked) {
+            tweet += `<svg class="text-center h-7 w-6 fill-blue-300 text-blue-800 bookmark_${tweets.tweet_id}"
                                                                     fill="none" stroke-linecap="round" stroke-linejoin="round"
                                                                     stroke-width="2" stroke="currentColor" viewBox="0 0 24 24"
                                                                     onclick="bookmarkHandler('${tweets.tweet_id}')">
@@ -161,8 +173,8 @@ function getTweetComponent(data) {
                                                                             d="M8 4H6a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-2m-4-1v8m0 0l3-3m-3 3L9 8m-5 5h2.586a1 1 0 01.707.293l2.414 2.414a1 1 0 00.707.293h3.172a1 1 0 00.707-.293l2.414-2.414a1 1 0 01.707-.293H20">
                                                                         </path>
                                                                 </svg>`
-                                                    } else {
-                                                        tweet += `<svg class="text-center h-7 w-6 bookmark_${tweets.tweet_id}"
+        } else {
+            tweet += `<svg class="text-center h-7 w-6 bookmark_${tweets.tweet_id}"
                                                                     fill="none" stroke-linecap="round" stroke-linejoin="round"
                                                                     stroke-width="2" stroke="currentColor" viewBox="0 0 24 24"
                                                                     onclick="bookmarkHandler('${tweets.tweet_id}')">
@@ -170,8 +182,8 @@ function getTweetComponent(data) {
                                                                             d="M8 4H6a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-2m-4-1v8m0 0l3-3m-3 3L9 8m-5 5h2.586a1 1 0 01.707.293l2.414 2.414a1 1 0 00.707.293h3.172a1 1 0 00.707-.293l2.414-2.414a1 1 0 01.707-.293H20">
                                                                         </path>
                                                                 </svg>`
-                                                    }
-                                        tweet +=`</span>
+        }
+        tweet += `</span>
                                             </div>
 
 
@@ -197,9 +209,9 @@ function getTweetComponent(data) {
                             <hr class="border-gray-200">
                         </article>
                     </li > `
-            });
+    });
 
-            tweet += `</ul>`;
+    tweet += `</ul>`;
 
             return tweet;
 }

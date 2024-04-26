@@ -116,3 +116,32 @@ img{
 {
     display: flex;
 }
+
+.pagination
+{
+    display: flex;
+    gap: 3%;
+    justify-content: end;
+    margin-right: 20%;
+    width: 500px;
+  
+
+}
+.pagebtn
+{
+    background-color: #0D2641; /* Green */
+  border: none;
+    height: 28px;
+    width: 50px;
+    color: white;
+
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 15px;
+}
+
+/* .pagecon
+{
+    width: 2000x;
+} */

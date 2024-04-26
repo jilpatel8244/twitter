@@ -14,9 +14,10 @@ exports.getLikes = async (req, res) => {
     where tweet_likes.user_id = ? and tweet_likes.status = '1';`
     let [likesData] = await connection.query(likesDataQuery, [id]);
 
-    let likeCountQuery = `SELECT b.tweet_id, COALESCE(sum(l.status), 0) as likeCount FROM bookmarks b LEFT JOIN tweet_likes l ON l.tweet_id = b.tweet_id WHERE b.user_id = ? AND b.status = '1' group by b.tweet_id`;
+    let likeCountQuery = `SELECT tweet_id, COALESCE(sum(status), 0) as likeCount FROM tweet_likes group by tweet_id`;
 
     let [likeCountData] = await connection.query(likeCountQuery, [id]);
+    console.log("\nHello This is like count data:\n",likeCountData);
 
     likesData.forEach((resultElement, index) => {
       likeCountData.forEach((likeCountElement, index) => {
@@ -25,6 +26,8 @@ exports.getLikes = async (req, res) => {
         }
       })
     });
+
+    console.log("this is the liked tweets data:\n",likesData);
 
     likedElement = likesData.map((element) => {
       element.isLiked = 1;
