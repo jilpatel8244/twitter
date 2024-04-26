@@ -1,18 +1,29 @@
+const { log } = require("console");
 const connection = require("../../config/connection");
 const logger = require("../../logger/logger");
 
 exports.getExploreProfile = async (req, res) => {
   try {
+    let isFollowing = false;
     let id = req.query.id;
     let userId = req.user[0][0].id;
-    logger.info(id);
+    // logger.info(id);
     
+    let [result] = await connection.query(`
+            SELECT current_status
+            FROM followers
+            WHERE following_id = ? AND follower_id = ?
+        `, [id, userId]);
+
+
+    if(result[0] && result[0].current_status) isFollowing = true;
 
     const profileQuery = `SELECT * FROM users WHERE id=?`;
     const [userProfileData] = await connection.query(profileQuery, [id]);
 
+    // console.log(userProfileData);
+
     if (userProfileData) {
-      let isFollowing = false;
       let followerId = null;
       if (req.user) {
         const currentUserId = req.user.id;
@@ -22,7 +33,8 @@ exports.getExploreProfile = async (req, res) => {
           currentUserId,
           id,
         ]);
-        isFollowing = followStatusRows[0].isFollowing > 0;
+        console.log("followr",followStatusRows[0])
+        // isFollowing = followStatusRows[0].isFollowing > 0;
       }
 
       const postDataQuery = `SELECT * FROM users as u INNER JOIN tweets as t ON u.id=t.user_id WHERE u.id = ?`;
@@ -62,9 +74,9 @@ exports.getExploreProfile = async (req, res) => {
           twitCountData,
           replyData,
           postData,
+          isFollowing,
           tweetData,
           commentData,
-          isFollowing,
           followerId,
         });
       } else {
@@ -99,8 +111,8 @@ exports.getExploreProfile = async (req, res) => {
           profileData,
           twitCountData,
           replyData,
-          postData,
           isFollowing,
+          postData,
           followerId,
           tweetData,
           commentData,
@@ -120,9 +132,9 @@ exports.getExploreProfile = async (req, res) => {
         follower_detail_data,
         profileData,
         twitCountData,
+        isFollowing,
         replyData,
         tweetData,
-        isFollowing: false,
         followerId: null,
         commentData,
       });
