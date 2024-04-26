@@ -1,21 +1,19 @@
 const connection = require("../../../config/connection");
 const logger = require("../../../logger/logger");
-
-
-
 require("dotenv").config();
 const jwt = require("jsonwebtoken");
 const md5 = require("md5");
 const { log } = require("console");
 
+
+
+
+
+
 exports.getAdminLogin = async (req, res) => {
 
     res.render("pages/admin/adminlogin");
 
-};
-exports.getAdminPannel = async (req, res) => {
-
-    res.render("pages/admin/adminPannel");
 };
 
 exports.getUsers = async (req, res) => {
@@ -229,4 +227,11 @@ exports.adminLoginHandler = async (req, res) => {
             message: "something went wrong",
         });
     }
+};
+
+
+
+exports.getAdminPannel = async (req, res) => {
+
+    res.render("pages/admin/adminPannel");
 };
