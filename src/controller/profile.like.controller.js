@@ -21,7 +21,7 @@ exports.getLikes = async (req, res) => {
 
     likesData.forEach((resultElement, index) => {
       likeCountData.forEach((likeCountElement, index) => {
-        if (resultElement.tweet_id == likeCountElement.tweet_id) {
+        if ((resultElement.tweet_id == likeCountElement.tweet_id)) {
           resultElement['likeCount'] = likeCountElement.likeCount;
         }
       })
