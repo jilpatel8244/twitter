@@ -19,6 +19,16 @@ module.exports.retweet = async (req, res) => {
         return res.status(500).json({ 'error': "Something went wrong" + error })
       }
     }
+    else if(action == "undo"){
+      try{
+        let undoPostQuery="update retweets set retweets.deleted_at=current_timestamp() where tweet_id=? and user_id= ?";
+        await conn.query(undoPostQuery,[tweetId,userId]);
+        return res.status(200).json({'msg':"Undo repost"})
+      }catch (error) {
+        console.log(error);
+        return res.status(500).json({ 'error': "Something went wrong in undo repost" + error })
+      }
+    }
     else if (action == "quote") {
       try {
         let sqlConent = 'insert into tweets(user_id,content,is_drafted,is_posted) values (?,?,?,?);';
@@ -45,4 +55,17 @@ module.exports.retweet = async (req, res) => {
     console.log(error);
     return res.status(500).json({ 'error': "Something went wrong" + error })
   }
+}
+
+module.exports.retweetData = async(req,res)=>{
+  let {tweetId}= req.body;
+  let userId=req.user[0][0].id;
+  try{
+    let sql="select count(*) as isRetweeted from retweets where user_id= ? and tweet_id= ? and deleted_at is null";
+    let [result]=await conn.query(sql,[userId,tweetId]);
+    console.log(result);
+    return res.status(200).json({isRetweeted:result[0].isRetweeted});
+  }catch(error){
+    return res.status(500).json({ 'error': "Something went wrong" + error })
+  }   
 }

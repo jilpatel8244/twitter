@@ -72,28 +72,47 @@ function getTweetComponent(data) {
 
 
                                             <!-- retweet span tag -->
-                                            <div  class="flex text-center py-2 m-2 cursor-pointer">
-                                                <span
-                                                    data-dropdown-toggle="";
-                                                    id="retweetBtn"
-                                                    onclick=retweet(${tweets.tweet_id},this);
+                                            <div  class="flex text-center py-2 m-2 cursor-pointer">`
+                                            if(tweets.notRetweeted == null && tweets.createdAt != null){
+                                            tweet+=    ` <span
+                                                
+                                                onclick=retweet(${tweets.tweet_id},this,'undo');
+                                                class="group flex items-center text-blue-600 px-3 py-2 text-base leading-6 font-medium rounded-full">
+                                                <svg class="text-center h-7 w-6" fill="none" stroke-linecap="round"
+                                                    stroke-linejoin="round" stroke-width="2" stroke="currentColor"
+                                                    viewBox="0 0 24 24">
+                                                    <path d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"></path>
+                                                </svg>
+                                                <span id="${tweets.tweet_id}tweet" class="group flex items-center text-blue-600 px-3 py-2 text-base leading-6 font-medium rounded-full">
+                                                ${tweets.repostCount ? tweets.repostCount : "" }
+                                            </span>
+                                            </span>
+                                            
+                                                </div><div id="retweetBox" class="overflow-y-auto overflow-x-hidden  z-30  md:inset-0  h-full  max-h-full" style="z-index: 25;"></div>`
+
+                                            }
+                                            else{
+                                                tweet+=    `<span
+                                                    
+                                                    onclick=retweet(${tweets.tweet_id},this,'retweet');
                                                     class="group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full  hover:text-blue-600">
                                                     <svg class="text-center h-7 w-6" fill="none" stroke-linecap="round"
                                                         stroke-linejoin="round" stroke-width="2" stroke="currentColor"
                                                         viewBox="0 0 24 24">
                                                         <path d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"></path>
                                                     </svg>
-                                                    <span id="totalRepost" class="group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full">
+                                                    <span id="${tweets.tweet_id}tweet" class="group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full">
                                                     ${tweets.repostCount ? tweets.repostCount : "" }
                                                 </span>
                                                 </span>
-                                                
-                                            </div><div id="retweetBox" class="overflow-y-auto overflow-x-hidden  z-30  md:inset-0  h-full  max-h-full" style="z-index: 25;"></div>
+                                            
 
+                                            </div><div id="retweetBox" class="overflow-y-auto overflow-x-hidden  z-30  md:inset-0  h-full  max-h-full" style="z-index: 25;"></div>`
+                                            }
                                             
 
 
-                                            <div id="removeRepostBox"  style="display: none;z-index: 15; position: absolute; top:0;left:0;width:99vw; height:300vh">
+                                            tweet +=`<div id="removeRepostBox"  style="display: none;z-index: 15; position: absolute; top:0;left:0;width:99vw; height:300vh">
 
                                             </div>
 
