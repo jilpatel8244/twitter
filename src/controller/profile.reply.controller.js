@@ -57,10 +57,10 @@ exports.getReplies = async (req, res) => {
     
     // console.log("\n this is replyer data: \n",replyerData);
 
-    const repliesPostDataQuery = `SELECT u.name, u.username, u.profile_img_url as profileImage, t.created_at, t.content,  m.media_url as media, t.id as id FROM users as u INNER JOIN tweets as t ON u.id = t.user_id LEFT JOIN medias as m ON t.id = m.tweet_id WHERE t.id =?`;
+    const repliesPostDataQuery = `SELECT u.name, u.username, u.profile_img_url as profileImage, t.created_at, t.content,  m.media_url as media, t.id as id, b.status as isBookmarked, tl.status as isLiked FROM users as u LEFT JOIN tweets as t ON u.id = t.user_id LEFT JOIN medias as m ON t.id = m.tweet_id LEFT JOIN bookmarks as b ON b.user_id = u.id and b.user_id = ? LEFT JOIN tweet_likes as tl ON tl.user_id = u.id and tl.user_id = ? WHERE t.id = ?`;
     let repliesPostData = [];
     for (let i = 0; i < tweetId.length; i++) {
-      let [[data]] = await connection.query(repliesPostDataQuery, [tweetId[i]]);
+      let [[data]] = await connection.query(repliesPostDataQuery, [id, id, tweetId[i]]);
       repliesPostData.push(data);
     }
 
@@ -75,9 +75,8 @@ exports.getReplies = async (req, res) => {
     // console.log("\n Hello This is the replies Post Data :",repliesPostData);   
 
     let repliesData = [repliesPostData, replyerData];
-    console.log("\n\n\n\n\n\n\n\n replies data\n\n\n\n",repliesData);
+    console.log("\n\n\n\n\n\n\n\n replies data \n\n\n\n",repliesData);
     return res.json({ repliesData });
-
 
   } catch (error) {
     console.log(error);
