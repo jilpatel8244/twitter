@@ -101,14 +101,14 @@
 
                                 </div>
                                 <div class="w-full p-4">
-                                    <div class="relative flex w-full">
+                                    <div class="flex w-full">
                                         <!-- Avatar -->
                                         <div class="flex flex-1">
                                             <div style="margin-top: -6rem;">
                                                 <div style="height:9rem; width:9rem;"
-                                                    class="md rounded-full relative avatar">
+                                                    class="md rounded-full  avatar">
                                                     <img style="height:9rem; width:9rem;"
-                                                        class="md rounded-full relative border-4 border-gray-900"
+                                                        class="md rounded-full  border-4 border-gray-900"
                                                         src="./uploads/<%=userProfileData[0].profile_img_url%>" alt="">
                                                     <div class="absolute"></div>
                                                 </div>
@@ -299,6 +299,7 @@
                 console.log(value1.repliesData[0].length);
                 for (let i = 0; i < value1.repliesData[0].length; i++) {
                     document.getElementById("allTweets").innerHTML += `<%- include('../partials/reply.ejs')%>`;
+                    // document.getElementsByClassName("likeIcon").setAttribute("id","")
                 }
                 let name = document.getElementsByClassName("name");
                 let username = document.getElementsByClassName("username");
@@ -309,6 +310,7 @@
                 let postIdElement = document.getElementsByClassName("commentElement");
                 let likeIcon = document.getElementsByClassName("likeIcon");
                 let likeCountElement = document.getElementsByClassName("likeCountElement");
+                let bookmark = document.getElementsByClassName("bookmark");
 
                 let replyerName = document.getElementsByClassName("replyerName");
                 let replyerUsername = document.getElementsByClassName("replyerUsername");
@@ -321,7 +323,7 @@
                 let replyerLikeCount = document.getElementsByClassName("replyerLikeCount");
 
                 // console.log(name, username, createdAt, content, replyerName, replyerUsername, replyerTweetDate, replyerRetweetMessage);
-                console.log("This is the like elements : ", likeIcon, likeCountElement, replyerLikeCount,replyerLikeIcon);
+                // console.log("This is the like elements : ", likeIcon, likeCountElement, replyerLikeCount,replyerLikeIcon);
 
                 for (let i = 0; i < value1.repliesData[0].length; i++) {
 
@@ -334,8 +336,23 @@
                     createdAt[i].innerText = " " + date.getDate() + " " + month + " ";
                     content[i].innerText = value1.repliesData[0][i].content;
                     postIdElement[i].setAttribute("href", "get_comments/" + value1.repliesData[0][i].id);
-                    likeIcon[i].setAttribute("onclick", "likeHandler("+value1.repliesData[0][i].id+")");
+                    if(value1.repliesData[0][i].isLiked === 1){
+                        likeIcon[i].classList.add('fill-red-600','text-red-600');    
+                    }
+                    if(value1.repliesData[0][i].isLiked === 0){
+                        likeIcon[i].classList.remove('fill-red-600','text-red-600');
+                    }
                     likeCountElement[i].innerText = value1.repliesData[0][i].likeCount;
+                    if(value1.repliesData[0][i].isBookmarked == 1){
+                        console.log("Heelloo",value1.repliesData[0][i].isBookmarked);
+                        bookmark[i].classList.remove('text-gray-500');
+                        bookmark[i].classList.add('fill-blue-300', 'text-blue-800');
+                    }
+                    if(value1.repliesData[0][i].isBookmarked == 0){
+                        console.log(value1.repliesData[0][i].isBookmarked);
+                        bookmark[i].classList.remove('fill-blue-300', 'text-blue-800');
+                    }
+
 
                     replyerName[i].innerText = value1.repliesData[1][i].replyerName;
                     replyerUsername[i].innerText = value1.repliesData[1][i].replyerUsername;
@@ -346,8 +363,9 @@
                     replyerTweetDate[i].innerText = " " + replyDate.getDate() + " " + month + " ";
                     replyerRetweetMessage[i].innerText = value1.repliesData[1][i].replyerMessage;
                     replyerPostIdElement[i].setAttribute("href", "get_comments/" + value1.repliesData[1][i].tweetId);
-                    replyerLikeCount[i].innerText = value1.repliesData[1][i].likeCount;
                     replyerLikeIcon[i].setAttribute("onclick", "likeHandler("+value1.repliesData[1][i].id+")");
+                    replyerLikeCount[i].innerText = value1.repliesData[1][i].likeCount;
+                    
 
                 }
                 allTweets.removeAttribute("hidden");
