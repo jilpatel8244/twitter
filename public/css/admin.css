@@ -145,3 +145,44 @@ img{
 {
     width: 2000x;
 } */
+.option {
+    width: 80%;
+    border: 1px solid black;
+    margin-top:-5% ;
+    box-shadow: #00000059 0px 5px 15px;
+    text-align: center;
+    padding: 20px;
+
+    font-size: x-large;
+
+
+}
+
+.imgfile {
+    width: 30px;
+    height: 30px;
+}
+
+.fileimg {
+    display: flex;
+    margin-top: 50px;
+}
+
+.fileupload {
+    margin-top: 5%;
+}
+
+.btnsub 
+{
+    max-width: 20%;
+}
+
+#fileupload
+{
+    display: none;
+}
+
+#formuser
+{
+    display: none;
+}
