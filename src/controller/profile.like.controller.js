@@ -2,7 +2,13 @@ const connection = require('../../config/connection');
 
 exports.getLikes = async (req, res) => {
   try {
-    let id = req.user[0][0].id;
+    let id = req.query.id;
+    console.log("id for the like before the confition in like section" ,id);
+    if(!id){
+
+     id = req.user[0][0].id;
+    }
+    console.log("id for the like after the confition in like section" ,id);
 
     let likesDataQuery = `	select tweets.id as tweet_id, tweets.content, tweets.created_at as time, users.name, 
     users.username, users.profile_img_url, bookmarks.status as isBookmarked, medias.media_url from tweet_likes 

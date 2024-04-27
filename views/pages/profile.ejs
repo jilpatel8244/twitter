@@ -116,18 +116,22 @@
                                         </div>
                                         <!-- Follow Button -->
                                         <div class="flex flex-col text-right">
-                                            <% if (id !== userProfileData[0].id) { %>
-                                                   
+                                            <% if (id !==userProfileData[0].id) { %>
+
+                                                <div class="flex justify-center -z-1 max-h-max whitespace-nowrap focus:outline-none  focus:ring  max-w-max border bg-transparent border-blue-500 text-blue-500 hover:border-blue-800  items-center hover:shadow-lg font-bold py-2 px-4 rounded-full mr-0 ml-auto"
+                                                    id="followButton"
+                                                    onclick="toggleFollow('<%=userProfileData[0].id%>')">
+                                                    <%=isFollowing ? "Following" : "Follow" %>
+                                                </div>
+
+
+                                                <% }else{ %>
                                                     <div
-                                                    class="flex justify-center -z-1 max-h-max whitespace-nowrap focus:outline-none  focus:ring  max-w-max border bg-transparent border-blue-500 text-blue-500 hover:border-blue-800  items-center hover:shadow-lg font-bold py-2 px-4 rounded-full mr-0 ml-auto" id="followButton" onclick="toggleFollow('<%=userProfileData[0].id%>')"><%=isFollowing ? "Following" : "Follow"%></div>
-                                           
-                                                      
-                                            <% }else{ %>
-                                            <div
-                                                class="flex justify-center  max-h-max whitespace-nowrap focus:outline-none  focus:ring  max-w-max border bg-transparent border-blue-500 text-blue-500 hover:border-blue-800  items-center hover:shadow-lg font-bold py-2 px-4 rounded-full mr-0 ml-auto">
-                                                <a href="editprofile?id=<%=userProfileData[0].id%>">Edit Profile</a>
-                                            </div>
-                                            <% } %>
+                                                        class="flex justify-center  max-h-max whitespace-nowrap focus:outline-none  focus:ring  max-w-max border bg-transparent border-blue-500 text-blue-500 hover:border-blue-800  items-center hover:shadow-lg font-bold py-2 px-4 rounded-full mr-0 ml-auto">
+                                                        <a href="editprofile?id=<%=userProfileData[0].id%>">Edit
+                                                            Profile</a>
+                                                    </div>
+                                                    <% } %>
                                         </div>
                                     </div>
 
@@ -197,11 +201,12 @@
                                                         class="pt-3 flex justify-start items-start w-full divide-x divide-gray-800 divide-solid">
                                                         <div class="text-center pr-3"><span
                                                                 class="font-bold text-black">
-                                                                <%=following_detail_data[0].following %>
+                                                                <%=follower_detail_data[0].follower %>
                                                             </span><span class="text-gray-600"> Following</span></div>
                                                         <div class="text-center px-3"><span
                                                                 class="font-bold text-black">
-                                                                <%=follower_detail_data[0].follower %>
+                                                                <%=following_detail_data[0].following %>
+
                                                             </span><span class="text-gray-600"> Followers</span></div>
                                                     </div>
                                                     <%}%>
@@ -288,7 +293,7 @@
             like.removeAttribute("style");
             document.getElementById("allTweets").innerHTML = "";
 
-            const months=['January', 'Febaruary', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+            const months = ['January', 'Febaruary', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
             await fetch('/profile/reply', {
                 method: "GET"
@@ -363,9 +368,8 @@
                     replyerTweetDate[i].innerText = " " + replyDate.getDate() + " " + month + " ";
                     replyerRetweetMessage[i].innerText = value1.repliesData[1][i].replyerMessage;
                     replyerPostIdElement[i].setAttribute("href", "get_comments/" + value1.repliesData[1][i].tweetId);
-                    replyerLikeIcon[i].setAttribute("onclick", "likeHandler("+value1.repliesData[1][i].id+")");
                     replyerLikeCount[i].innerText = value1.repliesData[1][i].likeCount;
-                    
+                    replyerLikeIcon[i].setAttribute("onclick", "likeHandler(" + value1.repliesData[1][i].id + ")");
 
                 }
                 allTweets.removeAttribute("hidden");
@@ -405,32 +409,32 @@
         }
 
 
-    async function toggleFollow(id) {
-        console.log(id);
-        const body = {
-            id : id
-        }
-    try {
-      const response = await fetch('/follow', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(body)
-      });
-      const responseData = await response.json();
-    
-      if(!responseData.statusdata) document.getElementById("followButton").innerHTML = "Following"
-      if(responseData.statusdata) document.getElementById("followButton").innerHTML = "Follow"
+        async function toggleFollow(id) {
+            console.log(id);
+            const body = {
+                id: id
+            }
+            try {
+                const response = await fetch('/follow', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(body)
+                });
+                const responseData = await response.json();
 
-      
-    } catch (error) {
-      console.error( error.message);
-    }
-  }
+                if (!responseData.statusdata) document.getElementById("followButton").innerHTML = "Following"
+                if (responseData.statusdata) document.getElementById("followButton").innerHTML = "Follow"
+
+
+            } catch (error) {
+                console.error(error.message);
+            }
+        }
     </script>
 
-    
+
 </body>
 
 </html>

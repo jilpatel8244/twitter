@@ -28,8 +28,13 @@ exports.getReplies = async (req, res) => {
     //   message: repliesData
     // });
 
-    let id = req.user[0][0].id;
+    let id = req.query.id;
+    console.log("id for the reply before the confition in like section" ,id);
+    if(!id){
 
+     id = req.user[0][0].id;
+    }
+    console.log("id for the reply after the confition in like section" ,id);
     const replyerDataQuery = `SELECT  u.name as replyerName,u.profile_img_url as replyerProfileImage, u.username as replyerUsername,tc.content as replyerMessage, tc.created_at as retweetDate, tc.tweet_id as tweetId, m.media_url as replyerMedia FROM users as u INNER JOIN tweet_comments as tc ON u.id = tc.user_id LEFT JOIN medias as m ON tc.tweet_id = m.tweet_id WHERE u.id=?`;
     const [replyerData] = await connection.query(replyerDataQuery, [id]);
     let tweetId = [];
