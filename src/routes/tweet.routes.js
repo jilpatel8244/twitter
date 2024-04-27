@@ -12,5 +12,7 @@ router.get('/displayDrafts',passport.authenticate('jwt',{session:false,failureRe
 router.post('/tweetUpdate',passport.authenticate('jwt',{session:false,failureRedirect: "/login" }),upload.single('media'),tweetUpdate);
 router.get('/displayImage',passport.authenticate('jwt',{session:false,failureRedirect: "/login" }),displayImage)
 router.post('/draftDelete',passport.authenticate('jwt',{session:false,failureRedirect: "/login" }),deleteDraft);
-router.get('/profileImage',passport.authenticate('jwt',{session:false,failureRedirect: "/login" }),getProfileImage)
+router.get('/profileImage',passport.authenticate('jwt',{session:false,failureRedirect: "/login" }),getProfileImage);
+
+
 module.exports = router

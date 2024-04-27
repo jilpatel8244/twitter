@@ -51,6 +51,10 @@ app.use(shareRoute);
 app.use('/profile', getProfileRouter);
 app.use("/tweetPost", tweetCreate);
 
+app.get('*', (req, res) => {
+  res.render('pages/404.ejs');
+})
+
 app.set("view engine", "ejs");
 
 
