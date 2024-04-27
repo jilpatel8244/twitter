@@ -2,14 +2,19 @@ const connection = require("../../../config/connection");
 const logger = require("../../../logger/logger");
 require("dotenv").config();
 const jwt = require("jsonwebtoken");
+const ShortUniqueId = require('short-unique-id');
 const md5 = require("md5");
 const { log } = require("console");
 const { search } = require("../../routes/admin.routes");
 
+const csvtojson = require('csvtojson')
 
 
+const fs = require("fs")
 
-
+exports.adduserbyform = async (req, res) => {
+    console.log(req.body);
+}
 
 exports.getAdminLogin = async (req, res) => {
 
@@ -24,11 +29,6 @@ exports.getUsers = async (req, res) => {
         let search = req.body.search;
         let page = req.body.page;
         let curpage = req.body.curpage;
-
-
-        if (page == "none") {
-            page = 1;
-        }
 
 
         const resultpage = 2;
@@ -210,13 +210,10 @@ exports.getTweets = async (req, res) => {
 
 };
 
-
-
 exports.getverifypage = async (req, res) => {
 
     res.render("pages/admin/verify");
 };
-
 
 exports.adminLoginHandler = async (req, res) => {
     let { email, password } = req.body;
@@ -278,9 +275,57 @@ exports.adminLoginHandler = async (req, res) => {
     }
 };
 
-
-
 exports.getAdminPannel = async (req, res) => {
 
     res.render("pages/admin/adminPannel");
 };
+
+
+
+
+exports.addUserCsv = async (req, res) => {
+
+    csvtojson().fromFile("./public/csv/" + req.file.filename).then(
+        async file => {
+
+
+            for (let i = 0; i < file.length; i++) {
+
+                let email = file[i].email;
+                let emailsql = `select count(*) as is_available from users where email = "${email}"`
+                let [emailvalidate] = await connection.query(emailsql)
+                if (emailvalidate[0].is_available == 0) {
+
+                    const saltuid = new ShortUniqueId({ length: 4 });
+                    let salt = saltuid.rnd();
+                    const activationcodeuid = new ShortUniqueId({ length: 12 });
+                    let activationcode = activationcodeuid.rnd();
+                    console.log("salt is ", salt);
+                    let password = md5(file[i].password + salt)
+                    let userdata =
+                    {
+                        "username": file[i].username,
+                        "email": file[i].email,
+                        "password": password,
+                        "name": file[i].name,
+                        "date_of_birth": file[i].date_of_birth,
+                        "activation_code": activationcode,
+                        "salt": salt,
+                        "is_active": file[i].is_active
+                    }
+
+                    let sql = `insert into users set ?`
+                    let [result] = await connection.query(sql, userdata)
+                    console.log(result.affectedRows);
+                }
+
+            }
+            fs.unlinkSync("./public/csv/" + req.file.filename)
+        }
+    )
+
+
+    res.send("hello");
+
+
+}

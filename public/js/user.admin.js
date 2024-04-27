@@ -1,5 +1,5 @@
 
-async function getuserpage(search, page, curpage) {
+async function getuserpage(search, curpage) {
     async function getdata() {
         let url = window.location.origin + "/admin/getusers"
         console.log("current page is ", curpage);
@@ -8,7 +8,7 @@ async function getuserpage(search, page, curpage) {
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({ 'search': search, 'page': page, "curpage": curpage }),
+            body: JSON.stringify({ 'search': search, 'page': curpage, "curpage": curpage }),
         });
 
 
@@ -27,27 +27,46 @@ async function getuserpage(search, page, curpage) {
 
     let user = ``;
 
+    if (curpage == "none") {
+        curpage = 1
+    }
 
 
+
+    user += `<div class="flex gap-8" >
+                <div class="pagination">`
+
+    if (curpage == 1) {
+        user += `<p class="ltuser pagebtn" hidden>
+            < </p>  `
+    }
+    else {
+        user += `<p class="ltuser pagebtn">
+            < </p>  `
+    }
 
 
     user += `
-        <div class="flex gap-8" >
-                <div class="pagination">
-                <p class="pagebtn">
-                < </p>  
                 <div class="flex">
                 <p>page &nbsp</p>
-                <p id="pagenumber">1</p>
-                <p> of ${result.totalpage}</p>
-           
-                  
-              
-                </div>
-                <p class="gtuser pagebtn">></p>
-                </div>
-    
-                <div class="ml-20">
+                <p id="pagenumber">${curpage}</p>
+                <p> of ${result.totalpage}</p>`
+
+    console.log("result page is", curpage);
+    console.log("result page is", result.curpage);
+    if (result.curpage >= result.totalpage) {
+        user += ` </div>
+        <p class="gtuser pagebtn" hidden>></p>
+        </div>`
+    }
+    else {
+        user += ` </div>
+        <p class="gtuser pagebtn">></p>
+        </div>`
+    }
+
+
+    user += `<div class="ml-20">
                 <label for="table-search" class="sr-only">Search</label>
                 <div class="relative">
                 <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
