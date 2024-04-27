@@ -3,7 +3,6 @@ const { getAllBookmarks } = require("../controller/getAllBookmarks.controller");
 const { bookmarkUnbookmarkHandler } = require("../controller/bookmarkUnbookmarkHandler.controller");
 const passport = require("passport");
 const { removeAllBookmarkHandler } = require("../controller/removeAllBookmarksHandler.controller");
-require("../middleware/passport");
 require("../middleware/permission");
 const router = express.Router();
 

@@ -8,13 +8,13 @@ require("../middleware/permission");
 
 const router = express.Router();
 
-router.get("/", passport.authenticate('jwt', { session: false }), getExplorePage)
-router.post("/topTweet", getTopTweetAndHastag)
-router.post("/latestTweet", getLatestTweet)
-router.post("/username", getUsername)
-router.post("/getMedia", getMedia)
-router.post("/hastag", getHastag);
-router.post("/searchboxdata", getUsernameOrHastagOnchage);
+router.get("/", passport.authenticate('jwt', { session: false, failureRedirect: "/login" }), getExplorePage)
+router.post("/topTweet", passport.authenticate('jwt', { session: false, failureRedirect: "/login" }), getTopTweetAndHastag)
+router.post("/latestTweet", passport.authenticate('jwt', { session: false, failureRedirect: "/login" }), getLatestTweet)
+router.post("/username",passport.authenticate('jwt', { session: false, failureRedirect: "/login" }), getUsername)
+router.post("/getMedia",passport.authenticate('jwt', { session: false, failureRedirect: "/login" }), getMedia)
+router.post("/hastag",passport.authenticate('jwt', { session: false, failureRedirect: "/login" }), getHastag);
+router.post("/searchboxdata",passport.authenticate('jwt', { session: false, failureRedirect: "/login" }), getUsernameOrHastagOnchage);
 
 router.get("/profile", passport.authenticate('jwt', { session: false }), getExploreProfile);
 

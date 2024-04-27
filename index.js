@@ -18,6 +18,7 @@ require("./src/middleware/passport");
 const bookmarkRoute = require("./src/routes/bookmark.routes");
 const likeRoute = require("./src/routes/like.routes");
 const messagesRoute = require("./src/routes/messages.routes");
+const shareRoute = require('./src/routes/share.routes');
 
 const adminroute = require("./src/routes/admin.routes");
 const resetpasswordProfile = require("./src/routes/resetpasswordProfile.route");
@@ -46,10 +47,12 @@ app.use(notification);
 app.use("/editprofile", editprofile);
 app.use(resetpasswordProfile);
 app.use(followUnfollowHandler)
-app.use('/profile', passport.authenticate('jwt', { session: false, failureRedirect: "/login" }), getProfileRouter);
+app.use(shareRoute);
+app.use('/profile', getProfileRouter);
+app.use("/tweetPost", tweetCreate);
+
 app.set("view engine", "ejs");
 
-app.use("/tweetPost", tweetCreate);
 
 let connectedUser = {};
 

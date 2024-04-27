@@ -153,7 +153,7 @@ function getTweetComponent(data) {
                                                     <div onclick="shareLinkHandler(${tweets.tweet_id})">
                                                         <p class="text-left">Copy link</p>
                                                     </div>
-                                                    <div>
+                                                    <div onclick="openModal('modelConfirm', '${tweets.tweet_id}')">
                                                         <p class="text-left">Send via Direct Message</p>
                                                     </div>
                                                 </div>
