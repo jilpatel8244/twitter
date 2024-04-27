@@ -313,7 +313,7 @@
                         </p>
                         <p
                         class="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 transition ease-in-out duration-150 check">
-                        @${element.username}
+                        @ <a href="/explore/profile?id=${element.id}">${element.username}</a>
                         </p></div></div></div></div>`
                 });
 
@@ -357,11 +357,11 @@
 
 
     let top1 = document.getElementById("top");
-    let Pepole = document.getElementById("Pepole");
+    let People = document.getElementById("People");
     let Latest = document.getElementById("Latest");
     let media1 = document.getElementById("media1");
     top1.addEventListener("click", topPostHandeler);
-    Pepole.addEventListener("click", pepoleHandeler);
+    People.addEventListener("click", pepoleHandeler);
     Latest.addEventListener("click", latestPostHandeler);
     media1.addEventListener("click", mediaPostHandeler);
 
@@ -394,7 +394,7 @@
 
         if (data1.length > 0) {
             tweet += `<div class="heading mt-2 text-2xl ml-5" id="head">
-                    <h2>Pepole</h2>
+                    <h2>People</h2>
                 </div>
 `;
 
@@ -412,25 +412,24 @@
                                 </div>
                                 <div class="ml-3 mt-3">
                                     <p class="text-base leading-6 font-medium ">
-                                        ${element.name} 
+                                        <a href="/explore/profile?id=${element.id}">${element.name}</a>
                                     </p>
                                     <p
                                         class="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 transition ease-in-out duration-150">
-                                        @ ${element.username}
+                                        @ <a href="/explore/profile?id=${element.id}">${element.username} </a>
                                     </p>
                                 </div>
                             </div>
 
                         </div>
                         <div class="flex-1 px-4 py-2 m-2" id="followbtn">
-                    <p class="font-semibold text-white bg-black py-2 px-4 rounded-full follow" id='btnfollow_${element.id}'  onclick="foollowhandel(${element.id})">
+                    <p class="font-semibold text-white bg-black py-2 px-4 rounded-full follow" id='btnfollow${element.id}'  onclick="foollowhandel(${element.id})">
                             Follow
                             </p>
                     
                 </div>
                     </div>
 `
-
         });
 
 
@@ -464,7 +463,7 @@
 
         let data1 = await getdata("")
         let tweet = `<div class="heading mt-2 text-2xl ml-5" id="head">
-            <h2>Pepole</h2>
+            <h2>People</h2>
         </div>
 `;
 
@@ -479,19 +478,19 @@
                         </div>
                         <div class="ml-3 mt-3">
                             <p class="text-base leading-6 font-medium ">
-                                ${element.name}
+                                <a href="/explore/profile?id=${element.id}">${element.name}</a>
                             </p>
                             <p
                                 class="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 transition ease-in-out duration-150">
-                                @ ${element.username}
+                                @ <a href="/explore/profile?id=${element.id}">${element.username}</a>
                             </p>
                         </div>
                     </div>
 
                 </div>
                 <div class="flex-1 px-4 py-2 m-2" id="followbtn">
-                    <p class="font-semibold text-white bg-black py-2 px-4 rounded-full follow" id='btnfollow_${element.id}'  onclick="foollowhandel(${element.id})">
-                            Follow
+                    <p class="font-semibold text-white bg-black py-2 px-4 rounded-full follow" id='btnfollow${element.id}'  onclick="foollowhandel(${element.id})">
+                        ${element.current_status}
                             </p>
                     
                 </div>
@@ -534,7 +533,7 @@
         if (data1.length > 0) {
 
             tweet += `<div class="heading mt-2 text-2xl ml-5" id="head">
-                <h2>Pepole</h2>
+                <h2>People</h2>
             </div>
     `;
         }
@@ -561,7 +560,7 @@
 
                 </div>
                 <div class="flex-1 px-4 py-2 m-2" id="followbtn">
-                    <p class="font-semibold text-white bg-black py-2 px-4 rounded-full follow" id='btnfollow_${element.id}'  onclick="foollowhandel(${element.id})">
+                    <p class="font-semibold text-white bg-black py-2 px-4 rounded-full follow" id='btnfollow${element.id}'  onclick="foollowhandel(${element.id})">
                             Follow
                             </p>
                     
@@ -601,7 +600,7 @@
 
         if (data1.length > 0) {
             tweet += `<div class="heading mt-2 text-2xl ml-5" id="head">
-                <h2>Pepole</h2>
+                <h2>People</h2>
             </div>
     `;
 
@@ -632,7 +631,7 @@
                     </a>
                 </div>
                 <div class="flex-1 px-4 py-2 m-2" id="followbtn">
-                    <p class="font-semibold text-white bg-black py-2 px-4 rounded-full follow" id='btnfollow_${element.id}'  onclick="foollowhandel(${element.id})">
+                    <p class="font-semibold text-white bg-black py-2 px-4 rounded-full follow" id='btnfollow${element.id}'  onclick="foollowhandel(${element.id})">
                             Follow
                             </p>
                     
@@ -688,22 +687,46 @@
     }
 
 
-    function foollowhandel(id) {
+   async function foollowhandel(id) {
+        console.log(id);
+        const body = {
+                id: id
+            }
+            try {
+                const response = await fetch('/follow', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(body)
+                });
+                const responseData = await response.json();
+                console.log(responseData)
+                if (!responseData.statusdata) {
+                    document.getElementById("btnfollow${element.id}").innerHTML = "Following"
+
+                }
+                if (responseData.statusdata)  document.getElementById("btnfollow${element.id}").innerHTML = "Follow"
 
 
-        let follow = document.getElementById(`btnfollow_${id}`);
-        let followdiv = document.getElementById(`followbtn`);
-        if (follow.innerHTML == "following") {
-            follow.innerText = "Follow"
-            follow.style.backgroundColor = "blue"
-            follow.style.backgroundColor = "black"
+            } catch (error) {
+                console.error(error.message);
+            }
+        // let follow = document.getElementById(`btnfollow_${id}`);
+        // let followdiv = document.getElementById(`followbtn`);
+        // if (follow.innerHTML == "following") {
+        //     follow.innerText = "Follow"
+        //     follow.style.backgroundColor = "blue"
+        //     follow.style.backgroundColor = "black"
 
-        }
-        else {
-            follow.innerText = "following"
+        // }
+        // else {
+        //     follow.innerText = "following"
 
 
-        }
+        // }
+
+
     }
 
     // let retweet = document.getElementById("retweet");

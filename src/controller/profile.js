@@ -117,6 +117,7 @@ exports.getExploreProfile = async (req, res) => {
           tweetData,
           commentData,
         });
+        res.render
       }
     } else {
       let profileData, twitCountData, replyData, tweetData, commentData;

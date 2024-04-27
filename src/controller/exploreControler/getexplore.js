@@ -1,3 +1,4 @@
+const { CLIENT_RENEG_LIMIT } = require("tls");
 const connection = require("../../../config/connection");
 const ShortUniqueId = require("short-unique-id");
 
@@ -108,30 +109,24 @@ exports.getHastag = async (req, res) => {
 
 
 exports.getUsername = async (req, res) => {
-
-
     let search = req.body.searchbox;
-
     if (!search) {
         search = ""
     }
-
     if (search.charAt(0) == "#") {
         search = search.substring(1)
     }
     try {
-
         if (req.body.type == 0) {
             let sql = `         
-      
-            SELECT * FROM users WHERE username LIKE '%${search}%' and is_active = 1 limit 3;`
+            select distinct(users.id) , followers.current_status ,users.* from users left join followers on users.id = followers.follower_id  WHERE username LIKE '%${search}%' and is_active = 1 limit 1;`
             let [result] = await connection.query(sql);
+         
             res.json({ username: result })
         }
         else {
             let sql = `         
-      
-            SELECT * FROM users WHERE username LIKE '%${search}%' and is_active = 1;`
+            select distinct(users.id) , followers.current_status ,users.* from users left join followers on users.id = followers.follower_id  WHERE username LIKE '%${search}%' and is_active = 1;`
             let [result] = await connection.query(sql);
             res.json({ username: result })
         }
