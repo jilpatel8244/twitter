@@ -180,7 +180,7 @@
                                                     </span></span>
                                             </div>
                                         </div>
-                                        <%if(!follower_detail_data[0] && !following_detail_data[0]){%>
+                                        <%if(!followerDetailData[0] && !followingdetaildata[0]){%>
                                             <div
                                                 class=" pt-3 flex justify-start items-start w-full divide-x
                                                                 divide-gray-800 divide-solid">
@@ -196,16 +196,16 @@
                                                                 </div>
                                             </div>
                                             <%}%>
-                                                <%if(follower_detail_data[0]){%>
+                                                <%if(followerDetailData[0]){%>
                                                     <div
                                                         class="pt-3 flex justify-start items-start w-full divide-x divide-gray-800 divide-solid">
                                                         <div class="text-center pr-3"><span
                                                                 class="font-bold text-black">
-                                                                <%=follower_detail_data[0].follower %>
+                                                                <%=followerDetailData[0].follower %>
                                                             </span><span class="text-gray-600"> Following</span></div>
                                                         <div class="text-center px-3"><span
                                                                 class="font-bold text-black">
-                                                                <%=following_detail_data[0].following %>
+                                                                <%=followingDetailData[0].following %>
 
                                                             </span><span class="text-gray-600"> Followers</span></div>
                                                     </div>
@@ -250,17 +250,18 @@
     <script src="/js/bookmark.script.js"></script>
     <script src="/js/like.script.js"></script>
     <script>
-        let tab = document.getElementById("tab");
+        
         let replies = document.getElementById("replies");
         let posts = document.getElementById("posts");
         let like = document.getElementById("like");
-
+        let url = window.location.pathname;
+        console.log(url+'/post');
         const fetchPosts = async () => {
 
-            let data = await fetch('/profile/post', {
+            let data = await fetch(url+'/post', {
                 method: "GET"
             });
-
+            
             let response = await data.json();
 
             let allTweets = document.getElementById('allTweets');
@@ -288,97 +289,39 @@
         }
 
         async function fetchReplies() {
-            replies.setAttribute("style", "border-bottom: 2px solid skyblue");
+            let data = await fetch(url+'/reply', {
+                method: "GET"
+            });
+
+            let response = await data.json();
+
+            let allTweets = document.getElementById('allTweets');
+
+            if (response.message.length) {
+                console.log(response.message);
+
+                let tweet = getTweetComponent(response.message);
+
+                allTweets.innerHTML = tweet;
+
+            } else {
+                allTweets.innerHTML = `<div class="w-3/5" style="margin: 50px auto;">
+                                        <div class="mb-3">
+                                            <h2 class="font-bold text-3xl">Save posts for later</h2>
+                                        </div>
+                                        <div class="mb-3">
+                                            <p style="color: rgb(83, 100, 113);">Bookmark posts to easily find them again in the future.</p>
+                                        </div>
+                                      </div>`;
+            }
+            replies.setAttribute("style", "border-bottom: 3px solid skyblue");
             posts.removeAttribute("style");
             like.removeAttribute("style");
-            document.getElementById("allTweets").innerHTML = "";
 
-            const months = ['January', 'Febaruary', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-
-            await fetch('/profile/reply', {
-                method: "GET"
-            }).then((value) => {
-                return value.json();
-            }).then((value1) => {
-                console.log(value1.repliesData);
-                console.log(value1.repliesData[0].length);
-                for (let i = 0; i < value1.repliesData[0].length; i++) {
-                    document.getElementById("allTweets").innerHTML += `<%- include('../partials/reply.ejs')%>`;
-                    // document.getElementsByClassName("likeIcon").setAttribute("id","")
-                }
-                let name = document.getElementsByClassName("name");
-                let username = document.getElementsByClassName("username");
-                let profileImage = document.getElementsByClassName("profileImage");
-                let media = document.getElementsByClassName("userMedia");
-                let createdAt = document.getElementsByClassName("created_at");
-                let content = document.getElementsByClassName("content");
-                let postIdElement = document.getElementsByClassName("commentElement");
-                let likeIcon = document.getElementsByClassName("likeIcon");
-                let likeCountElement = document.getElementsByClassName("likeCountElement");
-                let bookmark = document.getElementsByClassName("bookmark");
-
-                let replyerName = document.getElementsByClassName("replyerName");
-                let replyerUsername = document.getElementsByClassName("replyerUsername");
-                let replyerProfileImage = document.getElementsByClassName("replyerProfileImage");
-                let replyerMedia = document.getElementsByClassName("replyerMedia");
-                let replyerTweetDate = document.getElementsByClassName("replyerTweetDate");
-                let replyerRetweetMessage = document.getElementsByClassName("replyerRetweetMessage");
-                let replyerPostIdElement = document.getElementsByClassName("replyercommentElement");
-                let replyerLikeIcon = document.getElementsByClassName("replyerLikeIcon");
-                let replyerLikeCount = document.getElementsByClassName("replyerLikeCount");
-
-                // console.log(name, username, createdAt, content, replyerName, replyerUsername, replyerTweetDate, replyerRetweetMessage);
-                // console.log("This is the like elements : ", likeIcon, likeCountElement, replyerLikeCount,replyerLikeIcon);
-
-                for (let i = 0; i < value1.repliesData[0].length; i++) {
-
-                    name[i].innerText = value1.repliesData[0][i].name;
-                    username[i].innerText = value1.repliesData[0][i].username;
-                    profileImage[i].setAttribute("src", "./uploads/" + value1.repliesData[0][i].profileImage);
-                    media[i].setAttribute("src", "./uploads/" + value1.repliesData[0][i].media);
-                    let date = new Date(value1.repliesData[0][1].created_at);
-                    let month = months[date.getMonth()];
-                    createdAt[i].innerText = " " + date.getDate() + " " + month + " ";
-                    content[i].innerText = value1.repliesData[0][i].content;
-                    postIdElement[i].setAttribute("href", "get_comments/" + value1.repliesData[0][i].id);
-                    if(value1.repliesData[0][i].isLiked === 1){
-                        likeIcon[i].classList.add('fill-red-600','text-red-600');    
-                    }
-                    if(value1.repliesData[0][i].isLiked === 0){
-                        likeIcon[i].classList.remove('fill-red-600','text-red-600');
-                    }
-                    likeCountElement[i].innerText = value1.repliesData[0][i].likeCount;
-                    if(value1.repliesData[0][i].isBookmarked == 1){
-                        console.log("Heelloo",value1.repliesData[0][i].isBookmarked);
-                        bookmark[i].classList.remove('text-gray-500');
-                        bookmark[i].classList.add('fill-blue-300', 'text-blue-800');
-                    }
-                    if(value1.repliesData[0][i].isBookmarked == 0){
-                        console.log(value1.repliesData[0][i].isBookmarked);
-                        bookmark[i].classList.remove('fill-blue-300', 'text-blue-800');
-                    }
-
-
-                    replyerName[i].innerText = value1.repliesData[1][i].replyerName;
-                    replyerUsername[i].innerText = value1.repliesData[1][i].replyerUsername;
-                    replyerProfileImage[i].setAttribute("src", "./uploads/" + value1.repliesData[1][i].replyerProfileImage);
-                    // replyerMedia[i].setAttribute("src", "./uploads/"+value1.repliesData[1][i].replyerMedia);
-                    let replyDate = new Date(value1.repliesData[1][i].retweetDate);
-                    let replyMonth = months[replyDate.getMonth()];
-                    replyerTweetDate[i].innerText = " " + replyDate.getDate() + " " + month + " ";
-                    replyerRetweetMessage[i].innerText = value1.repliesData[1][i].replyerMessage;
-                    replyerPostIdElement[i].setAttribute("href", "get_comments/" + value1.repliesData[1][i].tweetId);
-                    replyerLikeCount[i].innerText = value1.repliesData[1][i].likeCount;
-                    replyerLikeIcon[i].setAttribute("onclick", "likeHandler(" + value1.repliesData[1][i].id + ")");
-
-                }
-                allTweets.removeAttribute("hidden");
-                console.log("Hello From the Replies section");
-            });
         }
 
         async function fetchLikes() {
-            let data = await fetch('/profile/like', {
+            let data = await fetch(url+'/like', {
                 method: "GET"
             });
 

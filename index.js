@@ -46,7 +46,7 @@ app.use(authRouter);
 app.use(notification);
 app.use("/editprofile", editprofile);
 app.use(resetpasswordProfile);
-app.use(followUnfollowHandler)
+app.use(followUnfollowHandler);
 app.use(shareRoute);
 app.use('/profile', getProfileRouter);
 app.use("/tweetPost", tweetCreate);
