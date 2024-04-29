@@ -6,7 +6,7 @@ const passport = require("passport");
 const {
   reset_password,
   resetpassword,
-} = require("../controller/resetpasswordProfile.controller");
+} = require("../controller/profile.resetpassword.controller");
 
 router.get(
   "/profilepasswordreset",

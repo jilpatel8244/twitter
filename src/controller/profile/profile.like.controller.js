@@ -1,15 +1,13 @@
-const connection = require('../../config/connection');
+const {log} = require('winston');
+const connection = require('../../../config/connection');
 
 exports.getLikes = async (req, res) => {
-  try {
+  try {    
     let id = req.query.id;
-    console.log("id for the like before the confition in like section" ,id);
     if(!id){
-
      id = req.user[0][0].id;
     }
-    console.log("id for the like after the confition in like section" ,id);
-
+    
     let likesDataQuery = `	select tweets.id as tweet_id, tweets.content, tweets.created_at as time, users.name, 
     users.username, users.profile_img_url, bookmarks.status as isBookmarked, medias.media_url from tweet_likes 
     left join tweets on tweet_likes.tweet_id = tweets.id
@@ -22,8 +20,7 @@ exports.getLikes = async (req, res) => {
 
     let likeCountQuery = `SELECT tweet_id, COALESCE(sum(status), 0) as likeCount FROM tweet_likes group by tweet_id`;
 
-    let [likeCountData] = await connection.query(likeCountQuery, [id]);
-    console.log("\nHello This is like count data:\n",likeCountData);
+    let [likeCountData] = await connection.query(likeCountQuery);
 
     likesData.forEach((resultElement, index) => {
       likeCountData.forEach((likeCountElement, index) => {
@@ -33,13 +30,11 @@ exports.getLikes = async (req, res) => {
       })
     });
 
-    console.log("this is the liked tweets data:\n",likesData);
-
     likedElement = likesData.map((element) => {
       element.isLiked = 1;
       return element;
     });
- 
+
     return res.status(200).json({
       success: true,
       message: likedElement
@@ -48,4 +43,4 @@ exports.getLikes = async (req, res) => {
   } catch (error) {
     console.log(error);
   }
-}
+};

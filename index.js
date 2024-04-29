@@ -19,9 +19,10 @@ const bookmarkRoute = require("./src/routes/bookmark.routes");
 const likeRoute = require("./src/routes/like.routes");
 const messagesRoute = require("./src/routes/messages.routes");
 const shareRoute = require('./src/routes/share.routes');
-
+const followData = require('./src/routes/followUser.route');
+const followingData =require('./src/routes/followinguser.route')
 const adminroute = require("./src/routes/admin.routes");
-const resetpasswordProfile = require("./src/routes/resetpasswordProfile.route");
+const resetpasswordProfile = require("./src/routes/profile.resetpassword.route");
 
 const PORT = process.env.PORT || 3000;
 const tweetCreate = require("./src/routes/tweet.routes");
@@ -47,6 +48,8 @@ app.use(notification);
 app.use("/editprofile", editprofile);
 app.use(resetpasswordProfile);
 app.use(followUnfollowHandler)
+app.use(followData);
+app.use(followingData);
 app.use(shareRoute);
 app.use('/profile', getProfileRouter);
 app.use("/tweetPost", tweetCreate);
@@ -62,7 +65,6 @@ let connectedUser = {};
 
 //Whenever someone connects this gets executed
 io.on("connection", async function (socket) {
-  logger.info("A user connected : " + socket.id);
 
   // store userId and socketId when user connects
   socket.on("user-connected", async (userId) => {
@@ -72,10 +74,13 @@ io.on("connection", async function (socket) {
   // to get all unread message count follower wise
   socket.on("getUnreadMessages", async (userId) => {
     try {
-      let sql = `select direct_messages.sender_id, count(unread_messages.message_id) as count from unread_messages inner join direct_messages on unread_messages.message_id = direct_messages.id where user_id = ? and is_read = 0 group by direct_messages.sender_id;`;
+      if (connectedUser[userId]) {
+        let sql = `select sender_id, count(id) as count from direct_messages where receiver_id = ? and is_read = 0 group by sender_id;`;
 
-      let data = await connection.query(sql, [userId]);
-      socket.emit("unreadMessages", data[0]);
+        let data = await connection.query(sql, [userId]);
+
+        io.to(connectedUser[userId]).emit("unreadMessages", data[0]);
+      }
     } catch (error) {
       logger.error(error);
     }
@@ -84,9 +89,9 @@ io.on("connection", async function (socket) {
   // to update the read flag of some specific follower
   socket.on("messageRead", async (data) => {
     try {
-      let sql = `update unread_messages join direct_messages on unread_messages.message_id = direct_messages.id set unread_messages.is_read = 1 where unread_messages.user_id = ? and direct_messages.sender_id = ?;`;
+      let sql = `update direct_messages set direct_messages.is_read = 1 where direct_messages.sender_id = ? and direct_messages.receiver_id = ?;`;
 
-      await connection.query(sql, [data.senderId, data.reciverId]);
+      await connection.query(sql, [data.reciverId, data.senderId]);
     } catch (error) {
       logger.error(error);
     }
@@ -94,7 +99,6 @@ io.on("connection", async function (socket) {
 
   //Whenever someone disconnects this piece of code executed
   socket.on("disconnect", function () {
-    logger.info("A user disconnected : ", socket.id);
 
     for (const userId in connectedUser) {
       if (connectedUser[userId] === socket.id) {
@@ -105,15 +109,16 @@ io.on("connection", async function (socket) {
   });
 
   socket.on("send-private-message", async (data) => {
-    const { senderId, reciverId, message, content_type } = data;
-    logger.info(data);
+    const { senderId, reciverId, message, url, content_type, created_at } = data;
 
     if (connectedUser[reciverId]) {
       io.to(connectedUser[reciverId]).emit("receive-private-message", {
         senderId,
         reciverId,
         message,
+        url,
         content_type,
+        created_at
       });
     }
   });
@@ -121,7 +126,7 @@ io.on("connection", async function (socket) {
   // load old chats
   socket.on("existingChats", async (data) => {
     try {
-      let sql = `select * from direct_messages where (sender_id = '${data.senderId}' and receiver_id = '${data.reciverId}') or (sender_id = '${data.reciverId}' and receiver_id = '${data.senderId}') order by created_at;`;
+      let sql = `select direct_messages.id, direct_messages.sender_id, direct_messages.receiver_id, direct_messages.content_type, direct_messages.content, direct_messages.is_read, direct_messages.created_at, message_medias.url from direct_messages left join message_medias on direct_messages.id = message_medias.message_id where (sender_id = '${data.senderId}' and receiver_id = '${data.reciverId}') or (sender_id = '${data.reciverId}' and receiver_id = '${data.senderId}') order by created_at;`;
 
       let [oldchats] = await connection.query(sql);
 

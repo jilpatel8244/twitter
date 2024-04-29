@@ -10,7 +10,7 @@ async function shareLinkHandler(tweetId) {
     }
 
     // display toast
-    showToastForSomeDuration();
+    
 
     // make display: none to shareToggle
     let shareOptionsDiv = document.getElementById(`shareOptions`+ tweetId);

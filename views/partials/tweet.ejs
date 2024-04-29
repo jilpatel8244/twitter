@@ -1,8 +1,9 @@
 <!-- tweet generate modal -->
-<div id="defaultModal" tabindex="-1" class="hidden  z-[1]  absolute inset-0 items-center w-full md:inset-0 h-full pt-44  md:h-screen">
-  <div class="fixed pt-44 z-[9]  left-[50%] w-full flex justify-center -translate-x-[53%] -translate-y-[50%] ">
+<div id="defaultModal" tabindex="-1" class="hidden  z-10 absolute inset-0 items-center w-full md:inset-0 h-full pt-44  md:h-screen">
+  
+  <div class="fixed pt-44 z-10 top-[30%] left-[50%] w-full  flex justify-center -translate-x-[53%] -translate-y-[45%] ">
     <!-- tweet generate content -->
-    <div class=" p-4 bg-white rounded-lg shadow-2xl dark:bg-white sm:p-5 max-w-[700px]  w-[592px]">
+    <div class=" p-4 bg-white rounded-lg shadow-2xl  dark:bg-white sm:p-5 max-w-[700px]  w-[592px]">
       <!-- tweet generate header -->
       <div class="justify-between flex items-center rounded-t  ">
         <p id="close" data-modal-target="popup-modal" data-modal-toggle="popup-modal" class="text-black cursor-pointer bg-transparent hover:bg-gray-200 hover:text-gray-900  rounded-full text-sm p-1.5  inline-flex items-center  " data-modal-toggle="defaultModal" id="close">
@@ -15,14 +16,18 @@
           Drafts
         </p>
       </div>
-
+      
 
 
 
       <!-- tweet generate body -->
-      <form id="tweet" name="tweet" enctype="multipart/form-data">
+
+      <form id="tweet" name="tweet"  enctype="multipart/form-data">
+        <div class="h-80 overflow-x-scroll">
+
+        
         <input type="hidden" id="tweetId" name="tweetId">
-        <div class="flex">
+        <div class="flex ">
           <div class="m-2 w-10 py-1">
             <img id="profile_img" class="inline-block h-10 w-10 rounded-full select-none " src="" alt="">
           </div>
@@ -31,9 +36,11 @@
             class="max-w-80 text-balance overflow-hidden bg-transparent text-gray-700 outline-none font-[Trebuchet MS, sans-serif] font-bold text-xl h-28 font-serif  w-full" placeholder="What is happening?!" name="content" id="content" contenteditable="true" ></pre>
             <br>
             <div id="images" class="inline-flex"></div>
+            <div id="tweetedBox"></div>
           </div>
         </div>
-        <!--middle creat tweet below icons-->
+      </div>
+        <!--middle create tweet below icons-->
         <div class="flex border-t-2 -mb-6">
           <div class="w-10 "></div>
 
