@@ -26,7 +26,7 @@ exports.getNotifications = async (req, res) => {
       [logger_id]
     );
     let countNotification = notificationCount[0].count;
-
+    console.log(mentionNotification);
     res.status(200).json({
       success: true,
       logNotification,
@@ -58,7 +58,7 @@ async function getAllNotifications(userId) {
     LEFT JOIN users u ON n.user_id = u.id
     LEFT JOIN users u2 ON n.related_user_id = u2.id
     LEFT JOIN tweets t ON n.tweet_id = t.id
-    WHERE n.user_id = ? and n.related_user_id != ? 
+    WHERE n.user_id = ? AND n.related_user_id != ? 
     ORDER BY n.created_at DESC;`,
     [userId, userId]
   );
@@ -81,7 +81,7 @@ async function getVerifiedNotifications(userId) {
     LEFT JOIN followers f ON n.related_user_id = f.follower_id
     LEFT JOIN tweets t ON n.tweet_id = t.id
     WHERE n.user_id = ? AND n.related_user_id  in (u2.id) AND u2.is_varified = 1 AND f.current_status = 1 AND n.user_id = f.following_id 
-    AND n.related_user_id = f.follower_id
+    AND n.related_user_id = f.follower_id 
     ORDER BY n.created_at DESC;`,
     [userId]
   );
@@ -102,7 +102,7 @@ async function getMentionNotifications(userId) {
     LEFT JOIN users u2 ON n.related_user_id = u2.id
     LEFT JOIN followers f ON u.id = f.follower_id AND u2.id = f.following_id 
     LEFT JOIN tweets t ON n.tweet_id = t.id
-    WHERE n.user_id = 1 AND u.username IN  (u.username) AND n.type = "Mention" 
+    WHERE n.user_id = ? AND u.username IN  (u.username) AND n.type = "Mention" 
     AND f.is_blocked = 0
     ORDER BY n.created_at DESC;`,
     [userId]

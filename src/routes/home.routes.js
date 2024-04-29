@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const passport = require("passport");
-const {get_comment, post_comment,delete_comment,edit_comment,get_notification,post_notification, getHomeForyou, getHomeFollowing, post_reply,get_reply  } = require('../controller/home.controller');
+const {get_comment, post_comment,delete_comment,edit_comment,get_notification,post_notification, getHomeForyou, getRetweet,getHomeFollowing, post_reply,get_reply  } = require('../controller/home.controller');
 
 
 const {retweet,retweetData} =require('../controller/retweet.controller');
@@ -15,7 +15,7 @@ router.get("/home", passport.authenticate('jwt', { session: false, failureRedire
   res.render('pages/home', {user: req.user[0][0]});
 });
 router.get("/getHomeForyou", passport.authenticate('jwt', { session: false, failureRedirect: "/login" }), getHomeForyou);
-router.get("/getHomeFollowing", passport.authenticate('jwt', { session: false, failureRedirect: "/login" }), getHomeFollowing)
+router.get("/getHomeFollowing", passport.authenticate('jwt', { session: false, failureRedirect: "/login" }), getHomeFollowing,getRetweet)
 
 
 
