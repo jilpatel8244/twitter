@@ -53,13 +53,16 @@ exports.storeMessageHandler = async (req, res) => {
 
         await connection.query(sql, [ reciverId, lastInsertedId[0].insertId, 0 ]);
 
+        let insertedData = await connection.query(`select * from direct_messages where id = ?`, [lastInsertedId[0].insertId]);
+
         return res.status(200).json({
             success: true,
             message: {
                 'senderId': senderId,
                 'reciverId': reciverId,
                 'message': message,
-                'content_type': content_type  
+                'content_type': content_type,
+                'created_at': insertedData[0][0].created_at
             }
         });
 

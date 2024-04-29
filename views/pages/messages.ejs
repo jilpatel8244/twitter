@@ -15,19 +15,26 @@
             padding: 10px 20px;
         }
 
-        .sender-chat span, .reciver-chat span{
-            padding: 15px 20px;
-            border-radius: 30px;
-        }
-        
-        .sender-chat span{
-            background-color: rgb(14 165 233);
-            color: white;
+        .sender-chat .contentSpan, .reciver-chat .contentSpan{
+            padding: 12px 20px;
+            border-radius: 25px;
         }
 
-        .reciver-chat span{
+        .sender-chat .timeSpan, .reciver-chat .timeSpan{
+            font-size: 13px;
+            color: slategray;
+        }
+
+        .sender-chat .contentSpan{
+            background-color: rgb(14 165 233);
+            color: white;
+            border-bottom-right-radius: 0;
+        }
+
+        .reciver-chat .contentSpan{
             background-color: rgb(245, 248, 250);
             color: black;
+            border-bottom-left-radius: 0;
         }
 
         .active-user{
@@ -299,7 +306,6 @@
             formData.append('message', message);
             formData.append('imgFile', imgFile);
 
-            // if (message && message.length != 0 && message.length < 250) {
                 let url = window.location.origin + '/messages/storeMessage';
 
                 let data = await fetch(url, {
@@ -312,20 +318,25 @@
                 if (response.success) {
 
                     let newDiv = document.createElement('div');
-                    newDiv.classList.add('text-right', 'sender-chat', 'flex', 'justify-end');
+                    newDiv.classList.add('text-right', 'sender-chat', 'flex', 'flex-col','items-end');
+
+                    let newTimeSpan = document.createElement('span');
+                    newTimeSpan.classList.add('timeSpan');
+                    let formatedTime = getFormatedTime(response.message.created_at);
+                    newTimeSpan.textContent = `${formatedTime}`;
 
                     if (imgFile) {
                         newDiv.innerHTML = `<img src="/uploads/${response.message.message}" alt="img" class="border rounded-xl" style="height: 300px; width: 300px">`;
                     } else {
                         let newSpan = document.createElement('span');
-                        // newSpan.classList.add('');
+                        newSpan.classList.add('contentSpan');
                         newSpan.textContent = `${response.message.message}`;
                         newSpan.style.lineBreak = 'anywhere';
                         newSpan.style.maxWidth = '85%';
                         newDiv.appendChild(newSpan);
-                        // newDiv.innerHTML = `<span style="line-break: anywhere; max-width: 85%;">${response.message.message}</span>`;
                     }
 
+                    newDiv.appendChild(newTimeSpan);
                     document.getElementById('chat-container').appendChild(newDiv);
 
                     // remove messge text
@@ -347,32 +358,38 @@
                     socket.emit('getUnreadMessages', reciverId);
                     socket.emit('send-private-message', response.message);
                 }
-            // }
         })
 
         // receive private messages
         socket.on('receive-private-message', (data) => {
 
-            let newDiv = document.createElement('div');
-            newDiv.classList.add('reciver-chat', 'flex', 'justify-start');
-
-            if (data.content_type == 'text') {
-                let newSpan = document.createElement('span');
-                // newSpan.classList.add('');
-                newSpan.textContent = `${data.message}`;
-                newSpan.style.lineBreak = 'anywhere';
-                newSpan.style.maxWidth = '85%';
-                newDiv.appendChild(newSpan);
-                // newDiv.innerHTML = `<span style="line-break: anywhere; max-width: 85%;">${data.message}</span>`;
-            } else {
-                newDiv.innerHTML = `<img src="/uploads/${data.message}" alt="img" class="border rounded-xl" style="height: 300px; width: 300px">`;
-            }
-    
-            document.getElementById('chat-container').appendChild(newDiv);  
-
-            scrollToBottom('user-display-and-chatting');
-
             if (data.senderId === reciverId) {
+
+                let newDiv = document.createElement('div');
+                newDiv.classList.add('reciver-chat', 'flex', 'flex-col', 'items-start');
+
+                let newTimeSpan = document.createElement('span');
+                newTimeSpan.classList.add('timeSpan');
+                let formatedTime = getFormatedTime(data.created_at);
+                newTimeSpan.textContent = `${formatedTime}`;
+
+                if (data.content_type == 'text') {
+                    let newSpan = document.createElement('span');
+                    newSpan.classList.add('contentSpan');
+                    newSpan.textContent = `${data.message}`;
+                    newSpan.style.lineBreak = 'anywhere';
+                    newSpan.style.maxWidth = '85%';
+                    newDiv.appendChild(newSpan);
+                } else {
+                    newDiv.innerHTML = `<img src="/uploads/${data.message}" alt="img" class="border rounded-xl" style="height: 300px; width: 300px">`;
+                }
+
+                newDiv.appendChild(newTimeSpan);
+                document.getElementById('chat-container').appendChild(newDiv);  
+
+                scrollToBottom('user-display-and-chatting');
+
+
                 socket.emit('messageRead', {senderId: senderId, reciverId: data.senderId});
             }
         })
@@ -384,22 +401,28 @@
             data.oldchats.forEach((element, index) => {
                 let newDiv = document.createElement('div');
 
+                let newTimeSpan = document.createElement('span');
+                newTimeSpan.classList.add('timeSpan');
+                let formatedTime = getFormatedTime(element.created_at);
+                newTimeSpan.textContent = `${formatedTime}`;
+
                 if (element.content_type == 'text') {
                     let newSpan = document.createElement('span');
-                    // newSpan.classList.add('');
+                    newSpan.classList.add('contentSpan');
                     newSpan.textContent = `${element.content}`;
                     newSpan.style.lineBreak = 'anywhere';
                     newSpan.style.maxWidth = '85%';
                     newDiv.appendChild(newSpan);
-                    // newDiv.textContent = `<span style="line-break: anywhere; max-width: 85%;">${element.content}</span>`;
                 } else {
                     newDiv.innerHTML = `<img src="/uploads/${element.content}" alt="img" class="border rounded-xl" style="height: 300px; width: 300px">`;
                 }
 
+                newDiv.appendChild(newTimeSpan);
+
                 if (element.sender_id == senderId) {
-                    newDiv.classList.add('text-right', 'sender-chat', 'flex', 'justify-end');
+                    newDiv.classList.add('text-right', 'sender-chat', 'flex', 'flex-col','items-end');
                 } else {
-                    newDiv.classList.add('reciver-chat', 'flex', 'justify-start');
+                    newDiv.classList.add('reciver-chat', 'flex', 'flex-col', 'items-start');
                 }
 
                 document.getElementById('chat-container').appendChild(newDiv);  
@@ -455,6 +478,23 @@
                 document.getElementById("messageSendBtn").style.opacity = 0.5;
             }
 
+        }
+
+        function getFormatedTime(created_at){
+
+            const weekday = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+
+            let dt = new Date(created_at);
+
+            let day = weekday[dt.getDay()];
+
+            let hr = dt.getHours();
+            let AmOrPm = hr >= 12 ? 'PM' : 'AM';
+            hr = (hr % 12) || 12;
+
+            let m = "0" + dt.getMinutes();
+            let s = "0" + dt.getSeconds();
+            return day + ' ' + hr + ':' + m.substr(-2) + ' ' + AmOrPm;
         }
     </script>
 </body>
