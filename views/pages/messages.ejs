@@ -224,7 +224,6 @@
         // });
 
         socket.on('unreadMessages', (data) => {
-            console.log("okok");
             data.forEach((element, index) => {
                 document.getElementById(`${element.sender_id}`).querySelector('.unreadMessageCount').parentElement.style.display = 'flex';
                 document.getElementById(`${element.sender_id}`).querySelector('.unreadMessageCount').innerHTML = `${element.count}`;
@@ -314,6 +313,7 @@
                 });
 
                 let response = await data.json();
+                console.log(response);
 
                 if (response.success) {
 
@@ -325,12 +325,28 @@
                     let formatedTime = getFormatedTime(response.message.created_at);
                     newTimeSpan.textContent = `${formatedTime}`;
 
-                    if (imgFile) {
-                        newDiv.innerHTML = `<img src="/uploads/${response.message.message}" alt="img" class="border rounded-xl" style="height: 300px; width: 300px">`;
-                    } else {
+                    if (imgFile && message) {
+                        newDiv.innerHTML = `<img src="/uploads/${response.message.url}" alt="img" class="border rounded-xl" style="height: 300px; width: 300px">`;
+
                         let newSpan = document.createElement('span');
                         newSpan.classList.add('contentSpan');
                         newSpan.textContent = `${response.message.message}`;
+                        newSpan.style.lineBreak = 'anywhere';
+                        newSpan.style.maxWidth = '85%';
+                        newDiv.appendChild(newSpan);
+                    } else if (imgFile) {
+                        newDiv.innerHTML = `<img src="/uploads/${response.message.url}" alt="img" class="border rounded-xl" style="height: 300px; width: 300px">`;
+                    } else if (message) {
+                        let newSpan = document.createElement('span');
+                        newSpan.classList.add('contentSpan');
+                        newSpan.textContent = `${response.message.message}`;
+                        newSpan.style.lineBreak = 'anywhere';
+                        newSpan.style.maxWidth = '85%';
+                        newDiv.appendChild(newSpan);
+                    } else {
+                        let newSpan = document.createElement('span');
+                        newSpan.classList.add('contentSpan');
+                        newSpan.innerHTML = `<a href="${data.content}">${response.message.content}</a>`;
                         newSpan.style.lineBreak = 'anywhere';
                         newSpan.style.maxWidth = '85%';
                         newDiv.appendChild(newSpan);
@@ -373,7 +389,18 @@
                 let formatedTime = getFormatedTime(data.created_at);
                 newTimeSpan.textContent = `${formatedTime}`;
 
-                if (data.content_type == 'text') {
+                if (data.content_type == 'media-text') {
+                    newDiv.innerHTML = `<img src="/uploads/${data.url}" alt="img" class="border rounded-xl" style="height: 300px; width: 300px">`;
+
+                    let newSpan = document.createElement('span');
+                    newSpan.classList.add('contentSpan');
+                    newSpan.textContent = `${data.message}`;
+                    newSpan.style.lineBreak = 'anywhere';
+                    newSpan.style.maxWidth = '85%';
+                    newDiv.appendChild(newSpan);
+                } else if (data.content_type == 'media') {
+                    newDiv.innerHTML = `<img src="/uploads/${data.url}" alt="img" class="border rounded-xl" style="height: 300px; width: 300px">`;
+                } else if (data.content_type == 'text') {
                     let newSpan = document.createElement('span');
                     newSpan.classList.add('contentSpan');
                     newSpan.textContent = `${data.message}`;
@@ -381,7 +408,12 @@
                     newSpan.style.maxWidth = '85%';
                     newDiv.appendChild(newSpan);
                 } else {
-                    newDiv.innerHTML = `<img src="/uploads/${data.message}" alt="img" class="border rounded-xl" style="height: 300px; width: 300px">`;
+                    let newSpan = document.createElement('span');
+                    newSpan.classList.add('contentSpan');
+                    newSpan.innerHTML = `<a href="${data.content}">${data.content}</a>`;
+                    newSpan.style.lineBreak = 'anywhere';
+                    newSpan.style.maxWidth = '85%';
+                    newDiv.appendChild(newSpan);
                 }
 
                 newDiv.appendChild(newTimeSpan);
@@ -390,7 +422,7 @@
                 scrollToBottom('user-display-and-chatting');
 
 
-                socket.emit('messageRead', {senderId: senderId, reciverId: data.senderId});
+                socket.emit('messageRead', {senderId: senderId, reciverId: data.senderId});              
             }
         })
 
@@ -406,7 +438,18 @@
                 let formatedTime = getFormatedTime(element.created_at);
                 newTimeSpan.textContent = `${formatedTime}`;
 
-                if (element.content_type == 'text') {
+                if (element.content_type == 'media-text') {
+                    newDiv.innerHTML = `<img src="/uploads/${element.url}" alt="img" class="border rounded-xl" style="height: 300px; width: 300px">`;
+
+                    let newSpan = document.createElement('span');
+                    newSpan.classList.add('contentSpan');
+                    newSpan.textContent = `${element.content}`;
+                    newSpan.style.lineBreak = 'anywhere';
+                    newSpan.style.maxWidth = '85%';
+                    newDiv.appendChild(newSpan);
+                } else if (element.content_type == 'media') {
+                    newDiv.innerHTML = `<img src="/uploads/${element.url}" alt="img" class="border rounded-xl" style="height: 300px; width: 300px">`;
+                } else if (element.content_type == 'text') {
                     let newSpan = document.createElement('span');
                     newSpan.classList.add('contentSpan');
                     newSpan.textContent = `${element.content}`;
@@ -414,7 +457,12 @@
                     newSpan.style.maxWidth = '85%';
                     newDiv.appendChild(newSpan);
                 } else {
-                    newDiv.innerHTML = `<img src="/uploads/${element.content}" alt="img" class="border rounded-xl" style="height: 300px; width: 300px">`;
+                    let newSpan = document.createElement('span');
+                    newSpan.classList.add('contentSpan');
+                    newSpan.innerHTML = `<a href="${element.content}">${element.content}</a>`;
+                    newSpan.style.lineBreak = 'anywhere';
+                    newSpan.style.maxWidth = '85%';
+                    newDiv.appendChild(newSpan);
                 }
 
                 newDiv.appendChild(newTimeSpan);

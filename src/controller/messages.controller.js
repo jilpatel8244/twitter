@@ -38,20 +38,28 @@ exports.getMessagesPage = async (req, res) => {
 exports.storeMessageHandler = async (req, res) => {
     try {
         let { senderId, reciverId, message } = req.body;
-        let content_type = 'text';
+        let content_type;
+        
+        // set content_type
 
-        if (req.file) {
-            message = req.file.filename;
+        if (req.file && req.body.message) {
+            content_type = 'media-text';
+        } else if (req.file) {
             content_type = 'media';
+        } else {
+            content_type = 'text';
         }
 
-        let sql = `insert into direct_messages (sender_id, receiver_id, content, content_type) values ( ?, ?, ?, ? );`;
+        // entry in direct_messages table
+        let sql = `insert into direct_messages (sender_id, receiver_id, content, content_type, is_read) values ( ?, ?, ?, ?, ? );`;
+        let lastInsertedId = await connection.query(sql, [ senderId, reciverId, message, content_type, 0 ]);
 
-        let lastInsertedId = await connection.query(sql, [ senderId, reciverId, message, content_type ]);
+        // entry in message_medias table
 
-        sql = `insert into unread_messages (user_id, message_id, is_read) values ( ?, ?, ? )`;
-
-        await connection.query(sql, [ reciverId, lastInsertedId[0].insertId, 0 ]);
+        if(content_type == 'media-text' || content_type == 'media') {
+            let sql = `insert into message_medias (message_id, url) values ( ?, ? );`;
+            await connection.query(sql, [ lastInsertedId[0].insertId, req.file.filename ]);
+        }
 
         let insertedData = await connection.query(`select * from direct_messages where id = ?`, [lastInsertedId[0].insertId]);
 
@@ -61,6 +69,7 @@ exports.storeMessageHandler = async (req, res) => {
                 'senderId': senderId,
                 'reciverId': reciverId,
                 'message': message,
+                'url': req.file ? (req.file.filename) : "nothing",
                 'content_type': content_type,
                 'created_at': insertedData[0][0].created_at
             }
