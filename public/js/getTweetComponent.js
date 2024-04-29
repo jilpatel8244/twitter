@@ -225,8 +225,25 @@ function getTweetComponent(data) {
                                     </div>
                                 </div>
                             </div>
-                            <hr class="border-gray-200">
-                        </article>
+                            <hr class="border-gray-200">`
+                            if (tweets.isAuthor) {
+                                tweet += `
+                                <div  onclick="showButtons('${ tweets.tweet_id }')">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                    stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z" />
+                                </svg>
+                            </div>
+                            <div
+                            class="show_${ tweets.tweet_id } bg-white shadow-xl rounded-xl cursor-pointer hidden w-16">
+
+                            <div onclick="deletePost(${tweets.tweet_id})"
+                                class="text-red-700 font-bold w-10 hover:bg-slate-100 py-2 px-4">Delete</div><hr class="border border-gray-100">
+                        </div></div>`
+                              }
+                              
+                        tweet += `</article>
                     </li > `
     });
 
@@ -243,3 +260,15 @@ function shareToggle(tweet_id) {
         shareOptionsDiv.style.display = "none"
     }
 }
+
+
+function showButtons(tweet_id){
+    let showBtn = document.querySelector(`.show_${ tweet_id }`)
+    console.log(showBtn);
+    if (showBtn.style.display == 'block'){
+     showBtn.style.display = 'none'
+    }else{
+     showBtn.style.display = 'block'
+    }
+ }
+ 
