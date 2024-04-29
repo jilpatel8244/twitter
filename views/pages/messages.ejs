@@ -217,7 +217,7 @@
         // });
 
         socket.on('unreadMessages', (data) => {
-
+            console.log("okok");
             data.forEach((element, index) => {
                 document.getElementById(`${element.sender_id}`).querySelector('.unreadMessageCount').parentElement.style.display = 'flex';
                 document.getElementById(`${element.sender_id}`).querySelector('.unreadMessageCount').innerHTML = `${element.count}`;
@@ -344,6 +344,7 @@
 
                     scrollToBottom('user-display-and-chatting');
 
+                    socket.emit('getUnreadMessages', reciverId);
                     socket.emit('send-private-message', response.message);
                 }
             // }
