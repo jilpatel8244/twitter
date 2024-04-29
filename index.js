@@ -21,7 +21,7 @@ const messagesRoute = require("./src/routes/messages.routes");
 const shareRoute = require('./src/routes/share.routes');
 
 const adminroute = require("./src/routes/admin.routes");
-const resetpasswordProfile = require("./src/routes/resetpasswordProfile.route");
+const resetpasswordProfile = require("./src/routes/profile.resetpassword.route");
 
 const PORT = process.env.PORT || 3000;
 const tweetCreate = require("./src/routes/tweet.routes");
