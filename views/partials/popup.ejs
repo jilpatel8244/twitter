@@ -96,7 +96,8 @@
         let response = await data.json();
 
         if (response.success) {
-            console.log(response);
+            // send notification
+            socket.emit('getUnreadMessages', selectedUserArr[0]);
 
             // remove all selected header
             document.getElementById('selectedFollowers').innerHTML = ''; 
