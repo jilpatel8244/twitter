@@ -25,10 +25,10 @@
                     Explore
                 </span></a>
 
-            <a href="/notifications"
-            id="notification"
+            <a href="/notifications" id="notification"
                 class="mt-1 group flex items-center px-2 py-4 text-base leading-6 font-medium rounded-full hover:bg-gray-200 relative">
-                <div class="h-5 w-5 text-xs text-white flex justify-center items-center absolute" style="background-color: rgb(14 165 233); border: 1px solid white; border-radius: 50px; top: 10px; left: 20px;">
+                <div class="h-5 w-5 text-xs text-white flex justify-center items-center absolute"
+                    style="background-color: rgb(14 165 233); border: 1px solid white; border-radius: 50px; top: 10px; left: 20px;">
                     <span id="NotificationCount"></span>
                 </div>
                 <svg class="mr-4 h-6 w-6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -36,11 +36,11 @@
                     <path
                         d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9">
                     </path>
-                </svg> 
-                
+                </svg>
+
                 <span class="text-xl ml-1">Notifications</span></span>
             </a>
-           
+
             <a href="/messages"
                 class="mt-1 group flex items-center px-2 py-4 text-base leading-6 font-medium rounded-full hover:bg-gray-200 relative">
                 <div class="h-5 w-5 text-xs text-white flex justify-center items-center absolute"
@@ -64,7 +64,7 @@
                 </svg> <span class="text-xl ">
                     Bookmarks
                 </span></a>
-            <a href="#"
+            <a href="/admin/verify"
                 class="mt-1 group flex items-center px-2 py-4 text-base leading-6 font-medium rounded-full hover:bg-gray-200 ">
                 <svg class="mr-4 h-6 w-6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                     stroke="currentColor" viewBox="0 0 24 24">
@@ -72,7 +72,7 @@
                         d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01">
                     </path>
                 </svg> <span class="text-xl ">
-                    Lists
+                    Help
                 </span></a>
             <a href="/profile"
                 class="mt-1 group flex items-center px-2 py-4 text-base leading-6 font-medium rounded-full hover:bg-gray-200 ">
@@ -89,7 +89,7 @@
                 <svg class="mr-4 h-6 w-6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                     stroke="currentColor" viewBox="0 0 24 24">
                     <path d="M8 12h.01M12 12h.01M16 12h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                </svg> <span class="text-xl" >
+                </svg> <span class="text-xl">
                     More
                 </span></a>
             <div id="defaultModalButton" data-modal-target="defaultModal" data-modal-toggle="defaultModal"
@@ -101,7 +101,7 @@
         </nav>
 
         <%- include('./tweet.ejs')%>
-        <script src="/js/tweet.script.js"></script>
+            <script src="/js/tweet.script.js"></script>
             <!-- User Menu -->
             <div class="absolute" style="bottom: 2rem; top: 50rem">
                 <div class="relative">
@@ -109,15 +109,13 @@
                         <span class="flex-shrink-0 group block cursor-pointer" onclick="logoutToggle()">
                             <div class="flex items-center">
                                 <div>
-                                    <img class="inline-block h-10 w-10 rounded-full"
-    
-                                        <% if (user.profile_img_url) { %>
-                                            src="/uploads/<%= user.profile_img_url %>"
+                                    <img class="inline-block h-10 w-10 rounded-full" <% if (user.profile_img_url) { %>
+                                    src="/uploads/<%= user.profile_img_url %>"
                                         <% } else { %>
                                             src="/assets/profile.png"
-                                        <% } %>
-    
-                                        alt="">
+                                            <% } %>
+
+                                                alt="">
                                 </div>
                                 <div class="ml-3">
                                     <p class="text-base leading-6 font-medium ">
@@ -133,24 +131,27 @@
                         </span>
                     </div>
                     <!-- logout toggle -->
-                    <a id="logoutDiv" style="display: none; top: -70px; left: 15px;" class="absolute p-4 border shadow-lg rounded-xl cursor-pointer" href="/logout">
+                    <a id="logoutDiv" style="display: none; top: -70px; left: 15px;"
+                        class="absolute p-4 border shadow-lg rounded-xl cursor-pointer" href="/logout">
                         <!-- <div>
                             <p>Add an existing account</p>
                         </div> -->
                         <div>
-                            <p>Log out @<%= user.username %></p>
+                            <p>Log out @<%= user.username %>
+                            </p>
                         </div>
                     </a>
 
-                    <div id="resetpass" style="display: none; bottom: 400px; left: 15px;" class="absolute p-4 border shadow-lg rounded-xl bg-gray-200 w-48 text-center cursor-pointer" >
-                       
+                    <div id="resetpass" style="display: none; bottom: 400px; left: 15px;"
+                        class="absolute p-4 border shadow-lg rounded-xl bg-gray-200 w-48 text-center cursor-pointer">
+
                         <div>
                             <a href="/profilepasswordreset" class="mt-2">
-                                <p>Reset Password</p> 
+                                <p>Reset Password</p>
                             </a>
                             <hr class="border-black">
                             <a href="" class="mt-2">
-                              <p>Get Verified</p>
+                                <p>Get Verified</p>
                             </a>
                         </div>
                     </div>
@@ -159,10 +160,15 @@
     </div>
 </div>
 
-<div style="top: 750px; left: 750px;" id="toast-success" class="fixed hidden items-center w-full max-w-xs p-4 mb-4 text-gray-500 bg-white rounded-lg shadow dark:text-gray-400 dark:bg-gray-800 z-10" role="alert">
-    <div class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-green-500 bg-green-100 rounded-lg dark:bg-green-800 dark:text-green-200">
-        <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z"/>
+<div style="top: 750px; left: 750px;" id="toast-success"
+    class="fixed hidden items-center w-full max-w-xs p-4 mb-4 text-gray-500 bg-white rounded-lg shadow dark:text-gray-400 dark:bg-gray-800 z-10"
+    role="alert">
+    <div
+        class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-green-500 bg-green-100 rounded-lg dark:bg-green-800 dark:text-green-200">
+        <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+            viewBox="0 0 20 20">
+            <path
+                d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
         </svg>
         <span class="sr-only">Check icon</span>
     </div>
@@ -171,58 +177,58 @@
 
 <%- include('../partials/popup.ejs') %>
 
-<!-- script to display toast for three seconds -->
-<script>
-    function showToastForSomeDuration() {
-        document.getElementById('toast-success').style.display = "flex";
+    <!-- script to display toast for three seconds -->
+    <script>
+        function showToastForSomeDuration() {
+            document.getElementById('toast-success').style.display = "flex";
 
-        setTimeout(() => {
-            document.getElementById('toast-success').style.display = "none"
-        }, 3000);
-    }
-</script>
-
-<!-- socket.io script that (new message ave to count display karva mate che) -->
-<script src="/socket.io/socket.io.js"></script>
-<script>
-
-    let socket = io();
-
-    let senderId = '<%= user.id %>';
-
-    socket.on('connect', () => {
-        console.log('connected to server ' + socket.id);
-
-        socket.emit('user-connected', senderId);
-        socket.emit('getUnreadMessages', senderId);     
-    });
-
-    socket.on('unreadMessages', (data) => {
-        if (data.length) {
-            document.getElementById('messageCount').parentElement.style.display = "flex";
-            document.getElementById('messageCount').innerHTML = `${data.length}`;
+            setTimeout(() => {
+                document.getElementById('toast-success').style.display = "none"
+            }, 3000);
         }
-    });
-</script>
+    </script>
 
-<script>
-    function logoutToggle() {
-        let logoutDiv = document.getElementById('logoutDiv');
-        if (logoutDiv.style.display == "none") {
-            logoutDiv.style.display = "block";
-        } else {
-            logoutDiv.style.display = "none"
-        }
-    }
+    <!-- socket.io script that (new message ave to count display karva mate che) -->
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
 
-    function ResetPassToggle() {
-        let logoutDiv = document.getElementById('resetpass');
-        if (logoutDiv.style.display == "none") {
-            logoutDiv.style.display = "block";
-        } else {
-            logoutDiv.style.display = "none"
+        let socket = io();
+
+        let senderId = '<%= user.id %>';
+
+        socket.on('connect', () => {
+            console.log('connected to server ' + socket.id);
+
+            socket.emit('user-connected', senderId);
+            socket.emit('getUnreadMessages', senderId);
+        });
+
+        socket.on('unreadMessages', (data) => {
+            if (data.length) {
+                document.getElementById('messageCount').parentElement.style.display = "flex";
+                document.getElementById('messageCount').innerHTML = `${data.length}`;
+            }
+        });
+    </script>
+
+    <script>
+        function logoutToggle() {
+            let logoutDiv = document.getElementById('logoutDiv');
+            if (logoutDiv.style.display == "none") {
+                logoutDiv.style.display = "block";
+            } else {
+                logoutDiv.style.display = "none"
+            }
         }
-    }
-    
-</script>
-<script src="/js/notificationCount.script.js"></script>
+
+        function ResetPassToggle() {
+            let logoutDiv = document.getElementById('resetpass');
+            if (logoutDiv.style.display == "none") {
+                logoutDiv.style.display = "block";
+            } else {
+                logoutDiv.style.display = "none"
+            }
+        }
+
+    </script>
+    <script src="/js/notificationCount.script.js"></script>

@@ -2,7 +2,7 @@
 async function getuserpage(search, curpage) {
     async function getdata() {
         let url = window.location.origin + "/admin/getusers"
-        console.log("current page is ", curpage);
+
         let data = await fetch(url, {
             method: "POST",
             headers: {
@@ -52,8 +52,7 @@ async function getuserpage(search, curpage) {
                 <p id="pagenumber">${curpage}</p>
                 <p> of ${result.totalpage}</p>`
 
-    console.log("result page is", curpage);
-    console.log("result page is", result.curpage);
+
     if (result.curpage >= result.totalpage) {
         user += ` </div>
         <p class="gtuser pagebtn" hidden>></p>
@@ -160,9 +159,6 @@ async function getuserpage(search, curpage) {
 
         }
 
-
-
-
     });
 
 
@@ -171,9 +167,7 @@ async function getuserpage(search, curpage) {
             </table>
         </div>
     `
-
     return user;
-
 }
 
 

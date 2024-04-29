@@ -1,77 +1,127 @@
 
-async function verify_request(search) {
+async function verify_request(search, curpage) {
     async function getdata() {
         let url = window.location.origin + "/admin/getVerifyRequest"
+
         let data = await fetch(url, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({ 'search': search, 'page': 1 }),
+            body: JSON.stringify({ 'search': search, 'page': curpage, "curpage": curpage }),
         });
+
+
         data = await data.json()
-        return data.data;
+
+        return data;
     }
 
-    let data = await getdata();
-    let user = `
-    <div class="flex gap-8" >
-            <div class="pagination">
-            <p class="pagebtn">
-            < </p>  
-            <div class="flex">
-            <p>page &nbsp</p>
-            <p> 1</p>
-            </div>
-            <p class="pagebtn">></p>
-            </div>
 
-            <div class="ml-20">
-            <label for="table-search" class="sr-only">Search</label>
-            <div class="relative">
-            <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
-            <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
-            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-            d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
-            </svg>
+    let result = await getdata();
+
+
+    let data = result.data;
+
+
+
+    let user = ``;
+
+    if (curpage == "none") {
+        curpage = 1
+    }
+
+
+
+    user += `<div class="flex gap-8" >
+                <div class="pagination">`
+
+    if (curpage == 1) {
+        user += `<p class="ltverify pagebtn" hidden>
+            < </p>  `
+    }
+    else {
+        user += `<p class="ltverify pagebtn">
+            < </p>  `
+    }
+
+
+    user += `
+                <div class="flex">
+                <p>page &nbsp</p>
+                <p id="pagenumber">${curpage}</p>
+                <p> of ${result.totalpage}</p>`
+
+
+    if (result.curpage >= result.totalpage) {
+        user += ` </div>
+        <p class="gtverify pagebtn" hidden>></p>
+        </div>`
+    }
+    else {
+        user += ` </div>
+        <p class="gtverify pagebtn">></p>
+        </div>`
+    }
+
+
+    user += `<div class="ml-20">
+                <label for="table-search" class="sr-only">Search</label>
+                <div class="relative">
+                <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
+                <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+                </svg>
+                </div>`
+
+
+
+    if (typeof search == "string") {
+        user += ` <input type="text" id="table-search-users"
+                class="verify block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                placeholder="Search for users" value="${search}">`
+    }
+    else {
+        user += ` <input type="text" id="table-search-users"
+                class="verify block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                placeholder="Search for users" >`
+    }
+
+    user += `</div >
+            </div >
+            </div >
+        <div class="relative overflow-x-auto overflow-y-auto shadow-md sm:rounded-lg tabal">
+            <div
+                class="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 bg-white dark:bg-gray-900" >
+
             </div>
-            <input type="text" id="table-search-users"
-            class="verify block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder="Search for users">
-            </div>
-            </div>
-            </div>
-    <div class="relative overflow-x-auto overflow-y-auto shadow-md sm:rounded-lg tabal">
-    <div
-        class="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 bg-white dark:bg-gray-900">
-        
-    </div>
-    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-            <tr>
-            <th scope="col" class="px-6 py-3">
-            tweet id
-            </th>
-           
-            <th scope="col" class="px-6 py-3">
-            name   
-            </th>
-            <th scope="col" class="px-6 py-3">
-            username
-            </th>
-            <th scope="col" class="px-6 py-3">
-            profile photo
-            </th>
-            <th scope="col" class="px-6 py-3">
-            Profession
-            </th>
-            <th scope="col" class="px-6 py-3">
-            Action 
-            </th>
-            </tr>
-        </thead>
-    <tbody>`
+            <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                <tr>
+                <th scope="col" class="px-6 py-3">
+                tweet id
+                </th>
+               
+                <th scope="col" class="px-6 py-3">
+                name   
+                </th>
+                <th scope="col" class="px-6 py-3">
+                username
+                </th>
+                <th scope="col" class="px-6 py-3">
+                profile photo
+                </th>
+                <th scope="col" class="px-6 py-3">
+                Profession
+                </th>
+                <th scope="col" class="px-6 py-3">
+                Action 
+                </th>
+                </tr>
+                </thead>
+                <tbody>`
     data.forEach(element => {
         user += `
         <tr
@@ -122,8 +172,8 @@ async function verify_request(search) {
         </tbody></table></div>`
 
     return user;
-
 }
+
 
 async function vrified(userId, request, reqid) {
     let url = window.location.origin + '/admin/updateverify';
