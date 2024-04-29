@@ -6,14 +6,40 @@ const ShortUniqueId = require('short-unique-id');
 const md5 = require("md5");
 const { log } = require("console");
 const { search } = require("../../routes/admin.routes");
-
 const csvtojson = require('csvtojson')
-
-
 const fs = require("fs")
 
 exports.adduserbyform = async (req, res) => {
-    console.log(req.body);
+
+    let email = req.body.email;
+    let emailsql = `select count(*) as is_available from users where email = "${email}"`
+    let [emailvalidate] = await connection.query(emailsql)
+    if (emailvalidate[0].is_available == 0) {
+
+        const saltuid = new ShortUniqueId({ length: 4 });
+        let salt = saltuid.rnd();
+        const activationcodeuid = new ShortUniqueId({ length: 12 });
+        let activationcode = activationcodeuid.rnd();
+        console.log("salt is ", salt);
+        let password = md5(req.body.password + salt)
+        let userdata =
+        {
+            "username": req.body.username,
+            "email": req.body.email,
+            "password": password,
+            "name": req.body.name,
+            "date_of_birth": req.body.date_of_birth,
+            "activation_code": activationcode,
+            "salt": salt,
+            "is_active": 1,
+            "role_id": 1
+        }
+
+        let sql = `insert into users set ?`
+        let [result] = await connection.query(sql, userdata)
+        //ahiya hato
+        console.log(userdata);
+    }
 }
 
 exports.getAdminLogin = async (req, res) => {
@@ -23,42 +49,23 @@ exports.getAdminLogin = async (req, res) => {
 };
 
 exports.getUsers = async (req, res) => {
-
     try {
-
         let search = req.body.search;
         let page = req.body.page;
-        let curpage = req.body.curpage;
-
-
         const resultpage = 2;
         if (typeof search == "object") {
 
             search = ""
         }
-
         let sql = `select count(*) as total from (select * from users where name LIKE '%${search}%') as h`
-
         let [result] = await connection.query(sql)
-
-        console.log(result);
         const numOfResults = result[0].total;
         const numberOfPages = Math.ceil(numOfResults / resultpage);
         page = page ? Number(page) : 1;
         const startingLimit = (page - 1) * resultpage;
-        console.log("start limit is ", startingLimit);
-        console.log("reslt page is", resultpage);
-
-
         let sql1 = `select * from users where name LIKE '%${search}%' limit ${startingLimit},${resultpage}`
-        console.log(sql1);
         let [result1] = await connection.query(sql1)
-        console.log(result1);
-
-
-
-
-        res.json({ data: result1, "curpage": curpage, "totalpage": numberOfPages })
+        res.json({ data: result1, "curpage": page, "totalpage": numberOfPages })
 
     } catch (error) {
         console.log(error);
@@ -120,11 +127,9 @@ exports.ristricTweet = async (req, res) => {
 };
 
 exports.getHastag = async (req, res) => {
-
     try {
         let sql = "select * from hastag_list"
         let [result] = await connection.query(sql)
-
         res.json({ data: result })
 
     } catch (error) {
@@ -135,21 +140,39 @@ exports.getHastag = async (req, res) => {
 
 exports.getVerifiedRequest = async (req, res) => {
 
+
     try {
         let search = req.body.search;
+        let page = req.body.page;
+        const resultpage = 2;
         if (typeof search == "object") {
 
             search = ""
         }
 
-        let sql = `select users.id ,  users.name , users.username , users.profile_img_url ,
+
+        let sql = `select count(*) as total from (select users.id ,  users.name , users.username , users.profile_img_url ,
         verification_requests.request ,verification_requests.id as reqid from verification_requests 
-         left join users on verification_requests.user_id = users.id where verification_requests.request =1   and users.name LIKE '%${search}%';
+         left join users on verification_requests.user_id = users.id where verification_requests.request =1   and users.name LIKE '%${search}%') as h;
         `
+
         let [result] = await connection.query(sql)
-        res.json({ data: result })
+        const numOfResults = result[0].total;
+        const numberOfPages = Math.ceil(numOfResults / resultpage);
+        page = page ? Number(page) : 1;
+        const startingLimit = (page - 1) * resultpage;
+
+
+
+        let sql1 = `select users.id ,  users.name , users.username , users.profile_img_url ,
+            verification_requests.request ,verification_requests.id as reqid from verification_requests 
+             left join users on verification_requests.user_id = users.id where verification_requests.request =1   and users.name LIKE '%${search}%' limit ${startingLimit},${resultpage};`
+
+        let [result1] = await connection.query(sql1)
+        res.json({ data: result1, "curpage": page, "totalpage": numberOfPages })
 
     } catch (error) {
+        console.log(error);
         res.json({ error: error })
     }
 
@@ -158,14 +181,10 @@ exports.getVerifiedRequest = async (req, res) => {
 exports.updateverify = async (req, res) => {
 
     try {
-
-
-
         let request = req.body.request; //get from the body
         let userId = req.body.userId; // get from the body;
         let reqId = req.body.requestid;
         let req1
-
         if (request == 1) {
             req1 = 0;
 
@@ -188,23 +207,35 @@ exports.updateverify = async (req, res) => {
 exports.getTweets = async (req, res) => {
 
     try {
-
-        let search = req.body.search
+        let search = req.body.search;
+        let page = req.body.page;
+        const resultpage = 2;
         if (typeof search == "object") {
 
             search = ""
         }
+
+
+
         let sql = `
-        select users.name , users.username , tweets.content , tweets.is_ristricted, tweets.id,medias.media_url  from tweets 
+        select count(*) as total from (select users.name , users.username , tweets.content , tweets.is_ristricted, tweets.id,medias.media_url  from tweets 
         left join users on tweets.user_id = users.id
-        left join medias on tweets.id = medias.tweet_id where tweets.is_posted = 1  and  users.name LIKE '%${search}%' ; `
+        left join medias on tweets.id = medias.tweet_id where tweets.is_posted = 1  and  users.name LIKE '%${search}%') as h ; `
         let [result] = await connection.query(sql)
+        const numOfResults = result[0].total;
+        const numberOfPages = Math.ceil(numOfResults / resultpage);
+        page = page ? Number(page) : 1;
+        const startingLimit = (page - 1) * resultpage;
 
-
-
-        res.json({ data: result })
+        let sql1 = `
+       select users.name , users.username , tweets.content , tweets.is_ristricted, tweets.id,medias.media_url  from tweets 
+        left join users on tweets.user_id = users.id
+        left join medias on tweets.id = medias.tweet_id where tweets.is_posted = 1  and  users.name LIKE '%${search}%'  limit ${startingLimit},${resultpage} ; `
+        let [result1] = await connection.query(sql1)
+        res.json({ data: result1, "curpage": page, "totalpage": numberOfPages })
 
     } catch (error) {
+        console.log(error);
         res.json({ error: error })
     }
 
@@ -212,7 +243,7 @@ exports.getTweets = async (req, res) => {
 
 exports.getverifypage = async (req, res) => {
 
-    res.render("pages/admin/verify");
+    res.render("pages/admin/verify", { user: req.user[0][0] });
 };
 
 exports.adminLoginHandler = async (req, res) => {
@@ -280,15 +311,10 @@ exports.getAdminPannel = async (req, res) => {
     res.render("pages/admin/adminPannel");
 };
 
-
-
-
 exports.addUserCsv = async (req, res) => {
 
     csvtojson().fromFile("./public/csv/" + req.file.filename).then(
         async file => {
-
-
             for (let i = 0; i < file.length; i++) {
 
                 let email = file[i].email;
@@ -316,7 +342,7 @@ exports.addUserCsv = async (req, res) => {
 
                     let sql = `insert into users set ?`
                     let [result] = await connection.query(sql, userdata)
-                    console.log(result.affectedRows);
+
                 }
 
             }
@@ -326,6 +352,33 @@ exports.addUserCsv = async (req, res) => {
 
 
     res.send("hello");
+
+
+}
+
+
+exports.supportForm = async (req, res) => {
+
+    let filename = req.file.path
+    filename = filename?.substring(6)
+    console.log(filename);
+
+
+    content = req.body.content;
+
+    const tickituid = new ShortUniqueId({ length: 10 });
+    let tickitid = tickituid.rnd();
+    console.log(tickitid);
+
+
+
+
+
+    // let data = {
+    //     req
+    // }
+
+    // console.log(req.);
 
 
 }

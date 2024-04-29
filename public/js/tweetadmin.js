@@ -1,5 +1,5 @@
 
-async function gettweets(search1) {
+async function gettweets(search1, curpage) {
     async function getdata() {
         let url = window.location.origin + "/admin/gettweet"
         let data = await fetch(url, {
@@ -7,35 +7,60 @@ async function gettweets(search1) {
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({ 'search': search1, 'page': search1 }),
+            body: JSON.stringify({ 'search': search1, 'page': curpage }),
         });
         data = await data.json()
-        return data.data;
+        return data;
     }
 
-    let data = await getdata();
-    let user = `
-    <div class="flex gap-8" >
-            <div class="pagination">
-            <p class="pagebtn">
-            < </p>  
-            <div class="flex">
-            <p>page &nbsp</p>
-            <p> 1</p>
-            </div>
-            <p class="pagebtn">></p>
-            </div>
+    let result = await getdata();
+    let data = result.data;
 
-            <div class="ml-20">
-            <label for="table-search" class="sr-only">Search</label>
-            <div class="relative">
-            <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
-            <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
-            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-            d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
-            </svg>
-            </div>`
+    let user = ``;
+    user += `<div class="flex gap-8" >
+                <div class="pagination">`
+
+    if (curpage == 1) {
+        user += `<p class="lttweet pagebtn" hidden>
+            < </p>  `
+    }
+    else {
+        user += `<p class="lttweet pagebtn">
+            < </p>  `
+    }
+
+
+    user += `
+                <div class="flex">
+                <p>page &nbsp</p>
+                <p id="pagenumber">${curpage}</p>
+                <p> of ${result.totalpage}</p>`
+
+
+    if (result.curpage >= result.totalpage) {
+        user += ` </div>
+        <p class="gttweet pagebtn" hidden>></p>
+        </div>`
+    }
+    else {
+        user += ` </div>
+        <p class="gttweet pagebtn">></p>
+        </div>`
+    }
+
+
+    user += `<div class="ml-20">
+                <label for="table-search" class="sr-only">Search</label>
+                <div class="relative">
+                <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
+                <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+                </svg>
+                </div>`
+
+
     if (typeof search1 == "string") {
         user += `<input type="text" id="table-search-users"
                 class="tweet block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -48,7 +73,7 @@ async function gettweets(search1) {
     }
 
     user += `</div >
-            </div >
+        </div >
             </div >
         <div class="relative overflow-x-auto overflow-y-auto shadow-md sm:rounded-lg tabal">
             <div

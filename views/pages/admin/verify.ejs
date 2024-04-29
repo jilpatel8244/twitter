@@ -2,98 +2,253 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
     <link href="/css/verify.css" rel="stylesheet" />
     <link href="/css/output.css" rel="stylesheet" />
 
     <style>
-        .option {
-            width: 40%;
-            border: 1px solid black;
-            margin: 20% auto;
-            box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-            text-align: center;
-            padding: 100px;
-            font-size: x-large;
-
-
+        .img-help:hover {
+            width: 100%;
         }
 
-        .imgfile {
-            width: 30px;
-            height: 30px;
+        .prob {
+            max-width: 250px;
         }
 
-        .fileimg {
-            display: flex;
+        .boxmain {
             margin-top: 50px;
         }
 
-        .fileupload {
-            margin-top: 5%;
+        .margmain {
+            margin-top: 2%;
         }
-        
+
+        .helpbtn {
+            width: 17%;
+            border: 1px solid black;
+            background-color: #0ea5e9;
+            color: white;
+            margin-bottom: 2%;
+            margin-left: 2%;
+            text-align: center;
+        }
+
+        .formhelp {
+            max-width: 50%;
+        }
+
+        .con {
+            padding-left: 13px;
+        }
+
+        .mainhelpcon {}
     </style>
 </head>
 
 <body>
+    <div class="relative h-screen" id="main" style="background-color: white">
+        <div class="flex justify-center">
+            <header class="py-4 h-auto">
+                <!-- Side Navbar (left side) -->
+                <%- include('../../partials/sidebar.ejs') %>
+            </header>
+            <main role="main">
+                <div class="flex" style="width: 990px">
+                    <div class="con">
+                        <div style="max-width: 650px" class="margmain">
+                            <div class="chat">
+                                <div class="mainhelpcon">
+                                    <div class="helpbtn">User support</div>
+                                    <div class="formhelp">
+                                        <div class="flex items-center justify-center p-12">
+                                            <!-- Author: FormBold Team -->
+                                            <!-- Learn More: https://formbold.com -->
+                                            <div class="mx-auto w-full max-w-[550px]">
+                                                <div class="mb-5">
+                                                    <label for="message"
+                                                        class="mb-3 block text-base font-medium text-[#07074D]">
+                                                        Describe Your Problem
+                                                    </label>
+                                                    <textarea rows="4" name="messagehelp" id="messagehelp"
+                                                        placeholder="Type your message"
+                                                        class="w-full resize-none rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"></textarea>
+                                                </div>
+                                                <div class="mb-5">
+                                                    <label for=""
+                                                        class="mb-3 block text-base font-medium text-[#07074D]">
+                                                        Upload screenshot
+                                                    </label>
 
+                                                    <input type="file" id="screenshot" name="screenshot" />
+                                                </div>
 
-    <div class="option">
+                                                <div>
+                                                    <p class="helpbtn" id="supportform">submit</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div
+                                    class="relative mt-10 overflow-x-auto overflow-y-auto shadow-md sm:rounded-lg tabal">
+                                    <div class="relative shadow-md sm:rounded-lg">
+                                        <table
+                                            class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                                            <thead
+                                                class="text-xs text-gray-700 bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                                <tr>
+                                                    <th scope="col" class="px-16 py-3">Ticket Id</th>
+                                                    <th scope="col" class="px-6 py-3">Image</th>
 
-        <div class="heading">
-            <p>Add users</p>
-            <hr>
+                                                    <th scope="col" class="px-6 py-3">Problem</th>
+                                                    <th scope="col" class="px-6 py-3">
+                                                        problem Status
+                                                    </th>
+                                                    <th scope="col" class="px-6 py-3">chat</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr
+                                                    class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                                    <td class="px-6 py-4 font-semibold text-gray-900 dark:text-white">
+                                                        2563155sdfg
+                                                    </td>
+                                                    <td class="p-4">
+                                                        <img src="/uploads/1713355020529-Screenshot from 2024-04-05 18-06-44.png"
+                                                            class="w-16 md:w-32 max-w-full img-help max-h-full"
+                                                            alt="Apple Watch" />
+                                                    </td>
+
+                                                    <td
+                                                        class="px-6 py-4 font-semibold text-gray-900 dark:text-white prob">
+                                                        i have issued when accesing my post sndfbgksbd
+                                                        hebskdjfb ebasdkfb
+                                                    </td>
+                                                    <td class="px-6 py-4 font-semibold text-gray-900 dark:text-white">
+                                                        <select name="problemstatus" id="problemstatus">
+                                                            <option value="volvo">in progress</option>
+                                                            <option value="saab">solved</option>
+                                                            <option value="mercedes">panding</option>
+                                                        </select>
+                                                    </td>
+                                                    <td
+                                                        class="px-6 py-4 font-semibold text-gray-900 dark:text-white prob">
+                                                        <div>
+                                                            <button id="open-chat"
+                                                                class="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition duration-300 flex items-center"
+                                                                onclick="toggleChatbox()">
+                                                                chat
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <!-- component -->
+                                <div id="chat-container" class="hidden fixed bottom-16 right-40 w-96">
+                                    <div class="bg-white shadow-md rounded-lg max-w-lg w-full">
+                                        <div
+                                            class="p-4 border-b bg-blue-500 text-white rounded-t-lg flex justify-between items-center">
+                                            <p class="text-lg font-semibold">Admin Bot</p>
+                                            <button id="close-chat"
+                                                class="text-gray-300 hover:text-gray-400 focus:outline-none focus:text-gray-400"
+                                                onclick="toggleChatbox()">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none"
+                                                    viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                        <div id="chatbox" class="p-4 h-80 overflow-y-auto">
+                                            <!-- Chat messages will be displayed here -->
+                                            <div class="mb-2 text-right">
+                                                <p class="bg-blue-500 text-white rounded-lg py-2 px-4 inline-block">
+                                                    hello
+                                                </p>
+                                            </div>
+                                            <div class="mb-2">
+                                                <p class="bg-gray-200 text-gray-700 rounded-lg py-2 px-4 inline-block">
+                                                    This is a response from the chatbot.
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="p-4 border-t flex">
+                                            <input id="user-input" type="text" placeholder="Type a message"
+                                                class="w-full px-3 py-2 border rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                            <button id="send-button"
+                                                class="bg-blue-500 text-white px-4 py-2 rounded-r-md hover:bg-blue-600 transition duration-300">
+                                                Send
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- right sidebar -->
+                    <%- include('../../partials/aside.ejs')%>
+                </div>
+            </main>
         </div>
-        <div class="fileimg">
-            <img src="/assets/file.png" alt="" class="imgfile">
-            <p>Add users using csv</p>
-
-        </div>
-        <div class="fileupload" id="fileupload">
-
-            <input type="file" id="filecsv" name="filecsv">
-
-            <p id="brt"
-                class="px-6 py-2 mt-4 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-black rounded-lg hover:bg-gray-900 focus:outline-none focus:ring focus:ring-gray-300 focus:ring-opacity-50"
-                value="submit">
-                submit
-            </p>
-        </div>
-        <div class="fileimg">
-            <img src="/assets/form.png" alt="" class="imgfile">
-            <p>Add user using form</p>
-        </div>
-        <div>
-            <input
-                class="block w-full px-4 py-2 mt-2 text-gray-800 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-black dark:focus:border-black focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-gray-300"
-                type="text" placeholder="Name" id="name" aria-label="Name" name="name" />
-
-            <input
-                class="block w-full px-4 py-2 mt-2 text-gray-800 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-black dark:focus:border-black focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-gray-300"
-                type="text" placeholder="Username" id="username" aria-addlabel="Username" name="username" />
-            <input
-                class="block w-full px-4 py-2 mt-2 text-gray-800 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-black dark:focus:border-black focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-gray-300"
-                type="text" placeholder="Email Address" id="email" aria-label="Email Address" name="email" />
-            <input
-                class="block w-full px-4 py-2 mt-2 text-gray-800 placeholder-gray-500 bg-white border rounded-lg focus:border-black dark:focus:border-black focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-white"
-                placeholder="Date Of Birth" class="textbox-n" type="text" onfocus="(this.type='date')"
-                onblur="(this.type='text')" id="dob" aria-label="date" name="dob" />
-            <input
-                class="block w-full px-4 py-2 mt-2 text-gray-800 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-black dark:focus:border-black focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-gray-300"
-                type="password" id="password" name="password" placeholder="Password" aria-label="password" required />
-            <p id="confirm"
-                class="px-6 py-2 text-sm mt-4 font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-black rounded-lg hover:bg-gray-900 focus:outline-none focus:ring focus:ring-gray-300 focus:ring-opacity-50"
-                value="create">
-                create
-            </p>
-
-
-        </div>
-
     </div>
+
+    <script>
+        const chatbox = document.getElementById("chatbox");
+        const chatContainer = document.getElementById("chat-container");
+        const userInput = document.getElementById("user-input");
+        const sendButton = document.getElementById("send-button");
+        const openChatButton = document.getElementById("open-chat");
+        const closeChatButton = document.getElementById("close-chat");
+
+        let isChatboxOpen = false; // Set the initial state to open
+
+        // Function to toggle the chatbox visibility
+        function toggleChatbox() {
+            if (isChatboxOpen == false) {
+                chatContainer.style.display = "block";
+                isChatboxOpen = true;
+            } else {
+                chatContainer.style.display = "none";
+                isChatboxOpen = false;
+            }
+        }
+
+        let supportform = document.getElementById("supportform")
+        supportform.addEventListener("click", supportformhandel)
+
+        async function supportformhandel() {
+            let messagehelp = document.getElementById("messagehelp");
+            let screenshot = document.getElementById("screenshot");
+            console.log(screenshot);
+            // let email = document.getElementById("email");
+            // let dob = document.getElementById("dob");
+            // let password = document.getElementById("password");
+            let formdata = new FormData();
+            formdata.append("content", messagehelp.value)
+            formdata.append("media", screenshot.files[0])
+            // formdata.append("email", email.value)
+            // formdata.append("date_of_birth", dob.value)
+            // formdata.append("password", password.value)
+            console.log(formdata);
+
+            let data = await fetch("/admin/supportform", {
+                method: "POST",
+                body: formdata
+            })
+
+
+
+        }
+
+    </script>
 </body>
 
 </html>
