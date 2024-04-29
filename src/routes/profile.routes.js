@@ -1,8 +1,8 @@
 const express = require('express');
-const {getProfile} = require('../controller/profile.controller');
-const {getPosts} = require('../controller/profile.post.controller');
-const {getReplies} = require('../controller/profile.reply.controller');
-const {getLikes} = require('../controller/profile.like.controller');
+const {getProfile} = require('../controller/profile/profile.controller');
+const {getPosts} = require('../controller/profile/profile.post.controller');
+const {getReplies} = require('../controller/profile/profile.reply.controller');
+const {getLikes} = require('../controller/profile/profile.like.controller');
 const passport = require("passport");
 
 const router = express.Router();
