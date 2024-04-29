@@ -3,12 +3,9 @@ const connection = require("../../config/connection");
 exports.followUnfollowHandler = async (req, res) => {
     try {
         const id = req.body.id;
-        console.log("dfhuihihudfiefhuihufihri",id);
-       
+
         const followerId = req.user[0][0].id; 
        // const followerId =13;
-      console.log(followerId,"hello")
-
       let [result] = await connection.query(`
             SELECT current_status
             FROM followers

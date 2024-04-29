@@ -3,9 +3,10 @@ const logger = require("../../logger/logger");
 const { getExplorePage, getTopTweetAndHastag, getHastag, getMedia, getLatestTweet, getUsername, getUsernameOrHastagOnchage } = require("../controller/exploreControler/getexplore");
 const passport = require("passport");
 const { getExploreProfile } = require("../controller/profile");
-const { getReplies } = require("../controller/profile.reply.controller");
-const { getPosts } = require("../controller/profile.post.controller");
+const { getReplies } = require("../controller/profile/profile.reply.controller");
+const { getPosts } = require("../controller/profile/profile.post.controller");
 const { getFollower } = require("../controller/follow.controller");
+const { getLikes } = require("../controller/profile/profile.like.controller");
 require("../middleware/permission");
 
 
@@ -22,6 +23,7 @@ router.post("/searchboxdata",passport.authenticate('jwt', { session: false, fail
 router.get("/profile", passport.authenticate('jwt', { session: false }), getExploreProfile);
 router.get("/reply",getReplies);
 router.get('/post', getPosts);
+router.get('/like', getLikes);
 // router.get('/followandfollowing', getFollower);
 
 module.exports = router;
