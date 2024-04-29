@@ -372,7 +372,7 @@
     }
     async function topPostHandeler() {
 
-
+        alert("top")
         let search = document.getElementById("search");
 
         async function getdata(search) {
@@ -424,7 +424,7 @@
                         </div>
                         <div class="flex-1 px-4 py-2 m-2" id="followbtn">
                     <p class="font-semibold text-white bg-black py-2 px-4 rounded-full follow" id='btnfollow${element.id}'  onclick="foollowhandel(${element.id})">
-                            Follow
+                        ${element.current_status === 0 ? 'Follow' : 'Following'}
                             </p>
                     
                 </div>
@@ -490,7 +490,7 @@
                 </div>
                 <div class="flex-1 px-4 py-2 m-2" id="followbtn">
                     <p class="font-semibold text-white bg-black py-2 px-4 rounded-full follow" id='btnfollow${element.id}'  onclick="foollowhandel(${element.id})">
-                        ${element.current_status}
+                        ${element.current_status === 0 ? 'Follow' : 'Following'}
                             </p>
                     
                 </div>
@@ -512,7 +512,7 @@
     }
 
     async function pepoleHandeler() {
-
+      
         async function getdata(search) {
             let url = window.location.origin + "/explore/username"
             let bodyargs = { searchbox: search, type: 1 }
@@ -522,6 +522,7 @@
                 body: JSON.stringify(bodyargs)
             })
             data1 = await data1.json()
+            console.log("helooooooooooooo",ata1);
             return data1.username;
         }
 
@@ -561,7 +562,7 @@
                 </div>
                 <div class="flex-1 px-4 py-2 m-2" id="followbtn">
                     <p class="font-semibold text-white bg-black py-2 px-4 rounded-full follow" id='btnfollow${element.id}'  onclick="foollowhandel(${element.id})">
-                            Follow
+                        ${element.current_status === 0 ? 'Follow' : 'Following'}
                             </p>
                     
                 </div>
@@ -632,7 +633,7 @@
                 </div>
                 <div class="flex-1 px-4 py-2 m-2" id="followbtn">
                     <p class="font-semibold text-white bg-black py-2 px-4 rounded-full follow" id='btnfollow${element.id}'  onclick="foollowhandel(${element.id})">
-                            Follow
+                        ${element.current_status === 0 ? 'Follow' : 'Following'}
                             </p>
                     
                 </div>
@@ -688,7 +689,8 @@
 
 
    async function foollowhandel(id) {
-        console.log(id);
+        console.log("id",id);
+       
         const body = {
                 id: id
             }
@@ -701,13 +703,16 @@
                     body: JSON.stringify(body)
                 });
                 const responseData = await response.json();
-                console.log(responseData)
+                console.log("response",response)
+                
                 if (!responseData.statusdata) {
-                    document.getElementById("btnfollow${element.id}").innerHTML = "Following"
+                    document.getElementById("btnfollow"+id).innerHTML = "Following"
 
                 }
-                if (responseData.statusdata)  document.getElementById("btnfollow${element.id}").innerHTML = "Follow"
-
+                if (responseData.statusdata) {
+                    console.log(responseData.statusdata)
+                 document.getElementById("btnfollow"+id).innerHTML = "Follow"
+                }
 
             } catch (error) {
                 console.error(error.message);
