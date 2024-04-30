@@ -36,7 +36,8 @@ exports.getHomeForyou = async (req, res) => {
   (SELECT COUNT(*) FROM tweet_likes WHERE tweet_likes.tweet_id = tweets.id AND tweet_likes.status = 1) as likeCount,
   (SELECT COUNT(*) FROM retweets where retweets.tweet_id=tweets.id and retweets.deleted_at IS NULL) as repostCount,
   retweets.deleted_at as notRetweeted,
-  retweets.created_at as createdAt
+  retweets.created_at as createdAt,
+  retweets.retweet_message as retweetMsg
   FROM users
   JOIN tweets ON users.id = tweets.user_id
   LEFT JOIN medias ON tweets.id = medias.tweet_id
@@ -114,7 +115,7 @@ exports.getRetweet = async (req,res) =>{
     END DESC;`
  
     const [retweetData] = await connection.query(retweet);
-    console.log(retweetData);
+  console.log(retweetData);
     res.status(200).json({
       success: true,
       retweetData: retweetData,
