@@ -23,10 +23,10 @@
          </div>
  
          <div class="p-6 pt-0 text-center">
-            <span onclick="sendTweetHandler()"
-                 class="text-white bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-base inline-flex items-center px-3 py-2.5 text-center mr-2">
+            <button onclick="sendTweetHandler()" id="shareTweetUsingDirectMessageButton" disabled
+                 class="text-white bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-base inline-flex items-center px-3 py-2.5 text-center">
                  Send
-            </span>
+            </button>
          </div>
  
      </div>
@@ -79,8 +79,8 @@
      };
 
     async function sendTweetHandler () {
+        console.log(selectedUserArr);
         let url = window.location.origin + '/shareTweet';
-        console.log(tweetId);
 
         let data = await fetch(url, {
             method: "POST",
@@ -97,13 +97,16 @@
 
         if (response.success) {
             // send notification
-            socket.emit('getUnreadMessages', selectedUserArr[0]);
+            selectedUserArr.forEach((element, index) => {
+                socket.emit('getUnreadMessages', selectedUserArr[index]);
+            })
 
             // remove all selected header
             document.getElementById('selectedFollowers').innerHTML = ''; 
             
             // remove empty selected array
             selectedUserArr = [];
+            document.getElementById('shareTweetUsingDirectMessageButton').disabled = true;
 
             // close popup
             closeModal('modelConfirm');
@@ -112,10 +115,30 @@
             let shareOptionsDiv = document.getElementById(`shareOptions`+ tweetId);
             shareOptionsDiv.style.display = "none";
 
-
             // display toast
-            
-
+            let timerInterval;
+            Swal.fire({
+                title: "Direct Message sent",
+                timer: 1000,
+                position: "top-end",
+                timerProgressBar: true,
+                showConfirmButton: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                    const timer = Swal.getPopup().querySelector("b");
+                    timerInterval = setInterval(() => {
+                    timer.textContent = `${Swal.getTimerLeft()}`;
+                    }, 100);
+                },
+                willClose: () => {
+                    clearInterval(timerInterval);
+                }
+                }).then((result) => {
+                /* Read more about handling dismissals below */
+                if (result.dismiss === Swal.DismissReason.timer) {
+                    console.log("I was closed by the timer");
+                }
+            });
         }
     }
  </script>

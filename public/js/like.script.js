@@ -15,7 +15,7 @@ async function likeHandler(tweetId) {
         let likeImg = document.querySelector(`.like_${tweetId}`);
 
         let likeCount = document.getElementById('likeCount'+tweetId);
-        
+
         if (response.likeStatus) {
             likeCount.innerHTML = parseInt(likeCount.innerHTML) + 1;
             likeImg.classList.add('fill-red-600', 'text-red-600');
@@ -29,6 +29,8 @@ async function likeHandler(tweetId) {
         } else {
             likeCount.style.display = "none";
         }
+        console.log(likeCount);
+
         
     } else {
         console.log(response.message);

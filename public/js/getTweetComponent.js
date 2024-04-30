@@ -142,17 +142,17 @@ function getTweetComponent(data) {
                                                                     </path>
                                                             </svg>`
         }
-        tweet += `</span>
-                                                <span class="px-1 py-2" id="likeCount${tweets.tweet_id}">
-                                                    ${tweets.likeCount}
-                                                </span>
-                                                <script>
-                                                    if (parseInt(document.getElementById('likeCount'+'${tweets.tweet_id}').innerHTML)) {
-                                                        document.getElementById('likeCount'+'${tweets.tweet_id}').style.display = "block";
-                                                    } else {
-                                                        document.getElementById('likeCount'+'${tweets.tweet_id}').style.display = "none";
-                                                    }
-                                                </script>
+        tweet += `</span>`
+                                                if (parseInt(tweets.likeCount)) {
+                                                    tweet += `<span class="px-1 py-2" id="likeCount${tweets.tweet_id}">
+                                                        ${tweets.likeCount}
+                                                    </span>`
+                                                } else {
+                                                    tweet += `<span class="px-1 py-2" id="likeCount${tweets.tweet_id}" style="display: none">
+                                                        0
+                                                    </span>`
+                                                }
+                                        tweet +=  `
                                             </div>
 
 
@@ -170,11 +170,13 @@ function getTweetComponent(data) {
                                                     </svg>
                                                 </span>
 
-                                                <div id="shareOptions${tweets.tweet_id}" style="width: 220px; display: none; top: 45px; left: -100px;" class="absolute p-4 border shadow-lg rounded-xl cursor-pointer bg-white">
-                                                    <div onclick="shareLinkHandler(${tweets.tweet_id})">
+                                                <div id="shareOptions${tweets.tweet_id}" style="width: 260px; display: none; top: 45px; left: -100px;" class="absolute p-4 border shadow-lg rounded-xl cursor-pointer bg-white">
+                                                    <div onclick="shareLinkHandler(${tweets.tweet_id})" class="flex items-center p-1">
+                                                        <img src="/assets/link_icon.svg" alt="link_icon" height="30px" width="30px" class="mr-2"/>
                                                         <p class="text-left">Copy link</p>
                                                     </div>
-                                                    <div onclick="openModal('modelConfirm', '${tweets.tweet_id}')">
+                                                    <div onclick="openModal('modelConfirm', '${tweets.tweet_id}')" class="flex items-center p-1">
+                                                        <img src="/assets/envelope.svg" alt="envelope" height="30px" width="30px" class="mr-2"/>
                                                         <p class="text-left">Send via Direct Message</p>
                                                     </div>
                                                 </div>
