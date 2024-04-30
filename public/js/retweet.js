@@ -62,7 +62,6 @@ const retweet = async (tweetId, icon, status, time) => {
     let removeRepostBox = document.getElementById('removeRepostBox');
     removeRepostBox.style.display = 'block';
     removeRepostBox.onclick = () => {
-      console.log(retweetBox.childNodes[1]);
       retweetBox.childNodes[1].style.display = "none";
       removeRepostBox.style.display = "none";
     }
@@ -99,7 +98,6 @@ const retweet = async (tweetId, icon, status, time) => {
     temp = Date.now();
     let retweetBox = icon.parentElement.nextSibling;
     retweetBox.setAttribute('id', temp);
-    console.log(retweetBox.innerHTML);
     retweetBox.innerHTML = `
   <div id="${temp + 1}" class=" absolute bg-white divide-y divide-gray-100 rounded-lg shadow w-[184px]  ">
   <ul class=" text-sm text-gray-700  aria-labelledby="dropdownDefaultButton">
@@ -139,7 +137,6 @@ const retweet = async (tweetId, icon, status, time) => {
     let removeRepostBox = document.getElementById('removeRepostBox');
     removeRepostBox.style.display = 'block';
     removeRepostBox.onclick = () => {
-      console.log(retweetBox.childNodes[1]);
       retweetBox.childNodes[1].style.display = "none";
       removeRepostBox.style.display = "none";
     }
@@ -159,7 +156,6 @@ const retweet = async (tweetId, icon, status, time) => {
       }
       else {
         let retweetCount = document.getElementById(tweetId + 'tweet');
-        console.log(retweetCount);
         alert(msg);
         if (retweetCount.innerText == 1) {
           icon.style.color = '#6b7280';
@@ -190,11 +186,19 @@ const retweet = async (tweetId, icon, status, time) => {
       method: 'GET'
     })
     let data = await response.json();
-    if (data.user.profile_img_url) {
-      profile_imgTag.setAttribute('src', "/uploads/" + data.user.profile_img_url)
-    } else {
-      profile_imgTag.setAttribute('src', "/assets/userProfile.png")
-    }
+    var profileImg;
+    fetch('/tweetPost/profileImage', {
+      method: 'GET'
+    })
+      .then((response) => response.json())
+      .then(profile => {
+        profileImg = profile.profileImg;
+        if (profileImg) {
+          profile_imgTag.setAttribute('src', "/uploads/" + profileImg)
+        } else {
+          profile_imgTag.setAttribute('src', "/assets/userProfile.png")
+        }
+      })
     let tweetedString;
     tweetedString = `
     <div style="border:1px solid lightgray;border-radius:25px">

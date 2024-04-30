@@ -7,6 +7,8 @@ const { getReplies } = require("../controller/profile/profile.reply.controller")
 const { getPosts } = require("../controller/profile/profile.post.controller");
 const { getFollower } = require("../controller/follow.controller");
 const { getLikes } = require("../controller/profile/profile.like.controller");
+const { getProfile } = require("../controller/profile/profile.controller");
+const {getProfileMedia} = require("../controller/profile/profile.media.controller");
 require("../middleware/permission");
 
 
@@ -20,10 +22,11 @@ router.post("/getMedia",passport.authenticate('jwt', { session: false, failureRe
 router.post("/hastag",passport.authenticate('jwt', { session: false, failureRedirect: "/login" }), getHastag);
 router.post("/searchboxdata",passport.authenticate('jwt', { session: false, failureRedirect: "/login" }), getUsernameOrHastagOnchage);
 
-router.get("/profile", passport.authenticate('jwt', { session: false }), getExploreProfile);
-router.get("/reply",getReplies);
-router.get('/post', getPosts);
-router.get('/like', getLikes);
+router.get("/profile", passport.authenticate('jwt', { session: false }), getProfile);
+router.get("/profile/reply",getReplies);
+router.get('/profile/post', getPosts);
+router.get('/profile/like', getLikes);
+router.get('/profile/media', getProfileMedia);
 // router.get('/followandfollowing', getFollower);
 
 module.exports = router;

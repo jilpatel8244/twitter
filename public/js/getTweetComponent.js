@@ -75,7 +75,7 @@ function getTweetComponent(data) {
                                             <!-- retweet span tag -->
                                             <div  class="flex text-center py-2 m-2 cursor-pointer">`
                                             let time= tweets.time;
-                                            if(tweets.notRetweeted == null && tweets.createdAt != null){
+                                            if(tweets.notRetweeted == null && tweets.createdAt != null && tweets.retweetMsg == null){
                                             tweet+=    ` <span
                                                 
                                                 onclick="retweet(${tweets.tweet_id},this,'undo','${time}')"
