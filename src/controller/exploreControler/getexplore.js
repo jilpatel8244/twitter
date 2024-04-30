@@ -147,7 +147,7 @@ exports.getMedia = async (req, res) => {
         WHERE (users.username LIKE '%${searchbox}%' OR tweets.content LIKE '%${searchbox}%' OR hashtag_lists.hashtag_name LIKE '%${searchbox}%')
         AND medias.media_type LIKE '%image%';`;
     let [result] = await connection.query(sql);
-    res.json({ media: result });
+    return res.json({ media: result });
   } catch (error) {
     return res.json({ error: error });
   }
