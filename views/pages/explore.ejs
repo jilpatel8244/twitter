@@ -1,294 +1,298 @@
 <html lang="en">
 
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="/css/output.css" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
-integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
-crossorigin="anonymous" referrerpolicy="no-referrer" />
-<script src="/sweetalert2.all.min.js"></script>
-<title>X</title>
-<style>
-#bla:after {
-position: fixed;
-content: "";
-top: 0;
-left: 0;
-bottom: 0;
-right: 0;
-background: rgba(0, 0, 0, 0.5);
-z-index: -2;
-}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/output.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+        integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="/sweetalert2.all.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.28.2/sweetalert2.all.min.js"></script>
+    
+    <title>X</title>
+    <style>
+        #bla:after {
+            position: fixed;
+            content: "";
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: -2;
+        }
 
-#bla:before {
-position: absolute;
-content: "";
-top: 0;
-left: 0;
-bottom: 0;
-right: 0;
-background: #FFF;
-z-index: -1;
-}
+        #bla:before {
+            position: absolute;
+            content: "";
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background: #FFF;
+            z-index: -1;
+        }
 
-#search {
-border: 1px #1D9BF0;
-margin-top: 2%;
-border-radius: 50px;
-background-color: #EFF3F4;
-height: 40px;
-width: 70%;
-padding-left: 10%;
+        #search {
+            border: 1px #1D9BF0;
+            margin-top: 2%;
+            border-radius: 50px;
+            background-color: #EFF3F4;
+            height: 40px;
+            width: 70%;
+            padding-left: 10%;
 
-}
+        }
 
-input {
-margin-left: 100px;
-}
+        input {
+            margin-left: 100px;
+        }
 
-.boxmain {
-margin-top: 100px;
-}
-
-
-.fix {
-position: fixed;
-background-color: white;
-
-width: 46%;
-top: 0;
-
-}
-
-.heading {
-color: black;
-font-weight: bolder;
-}
-
-.topmain {
-display: flex;
-
-position: absolute;
-}
-
-.sidebar {
-
-padding-left: 5%;
-
-}
-
-.main {
-
-position: relative;
-
-}
+        .boxmain {
+            margin-top: 100px;
+        }
 
 
-.btn1 {
-width: 30%;
-text-align: center;
-max-width: 5%;
+        .fix {
+            position: fixed;
+            background-color: white;
 
-}
+            width: 46%;
+            top: 0;
 
-.btn1:hover {
-/* background-color: #cad3d3; */
-border-bottom: 2px solid #1D9BF0;
-/* border-radius: 6px; */
-}
+        }
 
-.btn {
-display: flex;
-gap: 80px;
+        .heading {
+            color: black;
+            font-weight: bolder;
+        }
 
-font-size: larger;
-color: #536471;
-display: none;
-}
+        .topmain {
+            display: flex;
 
-.popup {
-min-height: 14%;
-width: 30%;
-background-color: rgb(255, 255, 255);
-position: fixed;
-top: 55;
-left: 31%;
-border-radius: 10px;
+            position: absolute;
+        }
 
-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-text-align: center;
-display: none;
-padding-top: 20px;
-padding-bottom: 20px;
-padding-left: 10px;
-}
+        .sidebar {
 
-.margmain {
-margin-top: 12%;
-}
+            padding-left: 5%;
 
-.follow {
-max-width: 100px;
-float: right;
-}
-</style>
-<script src="/js/tweetgenrate.js"></script>
+        }
+
+        .main {
+
+            position: relative;
+
+        }
+
+
+        .btn1 {
+            width: 30%;
+            text-align: center;
+            max-width: 5%;
+
+        }
+
+        .btn1:hover {
+            /* background-color: #cad3d3; */
+            border-bottom: 2px solid #1D9BF0;
+            /* border-radius: 6px; */
+        }
+
+        .btn {
+            display: flex;
+            gap: 80px;
+
+            font-size: larger;
+            color: #536471;
+            display: none;
+        }
+
+        .popup {
+            min-height: 14%;
+            width: 30%;
+            background-color: rgb(255, 255, 255);
+            position: fixed;
+            top: 55;
+            left: 31%;
+            border-radius: 10px;
+
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+            text-align: center;
+            display: none;
+            padding-top: 20px;
+            padding-bottom: 20px;
+            padding-left: 10px;
+        }
+
+        .margmain {
+            margin-top: 12%;
+        }
+
+        .follow {
+            max-width: 100px;
+            float: right;
+        }
+    </style>
+    <script src="/js/tweetgenrate.js"></script>
 
 </head>
 
 <body onload="onchangetop()">
-<div class="relative h-screen" id="main" style="background-color: white">
-<div class="flex justify-center">
-<header class=" py-4 h-auto">
-<!-- Side Navbar (left side) -->
-<%- include('../partials/sidebar.ejs') %>
-</header>
-<main role="main">
-<div class="flex" style="width: 990px;">
+    <div class="relative h-screen" id="main" style="background-color: white">
+        <div class="flex justify-center">
+            <header class=" py-4 h-auto">
+                <!-- Side Navbar (left side) -->
+                <%- include('../partials/sidebar.ejs') %>
+            </header>
+            <main role="main">
+                <div class="flex" style="width: 990px;">
 
-<div style="max-width: 600px;" class="margmain">
+                    <div style="max-width: 600px;" class="margmain">
 
-<%- include('../partials/explore.ejs')%>
+                        <%- include('../partials/explore.ejs')%>
 
-</div>
+                    </div>
 
-<!-- right sidebar -->
-<%- include('../partials/aside.ejs')%>
-</div>
-</main>
-</div>
-</div>
+                    <!-- right sidebar -->
+                    <%- include('../partials/aside.ejs')%>
+                </div>
+            </main>
+        </div>
+    </div>
 
 
-<style>
-.overflow-y-auto::-webkit-scrollbar,
-.overflow-y-scroll::-webkit-scrollbar,
-.overflow-x-auto::-webkit-scrollbar,
-.overflow-x::-webkit-scrollbar,
-.overflow-x-scroll::-webkit-scrollbar,
-.overflow-y::-webkit-scrollbar,
-body::-webkit-scrollbar {
-display: none;
-}
+    <style>
+        .overflow-y-auto::-webkit-scrollbar,
+        .overflow-y-scroll::-webkit-scrollbar,
+        .overflow-x-auto::-webkit-scrollbar,
+        .overflow-x::-webkit-scrollbar,
+        .overflow-x-scroll::-webkit-scrollbar,
+        .overflow-y::-webkit-scrollbar,
+        body::-webkit-scrollbar {
+            display: none;
+        }
 
-/* Hide scrollbar for IE, Edge and Firefox */
-.overflow-y-auto,
-.overflow-y-scroll,
-.overflow-x-auto,
-.overflow-x,
-.overflow-x-scroll,
-.overflow-y,
-body {
--ms-overflow-style: none;
-/* IE and Edge */
-scrollbar-width: none;
-/* Firefox */
-}
+        /* Hide scrollbar for IE, Edge and Firefox */
+        .overflow-y-auto,
+        .overflow-y-scroll,
+        .overflow-x-auto,
+        .overflow-x,
+        .overflow-x-scroll,
+        .overflow-y,
+        body {
+            -ms-overflow-style: none;
+            /* IE and Edge */
+            scrollbar-width: none;
+            /* Firefox */
+        }
 
-.bg-dim-700 {
---bg-opacity: 1;
-background-color: white;
-}
+        .bg-dim-700 {
+            --bg-opacity: 1;
+            background-color: white;
+        }
 
-html,
-body {
-margin: 0;
-background-color: white;
-}
+        html,
+        body {
+            margin: 0;
+            background-color: white;
+        }
 
-svg.paint-icon {
-fill: currentcolor;
-}
-</style>
+        svg.paint-icon {
+            fill: currentcolor;
+        }
+    </style>
 </body>
+
+<script src="/js/getTweetComponent.js"></script>
 
 <script>
 
-function hello() {
-alert("hello")
-}
+    function hello() {
+        alert("hello")
+    }
 
-let search = document.getElementById("search")
-let popup = document.getElementById("popup")
-let topmain = document.getElementById("topmain");
-search.addEventListener("keyup", searchOnchange);
-topmain.addEventListener("click", remove);
-search.addEventListener("focus", searchOnfocus);
-popup.addEventListener("click", show)
-function show() {
-popup.style.display = "block"
-}
-//done
-let debouncing;
-async function searchOnchange() {
+    let search = document.getElementById("search")
+    let popup = document.getElementById("popup")
+    let topmain = document.getElementById("topmain");
+    search.addEventListener("keyup", searchOnchange);
+    topmain.addEventListener("click", remove);
+    search.addEventListener("focus", searchOnfocus);
+    popup.addEventListener("click", show)
+    function show() {
+        popup.style.display = "block"
+    }
+    //done
+    let debouncing;
+    async function searchOnchange() {
 
-clearTimeout(debouncing)
+        clearTimeout(debouncing)
 
-debouncing = setTimeout(async () => {
-let hastag = document.getElementById("hastag")
-let username = document.getElementById("username")
-let simpale = document.getElementById("simpal")
-username.style.display = "none";
-hastag.style.display = "none";
-popup.style.display = "block"
-async function getdata(search) {
-let url = window.location.origin + "/explore/searchboxdata"
-let bodyargs = { searchbox: search }
-console.log(bodyargs);
-let data = await fetch(url, {
-method: 'post',
-headers: { 'Content-Type': 'application/json' },
-body: JSON.stringify(bodyargs)
-})
-data = await data.json()
-return data;
+        debouncing = setTimeout(async () => {
+            let hastag = document.getElementById("hastag")
+            let username = document.getElementById("username")
+            let simpale = document.getElementById("simpal")
+            username.style.display = "none";
+            hastag.style.display = "none";
+            popup.style.display = "block"
+            async function getdata(search) {
+                let url = window.location.origin + "/explore/searchboxdata"
+                let bodyargs = { searchbox: search }
+                console.log(bodyargs);
+                let data = await fetch(url, {
+                    method: 'post',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(bodyargs)
+                })
+                data = await data.json()
+                return data;
 
-}
+            }
 
-let search = document.getElementById("search");
+            let search = document.getElementById("search");
 
-search.addEventListener("keypress", handelclick)
-let data = await getdata(search.value);
+            search.addEventListener("keypress", handelclick)
+            let data = await getdata(search.value);
 
-function handelclick(e) {
-if (e.key == "Enter") {
+            function handelclick(e) {
+                if (e.key == "Enter") {
 
-let btncon = document.getElementById("btncon")
-btncon.style.display = "flex"
-let popup = document.getElementById("popup")
-let search = document.getElementById("search").blur();
-
-
-popup.style.display = "none"
-
-topPostHandeler()
-}
-}
-if (data.type == 0) {
+                    let btncon = document.getElementById("btncon")
+                    btncon.style.display = "flex"
+                    let popup = document.getElementById("popup")
+                    let search = document.getElementById("search").blur();
 
 
+                    popup.style.display = "none"
 
-let tag = ``
-
-data.result.forEach(element => {
-
-tag += ` <h2 class="px-4 ml-2 w-48 font-bold ">#${element.hashtag_name}</h2>`
-
-});
-hastag.innerHTML = tag
-hastag.style.display = "block";
-simpale.style.display = "none";
-username.style.display = "none";
-
-}
-else if (data.type == 1) {
+                    topPostHandeler()
+                }
+            }
+            if (data.type == 0) {
 
 
-let con = ``
-data.result.forEach(element => {
 
-con += `<div class="flex flex-shrink-0 check ">
+                let tag = ``
+
+                data.result.forEach(element => {
+
+                    tag += ` <h2 class="px-4 ml-2 w-48 font-bold ">#${element.hashtag_name}</h2>`
+
+                });
+                hastag.innerHTML = tag
+                hastag.style.display = "block";
+                simpale.style.display = "none";
+                username.style.display = "none";
+
+            }
+            else if (data.type == 1) {
+
+
+                let con = ``
+                data.result.forEach(element => {
+
+                    con += `<div class="flex flex-shrink-0 check ">
 <div class="flex-1 check">
 <div class="flex items-center w-48 check">
 <div>
@@ -305,90 +309,90 @@ alt="">
 class="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 transition ease-in-out duration-150 check">
 @${element.username}
 </p></div></div></div></div>`
-});
+                });
 
-hastag.style.display = "none";
-simpale.style.display = "none";
-username.innerHTML = con;
+                hastag.style.display = "none";
+                simpale.style.display = "none";
+                username.innerHTML = con;
 
-username.style.display = "block";
-}
-else {
+                username.style.display = "block";
+            }
+            else {
 
-hastag.style.display = "none";
-simpale.style.display = "block";
-username.style.display = "none";
-}
+                hastag.style.display = "none";
+                simpale.style.display = "block";
+                username.style.display = "none";
+            }
 
-}, 600)
+        }, 600)
 
-}
+    }
 
-function searchOnfocus() {
-let hastag = document.getElementById("hastag")
-let username = document.getElementById("username")
-let simpale = document.getElementById("simpal")
-username.style.display = "none";
-hastag.style.display = "none";
-popup.style.display = "block"
-simpale.style.display = "block"
-}
+    function searchOnfocus() {
+        let hastag = document.getElementById("hastag")
+        let username = document.getElementById("username")
+        let simpale = document.getElementById("simpal")
+        username.style.display = "none";
+        hastag.style.display = "none";
+        popup.style.display = "block"
+        simpale.style.display = "block"
+    }
 
-function remove(e) {
-if (e.target.class == "check") {
-popup.style.display = "block"
-}
-else {
-popup.style.display = "none"
-}
-}
+    function remove(e) {
+        if (e.target.class == "check") {
+            popup.style.display = "block"
+        }
+        else {
+            popup.style.display = "none"
+        }
+    }
 
-let top1 = document.getElementById("top");
-let Pepole = document.getElementById("Pepole");
-let Latest = document.getElementById("Latest");
-let media1 = document.getElementById("media1");
-top1.addEventListener("click", topPostHandeler);
-Pepole.addEventListener("click", pepoleHandeler);
-Latest.addEventListener("click", latestPostHandeler);
-media1.addEventListener("click", mediaPostHandeler);
+    let top1 = document.getElementById("top");
+    let Pepole = document.getElementById("Pepole");
+    let Latest = document.getElementById("Latest");
+    let media1 = document.getElementById("media1");
+    top1.addEventListener("click", topPostHandeler);
+    Pepole.addEventListener("click", pepoleHandeler);
+    Latest.addEventListener("click", latestPostHandeler);
+    media1.addEventListener("click", mediaPostHandeler);
 
-async function data(route, objarg) {
+    // async function data(route, objarg) {
 
-let tweet = await gettweet(route, objarg);
-return tweet;
-}
-async function topPostHandeler() {
+    //     let tweet = await gettweet(route, objarg);
+    //     return tweet;
+    // }
+    async function topPostHandeler() {
 
-let search = document.getElementById("search");
+        let search = document.getElementById("search");
 
-async function getdata(search) {
-let url = window.location.origin + "/explore/username"
-let bodyargs = { searchbox: search, type: 0 }
-let data1 = await fetch(url, {
-method: 'post',
-headers: { 'Content-Type': 'application/json' },
-body: JSON.stringify(bodyargs)
-})
-data1 = await data1.json()
-console.log("data is ", data1.username);
-return data1.username;
-}
+        async function getdata(search) {
+            let url = window.location.origin + "/explore/username"
+            let bodyargs = { searchbox: search, type: 0 }
+            let data1 = await fetch(url, {
+                method: 'post',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(bodyargs)
+            })
+            data1 = await data1.json()
+            console.log("data is ", data1.username);
+            return data1.username;
+        }
 
-let data1 = await getdata(search.value.trim())
+        let data1 = await getdata(search.value.trim())
 
-let tweet = ``;
+        let tweet = ``;
 
-if (data1.length > 0) {
-tweet += `<div class="heading mt-2 text-2xl ml-5" id="head">
+        if (data1.length > 0) {
+            tweet += `<div class="heading mt-2 text-2xl ml-5" id="head">
 <h2>Pepole</h2>
 </div>
 `;
 
-}
+        }
 
-data1.forEach(element => {
+        data1.forEach(element => {
 
-  tweet += `   <div class="flex flex-shrink-0 ">
+            tweet += `   <div class="flex flex-shrink-0 ">
                         <div class="flex-1">
                             <div class="flex items-center w-48">
                                 <div>
@@ -417,41 +421,54 @@ data1.forEach(element => {
                     </div>
 `
 
-});
+        });
 
-tweet += await data("/explore/topTweet", { search: search.value.trim() })
-let conn = document.getElementById("tweetss")
-conn.style.marginTop = "3px"
 
-conn.innerHTML = ""
+        // ----------------------
 
-conn.innerHTML = tweet;
+        let url = window.location.origin + '/explore/topTweet';
 
-}
+        let data = await fetch(url, {
+            method: 'post',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ search: search.value.trim() })
+        })
 
-async function onchangetop() {
+        data = await data.json();
 
-async function getdata(search) {
-let url = window.location.origin + "/explore/username"
-let bodyargs = { searchbox: search, type: 0 }
-let data1 = await fetch(url, {
-method: 'post',
-headers: { 'Content-Type': 'application/json' },
-body: JSON.stringify(bodyargs)
-})
-data1 = await data1.json()
-console.log("data is ", data1.username);
-return data1.username;
-}
+        let conn = document.getElementById("tweetss")
 
-let data1 = await getdata("")
-let tweet = `<div class="heading mt-2 text-2xl ml-5" id="head">
+        conn.style.marginTop = "3px"
+        conn.innerHTML = ""
+
+        conn.innerHTML = tweet;
+        conn.innerHTML += getTweetComponent(data.resultTweet);
+
+    }
+
+    async function onchangetop() {
+
+        async function getdata(search) {
+            let url = window.location.origin + "/explore/username"
+            let bodyargs = { searchbox: search, type: 0 }
+            let data1 = await fetch(url, {
+                method: 'post',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(bodyargs)
+            })
+            data1 = await data1.json()
+            console.log("data is ", data1.username);
+            return data1.username;
+        }
+
+        let data1 = await getdata("")
+        let tweet = `<div class="heading mt-2 text-2xl ml-5" id="head">
 <h2>Pepole</h2>
 </div>
 `;
 
 
-data1.forEach(element => {
+        data1.forEach(element => {
             tweet += `   <div class="flex flex-shrink-0 ">
                 <div class="flex-1">
                     <div class="flex items-center w-48">
@@ -481,45 +498,58 @@ data1.forEach(element => {
             </div>
 `
 
-});
-let search = document.getElementById("search");
+        });
 
-tweet += await data("/explore/topTweet", { search: search.value.trim() })
-let conn = document.getElementById("tweetss")
 
-conn.style.marginTop = "-50px"
-conn.innerHTML = ""
+        // ----------------------
+        let search = document.getElementById("search");
 
-conn.innerHTML = tweet;
+        let url = window.location.origin + '/explore/topTweet';
 
-}
+        let data = await fetch(url, {
+            method: 'post',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ search: search.value.trim() })
+        })
 
-async function pepoleHandeler() {
+        data = await data.json();
 
-async function getdata(search) {
-let url = window.location.origin + "/explore/username"
-let bodyargs = { searchbox: search, type: 1 }
-let data1 = await fetch(url, {
-method: 'post',
-headers: { 'Content-Type': 'application/json' },
-body: JSON.stringify(bodyargs)
-})
-data1 = await data1.json()
-return data1.username;
-}
+        let conn = document.getElementById("tweetss")
 
-let data1 = await getdata(search.value.trim())
-let tweet = ``;
+        conn.style.marginTop = "-50px"
+        conn.innerHTML = ""
 
-if (data1.length > 0) {
+        conn.innerHTML = tweet;
+        conn.innerHTML += getTweetComponent(data.resultTweet);
 
-tweet += `<div class="heading mt-2 text-2xl ml-5" id="head">
+    }
+
+    async function pepoleHandeler() {
+
+        async function getdata(search) {
+            let url = window.location.origin + "/explore/username"
+            let bodyargs = { searchbox: search, type: 1 }
+            let data1 = await fetch(url, {
+                method: 'post',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(bodyargs)
+            })
+            data1 = await data1.json()
+            return data1.username;
+        }
+
+        let data1 = await getdata(search.value.trim())
+        let tweet = ``;
+
+        if (data1.length > 0) {
+
+            tweet += `<div class="heading mt-2 text-2xl ml-5" id="head">
 <h2>Pepole</h2>
 </div>
 `;
-}
+        }
 
-data1.forEach(element => {
+        data1.forEach(element => {
             tweet += `   <div class="flex flex-shrink-0 ">
                 <div class="flex-1">
                     <div class="flex items-center w-48">
@@ -549,42 +579,44 @@ data1.forEach(element => {
             </div>
 `
 
-});
+        });
 
-let conn = document.getElementById("tweetss")
-conn.innerHTML = ""
-conn.innerHTML = tweet;
+        let conn = document.getElementById("tweetss")
+        conn.innerHTML = ""
+        conn.innerHTML = tweet;
 
-}
+    }
 
-async function latestPostHandeler() {
+    async function latestPostHandeler() {
 
-async function getdata(search) {
-let url = window.location.origin + "/explore/username"
-let bodyargs = { searchbox: search }
-let data1 = await fetch(url, {
-method: 'post',
-headers: { 'Content-Type': 'application/json' },
-body: JSON.stringify(bodyargs)
-})
-data1 = await data1.json()
-console.log("data is ", data1.username);
-return data1.username;
-}
+        let search = document.getElementById("search");
 
-let data1 = await getdata(search.value.trim())
+        async function getdata(search) {
+            let url = window.location.origin + "/explore/username"
+            let bodyargs = { searchbox: search }
+            let data1 = await fetch(url, {
+                method: 'post',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(bodyargs)
+            })
+            data1 = await data1.json()
+            console.log("data is ", data1.username);
+            return data1.username;
+        }
 
-let tweet = ``
+        let data1 = await getdata(search.value.trim())
 
-if (data1.length > 0) {
-tweet += `<div class="heading mt-2 text-2xl ml-5" id="head">
+        let tweet = ``
+
+        if (data1.length > 0) {
+            tweet += `<div class="heading mt-2 text-2xl ml-5" id="head">
 <h2>Pepole</h2>
 </div>
 `;
 
-}
+        }
 
-data1.forEach(element => {
+        data1.forEach(element => {
             tweet += `   <div class="flex flex-shrink-0 ">
                 <div class="flex-1">
                     <div class="flex items-center w-48">
@@ -617,102 +649,117 @@ data1.forEach(element => {
             </div>
 `
 
-});
+        });
 
-tweet += await data("/explore/latestTweet", { search: search.value.trim() })
-let conn = document.getElementById("tweetss")
-conn.innerHTML = ""
-conn.innerHTML = tweet;
+        // ----------------------
+        
 
-}
+        let url = window.location.origin + '/explore/latestTweet';
 
-async function mediaPostHandeler() {
+        let data = await fetch(url, {
+            method: 'post',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ search: search.value.trim() })
+        })
 
-async function getdata(search) {
+        data = await data.json();
 
-let url = window.location.origin + "/explore/getMedia"
-let bodyargs = { searchbox: search }
-let data = await fetch(url, {
-method: 'post',
-headers: { 'Content-Type': 'application/json' },
-body: JSON.stringify(bodyargs)
-})
+        let conn = document.getElementById("tweetss")
 
-data = await data.json()
+        conn.innerHTML = ""
+        conn.innerHTML = tweet;
+        conn.innerHTML += getTweetComponent(data.resultTweet);
 
-console.log("media data is the ", data);
-return data.media;
+    }
 
-}
+    async function mediaPostHandeler() {
 
-let search = document.getElementById("search").value
-let data = await getdata(search);
-let mediacon = `<div class="grid grid-cols-2 md:grid-cols-3 gap-4">`
+        async function getdata(search) {
 
-console.log("data is for media", data);
-data.forEach(element => {
-mediacon += `<div>
+            let url = window.location.origin + "/explore/getMedia"
+            let bodyargs = { searchbox: search }
+            let data = await fetch(url, {
+                method: 'post',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(bodyargs)
+            })
+
+            data = await data.json()
+
+            console.log("media data is the ", data);
+            return data.media;
+
+        }
+
+        let search = document.getElementById("search").value
+        let data = await getdata(search);
+        let mediacon = `<div class="grid grid-cols-2 md:grid-cols-3 gap-4">`
+
+        console.log("data is for media", data);
+        data.forEach(element => {
+            mediacon += `<div>
 <img class="h-auto max-w-full rounded-lg" src="/uploads/${element.media_url}" alt="">
 </div>`
-});
-mediacon += `</div>`
-let conn = document.getElementById("tweetss")
-conn.innerHTML = ""
-conn.innerHTML = mediacon;
+        });
+        mediacon += `</div>`
+        let conn = document.getElementById("tweetss")
+        conn.innerHTML = ""
+        conn.innerHTML = mediacon;
 
-}
-
-
-async function foollowhandel(id) {
-        console.log("id",id);
-       
-        const body = {
-                id: id
-            }
-            try {
-                const response = await fetch('/follow', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(body)
-                });
-                const responseData = await response.json();
-                console.log("response",response)
-                
-                if (!responseData.statusdata) {
-                    document.getElementById("btnfollow"+id).innerHTML = "Following"
-
-                }
-                if (responseData.statusdata) {
-                    console.log(responseData.statusdata)
-                 document.getElementById("btnfollow"+id).innerHTML = "Follow"
-                }
-
-            } catch (error) {
-                console.error(error.message);
-            }
     }
 
 
-// let retweet = document.getElementById("retweet");
+    async function foollowhandel(id) {
+        console.log("id", id);
 
-// console.log(retweet);
+        const body = {
+            id: id
+        }
+        try {
+            const response = await fetch('/follow', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(body)
+            });
+            const responseData = await response.json();
+            console.log("response", response)
 
-// retweet.addEventListener("click", retweethandeler)
+            if (!responseData.statusdata) {
+                document.getElementById("btnfollow" + id).innerHTML = "Following"
+
+            }
+            if (responseData.statusdata) {
+                console.log(responseData.statusdata)
+                document.getElementById("btnfollow" + id).innerHTML = "Follow"
+            }
+
+        } catch (error) {
+            console.error(error.message);
+        }
+    }
+
+
+    // let retweet = document.getElementById("retweet");
+
+    // console.log(retweet);
+
+    // retweet.addEventListener("click", retweethandeler)
 
 
 
 
 
-function retweetgenrate(id) {
+    function retweetgenrate(id) {
 
-alert("RETWEETED")
-}
+        alert("RETWEETED")
+    }
 
 </script>
 <script src="/js/like.script.js"></script>
 <script src="/js/bookmark.script.js"></script>
+<script src="/js/share.script.js"></script>
 <script src="/js/comment.script.js"></script>
 
 </html>

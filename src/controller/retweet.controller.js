@@ -1,7 +1,7 @@
 const conn = require('../../config/connection');
 
 module.exports.retweet = async (req, res) => {
-  let { tweetId, action } = req.body;
+  let { tweetId, action,retweetMsg } = req.body;
   let userId = req.user[0][0].id;
   if (!tweetId) {
     return res.status(422).json({ 'error': 'Please send tweetId!' });
@@ -30,26 +30,15 @@ module.exports.retweet = async (req, res) => {
       }
     }
     else if (action == "quote") {
-      try {
-        let sqlConent = 'insert into tweets(user_id,content,is_drafted,is_posted) values (?,?,?,?);';
-        let [insertedData] = await conn.query(sqlConent, [userId, result[0].content || "", 0, 1])
-        let lastTweet = await insertedData.insertId;
-        if (result[0].media_url) {
-          let insertImgSql = "insert into medias(tweet_id,media_url,media_type) values (?,?,?)";
-          await conn.query(insertImgSql, [lastTweet, result[0].media_url, result[0].media_type]);
-        }
         try {
           let repostQuery = "insert into retweets(tweet_id,user_id,retweet_message) values (?,?,?)";
-          await conn.query(repostQuery, [lastTweet,userId,"hello"])
+          let [quoteInserted]= await conn.query(repostQuery, [tweetId,userId,retweetMsg || null]);
+          
+          return res.status(200).json({'msg':"Quoted repost",'retweetId':quoteInserted.insertId})
         } catch (error) {
           console.log(error);
           return res.status(500).json({ 'error': "Something went wrong" + error })
         }
-      }
-      catch (error) {
-        console.log(error);
-        return res.status(500).json({ 'error': "Something went wrong" + error })
-      }
     }
   }catch (error) {
     console.log(error);
@@ -61,9 +50,8 @@ module.exports.retweetData = async(req,res)=>{
   let {tweetId}= req.body;
   let userId=req.user[0][0].id;
   try{
-    let sql="select count(*) as isRetweeted from retweets where user_id= ? and tweet_id= ? and deleted_at is null";
+    let sql="select count(*) as isRetweeted from retweets where user_id= ? and tweet_id= ? and deleted_at is null and retweet_message is null";
     let [result]=await conn.query(sql,[userId,tweetId]);
-    console.log(result);
     return res.status(200).json({isRetweeted:result[0].isRetweeted});
   }catch(error){
     return res.status(500).json({ 'error': "Something went wrong" + error })
