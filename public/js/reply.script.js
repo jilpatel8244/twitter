@@ -1,4 +1,6 @@
 function Reply(comment_id) {
+    let tweetId = document.querySelector('#tweet_id').value;
+    console.log(tweetId);
     let commentText = document.querySelector(`.reply_${comment_id}`);
     if (commentText.value !== '') {
 
@@ -10,6 +12,7 @@ function Reply(comment_id) {
             body: JSON.stringify({
                 comment_id: comment_id,
                 content: commentText.value,
+                tweetId: tweetId,
             }),
         })
             .then(response => response.json())
@@ -23,7 +26,7 @@ function Reply(comment_id) {
 async function showReply(comment_id) {
     let replySection = document.querySelector(`.replies_${comment_id}`);
     let showReplyButton = document.querySelector(`.showreply_${comment_id}`);
-    
+
     showReplyButton.style.display = 'flex';
     let data = await fetch('/get_reply', {
         method: 'POST',
@@ -70,8 +73,6 @@ async function showReply(comment_id) {
                         class="show_${reply.id} bg-white shadow-xl rounded-xl cursor-pointer hidden absolute top-2 right-10">
                         <div onclick="deleteReply('${reply.id}','${reply.comment_id}')"
                             class="text-red-700 font-bold hover:bg-slate-100 py-2 px-4">Delete</div><hr class="border border-gray-100">
-                        <div onclick="editReply('${reply.id}')" class="text-blue-700 font-bold hover:bg-slate-100 py-2 px-4">
-                            Edit</div>
                     </div>
         
             </div>
@@ -128,11 +129,11 @@ function editReply(replyId, comment_id) {
     });
 }
 
-function showButton(comment_id){
-    let showBtn = document.querySelector(`.show_${ comment_id }`)
-    if (showBtn.style.display == 'block'){
-     showBtn.style.display = 'none'
-    }else{
-     showBtn.style.display = 'flex'
+function showButton(comment_id) {
+    let showBtn = document.querySelector(`.show_${comment_id}`)
+    if (showBtn.style.display == 'block') {
+        showBtn.style.display = 'none'
+    } else {
+        showBtn.style.display = 'flex'
     }
- }
+}
