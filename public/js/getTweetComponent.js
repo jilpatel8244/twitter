@@ -140,17 +140,19 @@ function getTweetComponent(data) {
                                                                     </path>
                                                             </svg>`
         }
-        tweet += `</span>
-                                                <span class="px-1 py-2" id="likeCount${tweets.tweet_id}">
-                                                    ${tweets.likeCount}
-                                                </span>
-                                                <script>
-                                                    if (parseInt(document.getElementById('likeCount'+'${tweets.tweet_id}').innerHTML)) {
-                                                        document.getElementById('likeCount'+'${tweets.tweet_id}').style.display = "block";
-                                                    } else {
-                                                        document.getElementById('likeCount'+'${tweets.tweet_id}').style.display = "none";
-                                                    }
-                                                </script>
+        tweet += `</span>`
+                                                if (parseInt(tweets.likeCount)) {
+                                                    console.log(tweets.likeCount);
+                                                    tweet += `<span class="px-1 py-2" id="likeCount${tweets.tweet_id}">
+                                                        ${tweets.likeCount}
+                                                    </span>`
+                                                } else {
+                                                    console.log(tweets.likeCount);
+                                                    tweet += `<span class="px-1 py-2" id="likeCount${tweets.tweet_id}" style="display: none">
+                                                        ${tweets.likeCount}
+                                                    </span>`
+                                                }
+                                        tweet +=  `
                                             </div>
 
 
