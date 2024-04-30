@@ -12,7 +12,7 @@ module.exports.insertTweet = async (req, res) => {
   if (req.fileValidationError != undefined) {
     return res.status(422).json({ 'error': req.fileValidationError });
   }
-  let { content } = req.body;
+  let { content,retweetId } = req.body;
   let { status } = req.query;
   let userId = req.user[0][0].id;
   if (req.files == [] && content.trim() == "") {
@@ -21,7 +21,7 @@ module.exports.insertTweet = async (req, res) => {
   else {
     try {
       if (status == 'tweet') {
-        let data = [userId, content || "", '0', '1'];
+        let data = [userId, content || "", '0', '1',retweetId != 'undefined' ? retweetId : null];
         var lastInsertedId = await insertContent(data, res);
         let hashTags = extractHashtag(content);
         if (hashTags) {
@@ -55,7 +55,7 @@ module.exports.insertTweet = async (req, res) => {
         return res.status(200).json({ 'msg': 'Inserted' })
       }
       if (status == 'draft') {
-        let data = [userId, content || "", '1', '0'];
+        let data = [userId, content || "", '1', '0',retweetId != 'undefined' ? retweetId : null];
         let lastInsertedId = await insertContent(data)
         if (req.files[0] != null) {
           let { filename, mimetype } = req.files[0];
@@ -83,7 +83,7 @@ const insertNotification = async (data) => {
 
 const insertContent = async (data, res) => {
   try {
-    let sqlConent = 'insert into tweets(user_id,content,is_drafted,is_posted) values (?,?,?,?);';
+    let sqlConent = 'insert into tweets(user_id,content,is_drafted,is_posted,retweet_id) values (?,?,?,?,?);';
     let [result] = await conn.query(sqlConent, data)
     return result.insertId;
   }
@@ -197,7 +197,6 @@ const updateTweetImage = async (data, res) => {
     return res.status(422).json({ 'error': "tweet image error" + err })
   }
   try {
-    console.log(data,'----check')
     let sql = "update medias set media_url = ? , media_type = ? where tweet_id= ?";
     await conn.query(sql, data);
   }
@@ -280,5 +279,19 @@ exports.getProfileImage = async (req, res) => {
   }
   catch (error) {
     return res.status(422).json({ 'error': 'ProfileImage-error' + error });
+  }
+}
+
+exports.checkRetweet = async (req,res)=>{
+  let {tweetId}= req.body;
+  if(!tweetId){
+    return res.status(422).json({ 'error': 'check quote error-' + error });
+  }
+  try{
+    let sql= "select count(*) as alreadyRetweeted from retweets where user_id = ? and tweet_id = ? and deleted_at is null";
+    let [output] = await conn.query(sql,[req.user[0][0].id,tweetId]);
+    return res.status(200).json({'msg':"Data fetched!",alreadyRepost:output[0].alreadyRetweeted});
+  }catch(error){
+    return res.status(500).json({ 'error': 'fetch data error' + error });
   }
 }

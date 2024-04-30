@@ -25,7 +25,7 @@ const adminroute = require("./src/routes/admin.routes");
 const resetpasswordProfile = require("./src/routes/profile.resetpassword.route");
 
 const PORT = process.env.PORT || 3000;
-const tweetCreate = require("./src/routes/tweet.routes");
+const router = require("./src/routes/routes.js");
 const logger = require("./logger/logger");
 const followUnfollowHandler = require("./src/routes/follow.route");
 
@@ -52,7 +52,7 @@ app.use(followData);
 app.use(followingData);
 app.use(shareRoute);
 app.use('/profile', getProfileRouter);
-app.use("/tweetPost", tweetCreate);
+app.use(router);
 
 app.get('*', (req, res) => {
   res.render('pages/404.ejs');
