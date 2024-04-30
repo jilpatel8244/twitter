@@ -19,6 +19,8 @@ let finalDelete = document.getElementById('finalDelete');
 let emojiBtn = document.getElementById('emojiBtn');
 let emojiPicker = document.getElementById('emojiPicker');
 let allScreen = document.getElementById('allScreen');
+let remover = document.getElementById('remover');
+let tweetedBox=document.getElementById('tweetedBox');
 var imgToRemove;
 const removeImg = (id)=>{
   imgToRemove = document.getElementById(id);
@@ -29,7 +31,7 @@ const removeImg = (id)=>{
     let closeImg = document.getElementById('closeImg');
     closeImg.remove();
     imgToRemove = undefined;
-    if (content.innerText.trim() != '' || imgToRemove != undefined ) {
+    if (content.innerText.trim() != '' || imgToRemove != undefined || tweetedBox.innerHTML != "") {
       post.style.opacity = '1'
       post.style.cursor = 'pointer'
     }
@@ -47,14 +49,18 @@ document.addEventListener("DOMContentLoaded", function (event) {
     getProfileImage();
     content.focus();
   };
-
 });
+
+
 document.getElementById('close').onclick = () => {
   if (imgToRemove != undefined) {
     if (content.innerText.trim() != '' || imgToRemove != undefined ) {
       document.getElementById('popup-modal').style.display = 'block'
     } else {
       document.getElementById('defaultModal').style.display = 'none';
+      tweetedBox.innerHTML="";
+      post.style.opacity = '0.25'
+      post.style.cursor = 'default'
     }
   }
   else {
@@ -62,11 +68,14 @@ document.getElementById('close').onclick = () => {
       document.getElementById('popup-modal').style.display = 'block'
     } else {
       document.getElementById('defaultModal').style.display = 'none';
+      tweetedBox.innerHTML=""
+      post.style.opacity = '0.25';
+    post.style.cursor = 'default';
     }
   }
 }
 content.oninput = () => {
-  if (content.innerText.trim() != '' || imgToRemove != undefined ) {
+  if (content.innerText.trim() != '' || imgToRemove != undefined || tweetedBox.innerHTML != "") {
     post.style.opacity = '1'
     post.style.cursor = 'pointer'
   }
@@ -99,7 +108,7 @@ emojiBtn.onclick = () => {
     .addEventListener('emoji-click', event => {
       let emoji = event.detail.unicode;
       content.innerText += emoji;
-      if (content.innerText.trim() != '' || imgToRemove != undefined) {
+      if (content.innerText.trim() != '' || imgToRemove != undefined || tweetedBox.innerHTML != "") {
         post.style.opacity = '1'
         post.style.cursor = 'pointer'
       }
@@ -118,8 +127,15 @@ removeEmoji.addEventListener('click', () => {
 })
 
 const tweetInsert = async (status) => {
-  if (content.innerText.trim() != '' || imgToRemove != undefined) {
+  if (content.innerText.trim() != '' || imgToRemove != undefined || tweetedBox.innerHTML != "") {
     let contentText = content.innerText;
+    if(contentText.trim() == "" && tweetedBox.innerHTML != ""){
+
+    }
+    if(tweetedBox.innerHTML != ""){
+      let forRetweet = document.getElementById('forRetweet');
+      alert(forRetweet.value);
+    }
     let form = new FormData();
     form.append('content', contentText);
     form.append('media', media.files[0] || []);
@@ -131,12 +147,13 @@ const tweetInsert = async (status) => {
     if (msg == 'Inserted') {
       window.location.href = '/home';
     }
-    if (error) { alert(error) }
+    if (error) { return alert(error) }
     post.style.opacity = '0.25'
     post.style.cursor = 'default'
     clearImages();
     document.getElementById('defaultModal').style.display = 'none'
     document.forms['tweet'].reset();
+    tweetedBox.innerHTML = "";
   }
 }
 post.onclick = () => {
@@ -162,6 +179,7 @@ save.onclick = () => {
   post.style.opacity = '0.25'
   post.style.cursor = 'default'
   document.forms['tweet'].reset();
+  tweetedBox.innerHTML = "";
 }
 discard.onclick = () => {
   document.getElementById('popup-modal').style.display = 'none'
@@ -170,11 +188,12 @@ discard.onclick = () => {
   post.style.opacity = '0.25'
   post.style.cursor = 'default'
   document.forms['tweet'].reset();
+  tweetedBox.innerHTML = "";
 }
 
 media.onchange = () => {
   getImages();
-  if (content.innerText.trim() != '' || imgToRemove != undefined) {
+  if (content.innerText.trim() != '' || imgToRemove != undefined || tweetedBox.innerHTML != "") {
     post.style.opacity = '1'
     post.style.cursor = 'pointer'
   }
@@ -219,6 +238,7 @@ const clearImages = () => {
 drafts.onclick = () => {
   document.getElementById('select-modal').style.display = 'block';
   displayDraft();
+  tweetedBox.innerHTML = "";
 }
 
 const displayDraft = async () => {
@@ -318,7 +338,7 @@ const sendDraft = async (tweetId) => {
 
 const tweetUpdate = async (action) => {
   
-  if (content.innerText.trim() != '' || imgToRemove != undefined) {
+  if (content.innerText.trim() != '' || imgToRemove != undefined || tweetedBox.innerHTML != "") {
     let form = new FormData(document.forms[0]);
     form.append('content', content.innerText);
     form.append('action', action);
@@ -337,7 +357,8 @@ const tweetUpdate = async (action) => {
     post.style.opacity = '0.25'
     post.style.cursor = 'default'
     clearImages();
-    document.getElementById('defaultModal').style.display = 'none'
+    document.getElementById('defaultModal').style.display = 'none';
+    tweetedBox.innerHTML = "";
   }
 }
 

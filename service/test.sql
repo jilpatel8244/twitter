@@ -127,6 +127,15 @@ CREATE TABLE `temp_twitter`.`verification_requests` (
 -- by switching to profesaional, your account will no longer private. if private
 update users set is_private = 0, profession = "Programmer",
 prof_desc = "I'm a passinate developer who always willing to learn, and apply those things in practice" where id = 1;
+CREATE TABLE `get_support` (
+  `id` INT PRIMARY KEY AUTO_INCREMENT,
+  `user_id` INT NOT NULL,
+  `content` VARCHAR(255),
+  `url` VARCHAR(255),
+  `created_at` TIMESTAMP NOT NULL DEFAULT (CURRENT_TIMESTAMP),
+  `updated_at` TIMESTAMP  DEFAULT (NULL),
+  `deleted_at` TIMESTAMP  DEFAULT(NULL)
+);
 
 
 -- modified on 29th aprill 

@@ -186,3 +186,18 @@ img{
 {
     display: none;
 }
+.chat
+{
+    display: flex;
+    margin: -5%;
+}
+
+#chat-container
+{
+    display: none;
+}
+
+.img-help:hover {
+
+    width: 100%;
+}
