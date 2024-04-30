@@ -8,6 +8,7 @@ const io = new Server(server);
 const cookieParser = require("cookie-parser");
 const getProfileRouter = require("./src/routes/profile.routes");
 const homeRouter = require("./src/routes/home.routes");
+const routes = require("./src/routes/routes");
 const notification = require("./src/routes/notification.route");
 const exploreRoute = require("./src/routes/explore.routes");
 const authRouter = require("./src/routes/auth.routes");
@@ -38,7 +39,8 @@ app.use(express.static("public"));
 app.use(express.static("node_modules/sweetalert2/dist"));
 app.use("/admin", adminroute);
 
-app.use(homeRouter);
+// app.use(homeRouter);
+app.use(routes);
 app.use(likeRoute);
 app.use(bookmarkRoute);
 app.use(messagesRoute);

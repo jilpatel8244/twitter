@@ -15,7 +15,7 @@
         </div>
         <article class="hover:bg-gray-100 transition duration-350 ease-in-out">
             <div class="flex flex-shrink-0 p-4 pb-0">
-                <a href="#" class="flex-shrink-0 group block">
+                <a href="/explore/profile?id=<%= tweet.user_id %>" class="flex-shrink-0 group block">
                     <div class="flex items-center">
                         <div>
                             <% if(tweet.profile_img_url) { %>
@@ -73,58 +73,35 @@
                                 </div>
                             </a>
                         </div>
-
+                    
                         <!-- like span tag -->
-                        <div class="flex items-center text-center py-2 m-2">
+                        <div class="flex flex-1 items-center text-center py-2 m-2">
                             <span
                                 class="group flex items-center px-1 py-2 text-base leading-6 font-medium rounded-full  hover:text-red-300">
                                 <% if(tweet.isLiked) {%>
                                     <svg class="text-center h-7 w-6 fill-red-600 text-red-600 like_<%= tweet.tweet_id %>"
-                                            fill="none" stroke-linecap="round" stroke-linejoin="round"
-                                            stroke-width="2" stroke="currentColor" viewBox="0 0 24 24"
+                                        fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        stroke="currentColor" viewBox="0 0 24 24"
+                                        onclick="likeHandler('<%= tweet.tweet_id %>')">
+                                        <path
+                                            d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z">
+                                        </path>
+                                    </svg>
+                                    <% } else {%>
+                                        <svg class="text-center h-7 w-6 text-gray-500 like_<%= tweet.tweet_id %>"
+                                            fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            stroke="currentColor" viewBox="0 0 24 24"
                                             onclick="likeHandler('<%= tweet.tweet_id %>')">
-                                                <path
-                                                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z">
-                                                </path>
-                                        </svg>
-                                        <% } else {%>
-                                    <svg class="text-center h-7 w-6 text-gray-500 like_<%= tweet.tweet_id %>"
-                                            fill="none" stroke-linecap="round" stroke-linejoin="round"
-                                            stroke-width="2" stroke="currentColor" viewBox="0 0 24 24"
-                                            onclick="likeHandler('<%= tweet.tweet_id %>')">
-                                                <path
-                                                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z">
-                                                </path>
+                                            <path
+                                                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z">
+                                            </path>
                                         </svg>
                                         <% } %>
-                    </span>
+                            </span>
                             <span class="px-1 py-2" id="likeCount<%= tweet.tweet_id %>">
                                 <%= tweet.likeCount ? tweet.likeCount : '' %>
                             </span>
-                            <script>
-                                // if (parseInt(document.getElementById('likeCount'+'${tweets.tweet_id}').innerHTML)) {
-                                //     console.log("block");
-                                //     document.getElementById('likeCount'+'${tweets.tweet_id}').style.display = "block";
-                                // } else {
-                                //     console.log("none");
-                                //     document.getElementById('likeCount'+'${tweets.tweet_id}').style.display = "none";
-                                // }
-                            </script>
                         </div>
-
-                        <!-- share span tag -->
-                        <div class="flex-1 text-center py-2 m-2">
-                            <span
-                                class="w-12 mt-1 group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full hover:text-blue-300">
-                                <svg class="text-center h-7 w-6" fill="none" stroke-linecap="round"
-                                    stroke-linejoin="round" stroke-width="2" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12">
-                                    </path>
-                                </svg>
-                            </span>
-                        </div>
-
-                        <!-- done -->
 
                         <!-- bookmark span tag -->
                         <div class="flex-1 text-center py-2 m-2 ">
@@ -164,13 +141,13 @@
                                 </svg>
                             </span>
                         </div>
-                    </div>
                 </div>
-
             </div>
 
-            <hr class="border-gray-200">
-        </article>
+    </div>
+
+    <hr class="border-gray-200">
+    </article>
     </div>
 
     <div class="">
@@ -197,7 +174,7 @@
                     <article>
                         <% comments.forEach(function(comment) { %>
                             <input type="hidden" name="comment_id" value="<%= comment.id %>">
-                            <div 
+                            <div
                                 class="flex relative flex-shrink-0 p-4 pb-0 border hover:bg-gray-100 transition duration-350 ease-in-out">
 
                                 <div class=" flex items-start relative">
@@ -215,16 +192,18 @@
                                         <p class="font-bold text-lg text-wrap">
                                             <%= comment.name %> <span class="font-medium text-sm text-gray-400">
                                                     <%= comment.username %> .
-                                                </span> 
+                                                </span>
                                                 <span
                                                     class="text-sm leading-5 font-medium text-gray-400 transition ease-in-out duration-150">
                                                     <%= comment.time %>
                                                 </span>
                                         </p>
+                                        <input type="hidden" id="tweet_id" value="<%= comment.tweet_id %>">
                                         <div class="w-[55%]">
                                             <pre class="textarea_<%= comment.id %> mr-3 text-base width-auto font-normal text-balance overflow-hidden font-sans"
                                                 style="word-wrap: break-word; overflow-wrap: break-word;"><%= comment.content %></pre>
-                                                <div><button onclick="showReply('<%= comment.id %>')"class="text-blue-700 font-bold">replies</button></div>
+                                            <div><button onclick="showReply('<%= comment.id %>')"
+                                                    class="text-blue-700 font-bold">replies</button></div>
                                         </div>
                                     </div>
                                 </div>
@@ -240,8 +219,10 @@
                                         class="show_<%= comment.id %> bg-white shadow-xl rounded-xl cursor-pointer hidden absolute top-2 right-10">
 
                                         <div onclick="deleteComment('<%= comment.id %>')"
-                                            class="text-red-700 font-bold hover:bg-slate-100 py-2 px-4">Delete</div><hr class="border border-gray-100">
-                                        <div onclick="editComment('<%= comment.id %>')" class="text-blue-700 font-bold hover:bg-slate-100 py-2 px-4">
+                                            class="text-red-700 font-bold hover:bg-slate-100 py-2 px-4">Delete</div>
+                                        <hr class="border border-gray-100">
+                                        <div onclick="editComment('<%= comment.id %>')"
+                                            class="text-blue-700 font-bold hover:bg-slate-100 py-2 px-4">
                                             Edit</div>
                                     </div>
                                     <% } %>
@@ -272,8 +253,3 @@
                         <%} %>
     </div>
 </section>
-
-<script src="/js/bookmark.script.js"></script>
-<script src="/js/like.script.js"></script>
-<script src="/js/comment.script.js"></script>
-<script src="/js/reply.script.js"></script>

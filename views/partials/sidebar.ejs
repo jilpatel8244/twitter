@@ -1,5 +1,5 @@
 <div style="width: 275px;">
-    <div class="overflow-y-auto fixed h-screen pr-3" style="width: 275px;">
+    <div class="fixed overflow-y-auto h-screen pr-3" style="width: 275px;">
         <!--Logo-->
         <div class="ml-3">
             <img class="h-6" src="/assets/x-logo.png" alt="">
@@ -8,7 +8,7 @@
         <!-- Nav-->
         <nav class="mt-5 px-2">
             <a href="/home"
-                class="mt-1 group flex items-center px-2 py-4 text-base leading-6 font-medium rounded-full hover:bg-gray-200 ">
+                class="sidebar mt-1 group flex items-center px-2 py-4 text-base leading-6 font-medium rounded-full hover:bg-gray-200 ">
                 <svg class="mr-4 h-6 w-6 " stroke="currentColor" fill="none" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M3 12l9-9 9 9M5 10v10a1 1 0 001 1h3a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1h3a1 1 0 001-1V10M9 21h6">
@@ -17,7 +17,7 @@
                     Home
                 </span></a>
             <a href="/explore"
-                class="mt-1 group flex items-center px-2 py-4 text-base leading-6 font-medium rounded-full hover:bg-gray-200 ">
+                class="sidebar mt-1 group flex items-center px-2 py-4 text-base leading-6 font-medium rounded-full hover:bg-gray-200 ">
                 <svg class="mr-4 h-6 w-6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                     stroke="currentColor" viewBox="0 0 24 24">
                     <path d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14"></path>
@@ -26,7 +26,7 @@
                 </span></a>
 
             <a href="/notifications" id="notification"
-                class="mt-1 group flex items-center px-2 py-4 text-base leading-6 font-medium rounded-full hover:bg-gray-200 relative">
+                class="sidebar mt-1 group flex items-center px-2 py-4 text-base leading-6 font-medium rounded-full hover:bg-gray-200 relative">
                 <div class="h-5 w-5 text-xs text-white flex justify-center items-center absolute"
                     style="background-color: rgb(14 165 233); border: 1px solid white; border-radius: 50px; top: 10px; left: 20px;">
                     <span id="NotificationCount"></span>
@@ -104,7 +104,7 @@
             <script src="/js/tweet.script.js"></script>
             <!-- User Menu -->
             <div class="absolute" style="bottom: 2rem; top: 50rem">
-                <div class="relative">
+                <div class="">
                     <div class="flex-shrink-0 flex hover:bg-gray-200 rounded-full px-4 py-3 mt-12 mr-2 ">
                         <span class="flex-shrink-0 group block cursor-pointer" onclick="logoutToggle()">
                             <div class="flex items-center">
@@ -160,35 +160,8 @@
     </div>
 </div>
 
-<!-- Toast -->
-<!-- <div style="top: 750px; left: 750px;" id="toast-success" class="fixed hidden items-center w-full max-w-xs p-4 mb-4 text-gray-500 bg-white rounded-lg shadow dark:text-gray-400 dark:bg-gray-800 z-10" role="alert">
-    <div class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-green-500 bg-green-100 rounded-lg dark:bg-green-800 dark:text-green-200">
-        <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z"/>
-        </svg>
-        <span class="sr-only">Check icon</span>
-    </div>
-    <div class="ms-3 text-sm font-normal">Copied to clipboard</div>
-</div> -->
 
 <%- include('../partials/popup.ejs') %>
-
-<!-- script to display toast for three seconds -->
-<!-- <script>
-    function showToastForSomeDuration() {
-        document.getElementById('toast-success').style.display = "flex";
-
-        setTimeout(() => {
-            document.getElementById('toast-success').style.display = "none"
-        }, 3000);
-    }
-</script> -->
-
-            setTimeout(() => {
-                document.getElementById('toast-success').style.display = "none"
-            }, 3000);
-        }
-    </script>
 
     <!-- socket.io script that (new message ave to count display karva mate che) -->
     <script src="/socket.io/socket.io.js"></script>
@@ -234,3 +207,10 @@
 
     </script>
     <script src="/js/notificationCount.script.js"></script>
+
+    <style>
+.bold {
+    font-weight: bold;
+    background-color: aqua;
+}
+</style>

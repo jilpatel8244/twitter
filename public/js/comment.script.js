@@ -64,9 +64,6 @@ function editComment(commentId) {
         .catch(error => console.error('Error:', error));
     });
 }
-
-
-
   function showButtons(comment_id){
     let showBtn = document.querySelector(`.show_${ comment_id }`)
     if (showBtn.style.display == 'block'){
