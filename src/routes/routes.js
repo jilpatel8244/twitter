@@ -1,11 +1,21 @@
 const express = require("express");
 const router = express.Router();
 const passport = require("passport");
+const { upload } = require("../middleware/multer");
+const {tweetCreate,insertTweet, showDrafts, tweetUpdate, displayImage, deleteDraft,getProfileImage, checkRetweet} = require('../controller/tweet.controller');
+
+const { getAllFollowersList } = require("../controller/getAllFollowersList.controller");
 const { get_comment, post_comment,delete_post, delete_comment, edit_comment, get_notification, post_notification, getHomeForyou,
   getHomeFollowing, post_reply, get_reply, delete_reply, edit_reply } = require('../controller/home.controller');
 
 
 const { retweet, retweetData } = require('../controller/retweet.controller');
+const { shareTweetHandler } = require("../controller/sharePostHandler.controller");
+const { getMessagesPage, storeMessageHandler } = require("../controller/messages.controller");
+const { likeUnlikeHandler } = require("../controller/likeUnlikeHandler");
+const { getAllBookmarks } = require("../controller/getAllBookmarks.controller");
+const { bookmarkUnbookmarkHandler } = require("../controller/bookmarkUnbookmarkHandler.controller");
+const { removeAllBookmarkHandler } = require("../controller/removeAllBookmarksHandler.controller");
 
 router.get("/", (req, res) => {
   res.render("pages/index");
@@ -68,8 +78,7 @@ router.post('/removeAllBookmarks', passport.authenticate('jwt', { session: false
 
 
 //rajnikumar-tweetGenerate component
-const { upload } = require("../middleware/multer");
-const {tweetCreate,insertTweet, showDrafts, tweetUpdate, displayImage, deleteDraft,getProfileImage, checkRetweet} = require('../controller/tweet.controller');
+
 router.get('/tweetPost',passport.authenticate('jwt',{session:false}),tweetCreate);
 
 router.post('/tweetPost/insertTweet',passport.authenticate('jwt',{session:false,failureRedirect: "/login" }),upload.array('media',1),insertTweet);
