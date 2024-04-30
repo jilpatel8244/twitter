@@ -11,6 +11,7 @@
     <script src="/js/tweetadmin.js"></script>
     <script src="/js/hastag.admin.js"></script>
     <script src="/js/verify.admin.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
 
 </head>
 
@@ -25,68 +26,9 @@
                     <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
                         <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                             <thead class="text-xs text-gray-700 bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                                <tr>
-                                    <th scope="col" class="px-16 py-3">
-                                        Ticket Id
-                                    </th>
-                                    <th scope="col" class="px-6 py-3">
-                                        Image
-                                    </th>
-                                    <th scope="col" class="px-6 py-3">
-                                        username
-                                    </th>
-                                    <th scope="col" class="px-6 py-3">
-                                        Problem
-                                    </th>
-                                    <th scope="col" class="px-6 py-3">
-                                        problem Status
-                                    </th>
-                                    <th scope="col" class="px-6 py-3">
-                                        chat
-                                    </th>
-                                </tr>
+
                             </thead>
-                            <tbody>
-                                <tr
-                                    class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-
-                                    <td class="px-6 py-4 font-semibold text-gray-900 dark:text-white">
-                                        2563155sdfg
-                                    </td>
-                                    <td class="p-4">
-                                        <img src="/uploads/1713355020529-Screenshot from 2024-04-05 18-06-44.png"
-                                            class="w-16 md:w-32 max-w-full  img-help max-h-full" alt="Apple Watch">
-                                    </td>
-                                    <td class="px-6 py-4 font-semibold text-gray-900 dark:text-white">
-                                        @mihirthakkar
-                                    </td>
-                                    <td class="px-6 py-4 font-semibold text-gray-900 dark:text-white prob">
-                                        i have issued when accesing my post sndfbgksbd hebskdjfb ebasdkfb
-                                    </td>
-                                    <td class="px-6 py-4 font-semibold text-gray-900 dark:text-white">
-                                        <select name="problemstatus" id="problemstatus">
-                                            <option value="volvo">in progress</option>
-                                            <option value="saab">solved</option>
-                                            <option value="mercedes">panding</option>
-
-                                        </select>
-                                    </td>
-                                    <td class="px-6 py-4 font-semibold text-gray-900 dark:text-white prob">
-                                        <div>
-                                            <button id="open-chat"
-                                                class="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition duration-300 flex items-center"
-                                                onclick="toggleChatbox()">
-
-
-                                                </svg>
-                                                chat
-                                            </button>
-                                        </div>
-
-                                    </td>
-
-
-                                </tr>
+                            <tbody id="tbody">
 
                             </tbody>
                         </table>
@@ -101,7 +43,7 @@
                                 <button id="close-chat"
                                     class="text-gray-300 hover:text-gray-400 focus:outline-none focus:text-gray-400"
                                     onclick="toggleChatbox()">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none"
+                                    <svg id="pagenumber" xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none"
                                         viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M6 18L18 6M6 6l12 12"></path>
@@ -110,15 +52,7 @@
                             </div>
                             <div id="chatbox" class="p-4 h-80 overflow-y-auto">
                                 <!-- Chat messages will be displayed here -->
-                                <div class="mb-2 text-right">
-                                    <p class="bg-blue-500 text-white rounded-lg py-2 px-4 inline-block">
-                                        hello</p>
-                                </div>
-                                <div class="mb-2">
-                                    <p class="bg-gray-200 text-gray-700 rounded-lg py-2 px-4 inline-block">
-                                        This is a
-                                        response from the chatbot.</p>
-                                </div>
+
 
 
                             </div>
@@ -277,6 +211,8 @@
         // let userscontent = await getuserpage(search, curpage);
         // content.innerHTML = userscontent;
 
+        await filldata()
+
 
 
     }
@@ -334,6 +270,9 @@
 
     main.addEventListener("click", mainhandel)
 
+
+
+
     async function mainhandel(e) {
 
         console.log(e.target.id);
@@ -389,7 +328,60 @@
             formuser.style.display = "block"
         }
 
-        console.log(e.target.id);
+
+
+        if (e.target.id == "chatbtntab") {
+
+            tickitid = e.target.classList[0];
+            let chatbtntab = document.getElementById("chatbtntab");
+            chatload()
+            async function chatload() {
+
+
+
+                let data = await fetch("/admin/oldchats", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ 'tickitid': tickitid }),
+                });
+
+
+
+
+
+                data = await data.json();
+                data = data.data;
+                let chatbox = document.getElementById("chatbox");
+
+                chatbox.innerHTML = ``
+
+                data.forEach(element => {
+                    if (element.sender_id == 17) {
+                        chatbox.innerHTML
+                            +=
+                            `
+                <div class="mb-2 text-right">
+                <p class="bg-blue-500 text-white rounded-lg py-2 px-4 inline-block">
+                    ${element.content}</p>
+                    </div>
+                        `
+                    }
+                    else {
+                        chatbox.innerHTML += `   <div class="mb-2">
+                            <p id="pagenumber"
+                                class="bg-gray-200 text-gray-700 rounded-lg py-2 px-4 inline-block">
+                            
+                            ${element.content}</p>
+                        </div>
+                `
+                    }
+                });
+
+
+            }
+        }
 
         if (e.target.id == "table-search-users") {
             let tableSearchUsers = document.getElementById("table-search-users");
@@ -456,6 +448,130 @@
             isChatboxOpen = false
         }
     }
+
+
+    async function filldata() {
+        let getsupportdata = await fetch("/admin/getsupport");
+        getsupportdata = await getsupportdata.json();
+        let dataget = getsupportdata.data;
+        let getstring = ``;
+        dataget.forEach(async (element) => {
+            getstring += `
+                <trclass="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                <td class="px-6 py-4 font-semibold text-gray-900 dark:text-white">
+                ${element.id}
+                </td>
+                <td class="p-4">
+                <img src="${element.url}"class="w-16 md:w-32 max-w-full img-help max-h-full" alt="Apple Watch" />
+                </td>
+                <td class="px-6 py-4 font-semibold text-gray-900 max-w-[150px] break-words dark:text-white prob">
+                ${element.content}
+                </td>
+                <td class="px-6 py-4 font-semibold text-gray-900 dark:text-white">
+                    ${element.status}
+                </td>
+                <td class="px-6 py-4 font-semibold text-gray-900 dark:text-white prob">
+                <div>
+                <p id="chatbtntab" class="${element.id} bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition duration-300 flex items-center"
+                onclick="toggleChatbox()"> chat </button> </div> </td> </tr>
+
+                `;
+        });
+
+        document.getElementById("tbody").innerHTML = getstring;
+    }
+
+
+
+    const socket = io();
+
+    let tickit = "RkhKctEEF2"
+
+    socket.on(`recivemsg-${tickit}`, (data) => {
+
+
+        let chatbox = document.getElementById("chatbox");
+
+        if (data.sender_id == 17) {
+            chatbox.innerHTML
+                +=
+                `
+                <div class="mb-2 text-right">
+                <p class="bg-blue-500 text-white rounded-lg py-2 px-4 inline-block">
+                    ${data.content}</p>
+                    </div>
+                        `
+        }
+        else {
+            chatbox.innerHTML += `   <div class="mb-2">
+                            <p id="pagenumber"
+                                class="bg-gray-200 text-gray-700 rounded-lg py-2 px-4 inline-block">
+                            
+                            ${data.content}</p>
+                        </div>
+                `
+        }
+
+
+
+
+    });
+
+
+
+    let sendbutton = document.getElementById("send-button")
+    let userInput1 = document.getElementById("user-input")
+
+    sendbutton.addEventListener("click", sendhandel)
+
+
+
+    async function sendhandel() {
+        // let tickitid = document.getElementById("help").innerText;
+
+
+        let message = {
+            content: userInput1.value,
+            tickit_id: "RkhKctEEF2",
+            sender_id: 17,
+            receiver_id: 11,
+        };
+        const socket = io();
+
+
+
+        let data = await fetch("/admin/savechat", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ data: message }),
+        });
+
+
+        data = await data.json();
+        console.log(data);
+        if (data.result == true) {
+            socket.emit("adminmesaage", message);
+
+            let chatbox = document.getElementById("chatbox");
+
+            chatbox.innerHTML += `   
+                <div class="mb-2 text-right">
+                            <p class="bg-blue-500 text-white rounded-lg py-2 px-4 inline-block">
+                    ${userInput1.value}</p>
+                                </div>
+        `;
+
+
+
+
+
+        }
+
+    }
+
+
 
 
 </script>

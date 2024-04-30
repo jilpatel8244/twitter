@@ -10,7 +10,7 @@
     <script src="/sweetalert2.all.min.js"></script>
     <title>X</title>
 
-    
+
     <style>
         #bla:after {
             position: fixed;
@@ -689,31 +689,31 @@
     }
 
 
-   async function foollowhandel(id) {
+    async function foollowhandel(id) {
         console.log(id);
         const body = {
-                id: id
+            id: id
+        }
+        try {
+            const response = await fetch('/follow', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(body)
+            });
+            const responseData = await response.json();
+            console.log(responseData)
+            if (!responseData.statusdata) {
+                document.getElementById("btnfollow${element.id}").innerHTML = "Following"
+
             }
-            try {
-                const response = await fetch('/follow', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(body)
-                });
-                const responseData = await response.json();
-                console.log(responseData)
-                if (!responseData.statusdata) {
-                    document.getElementById("btnfollow${element.id}").innerHTML = "Following"
-
-                }
-                if (responseData.statusdata)  document.getElementById("btnfollow${element.id}").innerHTML = "Follow"
+            if (responseData.statusdata) document.getElementById("btnfollow${element.id}").innerHTML = "Follow"
 
 
-            } catch (error) {
-                console.error(error.message);
-            }
+        } catch (error) {
+            console.error(error.message);
+        }
         // let follow = document.getElementById(`btnfollow_${id}`);
         // let followdiv = document.getElementById(`followbtn`);
         // if (follow.innerHTML == "following") {
