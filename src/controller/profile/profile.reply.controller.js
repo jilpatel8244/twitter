@@ -3,7 +3,10 @@ const connection = require('../../../config/connection');
 
 exports.getReplies = async (req, res) => {
   try {
-    let id = req.user[0][0].id;
+    let id = req.query.id;
+    if (!id) {
+      id = req.user[0][0].id;
+    }
 
     const replyerDataQuery = `SELECT  tc.tweet_id as tweet_id FROM users as u LEFT JOIN tweet_comments as tc ON u.id = tc.user_id LEFT JOIN tweets as t ON t.user_id = u.id LEFT JOIN medias as m ON tc.tweet_id = m.tweet_id LEFT JOIN tweet_likes as tl ON tl.tweet_id = t.id LEFT JOIN bookmarks as b ON b.tweet_id = t.id WHERE u.id=? GROUP BY tc.tweet_id`;
     const [replyerData] = await connection.query(replyerDataQuery, [id]);
