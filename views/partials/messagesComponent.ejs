@@ -1,4 +1,4 @@
-<section class="w-3/5 border-x border-gray-200" >
+<section class="w-3/5 border-x border-gray-200 overflow-auto">
     <!--Content (Center)-->
         <aside>
             <div class="flex">
@@ -31,4 +31,30 @@
             </article>
         </ul>
 
+        <script>
+            function openThreeDotForMessageDelete(id) {
+                document.getElementById(id).querySelector('.three-dot-for-delete-chat').style.display = "block";
+            }
+
+            function closeThreeDotForMessageDelete(id) {
+                document.getElementById(id).querySelector('.three-dot-for-delete-chat').style.display = "none";
+            }
+
+            async function deleteAllMessages(event, id) {
+                event.stopPropagation();
+
+                // fetch request for update 
+                let url = window.location.origin + '/messages/deleteMessages';
+
+                let data = await fetch(url, {
+                    method: "POST",
+                    body: formData
+                });
+
+                let response = await data.json();
+
+
+                // then empty chat container for sender side
+            }
+        </script>
 </section>

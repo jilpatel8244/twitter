@@ -1,4 +1,4 @@
-<div id="<%= follower.id %>" onclick="openMessageBox(id, '<%= follower.name %>', '<%= follower.username %>', '<%= follower.profile_img_url %>')" class="follower flex items-center justify-between">
+<div id="<%= follower.id %>" onmouseenter="openThreeDotForMessageDelete(this.id)" onmouseleave="closeThreeDotForMessageDelete(this.id)" onclick="openMessageBox(id, '<%= follower.name %>', '<%= follower.username %>', '<%= follower.profile_img_url %>')" class="follower flex items-center justify-between">
     <div class="flex flex-shrink-0 p-4 my-3">
         <div class="flex-shrink-0 group block">
             <div class="flex items-center">
@@ -23,9 +23,34 @@
             </div>
         </div>
     </div>
-    <div class="p-4">
-        <div class="h-5 w-5 text-xs text-white flex justify-center items-center" style="background-color: rgb(14 165 233); border: 1px solid white; border-radius: 50px; display: none;">
-            <span class="unreadMessageCount">0</span>
+    <div class="flex items-center">
+        <div class="p-4">
+            <div class="h-5 w-5 text-xs text-white flex justify-center items-center" style="background-color: rgb(14 165 233); border: 1px solid white; border-radius: 50px; display: none;">
+                <span class="unreadMessageCount">0</span>
+            </div>
+        </div>
+        <div class="group relative cursor-pointer py-2">
+
+            <div class="">
+                <div class="p-2 hidden three-dot-for-delete-chat">
+                    <img src="/assets/three-dots-vertical-svgrepo-com.svg" alt="three dot vertical" height="18px" width="18px">
+                </div>
+            </div>
+    
+            <div
+                class="invisible absolute z-50 top-10 right-2 flex w-52 flex-col rounded-lg bg-white py-1 px-4 text-black shadow-xl group-hover:visible">
+    
+                <span class="my-2 block py-1 font-semibold hover:text-slate-500 md:mx-2">
+                    Pin conversation
+                </span>
+    
+                <span class="my-2 block py-1 font-semibold hover:text-slate-500 md:mx-2" onclick="deleteAllMessages(event, '<%= follower.id %>')">
+                    Delete conversation
+                </span>
+            </div>
         </div>
     </div>
+
+
 </div>
+

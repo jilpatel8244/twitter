@@ -335,15 +335,15 @@
             formData.append('message', message);
             formData.append('imgFile', imgFile);
 
-                let url = window.location.origin + '/messages/storeMessage';
+            let url = window.location.origin + '/messages/storeMessage';
 
             let data = await fetch(url, {
                 method: "POST",
                 body: formData
             });
 
-                let response = await data.json();
-                console.log(response);
+            let response = await data.json();
+            console.log(response);
 
             if (response.success) {
 
@@ -525,6 +525,12 @@
                 document.getElementById("messageSendBtn").disabled = false;
                 document.getElementById("messageSendBtn").style.opacity = 1;
             }
+
+            let imgMessage = document.getElementById('img-message').value;
+            if (imgMessage) {
+                document.getElementById("messageSendBtn").disabled = false;
+                document.getElementById("messageSendBtn").style.opacity = 1;
+            }
         }
 
         const previewMedia = (event) => {
@@ -536,11 +542,36 @@
             let form = document.getElementById('messageForm');
 
             let newDiv = document.createElement('div');
-            newDiv.innerHTML = `<img src="" alt="" id="preview_img" class="h-36 w-36 m-4 rounded-xl">`;
+            newDiv.innerHTML = `
+            
+            <div class="flex p-2 items-center relative" id="preview_img">
+                <img src="" alt="" class="h-36 w-36 m-4 rounded-xl">
+                <button
+                    type="button"
+                    class="absolute top-[30px] left-[130px] text-gray-900 bg-gray-200 rounded-full text-sm p-1 inline-flex items-center"
+                    onclick="removePreviewMedia()"
+                >
+                    <svg
+                    class="w-5 h-5"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg"
+                    >
+                    <path
+                        fill-rule="evenodd"
+                        d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                        clip-rule="evenodd"
+                    ></path>
+                    </svg>
+                </button>
+            </div>
+            
+            
+            `;
 
             form.insertBefore(newDiv, form.firstChild);
 
-            let output = document.getElementById('preview_img');
+            let output = document.getElementById('preview_img').querySelector('img');
 
             output.src = URL.createObjectURL(event.target.files[0]);
             output.onload = function () {
@@ -556,6 +587,12 @@
                 document.getElementById("messageSendBtn").style.opacity = 0.5;
             }
 
+        }
+
+        function removePreviewMedia() {
+            document.getElementById('preview_img').remove();
+            document.getElementById('img-message').value = '';
+            checkMessageBox();
         }
 
         function getFormatedTime(created_at){
