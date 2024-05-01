@@ -1,3 +1,5 @@
+
+
 const retweet = async (tweetId, icon, status, time) => {
   let temp;
   let form = new FormData();
@@ -8,7 +10,7 @@ const retweet = async (tweetId, icon, status, time) => {
   })
   let data = await res.json();
   if (data.error) {
-    return alert(error);
+    return console.log(error);
   }
   else {
     if (data.isRetweeted != 0) {
@@ -77,10 +79,20 @@ const retweet = async (tweetId, icon, status, time) => {
       })
       let { error, msg } = await response.json();
       if (error) {
-        return alert('Error:' + error);
+        logger.info('Error:' + error);
+        return ;
       }
       else {
-        alert(msg);
+        // console.log(msg);
+        Swal.fire({
+          position: "bottom",
+          title: "You reposted.",
+          showConfirmButton: false,
+          toast: 'true',
+          color: "#ffffff",
+          background: '#60a5fa',
+          timer: 3000
+        });
         let retweetCount = document.getElementById(tweetId + 'tweet');
         if (retweetCount.innerText == "") {
           icon.style.color = '#2563eb';
@@ -152,11 +164,20 @@ const retweet = async (tweetId, icon, status, time) => {
       })
       let { error, msg } = await response.json();
       if (error) {
-        return alert('Error:' + error);
+        return console.log('Error:' + error);
       }
       else {
         let retweetCount = document.getElementById(tweetId + 'tweet');
-        alert(msg);
+        // console.log(msg);
+        Swal.fire({
+          position: "bottom",
+          title: "You undo repost.",
+          showConfirmButton: false,
+          toast: 'true',
+          color: "#ffffff",
+          background: '#60a5fa',
+          timer: 3000
+        });
         if (retweetCount.innerText == 1) {
           icon.style.color = '#6b7280';
           retweetCount.innerText = "";

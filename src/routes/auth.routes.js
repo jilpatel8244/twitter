@@ -39,7 +39,6 @@ router.get("/resetPassword", resetPassword)
 router.post("/setPassword", set_password);
 router.get("/logout", logoutHandler);
 router.post("/isUserExist", USER_NAME_EXIST);
-router.use('/home', homeRoute);
 router.get("/follow",passport.authenticate('jwt', { session: false, failureRedirect: "/login" }),getFollowData)
 router.get("/followingUser",passport.authenticate('jwt', { session: false, failureRedirect: "/login" }),getFollowingData)
 router.get("/editprofile",passport.authenticate('jwt', { session: false, failureRedirect: "/login" }), getEditprofile);
