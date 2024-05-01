@@ -34,7 +34,7 @@ exports.setPassword = async (req, res) => {
     console.log("hashPassword", hashPassword);
     let passwordUpdateQuery = `UPDATE users SET password = ? ,is_active=1 WHERE id= ?`;
     await connection.query(passwordUpdateQuery, [hashPassword, dataId]);
-    res.json({ isComplete: true });
+    res.redirect('/login');
 
   } catch (error) {
     res.json({ error: error })

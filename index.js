@@ -6,7 +6,6 @@ const { Server } = require("socket.io");
 
 const io = new Server(server);
 const cookieParser = require("cookie-parser");
-const getProfileRouter = require("./src/routes/profile.routes");
 const homeRouter = require("./src/routes/home.routes");
 const routes = require("./src/routes/routes");
 const notification = require("./src/routes/notification.route");
@@ -53,7 +52,6 @@ app.use(followUnfollowHandler)
 app.use(followData);
 app.use(followingData);
 app.use(shareRoute);
-app.use('/profile', getProfileRouter);
 app.use(router);
 
 app.get('*', (req, res) => {
