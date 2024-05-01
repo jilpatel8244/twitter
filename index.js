@@ -39,7 +39,6 @@ app.use(bookmarkRoute);
 app.use(messagesRoute);
 app.use("/explore", exploreRoute);
 app.use(authRouter);
-app.use(notification);
 app.use(resetpasswordProfile);
 app.use(followUnfollowHandler)
 app.use(shareRoute);
