@@ -2,12 +2,13 @@ function getTweetComponent(data) {
     let tweet = `<ul class="list-none">`;
 
     data.forEach(tweets => {
+        let processedContent = tweets.content.replace(/(@|#)\w+/g, '<span class="blue-text">$&</span>');
         tweet += `
                     <li>
                         <article class="hover:bg-gray-100 transition duration-350 ease-in-out">
                             <div id="${tweets.tweet_id}">
                                 <div class="flex flex-shrink-0 p-4 pb-0">
-                                    <a href="" class="flex-shrink-0 group block">
+                                    <a href="/explore/profile?id=${tweets.user_id}" class="flex-shrink-0 group block">
                                         <div class="flex items-center">
                                             <div>`
 
@@ -33,9 +34,8 @@ function getTweetComponent(data) {
 
                                 <div class="pl-16">
                                     <a href="/get_comments/${tweets.tweet_id}">
-                                    <pre class="mr-3 text-base width-auto font-normal text-balance overflow-hidden" style="word-wrap: break-word; overflow-wrap: break-word; font-family: sans-serif;">${tweets.content}</pre>
+                                    <pre class="mr-3 text-base width-auto font-normal text-balance overflow-hidden" style="white-space: no-wrap;  text-overflow: ellipsis; word-wrap: break-word; overflow-wrap: break-word; font-family: sans-serif;">${processedContent}</pre>
                                     `
-
         if (tweets.media_url) {
             tweet += `<div class="md:flex-shrink pr-6 pt-3">
                                                     <div class="bg-cover bg-no-repeat bg-center rounded-lg size-fit">
@@ -75,7 +75,7 @@ function getTweetComponent(data) {
                                             <!-- retweet span tag -->
                                             <div  class="flex text-center py-2 m-2 cursor-pointer">`
                                             let time= tweets.time;
-                                            if(tweets.notRetweeted == null && tweets.createdAt != null){
+                                            if(tweets.notRetweeted == null && tweets.createdAt != null && tweets.retweetMsg == null){
                                             tweet+=    ` <span
                                                 
                                                 onclick="retweet(${tweets.tweet_id},this,'undo','${time}')"
@@ -223,31 +223,11 @@ function getTweetComponent(data) {
                                                     </svg>
                                                 </span>
                                             </div>
-
-
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <hr class="border-gray-200">`
-                            if (tweets.isAuthor) {
-                                tweet += `
-                                <div  onclick="showButtons('${ tweets.tweet_id }')">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                    stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z" />
-                                </svg>
-                            </div>
-                            <div
-                            class="show_${ tweets.tweet_id } bg-white shadow-xl rounded-xl cursor-pointer hidden w-16">
-
-                            <div onclick="deletePost(${tweets.tweet_id})"
-                                class="text-red-700 font-bold w-10 hover:bg-slate-100 py-2 px-4">Delete</div><hr class="border border-gray-100">
-                        </div></div>`
-                              }
-                              
-                        tweet += `</article>
+                            <hr class="border-gray-200"></article>
                     </li > `
     });
 

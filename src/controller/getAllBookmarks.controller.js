@@ -18,7 +18,7 @@ exports.getAllBookmarks = async (req, res) => {
         // where bookmarks.user_id = '${req.user[0][0].id}' and bookmarks.status = '1'
         // order by bookmarks.created_at;`
 
-        let sql = `select tweets.id as tweet_id, tweets.content, users.name, users.username, users.profile_img_url, tweet_likes.status as isLiked, medias.media_url,
+        let sql = `select tweets.id as tweet_id,tweets.user_id, tweets.content, users.name, users.username, users.profile_img_url, tweet_likes.status as isLiked, medias.media_url,
         CASE
             WHEN TIMESTAMPDIFF(SECOND, tweets.created_at, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(SECOND, tweets.created_at, NOW()), ' seconds ago')
             WHEN TIMESTAMPDIFF(MINUTE, tweets.created_at, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(MINUTE, tweets.created_at, NOW()), ' minutes ago')

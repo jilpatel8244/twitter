@@ -8,6 +8,7 @@ const io = new Server(server);
 const cookieParser = require("cookie-parser");
 const getProfileRouter = require("./src/routes/profile.routes");
 const homeRouter = require("./src/routes/home.routes");
+const routes = require("./src/routes/routes");
 const notification = require("./src/routes/notification.route");
 const exploreRoute = require("./src/routes/explore.routes");
 const authRouter = require("./src/routes/auth.routes");
@@ -25,7 +26,7 @@ const adminroute = require("./src/routes/admin.routes");
 const resetpasswordProfile = require("./src/routes/profile.resetpassword.route");
 
 const PORT = process.env.PORT || 3000;
-const tweetCreate = require("./src/routes/tweet.routes");
+const router = require("./src/routes/routes.js");
 const logger = require("./logger/logger");
 const followUnfollowHandler = require("./src/routes/follow.route");
 
@@ -38,7 +39,8 @@ app.use(express.static("public"));
 app.use(express.static("node_modules/sweetalert2/dist"));
 app.use("/admin", adminroute);
 
-app.use(homeRouter);
+// app.use(homeRouter);
+app.use(routes);
 app.use(likeRoute);
 app.use(bookmarkRoute);
 app.use(messagesRoute);
@@ -52,7 +54,7 @@ app.use(followData);
 app.use(followingData);
 app.use(shareRoute);
 app.use('/profile', getProfileRouter);
-app.use("/tweetPost", tweetCreate);
+app.use(router);
 
 app.get('*', (req, res) => {
   res.render('pages/404.ejs');
