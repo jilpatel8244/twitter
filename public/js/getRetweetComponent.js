@@ -2,18 +2,17 @@ function getRetweetComponent(data) {
   let tweet = `<ul class="list-none">`;
 
   data.forEach((tweets) => {
-    let date = new Date(Date.parse(tweets.createdAt));
-    if (tweets.retweetContent) {
+    if (tweets.repostCount) {
       tweet += `<li>
                       <article class="hover:bg-gray-100 transition duration-350 ease-in-out">
                           <div id="${tweets.tweet_id}">
                               <div class="flex flex-shrink-0 p-4 pb-0">
-                                  <a href="" class="flex-shrink-0 group block">
+                                  <a href="/get_comments/${tweets.tweet_id}" class="flex-shrink-0 group block">
                                       <div class="flex items-center">
                                           <div>`;
 
-      if (tweets.rt_profile_img_url) {
-        tweet += `<img class="inline-block h-10 w-10 rounded-full" src="/uploads/${tweets.rt_profile_img_url}" alt="" />`;
+      if (tweets.retweeter_profile_img_url) {
+        tweet += `<img class="inline-block h-10 w-10 rounded-full" src="/uploads/${tweets.retweeter_profile_img_url}" alt="" />`;
       } else {
         tweet += `<img class="inline-block h-10 w-10 rounded-full" src="/assets/profile.png" alt="" />`;
       }
@@ -23,20 +22,22 @@ function getRetweetComponent(data) {
                        ${tweets.retweeter_name}
                            <span
                              class="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 transition ease-in-out duration-150">
-                             @ ${tweets.rt_username} . ${tweets.createdAt}
+                             @ ${tweets.retweeter_username} . ${tweets.time}
                            </span>
                     </p>
                 </div>
-                </div> 
-              <div class="ml-4 mb-2">
-             <pre class="mr-3 ml-3 text-base width-auto font-normal text-balance overflow-hidden" style="word-wrap: break-word; overflow-wrap: break-word; font-family: sans-serif;">${tweets.retweetContent}</pre>
-             </div>
-             </a>
-    </div>`;
+                </div>
+                <div class="ml-4 mb-2"> `;
+      if (tweets.retweetMsg) {
+        tweet += `  <pre class="mr-3 ml-3 text-base width-auto font-normal text-balance overflow-hidden" style="word-wrap: break-word; overflow-wrap: break-word; font-family: sans-serif;">${tweets.retweetMsg}</pre> `;
+      }
       tweet += `
+            </div>
+             </a>
+        </div>
     <div class="pl-16">
     <div class="ml-3 border border-indigo-600 mr-3 mb-3 p-4 rounded-lg">
-        <a href="/get_comments/${tweets.tweet_id}">
+        <a href="">
         <div class="ml-3">
         <p class="text-base leading-6 font-medium text-black">`;
     } else {
@@ -48,21 +49,20 @@ function getRetweetComponent(data) {
                     <a href="" class="flex-shrink-0 group block">
                         <div class="flex items-center">
                             <div>`;
-
     }
     if (tweets.profile_img_url) {
-            tweet += `<img class="inline-block h-10 w-10 rounded-full" src="/uploads/${tweets.profile_img_url}" alt="" />`
-        } else {
-            tweet += `<img class="inline-block h-10 w-10 rounded-full" src="/assets/profile.png" alt="" />`
-        }
+      tweet += `<img class="inline-block h-10 w-10 rounded-full" src="/uploads/${tweets.profile_img_url}" alt="" />`;
+    } else {
+      tweet += `<img class="inline-block h-10 w-10 rounded-full" src="/assets/profile.png" alt="" />`;
+    }
 
-        tweet += `</div>
+    tweet += `</div>
                                             <div class="ml-3">
                                                 <p class="text-base leading-6 font-medium text-black">
                                                     ${tweets.name}
                                                         <span
                                                             class="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 transition ease-in-out duration-150">
-                                                            @ ${tweets.username} . ${tweets.time}
+                                                            @ ${tweets.username} . ${tweets.tweetTime}
                                                         </span>
                                                 </p>
                                             </div>
@@ -73,17 +73,16 @@ function getRetweetComponent(data) {
                                 <div class="pl-16">
                                     <a href="/get_comments/${tweets.tweet_id}">
                                     <pre class="mr-3 text-base width-auto font-normal text-balance overflow-hidden" style="word-wrap: break-word; overflow-wrap: break-word; font-family: sans-serif;">${tweets.content}</pre>
-                                    `
+                                    `;
 
-        if (tweets.media_url) {
-            tweet += `<div class="md:flex-shrink pr-6 pt-3">
+    if (tweets.media_url) {
+      tweet += `<div class="md:flex-shrink pr-6 pt-3">
                                                     <div class="bg-cover bg-no-repeat bg-center rounded-lg size-fit">
                                                         <img class="" src="/uploads/${tweets.media_url}" alt="missing">
                                                     </div>
                                                     </a>
-                                                </div>`
-        }
-
+                                                </div>`;
+    }
 
     tweet += `
     </div>

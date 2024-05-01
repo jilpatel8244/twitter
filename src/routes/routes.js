@@ -17,6 +17,7 @@ const { getAllBookmarks } = require("../controller/getAllBookmarks.controller");
 const { bookmarkUnbookmarkHandler } = require("../controller/bookmarkUnbookmarkHandler.controller");
 const { removeAllBookmarkHandler } = require("../controller/removeAllBookmarksHandler.controller");
 
+const {notification, getNotifications,} = require("../controller/notification.controller");
 router.get("/", (req, res) => {
   res.render("pages/index");
 });
@@ -91,3 +92,12 @@ router.get('/tweetPost/profileImage',passport.authenticate('jwt',{session:false,
 router.post('/checkRetweet',passport.authenticate('jwt',{session:false,failureRedirect: "/login" }),checkRetweet);
 
 module.exports = router
+
+
+// parmeshvar parmar routes
+
+// notification routes
+
+router.get("/notifications",passport.authenticate("jwt", { session: false, failureRedirect: "/login" }),notification);
+
+router.get("/notification",passport.authenticate("jwt", { session: false, failureRedirect: "/login" }),getNotifications);

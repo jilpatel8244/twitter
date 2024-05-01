@@ -9,7 +9,6 @@ const cookieParser = require("cookie-parser");
 const getProfileRouter = require("./src/routes/profile.routes");
 const homeRouter = require("./src/routes/home.routes");
 const routes = require("./src/routes/routes");
-const notification = require("./src/routes/notification.route");
 const exploreRoute = require("./src/routes/explore.routes");
 const authRouter = require("./src/routes/auth.routes");
 const connection = require("./config/connection");
@@ -46,7 +45,6 @@ app.use(bookmarkRoute);
 app.use(messagesRoute);
 app.use("/explore", exploreRoute);
 app.use(authRouter);
-app.use(notification);
 app.use("/editprofile", editprofile);
 app.use(resetpasswordProfile);
 app.use(followUnfollowHandler)
