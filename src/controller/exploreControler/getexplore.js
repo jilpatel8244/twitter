@@ -50,10 +50,15 @@ exports.getTopTweetAndHastag = async (req, res) => {
           tweet_comments.content as comments,
           tweets.created_at as time, 
           medias.media_url as media_url
+          ,(SELECT COUNT(*) FROM retweets where retweets.tweet_id=tweets.id and retweets.deleted_at IS NULL) as repostCount,
+        retweets.deleted_at as notRetweeted,
+        retweets.created_at as createdAt,
+        retweets.retweet_message as retweetMsg
           FROM users
           JOIN tweets ON users.id = tweets.user_id
           LEFT JOIN medias ON tweets.id = medias.tweet_id
           LEFT JOIN tweet_comments ON tweet_comments.user_id = tweets.id 
+          left join retweets on retweets.tweet_id=tweets.id and retweets.user_id = ${req.user[0][0].id} and retweets.deleted_at IS NULL
           WHERE tweets.content LIKE '%${search}%' OR tweets.id IN (
                   SELECT tweet_id FROM hashtag_tweet WHERE hashtag_id IN (
                       SELECT id FROM hashtag_lists WHERE hashtag_name LIKE '%${search}%'
@@ -171,12 +176,17 @@ exports.getLatestTweet = async (req, res) => {
               tweets.id as tweet_id,
               tweet_comments.content as comments, 
               medias.media_url as media_url
+              ,(SELECT COUNT(*) FROM retweets where retweets.tweet_id=tweets.id and retweets.deleted_at IS NULL) as repostCount,
+        retweets.deleted_at as notRetweeted,
+        retweets.created_at as createdAt,
+        retweets.retweet_message as retweetMsg
               FROM users
               JOIN tweets ON users.id = tweets.user_id
               LEFT JOIN medias ON tweets.id = medias.tweet_id
               LEFT JOIN tweet_comments ON tweet_comments.user_id = tweets.id 
               JOIN hashtag_tweet ON tweets.id = hashtag_tweet.tweet_id 
               JOIN hashtag_lists ON hashtag_tweet.hashtag_id = hashtag_lists.id
+              left join retweets on retweets.tweet_id=tweets.id and retweets.user_id = ${req.user[0][0].id} and retweets.deleted_at IS NULL
               WHERE  hashtag_lists.hashtag_name like '%${search.substring(1)}%'
               ORDER BY tweets.created_at DESC
               ;`;
@@ -196,10 +206,15 @@ exports.getLatestTweet = async (req, res) => {
             tweets.id as tweet_id,
             tweet_comments.content as comments, 
             medias.media_url as media_url
+            ,(SELECT COUNT(*) FROM retweets where retweets.tweet_id=tweets.id and retweets.deleted_at IS NULL) as repostCount,
+        retweets.deleted_at as notRetweeted,
+        retweets.created_at as createdAt,
+        retweets.retweet_message as retweetMsg
             FROM users
             JOIN tweets ON users.id = tweets.user_id
             LEFT JOIN medias ON tweets.id = medias.tweet_id
             LEFT JOIN tweet_comments ON tweet_comments.user_id = tweets.id 
+            left join retweets on retweets.tweet_id=tweets.id and retweets.user_id = ${req.user[0][0].id} and retweets.deleted_at IS NULL
             WHERE  tweets.content LIKE '%${search}%' OR users.username LIKE '%${search}%' OR users.name LIKE '%${search}%'
                   ORDER BY tweets.created_at DESC
           `;

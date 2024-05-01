@@ -94,11 +94,21 @@
         });
 
         let response = await data.json();
+        console.log("this is my response ", response);
 
         if (response.success) {
-            // send notification
+            // send notification and message
             selectedUserArr.forEach((element, index) => {
                 socket.emit('getUnreadMessages', selectedUserArr[index]);
+                socket.emit('send-private-message',
+                    {
+                        senderId: response.message.senderId,
+                        reciverId: selectedUserArr[index],
+                        content: response.message.content,
+                        url: response.message.url,
+                        content_type: response.message.content_type,
+                        created_at: response.message.created_at
+                    });
             })
 
             // remove all selected header
@@ -116,12 +126,13 @@
             shareOptionsDiv.style.display = "none";
 
             // display toast
-            let timerInterval;
             Swal.fire({
-                title: "Direct Message sent",
-                timer: 1000,
-                position: "top-end",
-                timerProgressBar: true,
+                toast: true,
+                icon: 'success',
+                title: 'Direct Message sent',
+                background: 'rgb(14 165 233)',
+                animation: false,
+                position: 'bottom',
                 showConfirmButton: false,
                 didOpen: () => {
                     Swal.showLoading();
@@ -138,7 +149,7 @@
                 if (result.dismiss === Swal.DismissReason.timer) {
 
                 }
-            });
+            })
         }
     }
 </script>

@@ -21,7 +21,7 @@ let emojiPicker = document.getElementById('emojiPicker');
 let allScreen = document.getElementById('allScreen');
 let remover = document.getElementById('remover');
 let tweetedBox = document.getElementById('tweetedBox');
-var imgToRemove;
+let imgToRemove;
 const removeImg = (id) => {
   imgToRemove = document.getElementById(id);
   if (imgToRemove) {
@@ -127,19 +127,28 @@ removeEmoji.addEventListener('click', () => {
 })
 
 const tweetInsert = async (status) => {
-  var retweetId;
+  let retweetId;
   if (content.innerText.trim() != '' || imgToRemove != undefined || tweetedBox.innerHTML != "") {
     let contentText = content.innerText;
     let forRetweet = document.getElementById('forRetweet');
     if ((contentText.trim() == "" && imgToRemove == undefined) && tweetedBox.innerHTML != "") {
       let formForCheck = new FormData();
       formForCheck.append('tweetId', forRetweet.value);
-      let checkQuote = await fetch('/checkRetweet',{
-        method:'POST',
-        body:new URLSearchParams(formForCheck)
-      }).then(response => response.json()); 
-      if(checkQuote.alreadyRepost != 0){
-        alert('Already reposted!!')
+      let checkQuote = await fetch('/checkRetweet', {
+        method: 'POST',
+        body: new URLSearchParams(formForCheck)
+      }).then(response => response.json());
+      if (checkQuote.alreadyRepost != 0) {
+        // console.log('Already reposted!!')
+        await Swal.fire({
+          position: "bottom",
+          title: "This post already reposted.",
+          showConfirmButton: false,
+          toast: 'true',
+          color: "#ffffff",
+          background: '#60a5fa',
+          timer: 1000
+        });
         window.location.href = '/home';
         return;
       }
@@ -152,48 +161,65 @@ const tweetInsert = async (status) => {
       })
       let { error, msg } = await response.json();
       if (error) {
-        return alert('Error:' + error);
+        return console.log('Error:' + error);
       }
       else {
-        alert(msg);
+        // console.log(msg);
+        await Swal.fire({
+          position: "bottom",
+          title: "You reposted.",
+          showConfirmButton: false,
+          toast: 'true',
+          color: "#ffffff",
+          background: '#60a5fa',
+          timer: 1000
+        });
         window.location.href = '/home';
-        return ;
+        return;
       }
     }
-    else if(tweetedBox.innerHTML != ""){
+    else if (tweetedBox.innerHTML != "") {
       let forRetweet = document.getElementById('forRetweet');
       let form = new FormData();
       form.append('tweetId', forRetweet.value);
       form.append('action', 'quote');
-      form.append('retweetMsg',contentText.trim())
+      form.append('retweetMsg', contentText.trim())
       let response = await fetch('/retweet', {
         method: 'POST',
         body: new URLSearchParams(form)
       })
       let responseOfQuote = await response.json();
       if (responseOfQuote.error) {
-        return alert('Error:' + error);
+        return console.log('Error:' + error);
       }
       else {
-        alert(responseOfQuote.retweetId);
-        if(responseOfQuote.retweetId){
-          retweetId=responseOfQuote.retweetId;
+        if (responseOfQuote.retweetId) {
+          retweetId = responseOfQuote.retweetId;
         }
       }
     }
     let form = new FormData();
     form.append('content', contentText);
     form.append('media', media.files[0] || []);
-    form.append('retweetId',retweetId);
+    form.append('retweetId', retweetId);
     const response = await fetch('/tweetPost/insertTweet/?status=' + status, {
       method: 'POST',
       body: form
     })
     let { msg, error } = await response.json();
     if (msg == 'Inserted') {
+      await Swal.fire({
+        position: "bottom",
+        title: "Your post was sent.",
+        showConfirmButton: false,
+        color: "#ffffff",
+        toast: 'true',
+        background: '#60a5fa',
+        timer: 1000
+      });
       window.location.href = '/home';
     }
-    if (error) { return alert(error) }
+    if (error) { return console.log(error) }
     post.style.opacity = '0.25'
     post.style.cursor = 'default'
     clearImages();
@@ -209,6 +235,7 @@ post.onclick = () => {
   else {
     tweetInsert('tweet')
   }
+
 }
 
 save.onclick = () => {
@@ -226,6 +253,15 @@ save.onclick = () => {
   post.style.cursor = 'default'
   document.forms['tweet'].reset();
   tweetedBox.innerHTML = "";
+  Swal.fire({
+    position: "bottom",
+    title: "Your draft was saved.",
+    showConfirmButton: false,
+    toast: 'true',
+    color: "#ffffff",
+    background: '#60a5fa',
+    timer: 3000
+  });
 }
 discard.onclick = () => {
   document.getElementById('popup-modal').style.display = 'none'
@@ -294,7 +330,7 @@ const displayDraft = async () => {
   }))
   const { draftTweet, error } = await response.json();
   if (error) {
-    return alert(error);
+    return console.log(error);
   }
   let list = ""
   if (draftTweet.length == 0) {
@@ -357,9 +393,9 @@ const sendDraft = async (tweetId) => {
   })
   let { image, error, draftContent } = await response.json();
   if (error) {
-    return alert(error);
+    return console.log(error);
   }
-  var temp;
+  let temp;
   if (image != undefined) {
     let { media_url } = image;
     temp = Date.now();
@@ -395,9 +431,18 @@ const tweetUpdate = async (action) => {
     })
     let { msg, error } = await response.json();
     if (error) {
-      return alert(error);
+      return console.log(error);
     }
     if (msg == 'Updated') {
+      await Swal.fire({
+        position: "bottom",
+        title: "Your post was sent.",
+        showConfirmButton: false,
+        color: "#ffffff",
+        toast: 'true',
+        background: '#60a5fa',
+        timer: 1000
+      });
       window.location.href = '/home'
     }
     post.style.opacity = '0.25'
@@ -408,8 +453,8 @@ const tweetUpdate = async (action) => {
   }
 }
 
-var list = [];
-var unSelected = []
+let list = [];
+let unSelected = []
 editDraft.onclick = () => {
   let draftList = document.querySelectorAll('.draftList');
   let checksForDelete = document.querySelectorAll('input[type=checkbox]')
@@ -534,7 +579,7 @@ finalDelete.onclick = async () => {
       draftId.push(checks.nextElementSibling.getAttribute('id'));
     }
   })
-  var formsData = new FormData();
+  let formsData = new FormData();
   formsData.append('deleteDraft', draftId);
   let response = await fetch('/tweetPost/draftDelete', {
     method: 'POST',
@@ -542,7 +587,7 @@ finalDelete.onclick = async () => {
   })
   let { msg, error } = await response.json();
   if (error) {
-    alert(error);
+    console.log(error);
     deselect();
     document.getElementById('delete-modal').style.display = 'none';
   }
@@ -553,4 +598,13 @@ finalDelete.onclick = async () => {
   deleteBlock.style.display = 'none'
   displayDraft();
   deselect();
+  Swal.fire({
+    position: "bottom",
+    title: "Your selected unsent posts were deleted.",
+    showConfirmButton: false,
+    toast: 'true',
+    color: "#ffffff",
+    background: '#60a5fa',
+    timer: 4000
+  });
 }

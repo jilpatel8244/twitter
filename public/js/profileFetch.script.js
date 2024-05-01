@@ -122,8 +122,7 @@ async function fetchMedia() {
   allTweets.innerHTML = "";
 
   if (response.media.length) {
-
-    allTweets.innerHTML = mediaFunction(response.media);
+    allTweets.innerHTML = getTweetComponent(response.media);
   } else {
     allTweets.innerHTML = `<div class="w-3/5" style="margin: 50px auto;">
                                         <div class="mb-3">
@@ -134,7 +133,6 @@ async function fetchMedia() {
                                         </div>
                                     </div>`;
   }
-
   like.removeAttribute("style");
   replies.removeAttribute("style");
   posts.removeAttribute("style");

@@ -6,7 +6,6 @@ const { tweetCreate, insertTweet, showDrafts, tweetUpdate, displayImage, deleteD
 
 const { getExplorePage, getTopTweetAndHastag, getHastag, getMedia, getLatestTweet, getUsername, getUsernameOrHastagOnchage } = require("../controller/exploreControler/getexplore");
 
-const { getExploreProfile } = require("../controller/profile");
 const { getReplies } = require("../controller/profile/profile.reply.controller");
 const { getPosts } = require("../controller/profile/profile.post.controller");
 const { getFollower } = require("../controller/follow.controller");
@@ -42,6 +41,9 @@ const { getAllBookmarks } = require("../controller/getAllBookmarks.controller");
 const { bookmarkUnbookmarkHandler } = require("../controller/bookmarkUnbookmarkHandler.controller");
 const { removeAllBookmarkHandler } = require("../controller/removeAllBookmarksHandler.controller");
 
+const { getAllTrendingHashtagsHandler } = require("../controller/getAllTrendingHashtags.controller");
+
+const {notification, getNotifications,} = require("../controller/notification.controller");
 router.get("/", (req, res) => {
   res.render("pages/index");
 });
@@ -98,7 +100,7 @@ router.post('/bookmark', passport.authenticate('jwt', { session: false, failureR
 
 router.post('/removeAllBookmarks', passport.authenticate('jwt', { session: false, failureRedirect: "/login" }), removeAllBookmarkHandler);
 
-
+router.get('/aside/getAllTrendingHashtags', passport.authenticate('jwt', { session: false, failureRedirect: "/login" }), getAllTrendingHashtagsHandler);
 // end of jil patel routes
 
 
@@ -178,9 +180,24 @@ router.get('/explore/profile/like', getLikes);
 router.get('/explore/profile/media', getProfileMedia);
 
 
+
+// Sanket Patel Profile Routes Starts Here
+
+router.get("/profile", passport.authenticate('jwt', { session: false, failureRedirect: "/login" }), getProfile);
+router.get("/profile/post", passport.authenticate('jwt', { session: false, failureRedirect: "/login" }), getPosts);
+router.get("/profile/reply", passport.authenticate('jwt', { session: false, failureRedirect: "/login" }), getReplies);
+router.get("/profile/like", passport.authenticate('jwt', { session: false, failureRedirect: "/login" }), getLikes);
+router.get("/profile/media", passport.authenticate('jwt', { session: false, failureRedirect: "/login" }), getProfileMedia);
+
+// Sanket Patel Profile Routes Ends Here
+
 module.exports = router
 
 
+// parmeshvar parmar routes
 
+// notification routes
 
+router.get("/notifications",passport.authenticate("jwt", { session: false, failureRedirect: "/login" }),notification);
 
+router.get("/notification",passport.authenticate("jwt", { session: false, failureRedirect: "/login" }),getNotifications);

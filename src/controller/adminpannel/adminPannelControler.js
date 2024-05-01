@@ -363,7 +363,7 @@ exports.supportForm = async (req, res) => {
 
     try {
         let user_id = req.user[0][0].id
-        let filename = req.file.path
+        let filename = req.file.path;
         filename = filename?.substring(6)
 
         content = req.body.content;

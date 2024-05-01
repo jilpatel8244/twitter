@@ -127,8 +127,9 @@ CREATE TABLE `temp_twitter`.`verification_requests` (
 -- by switching to profesaional, your account will no longer private. if private
 update users set is_private = 0, profession = "Programmer",
 prof_desc = "I'm a passinate developer who always willing to learn, and apply those things in practice" where id = 1;
+
 CREATE TABLE `get_support` (
-  `id` VARCHAR PRIMARY KEY,
+  `id` VARCHAR(255) PRIMARY KEY,
   `user_id` INT NOT NULL,
   `content` VARCHAR(255),
   `url` VARCHAR(255),
@@ -140,23 +141,17 @@ CREATE TABLE `get_support` (
 
   ALTER TABLE `get_support` ADD FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
 
-
-
-
-
-
-
-
-
-
-
-
   -- new table 
 CREATE TABLE `support_messages` (
   `id` INT PRIMARY KEY AUTO_INCREMENT,
   `sender_id` INT NOT NULL,
   `receiver_id` INT NOT NULL,
   `content` text,
+  `content` text
+);
+
+ALTER TABLE `support_messages` ADD FOREIGN KEY (`sender_id`) REFERENCES `users` (`id`);
+ALTER TABLE `support_messages` ADD FOREIGN KEY (`receiver_id`) REFERENCES `users` (`id`);
 -- modified on 29th aprill 
 
 -- add new table message_medias and remove table unread_messages
@@ -188,3 +183,67 @@ CREATE TABLE `message_medias` (
   `deleted_at` TIMESTAMP
 );
 ALTER TABLE `message_medias` ADD FOREIGN KEY (`message_id`) REFERENCES `direct_messages` (`id`);
+
+--///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+-- changes 1 may 2024
+-- rajni
+ALTER TABLE temp_twitter.tweets ADD column retweet_id INT;
+ALTER TABLE temp_twitter.tweets ADD FOREIGN KEY (retweet_id) REFERENCES temp_twitter.retweets (id);
+
+
+-- jeel
+CREATE TABLE `direct_messages` (
+  `id` INT PRIMARY KEY AUTO_INCREMENT,
+  `sender_id` INT NOT NULL,
+  `receiver_id` INT NOT NULL,
+  `content_type` VARCHAR(255),
+  `content` text,
+  `is_read` boolean,
+  `created_at` TIMESTAMP DEFAULT (CURRENT_TIMESTAMP),
+  `updated_at` TIMESTAMP on update CURRENT_TIMESTAMP,
+  `deleted_at` TIMESTAMP
+);
+
+ALTER TABLE `direct_messages` ADD FOREIGN KEY (`sender_id`) REFERENCES `users` (`id`);
+ALTER TABLE `direct_messages` ADD FOREIGN KEY (`receiver_id`) REFERENCES `users` (`id`);
+
+
+CREATE TABLE `message_medias` (
+  `id` INT PRIMARY KEY AUTO_INCREMENT,
+  `message_id` INT NOT NULL,
+  `url` text,
+  `created_at` TIMESTAMP DEFAULT (CURRENT_TIMESTAMP),
+  `updated_at` TIMESTAMP on update CURRENT_TIMESTAMP,
+  `deleted_at` TIMESTAMP
+);
+ALTER TABLE `message_medias` ADD FOREIGN KEY (`message_id`) REFERENCES `direct_messages` (`id`);
+
+-- mihir
+
+CREATE TABLE `get_support` (
+  `id` VARCHAR(255) PRIMARY KEY,
+  `user_id` INT NOT NULL,
+  `content` VARCHAR(255),
+  `url` VARCHAR(255),
+  `created_at` TIMESTAMP NOT NULL DEFAULT (CURRENT_TIMESTAMP),
+  `updated_at` TIMESTAMP  DEFAULT (NULL),
+  `deleted_at` TIMESTAMP  DEFAULT(NULL)
+);
+
+  ALTER TABLE `get_support` ADD FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
+
+  -- new table 
+CREATE TABLE `support_messages` (
+  `id` INT PRIMARY KEY AUTO_INCREMENT,
+  `sender_id` INT NOT NULL,
+  `receiver_id` INT NOT NULL,
+  `content` text
+);
+
+ALTER TABLE `support_messages` ADD FOREIGN KEY (`sender_id`) REFERENCES `users` (`id`);
+ALTER TABLE `support_messages` ADD FOREIGN KEY (`receiver_id`) REFERENCES `users` (`id`);
+
+-- execute this query in database
+alter table temp_twitter.tweets add column retweet_id INT;
+ALTER TABLE temp_twitter.tweets ADD FOREIGN KEY (retweet_id) REFERENCES temp_twitter.retweets (id);

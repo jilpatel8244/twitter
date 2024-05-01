@@ -26,10 +26,8 @@ exports.getProfile = async (req, res) => {
         const currentUserId = req.user.id;
         followerId = currentUserId;
         const followStatusQuery = `SELECT COUNT(*) AS isFollowing FROM followers WHERE follower_id = ? AND following_id = ?`;
-        const [followStatusRows] = await connection.query(followStatusQuery, [currentUserId,id]);
-        
+        const [followStatusRows] = await connection.query(followStatusQuery, [currentUserId,id]); 
       }
-
       const postDataQuery = `SELECT * FROM users as u INNER JOIN tweets as t ON u.id=t.user_id WHERE u.id = ?`;
       const [postData] = await connection.query(postDataQuery, [id]);
 

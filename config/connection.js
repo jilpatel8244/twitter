@@ -5,7 +5,7 @@ const connection = mysql.createConnection({
     host: "localhost",
     user: "root",
     password: process.env.PASSWORD || "password",
-    database: process.env.DB_NAME || 'temp_twitter',
+    database: process.env.DB_NAME || 'twitter',
 
 }).promise();
 
