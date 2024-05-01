@@ -11,8 +11,6 @@ async function getAllBookamrkHandler() {
     
     if (response.success == true) {
         if(response.message.length){
-            console.log(response.message);
-
             let tweet = getTweetComponent(response.message);
 
             allTweets.innerHTML = tweet;

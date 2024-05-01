@@ -21,6 +21,7 @@ const { getPosts } = require("../controller/profile/profile.post.controller");
 const { getReplies } = require("../controller/profile/profile.reply.controller");
 const { getLikes } = require("../controller/profile/profile.like.controller");
 const { getProfileMedia } = require("../controller/profile/profile.media.controller");
+const { getAllTrendingHashtagsHandler } = require("../controller/getAllTrendingHashtags.controller");
 
 router.get("/", (req, res) => {
   res.render("pages/index");
@@ -78,7 +79,7 @@ router.post('/bookmark', passport.authenticate('jwt', { session: false, failureR
 
 router.post('/removeAllBookmarks', passport.authenticate('jwt', { session: false, failureRedirect: "/login" }), removeAllBookmarkHandler);
 
-
+router.get('/aside/getAllTrendingHashtags', passport.authenticate('jwt', { session: false, failureRedirect: "/login" }), getAllTrendingHashtagsHandler);
 // end of jil patel routes
 
 

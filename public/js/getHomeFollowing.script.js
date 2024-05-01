@@ -22,14 +22,16 @@ async function getHomeFollowingHandler() {
             allTweets.innerHTML = tweet;
 
         } else {
-            allTweets.innerHTML = `<div class="w-3/5 mx-auto my-8">
+            
+            allTweets.innerHTML = `<div class="w-3/5 mx-auto py-12">
                                         <div class="mb-3">
-                                            <h2 class="font-bold text-3xl">Save posts for later</h2>
+                                            <h2 class="font-bold text-3xl">Welcome to X!</h2>
                                         </div>
                                         <div class="mb-3">
-                                            <p style="color: rgb(83, 100, 113);">Bookmark posts to easily find them again in the future.</p>
+                                            <p style="color: rgb(83, 100, 113);">This is the best place to see what’s happening in your world. Find some people and topics to follow now.</p>
                                         </div>
                                     </div>`;
+
         }
     } else {
         console.log(response.message);
