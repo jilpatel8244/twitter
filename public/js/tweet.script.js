@@ -21,7 +21,7 @@ let emojiPicker = document.getElementById('emojiPicker');
 let allScreen = document.getElementById('allScreen');
 let remover = document.getElementById('remover');
 let tweetedBox = document.getElementById('tweetedBox');
-var imgToRemove;
+let imgToRemove;
 const removeImg = (id) => {
   imgToRemove = document.getElementById(id);
   if (imgToRemove) {
@@ -127,7 +127,7 @@ removeEmoji.addEventListener('click', () => {
 })
 
 const tweetInsert = async (status) => {
-  var retweetId;
+  let retweetId;
   if (content.innerText.trim() != '' || imgToRemove != undefined || tweetedBox.innerHTML != "") {
     let contentText = content.innerText;
     let forRetweet = document.getElementById('forRetweet');
@@ -395,7 +395,7 @@ const sendDraft = async (tweetId) => {
   if (error) {
     return console.log(error);
   }
-  var temp;
+  let temp;
   if (image != undefined) {
     let { media_url } = image;
     temp = Date.now();
@@ -453,8 +453,8 @@ const tweetUpdate = async (action) => {
   }
 }
 
-var list = [];
-var unSelected = []
+let list = [];
+let unSelected = []
 editDraft.onclick = () => {
   let draftList = document.querySelectorAll('.draftList');
   let checksForDelete = document.querySelectorAll('input[type=checkbox]')
@@ -579,7 +579,7 @@ finalDelete.onclick = async () => {
       draftId.push(checks.nextElementSibling.getAttribute('id'));
     }
   })
-  var formsData = new FormData();
+  let formsData = new FormData();
   formsData.append('deleteDraft', draftId);
   let response = await fetch('/tweetPost/draftDelete', {
     method: 'POST',

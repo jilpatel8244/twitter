@@ -1,6 +1,7 @@
 const { log } = require("winston");
 const connection = require("../../config/connection");
 const logger = require('../../logger/logger');
+const { hkdfSync } = require("crypto");
 
 exports.getHomeForyou = async (req, res) => {
   let sql = `
@@ -53,7 +54,7 @@ exports.getHomeForyou = async (req, res) => {
     END DESC;
 `;
 
-const retweet = `SELECT users.username,users.id as userId, users.name,users.profile_img_url as profile_img_url, 
+  const retweet = `SELECT users.username,users.id as userId, users.name,users.profile_img_url as profile_img_url, 
 tweets.content,tweets.id as tweet_id,
 tweet_comments.content as comments, 
 medias.media_url as media_url,
@@ -103,11 +104,12 @@ ORDER BY
   const [rows] = await connection.query(sql);
   res.status(200).json({
     success: true,
-    message: {rows,retweetData},
+    message: { rows, retweetData},
   })
 }
 
-exports.getRetweet = async (req,res) =>{
+
+exports.getRetweet = async (req, res) => {
   const retweet = `SELECT users.username, 
   users.id as user_id, 
   users.name,  
@@ -158,12 +160,12 @@ exports.getRetweet = async (req,res) =>{
       WHEN tweets.updated_at IS NOT NULL THEN tweets.updated_at
       ELSE tweets.created_at
     END DESC;`
- 
-    const [retweetData] = await connection.query(retweet);
-    res.status(200).json({
-      success: true,
-      retweetData: retweetData,
-    });
+
+  const [retweetData] = await connection.query(retweet);
+  res.status(200).json({
+    success: true,
+    retweetData: retweetData,
+  });
 }
 
 exports.getHomeFollowing = async (req, res) => {
@@ -226,33 +228,33 @@ exports.getHomeFollowing = async (req, res) => {
     message: rows
   })
 }
-exports.delete_post =  async (req, res) => {
+exports.delete_post = async (req, res) => {
   const postId = req.params.id;
   const userId = req.user[0][0].id;
 
   const [post] = await connection.query('SELECT user_id FROM tweets WHERE id = ?', [postId]);
 
-    await connection.query('DELETE FROM tweet_likes WHERE tweet_id = ?', [postId]);
+  await connection.query('DELETE FROM tweet_likes WHERE tweet_id = ?', [postId]);
 
-    await connection.query('DELETE FROM medias WHERE tweet_id = ?', [postId]);
+  await connection.query('DELETE FROM medias WHERE tweet_id = ?', [postId]);
 
-    await connection.query('DELETE FROM bookmarks WHERE tweet_id = ?', [postId]);
+  await connection.query('DELETE FROM bookmarks WHERE tweet_id = ?', [postId]);
 
-    const [comments] = await connection.query('SELECT id FROM tweet_comments WHERE tweet_id = ?', [postId]);
+  const [comments] = await connection.query('SELECT id FROM tweet_comments WHERE tweet_id = ?', [postId]);
 
-    for(let comment of comments){
-      await connection.query('DELETE FROM reply_comments WHERE comment_id = ?', [comment.id]);
-    }
+  for (let comment of comments) {
+    await connection.query('DELETE FROM reply_comments WHERE comment_id = ?', [comment.id]);
+  }
 
-    await connection.query('DELETE FROM tweet_comments WHERE tweet_id = ?', [postId]);
+  await connection.query('DELETE FROM tweet_comments WHERE tweet_id = ?', [postId]);
 
-    const [result] = await connection.query('DELETE FROM tweets WHERE id = ?', [postId]);
+  const [result] = await connection.query('DELETE FROM tweets WHERE id = ?', [postId]);
 
-      res.json({
-        success: true,
-        message: 'Post and associated media, likes, bookmarks, and comments deleted successfully',
-      });
-    }
+  res.json({
+    success: true,
+    message: 'Post and associated media, likes, bookmarks, and comments deleted successfully',
+  });
+}
 exports.get_notification = async (req, res) => {
   const [notificationCount] = await connection.query(`select count(*) as notificationCount from notifications where user_id = ? and  is_read = 0 and related_user_id != ? ;`, [req.user[0][0].id, req.user[0][0].id]);
   res.status(200).json({
@@ -291,7 +293,7 @@ exports.post_comment = async (req, res) => {
   let [comment_mention] = await connection.query(`SELECT * FROM tweet_comments WHERE tweet_id = ? order by created_at desc`, [tweetId])
   const mentionedUsernames = extractMentionedUsernames(comment_mention[0].content);
   const mentionedUsers = await getUsersByUsernames(mentionedUsernames);
-  
+
   let [tweet_user_id] = await connection.query(`SELECT user_id FROM tweets WHERE id = ?`, [tweetId]);
   await connection.query(`INSERT INTO notifications (user_id, tweet_id, type, related_user_id)
     VALUES (?, ?, 'Comment', ?);`, [tweet_user_id[0].user_id, tweetId, user_id]);
@@ -390,7 +392,7 @@ exports.delete_comment = async (req, res) => {
   let [rows] = await connection.query(sql, [commentId]);
 
   if (rows.length > 0 && rows[0].user_id === userId) {
-   
+
     sql = `DELETE FROM reply_comments WHERE comment_id = ?`;
     await connection.query(sql, [commentId]);
 
@@ -399,7 +401,7 @@ exports.delete_comment = async (req, res) => {
 
     res.json({
       success: result.affectedRows > 0,
-      userId:userId,
+      userId: userId,
     });
   } else {
     res.json({
@@ -435,7 +437,7 @@ exports.edit_comment = async (req, res) => {
 //     success: result.affectedRows > 0,
 //   });
 // }
- 
+
 exports.get_reply = async (req, res) => {
 
   let comment_id = req.body.comment_id;
@@ -481,7 +483,7 @@ exports.post_reply = async (req, res) => {
   let content = req.body.content;
   let comment_id = req.body.comment_id;
   let tweetId = req.body.tweetId;
-  
+
 
   if (content.length > 255) {
     res.json({
@@ -503,9 +505,9 @@ exports.post_reply = async (req, res) => {
   const mentionedUsers = await getUsersByUsernames(mentionedUsernames);
 
   let [reply_user_id] = await connection.query(`SELECT user_id FROM tweet_comments WHERE id = ?`, [comment_id]);
-  console.log("hello "+ reply_user_id[0].user_id);
+  console.log("hello " + reply_user_id[0].user_id);
   await connection.query(`INSERT INTO notifications (user_id, tweet_id, type, related_user_id)
-    VALUES (?, ?, 'Comment', ?);`, [reply_user_id[0].user_id, tweetId, user_id ]);
+    VALUES (?, ?, 'Comment', ?);`, [reply_user_id[0].user_id, tweetId, user_id]);
 
   if (mentionedUsers.length >= 1) {
     let [comment_user_id] = await connection.query(`SELECT user_id FROM tweet_comments WHERE id = ?`, [comment_id])
@@ -518,7 +520,7 @@ exports.post_reply = async (req, res) => {
       id: result.insertId,
       comment_id: comment_id,
       content: content,
-      user_id : user_id,
+      user_id: user_id,
     },
   });
 }
@@ -535,7 +537,7 @@ exports.delete_reply = async (req, res) => {
 
     res.json({
       success: result.affectedRows > 0,
-      userId:userId,
+      userId: userId,
     });
   } else {
     res.json({

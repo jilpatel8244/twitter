@@ -23,7 +23,6 @@ exports.followUnfollowHandler = async (req, res) => {
             [id, followerId]
         );
         currentStatus =1;
-        console.log("new follower added",add)
 }else{
     statusdata =result[0].current_status;
     console.log("how are you all here")
@@ -46,7 +45,7 @@ console.log('Follower changed their status.');
         console.error(error);
         return res.status(500).json({
             success: false,
-            message: "An error occurred",statusdata
+            message: "An error occurred"
         });
     }
 }

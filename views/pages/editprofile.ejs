@@ -139,23 +139,23 @@
     
         <div class="profile-section">
           <div class="cover-photo">
-            <label for="coverPhoto">Cover Photo</label>
+           
           
             
             <img src="./uploads/<%= profileData.cover_img_url %>" alt="Cover Photo Preview" id="coverPhotoPreview"/>
             <input type="file" id="coverPhoto" name="coverPhoto" accept="image/*"
               onchange="previewImage('coverPhoto', 'coverPhotoPreview')" style="display: none" multiple />
             <button type="button" onclick="document.getElementById('coverPhoto').click()">
-              change
+              Change Cover Image
             </button>
           </div>
           <div class="display-photo">
-            <label for="displayPhoto">Display Photo</label>
+            
             <input type="file" id="displayPhoto" name="displayPhoto" accept="image/*"
               onchange="previewImage('displayPhoto', 'displayPhotoPreview')" style="display: none" />
             <img src="./uploads/<%= profileData.profile_img_url %>" alt="Display Photo Preview" id="displayPhotoPreview"/>
             <button type="button" onclick="document.getElementById('displayPhoto').click()">
-              change
+              Change Profile Image
             </button>
           </div>
         </div>

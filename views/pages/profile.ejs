@@ -49,6 +49,11 @@
         }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.28.2/sweetalert2.all.min.js"></script>
+    <style>
+        .swal2-html-container, .swal2-title{
+            color: white !important;
+        }
+    </style>
 
 </head>
 
@@ -188,13 +193,11 @@
                                                                 <div class="text-center pr-3"><span
                                                                         class="font-bold text-black">
 
-                                                                    </span><span class="text-gray-600"> Following</span>
-                                                                </div>
+                                                                    </span><span class="text-gray-600">  <a href="/follow?id=<%=userProfileData[0].id%>">Followers</a></span></div>
                                                                 <div class="text-center px-3"><span
                                                                         class="font-bold text-black">
 
-                                                                    </span><span class="text-gray-600"> Followers</span>
-                                                                </div>
+                                                                    </span><span class="text-gray-600">  <a href="/followingUser?id=<%=userProfileData[0].id%>">Following</a></span></div>
                                             </div>
                                             <%}%>
                                                 <%if(followerDetailData[0]){%>
@@ -203,12 +206,12 @@
                                                         <div class="text-center pr-3"><span
                                                                 class="font-bold text-black">
                                                                 <%=followerDetailData[0].follower %>
-                                                            </span><span class="text-gray-600"> Following</span></div>
-                                                        <div class="text-center px-3"><span
-                                                                class="font-bold text-black">
-                                                                <%=followingDetailData[0].following %>
-
-                                                            </span><span class="text-gray-600"> Followers</span></div>
+                                                            </span><span class="text-gray-600">  <a href="/follow?id=<%=userProfileData[0].id%>">Followers</a></span></div>
+                                                                <div class="text-center px-3"><span
+                                                                    class="font-bold text-black">
+                                                                    <%=followingDetailData[0].following %>
+                                                                    
+                                                            </span><span class="text-gray-600">  <a href="/followingUser?id=<%=userProfileData[0].id%>">Following</a></span></div>
                                                     </div>
                                                     <%}%>
                                         </div>
@@ -251,6 +254,7 @@
     </div>
 
     <script src="/js/getTweetComponent.js"></script>
+    <script src="/js/share.script.js"></script>
     <script src="/js/bookmark.script.js"></script>
     <script src="/js/like.script.js"></script>
     <script src="/js/getMedia.js"></script>

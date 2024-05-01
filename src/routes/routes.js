@@ -16,6 +16,7 @@ const { likeUnlikeHandler } = require("../controller/likeUnlikeHandler");
 const { getAllBookmarks } = require("../controller/getAllBookmarks.controller");
 const { bookmarkUnbookmarkHandler } = require("../controller/bookmarkUnbookmarkHandler.controller");
 const { removeAllBookmarkHandler } = require("../controller/removeAllBookmarksHandler.controller");
+const { getAllTrendingHashtagsHandler } = require("../controller/getAllTrendingHashtags.controller");
 
 router.get("/", (req, res) => {
   res.render("pages/index");
@@ -73,7 +74,7 @@ router.post('/bookmark', passport.authenticate('jwt', { session: false, failureR
 
 router.post('/removeAllBookmarks', passport.authenticate('jwt', { session: false, failureRedirect: "/login" }), removeAllBookmarkHandler);
 
-
+router.get('/aside/getAllTrendingHashtags', passport.authenticate('jwt', { session: false, failureRedirect: "/login" }), getAllTrendingHashtagsHandler);
 // end of jil patel routes
 
 

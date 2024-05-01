@@ -40,13 +40,13 @@ async function showReply(comment_id) {
     let repliesHtml = '';
     data.replies.forEach(reply => {
         let reply_list = ` 
-            <div class="">
-                <div class="relative flex items-start my-1 hover:bg-gray-100 transition duration-350 ease-in-out">
+            <div class="w-[100%]">
+                <div class="relative flex items-start my-1 hover:bg-gray-100 transition duration-350 ease-in-out" style="width:94%">
                 <div class="shrink-0">
                         <img class="inline-block h-8 w-8 rounded-full"
                         src="/uploads/${reply.profile_img_url}" alt="" />
                 </div>
-                <div class="ml-3" style="width:90%;">
+                <div class="ml-3" style="width:80%">
                     <p class="font-bold text-lg text-wrap">
                         ${reply.name} <span class="font-medium text-sm text-gray-400">
                                 ${reply.username} .

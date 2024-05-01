@@ -1,7 +1,7 @@
 
 
 const retweet = async (tweetId, icon, status, time) => {
-  var temp;
+  let temp;
   let form = new FormData();
   form.append('tweetId', tweetId);
   let res = await fetch('/retweetData', {
@@ -207,7 +207,7 @@ const retweet = async (tweetId, icon, status, time) => {
       method: 'GET'
     })
     let data = await response.json();
-    var profileImg;
+    let profileImg;
     fetch('/tweetPost/profileImage', {
       method: 'GET'
     })
