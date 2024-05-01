@@ -1,4 +1,9 @@
 async function getHomeFollowingHandler() {
+    let element = document.querySelector('#following_btn');
+    element.style.borderBottom = '10px solid rgba(59, 130, 246, 0.5)'
+    element.style.borderBottomWidth = '4px';
+    document.querySelector('#foryou_btn').style.borderBottom = "none"
+
     let url = window.location.origin + '/getHomeFollowing';
 
     let data = await fetch(url, {

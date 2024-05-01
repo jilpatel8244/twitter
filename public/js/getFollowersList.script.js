@@ -77,4 +77,10 @@ function selectUnselectHandler(userId, name) {
         // remove span to header
         document.getElementById('header'+userId).remove();
     }
+
+    if(selectedUserArr.length) {
+        document.getElementById('shareTweetUsingDirectMessageButton').disabled = false;
+    } else {
+        document.getElementById('shareTweetUsingDirectMessageButton').disabled = true;
+    }
 }

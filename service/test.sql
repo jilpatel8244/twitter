@@ -68,34 +68,6 @@ CREATE TABLE `notifications` (
   `created_at` TIMESTAMP NOT NULL DEFAULT (CURRENT_TIMESTAMP)
 );
 
- 
--- modified direct message table and new unread message table
-CREATE TABLE `direct_messages` (
-  `id` INT PRIMARY KEY AUTO_INCREMENT,
-  `sender_id` INT NOT NULL,
-  `receiver_id` INT NOT NULL,
-  `content_type` VARCHAR(255),
-  `content` text,
-  `created_at` TIMESTAMP DEFAULT (CURRENT_TIMESTAMP),
-  `updated_at` TIMESTAMP on update CURRENT_TIMESTAMP,
-  `deleted_at` TIMESTAMP
-);
--- for now type is text and media
-ALTER TABLE `direct_messages` ADD FOREIGN KEY (`sender_id`) REFERENCES `users` (`id`);
-ALTER TABLE `direct_messages` ADD FOREIGN KEY (`receiver_id`) REFERENCES `users` (`id`);
-
-CREATE TABLE `unread_messages` (
-  `id` INT PRIMARY KEY AUTO_INCREMENT,
-  `user_id` INT NOT NULL,
-  `message_id` INT NOT NULL,
-  `is_read` boolean
-);
-
-ALTER TABLE `unread_messages` ADD FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
-ALTER TABLE `unread_messages` ADD FOREIGN KEY (`message_id`) REFERENCES `direct_messages` (`id`);
-
-
-
 
 --  in controller 
 const mentionedUsernames = extractMentionedUsernames(
@@ -166,6 +138,7 @@ CREATE TABLE `get_support` (
 );
 
 
+<<<<<<< HEAD
   ALTER TABLE `get_support` ADD FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
 
 
@@ -185,6 +158,19 @@ CREATE TABLE `support_messages` (
   `sender_id` INT NOT NULL,
   `receiver_id` INT NOT NULL,
   `content` text,
+=======
+-- modified on 29th aprill 
+
+-- add new table message_medias and remove table unread_messages
+
+CREATE TABLE `direct_messages` (
+  `id` INT PRIMARY KEY AUTO_INCREMENT,
+  `sender_id` INT NOT NULL,
+  `receiver_id` INT NOT NULL,
+  `content_type` VARCHAR(255),
+  `content` text,
+  `is_read` boolean,
+>>>>>>> development
   `created_at` TIMESTAMP DEFAULT (CURRENT_TIMESTAMP),
   `updated_at` TIMESTAMP on update CURRENT_TIMESTAMP,
   `deleted_at` TIMESTAMP
@@ -192,3 +178,16 @@ CREATE TABLE `support_messages` (
 
 ALTER TABLE `support_messages` ADD FOREIGN KEY (`sender_id`) REFERENCES `users` (`id`);
 ALTER TABLE `support_messages` ADD FOREIGN KEY (`receiver_id`) REFERENCES `users` (`id`);
+ALTER TABLE `direct_messages` ADD FOREIGN KEY (`sender_id`) REFERENCES `users` (`id`);
+ALTER TABLE `direct_messages` ADD FOREIGN KEY (`receiver_id`) REFERENCES `users` (`id`);
+
+
+CREATE TABLE `message_medias` (
+  `id` INT PRIMARY KEY AUTO_INCREMENT,
+  `message_id` INT NOT NULL,
+  `url` text,
+  `created_at` TIMESTAMP DEFAULT (CURRENT_TIMESTAMP),
+  `updated_at` TIMESTAMP on update CURRENT_TIMESTAMP,
+  `deleted_at` TIMESTAMP
+);
+ALTER TABLE `message_medias` ADD FOREIGN KEY (`message_id`) REFERENCES `direct_messages` (`id`);

@@ -2,12 +2,13 @@ function getTweetComponent(data) {
     let tweet = `<ul class="list-none">`;
 
     data.forEach(tweets => {
+        let processedContent = tweets.content.replace(/(@|#)\w+/g, '<span class="blue-text">$&</span>');
         tweet += `
                     <li>
                         <article class="hover:bg-gray-100 transition duration-350 ease-in-out">
                             <div id="${tweets.tweet_id}">
                                 <div class="flex flex-shrink-0 p-4 pb-0">
-                                    <a href="" class="flex-shrink-0 group block">
+                                    <a href="/explore/profile?id=${tweets.user_id}" class="flex-shrink-0 group block">
                                         <div class="flex items-center">
                                             <div>`
 
@@ -16,6 +17,7 @@ function getTweetComponent(data) {
         } else {
             tweet += `<img class="inline-block h-10 w-10 rounded-full" src="/assets/profile.png" alt="" />`
         }
+
         tweet += `</div>
                                             <div class="ml-3">
                                                 <p class="text-base leading-6 font-medium text-black">
@@ -32,9 +34,8 @@ function getTweetComponent(data) {
 
                                 <div class="pl-16">
                                     <a href="/get_comments/${tweets.tweet_id}">
-                                    <pre class="mr-3 text-base width-auto font-normal text-balance overflow-hidden" style="word-wrap: break-word; overflow-wrap: break-word; font-family: sans-serif;">${tweets.content}</pre>
+                                    <pre class="mr-3 text-base width-auto font-normal text-balance overflow-hidden" style="white-space: no-wrap;  text-overflow: ellipsis; word-wrap: break-word; overflow-wrap: break-word; font-family: sans-serif;">${processedContent}</pre>
                                     `
-
         if (tweets.media_url) {
             tweet += `<div class="md:flex-shrink pr-6 pt-3">
                                                     <div class="bg-cover bg-no-repeat bg-center rounded-lg size-fit">
@@ -73,17 +74,18 @@ function getTweetComponent(data) {
 
                                             <!-- retweet span tag -->
                                             <div  class="flex text-center py-2 m-2 cursor-pointer">`
-                                            if(tweets.notRetweeted == null && tweets.createdAt != null){
+                                            let time= tweets.time;
+                                            if(tweets.notRetweeted == null && tweets.createdAt != null && tweets.retweetMsg == null){
                                             tweet+=    ` <span
                                                 
-                                                onclick=retweet(${tweets.tweet_id},this,'undo');
-                                                class="group flex items-center text-blue-600 px-3 py-2 text-base leading-6 font-medium rounded-full">
-                                                <svg class="text-center h-7 w-6" fill="none" stroke-linecap="round"
+                                                onclick="retweet(${tweets.tweet_id},this,'undo','${time}')"
+                                                class="group flex items-center text-blue-600 px-2 py-2 text-base leading-6 font-medium rounded-full" style="color: #26a4cd;">
+                                                <svg class="text-center h-7 w-6 text-blue-600" fill="none" stroke-linecap="round"
                                                     stroke-linejoin="round" stroke-width="2" stroke="currentColor"
                                                     viewBox="0 0 24 24">
                                                     <path d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"></path>
                                                 </svg>
-                                                <span id="${tweets.tweet_id}tweet" class="group flex items-center text-blue-600 px-3 py-2 text-base leading-6 font-medium rounded-full">
+                                                <span id="${tweets.tweet_id}tweet" class="group flex items-center text-blue-600 px-2 py-2 text-base leading-6 font-medium rounded-full">
                                                 ${tweets.repostCount ? tweets.repostCount : "" }
                                             </span>
                                             </span>
@@ -94,14 +96,14 @@ function getTweetComponent(data) {
                                             else{
                                                 tweet+=    `<span
                                                     
-                                                    onclick=retweet(${tweets.tweet_id},this,'retweet');
+                                                    onclick="retweet(${tweets.tweet_id},this,'retweet','${time}')"
                                                     class="group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full  hover:text-blue-600">
                                                     <svg class="text-center h-7 w-6" fill="none" stroke-linecap="round"
                                                         stroke-linejoin="round" stroke-width="2" stroke="currentColor"
                                                         viewBox="0 0 24 24">
                                                         <path d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"></path>
                                                     </svg>
-                                                    <span id="${tweets.tweet_id}tweet" class="group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full">
+                                                    <span id="${tweets.tweet_id}tweet" class="group flex items-center text-gray-500 px-2 py-2 text-base leading-6 font-medium rounded-full">
                                                     ${tweets.repostCount ? tweets.repostCount : "" }
                                                 </span>
                                                 </span>
@@ -140,17 +142,17 @@ function getTweetComponent(data) {
                                                                     </path>
                                                             </svg>`
         }
-        tweet += `</span>
-                                                <span class="px-1 py-2" id="likeCount${tweets.tweet_id}">
-                                                    ${tweets.likeCount}
-                                                </span>
-                                                <script>
-                                                    if (parseInt(document.getElementById('likeCount'+'${tweets.tweet_id}').innerHTML)) {
-                                                        document.getElementById('likeCount'+'${tweets.tweet_id}').style.display = "block";
-                                                    } else {
-                                                        document.getElementById('likeCount'+'${tweets.tweet_id}').style.display = "none";
-                                                    }
-                                                </script>
+        tweet += `</span>`
+                                                if (parseInt(tweets.likeCount)) {
+                                                    tweet += `<span class="px-1 py-2" id="likeCount${tweets.tweet_id}">
+                                                        ${tweets.likeCount}
+                                                    </span>`
+                                                } else {
+                                                    tweet += `<span class="px-1 py-2" id="likeCount${tweets.tweet_id}" style="display: none">
+                                                        0
+                                                    </span>`
+                                                }
+                                        tweet +=  `
                                             </div>
 
 
@@ -168,11 +170,13 @@ function getTweetComponent(data) {
                                                     </svg>
                                                 </span>
 
-                                                <div id="shareOptions${tweets.tweet_id}" style="width: 220px; display: none; top: 45px; left: -100px;" class="absolute p-4 border shadow-lg rounded-xl cursor-pointer bg-white">
-                                                    <div onclick="shareLinkHandler(${tweets.tweet_id})">
+                                                <div id="shareOptions${tweets.tweet_id}" style="width: 260px; display: none; top: 45px; left: -100px;" class="absolute p-4 border shadow-lg rounded-xl cursor-pointer bg-white">
+                                                    <div onclick="shareLinkHandler(${tweets.tweet_id})" class="flex items-center p-1">
+                                                        <img src="/assets/link_icon.svg" alt="link_icon" height="30px" width="30px" class="mr-2"/>
                                                         <p class="text-left">Copy link</p>
                                                     </div>
-                                                    <div onclick="openModal('modelConfirm', '${tweets.tweet_id}')">
+                                                    <div onclick="openModal('modelConfirm', '${tweets.tweet_id}')" class="flex items-center p-1">
+                                                        <img src="/assets/envelope.svg" alt="envelope" height="30px" width="30px" class="mr-2"/>
                                                         <p class="text-left">Send via Direct Message</p>
                                                     </div>
                                                 </div>
@@ -219,14 +223,11 @@ function getTweetComponent(data) {
                                                     </svg>
                                                 </span>
                                             </div>
-
-
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <hr class="border-gray-200">
-                        </article>
+                            <hr class="border-gray-200"></article>
                     </li > `
     });
 
@@ -243,3 +244,15 @@ function shareToggle(tweet_id) {
         shareOptionsDiv.style.display = "none"
     }
 }
+
+
+function showButtons(tweet_id){
+    let showBtn = document.querySelector(`.show_${ tweet_id }`)
+    console.log(showBtn);
+    if (showBtn.style.display == 'block'){
+     showBtn.style.display = 'none'
+    }else{
+     showBtn.style.display = 'block'
+    }
+ }
+ 

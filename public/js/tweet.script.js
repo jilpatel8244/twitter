@@ -19,17 +19,19 @@ let finalDelete = document.getElementById('finalDelete');
 let emojiBtn = document.getElementById('emojiBtn');
 let emojiPicker = document.getElementById('emojiPicker');
 let allScreen = document.getElementById('allScreen');
+let remover = document.getElementById('remover');
+let tweetedBox = document.getElementById('tweetedBox');
 var imgToRemove;
-const removeImg = (id)=>{
+const removeImg = (id) => {
   imgToRemove = document.getElementById(id);
-  if(imgToRemove){
+  if (imgToRemove) {
     imgToRemove.remove();
-    
-    media.value=null;
+
+    media.value = null;
     let closeImg = document.getElementById('closeImg');
     closeImg.remove();
     imgToRemove = undefined;
-    if (content.innerText.trim() != '' || imgToRemove != undefined ) {
+    if (content.innerText.trim() != '' || imgToRemove != undefined || tweetedBox.innerHTML != "") {
       post.style.opacity = '1'
       post.style.cursor = 'pointer'
     }
@@ -47,14 +49,18 @@ document.addEventListener("DOMContentLoaded", function (event) {
     getProfileImage();
     content.focus();
   };
-
 });
+
+
 document.getElementById('close').onclick = () => {
   if (imgToRemove != undefined) {
-    if (content.innerText.trim() != '' || imgToRemove != undefined ) {
+    if (content.innerText.trim() != '' || imgToRemove != undefined) {
       document.getElementById('popup-modal').style.display = 'block'
     } else {
       document.getElementById('defaultModal').style.display = 'none';
+      tweetedBox.innerHTML = "";
+      post.style.opacity = '0.25'
+      post.style.cursor = 'default'
     }
   }
   else {
@@ -62,11 +68,14 @@ document.getElementById('close').onclick = () => {
       document.getElementById('popup-modal').style.display = 'block'
     } else {
       document.getElementById('defaultModal').style.display = 'none';
+      tweetedBox.innerHTML = ""
+      post.style.opacity = '0.25';
+      post.style.cursor = 'default';
     }
   }
 }
 content.oninput = () => {
-  if (content.innerText.trim() != '' || imgToRemove != undefined ) {
+  if (content.innerText.trim() != '' || imgToRemove != undefined || tweetedBox.innerHTML != "") {
     post.style.opacity = '1'
     post.style.cursor = 'pointer'
   }
@@ -99,7 +108,7 @@ emojiBtn.onclick = () => {
     .addEventListener('emoji-click', event => {
       let emoji = event.detail.unicode;
       content.innerText += emoji;
-      if (content.innerText.trim() != '' || imgToRemove != undefined) {
+      if (content.innerText.trim() != '' || imgToRemove != undefined || tweetedBox.innerHTML != "") {
         post.style.opacity = '1'
         post.style.cursor = 'pointer'
       }
@@ -111,18 +120,71 @@ emojiBtn.onclick = () => {
 }
 
 removeEmoji.addEventListener('click', () => {
-  emojiPicker.innerHTML= '';
-  if( emojiPicker.innerHTML==''){
-    removeEmoji.style.display='none';
+  emojiPicker.innerHTML = '';
+  if (emojiPicker.innerHTML == '') {
+    removeEmoji.style.display = 'none';
   }
 })
 
 const tweetInsert = async (status) => {
-  if (content.innerText.trim() != '' || imgToRemove != undefined) {
+  var retweetId;
+  if (content.innerText.trim() != '' || imgToRemove != undefined || tweetedBox.innerHTML != "") {
     let contentText = content.innerText;
+    let forRetweet = document.getElementById('forRetweet');
+    if ((contentText.trim() == "" && imgToRemove == undefined) && tweetedBox.innerHTML != "") {
+      let formForCheck = new FormData();
+      formForCheck.append('tweetId', forRetweet.value);
+      let checkQuote = await fetch('/checkRetweet',{
+        method:'POST',
+        body:new URLSearchParams(formForCheck)
+      }).then(response => response.json()); 
+      if(checkQuote.alreadyRepost != 0){
+        alert('Already reposted!!')
+        window.location.href = '/home';
+        return;
+      }
+      let form = new FormData();
+      form.append('tweetId', forRetweet.value);
+      form.append('action', 'repost')
+      let response = await fetch('/retweet', {
+        method: 'POST',
+        body: new URLSearchParams(form)
+      })
+      let { error, msg } = await response.json();
+      if (error) {
+        return alert('Error:' + error);
+      }
+      else {
+        alert(msg);
+        window.location.href = '/home';
+        return ;
+      }
+    }
+    else if(tweetedBox.innerHTML != ""){
+      let forRetweet = document.getElementById('forRetweet');
+      let form = new FormData();
+      form.append('tweetId', forRetweet.value);
+      form.append('action', 'quote');
+      form.append('retweetMsg',contentText.trim())
+      let response = await fetch('/retweet', {
+        method: 'POST',
+        body: new URLSearchParams(form)
+      })
+      let responseOfQuote = await response.json();
+      if (responseOfQuote.error) {
+        return alert('Error:' + error);
+      }
+      else {
+        alert(responseOfQuote.retweetId);
+        if(responseOfQuote.retweetId){
+          retweetId=responseOfQuote.retweetId;
+        }
+      }
+    }
     let form = new FormData();
     form.append('content', contentText);
     form.append('media', media.files[0] || []);
+    form.append('retweetId',retweetId);
     const response = await fetch('/tweetPost/insertTweet/?status=' + status, {
       method: 'POST',
       body: form
@@ -131,12 +193,13 @@ const tweetInsert = async (status) => {
     if (msg == 'Inserted') {
       window.location.href = '/home';
     }
-    if (error) { alert(error) }
+    if (error) { return alert(error) }
     post.style.opacity = '0.25'
     post.style.cursor = 'default'
     clearImages();
     document.getElementById('defaultModal').style.display = 'none'
     document.forms['tweet'].reset();
+    tweetedBox.innerHTML = "";
   }
 }
 post.onclick = () => {
@@ -162,6 +225,7 @@ save.onclick = () => {
   post.style.opacity = '0.25'
   post.style.cursor = 'default'
   document.forms['tweet'].reset();
+  tweetedBox.innerHTML = "";
 }
 discard.onclick = () => {
   document.getElementById('popup-modal').style.display = 'none'
@@ -170,11 +234,12 @@ discard.onclick = () => {
   post.style.opacity = '0.25'
   post.style.cursor = 'default'
   document.forms['tweet'].reset();
+  tweetedBox.innerHTML = "";
 }
 
 media.onchange = () => {
   getImages();
-  if (content.innerText.trim() != '' || imgToRemove != undefined) {
+  if (content.innerText.trim() != '' || imgToRemove != undefined || tweetedBox.innerHTML != "") {
     post.style.opacity = '1'
     post.style.cursor = 'pointer'
   }
@@ -206,7 +271,7 @@ const getImages = () => {
       </div>`
       images.style.display = 'block';
       images.innerHTML = photos
-      imgToRemove=document.getElementById(temp)
+      imgToRemove = document.getElementById(temp)
     });
   }
 }
@@ -219,6 +284,7 @@ const clearImages = () => {
 drafts.onclick = () => {
   document.getElementById('select-modal').style.display = 'block';
   displayDraft();
+  tweetedBox.innerHTML = "";
 }
 
 const displayDraft = async () => {
@@ -286,7 +352,7 @@ closeDraft.onclick = () => {
 
 const sendDraft = async (tweetId) => {
   hiddenId.value = tweetId;
-  let response = await fetch('/tweetPost/displayImage/?id=' + tweetId , {
+  let response = await fetch('/tweetPost/displayImage/?id=' + tweetId, {
     method: 'GET'
   })
   let { image, error, draftContent } = await response.json();
@@ -296,7 +362,7 @@ const sendDraft = async (tweetId) => {
   var temp;
   if (image != undefined) {
     let { media_url } = image;
-    temp=Date.now();
+    temp = Date.now();
     images.innerHTML = `
     <div class='relative w-fit'>
     <img id='${temp}' style="height:200px;width:170px" class="m-2" src="/uploads/${media_url}"/>
@@ -313,16 +379,16 @@ const sendDraft = async (tweetId) => {
   content.innerText = draftContent;
   post.style.opacity = '1'
   post.style.cursor = 'pointer'
-  imgToRemove=document.getElementById(temp);
+  imgToRemove = document.getElementById(temp);
 }
 
 const tweetUpdate = async (action) => {
-  
-  if (content.innerText.trim() != '' || imgToRemove != undefined) {
+
+  if (content.innerText.trim() != '' || imgToRemove != undefined || tweetedBox.innerHTML != "") {
     let form = new FormData(document.forms[0]);
     form.append('content', content.innerText);
     form.append('action', action);
-    form.append('isImg',imgToRemove || null);
+    form.append('isImg', imgToRemove || null);
     const response = await fetch('/tweetPost/tweetUpdate', {
       method: 'POST',
       body: form
@@ -337,7 +403,8 @@ const tweetUpdate = async (action) => {
     post.style.opacity = '0.25'
     post.style.cursor = 'default'
     clearImages();
-    document.getElementById('defaultModal').style.display = 'none'
+    document.getElementById('defaultModal').style.display = 'none';
+    tweetedBox.innerHTML = "";
   }
 }
 
@@ -486,7 +553,4 @@ finalDelete.onclick = async () => {
   deleteBlock.style.display = 'none'
   displayDraft();
   deselect();
-}
-const editImg = () => {
-
 }
