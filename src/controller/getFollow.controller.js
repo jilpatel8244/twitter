@@ -46,7 +46,7 @@ console.log('Follower changed their status.');
         console.error(error);
         return res.status(500).json({
             success: false,
-            message: "An error occurred",statusbar
+            message: "An error occurred",statusdata
         });
     }
 }

@@ -197,6 +197,10 @@ exports.getHomeFollowing = async (req, res) => {
   bookmarks.status as isBookmarked,
   tweet_likes.status as isLiked,
   (SELECT COUNT(*) FROM tweet_likes WHERE tweet_likes.tweet_id = tweets.id AND tweet_likes.status = 1) as likeCount
+  ,(SELECT COUNT(*) FROM retweets where retweets.tweet_id=tweets.id and retweets.deleted_at IS NULL) as repostCount,
+  retweets.deleted_at as notRetweeted,
+  retweets.created_at as createdAt,
+  retweets.retweet_message as retweetMsg
   FROM users
   JOIN tweets ON users.id = tweets.user_id
   LEFT JOIN medias ON tweets.id = medias.tweet_id
@@ -204,6 +208,7 @@ exports.getHomeFollowing = async (req, res) => {
   LEFT JOIN bookmarks ON bookmarks.tweet_id = tweets.id AND bookmarks.user_id = ${req.user[0][0].id}
   LEFT JOIN tweet_likes ON tweet_likes.tweet_id = tweets.id AND tweet_likes.user_id = ${req.user[0][0].id}
   JOIN followers ON followers.following_id = users.id AND followers.follower_id = ${req.user[0][0].id}
+  left join retweets on retweets.tweet_id=tweets.id and retweets.user_id = ${req.user[0][0].id} and retweets.deleted_at IS NULL
   WHERE users.is_active = 1 AND tweets.is_posted = 1 AND tweets.deleted_at IS NULL
   ORDER BY 
     CASE

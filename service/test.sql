@@ -191,3 +191,7 @@ CREATE TABLE `message_medias` (
   `deleted_at` TIMESTAMP
 );
 ALTER TABLE `message_medias` ADD FOREIGN KEY (`message_id`) REFERENCES `direct_messages` (`id`);
+
+-- execute this query in database
+alter table temp_twitter.tweets add column retweet_id INT;
+ALTER TABLE temp_twitter.tweets ADD FOREIGN KEY (retweet_id) REFERENCES temp_twitter.retweets (id);
