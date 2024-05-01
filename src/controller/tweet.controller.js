@@ -22,7 +22,7 @@ module.exports.insertTweet = async (req, res) => {
     try {
       if (status == 'tweet') {
         let data = [userId, content || "", '0', '1',retweetId != 'undefined' ? retweetId : null];
-        var lastInsertedId = await insertContent(data, res);
+        let lastInsertedId = await insertContent(data, res);
         let hashTags = extractHashtag(content);
         if (hashTags) {
           try {
@@ -39,7 +39,7 @@ module.exports.insertTweet = async (req, res) => {
         }
         let notification = await insertNotification([userId, lastInsertedId, 'Tweet', userId]);
         let mentionedUsers = extractMentionedUsernames(content);
-        var usersDetails = await getUsersByUsernames(mentionedUsers);
+        let usersDetails = await getUsersByUsernames(mentionedUsers);
         if (usersDetails) {
           usersDetails.forEach(async (mention) => {
             notification = await insertNotification([mention.id, lastInsertedId, 'Mention', userId]);
@@ -146,7 +146,7 @@ exports.tweetUpdate = async (req, res) => {
         }
         let notification = await insertNotification([userId, tweetId, 'Tweet', userId]);
         let mentionedUsers = extractMentionedUsernames(content);
-        var usersDetails = await getUsersByUsernames(mentionedUsers);
+        let usersDetails = await getUsersByUsernames(mentionedUsers);
         if (usersDetails) {
           usersDetails.forEach(async (mention) => {
             notification = await insertNotification([mention.id, tweetId, 'Mention', userId]);

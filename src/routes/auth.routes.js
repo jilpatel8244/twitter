@@ -4,7 +4,6 @@ const logger = require("../../logger/logger");
 const passport = require("passport");
 require("../middleware/permission");
 
-const homeRoute = require("./home.routes");
 const bookmarkRoute = require("./bookmark.routes");
 // const likeRoute = require("./like.routes");
 const messagesRoute = require("./messages.routes");
@@ -36,7 +35,6 @@ router.get("/resetPassword", resetPassword)
 router.post("/setPassword", set_password);
 router.get("/logout", logoutHandler);
 router.post("/isUserExist", USER_NAME_EXIST);
-router.use('/home', homeRoute);
 
 
 module.exports = router;
