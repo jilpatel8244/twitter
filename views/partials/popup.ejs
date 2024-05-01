@@ -1,7 +1,7 @@
 <div id="modelConfirm" class="fixed hidden z-50 inset-0 bg-gray-900 bg-opacity-60 overflow-y-auto h-full w-full px-4 ">
-     <div class="relative top-40 mx-auto shadow-xl rounded-md bg-white max-w-md">
- 
-         <div class="flex justify-between items-center p-4 border-b-2">
+    <div class="relative top-40 mx-auto shadow-xl rounded-md bg-white max-w-md">
+
+        <div class="flex justify-between items-center p-4 border-b-2">
             <div>
                 <p>Send via Direct Message</p>
             </div>
@@ -13,29 +13,29 @@
                         clip-rule="evenodd"></path>
                 </svg>
             </button>
-         </div>
+        </div>
 
-         <div id="selectedFollowers" class="flex flex-wrap px-2 py-1">
+        <div id="selectedFollowers" class="flex flex-wrap px-2 py-1">
 
-         </div>
+        </div>
 
-         <div class="p-2 h-[50vh] overflow-x-hidden" id="listOfFollwers">
-         </div>
- 
-         <div class="p-6 pt-0 text-center">
+        <div class="p-2 h-[50vh] overflow-x-hidden" id="listOfFollwers">
+        </div>
+
+        <div class="p-6 pt-0 text-center">
             <button onclick="sendTweetHandler()" id="shareTweetUsingDirectMessageButton" disabled
-                 class="text-white bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-base inline-flex items-center px-3 py-2.5 text-center">
-                 Send
+                class="text-white bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-base inline-flex items-center px-3 py-2.5 text-center">
+                Send
             </button>
-         </div>
- 
-     </div>
- </div>
+        </div>
 
- <script src="/js/getFollowersList.script.js"></script>
- <script type="text/javascript">
+    </div>
+</div>
+
+<script src="/js/getFollowersList.script.js"></script>
+<script type="text/javascript">
     let tweetId;
-     window.openModal = async function(modalId, tweet_id) {
+    window.openModal = async function (modalId, tweet_id) {
         tweetId = tweet_id
         document.getElementById(modalId).style.display = 'block'
         document.getElementsByTagName('body')[0].classList.add('overflow-y-hidden')
@@ -57,28 +57,31 @@
             let users = getFollowersList(response.message);
 
             listOfFollwers.innerHTML = users;
-            
-        }
-     }
- 
-     window.closeModal = function(modalId) {
-         document.getElementById(modalId).style.display = 'none'
-         document.getElementsByTagName('body')[0].classList.remove('overflow-y-hidden')
-     }
- 
-     // Close all modals when press ESC
-     document.onkeydown = function(event) {
-         event = event || window.event;
-         if (event.keyCode === 27) {
-             document.getElementsByTagName('body')[0].classList.remove('overflow-y-hidden')
-             let modals = document.getElementsByClassName('modal');
-             Array.prototype.slice.call(modals).forEach(i => {
-                 i.style.display = 'none'
-             })
-         }
-     };
 
-    async function sendTweetHandler () {
+        }
+    }
+
+    window.closeModal = function (modalId) {
+        document.getElementById(modalId).style.display = 'none';
+        document.getElementsByTagName('body')[0].classList.remove('overflow-y-hidden');
+
+        document.getElementById('selectedFollowers').innerHTML = '';
+        selectedUserArr = [];
+    }
+
+    // Close all modals when press ESC
+    document.onkeydown = function (event) {
+        event = event || window.event;
+        if (event.keyCode === 27) {
+            document.getElementsByTagName('body')[0].classList.remove('overflow-y-hidden')
+            let modals = document.getElementsByClassName('modal');
+            Array.prototype.slice.call(modals).forEach(i => {
+                i.style.display = 'none'
+            })
+        }
+    };
+
+    async function sendTweetHandler() {
         console.log(selectedUserArr);
         let url = window.location.origin + '/shareTweet';
 
@@ -87,23 +90,33 @@
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({ 
+            body: JSON.stringify({
                 'link': window.location.origin + '/get_comments/' + tweetId,
                 'users': selectedUserArr
             }),
         });
 
         let response = await data.json();
+        console.log("this is my response ", response);
 
         if (response.success) {
-            // send notification
+            // send notification and message
             selectedUserArr.forEach((element, index) => {
                 socket.emit('getUnreadMessages', selectedUserArr[index]);
+                socket.emit('send-private-message',
+                    {
+                        senderId: response.message.senderId,
+                        reciverId: selectedUserArr[index],
+                        content: response.message.content,
+                        url: response.message.url,
+                        content_type: response.message.content_type,
+                        created_at: response.message.created_at
+                    });
             })
 
             // remove all selected header
-            document.getElementById('selectedFollowers').innerHTML = ''; 
-            
+            document.getElementById('selectedFollowers').innerHTML = '';
+
             // remove empty selected array
             selectedUserArr = [];
             document.getElementById('shareTweetUsingDirectMessageButton').disabled = true;
@@ -112,33 +125,25 @@
             closeModal('modelConfirm');
 
             // display none to the share toggle
-            let shareOptionsDiv = document.getElementById(`shareOptions`+ tweetId);
+            let shareOptionsDiv = document.getElementById(`shareOptions` + tweetId);
             shareOptionsDiv.style.display = "none";
 
             // display toast
-            let timerInterval;
             Swal.fire({
-                title: "Direct Message sent",
-                timer: 1000,
-                position: "top-end",
-                timerProgressBar: true,
+                toast: true,
+                icon: 'success',
+                title: 'Direct Message sent',
+                background: 'rgb(14 165 233)',
+                animation: false,
+                position: 'bottom',
                 showConfirmButton: false,
-                didOpen: () => {
-                    Swal.showLoading();
-                    const timer = Swal.getPopup().querySelector("b");
-                    timerInterval = setInterval(() => {
-                    timer.textContent = `${Swal.getTimerLeft()}`;
-                    }, 100);
-                },
-                willClose: () => {
-                    clearInterval(timerInterval);
+                timer: 3000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                    toast.addEventListener('mouseleave', Swal.resumeTimer)
                 }
-                }).then((result) => {
-                /* Read more about handling dismissals below */
-                if (result.dismiss === Swal.DismissReason.timer) {
-                    console.log("I was closed by the timer");
-                }
-            });
+            })
         }
     }
- </script>
+</script>

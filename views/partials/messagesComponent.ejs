@@ -42,19 +42,10 @@
 
             async function deleteAllMessages(event, id) {
                 event.stopPropagation();
+            }
 
-                // fetch request for update 
-                let url = window.location.origin + '/messages/deleteMessages';
-
-                let data = await fetch(url, {
-                    method: "POST",
-                    body: formData
-                });
-
-                let response = await data.json();
-
-
-                // then empty chat container for sender side
+            async function pinConversation(event, id) {
+                event.stopPropagation();
             }
         </script>
 </section>

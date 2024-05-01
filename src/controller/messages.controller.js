@@ -68,7 +68,7 @@ exports.storeMessageHandler = async (req, res) => {
             message: {
                 'senderId': senderId,
                 'reciverId': reciverId,
-                'message': message,
+                'content': message,
                 'url': req.file ? (req.file.filename) : "nothing",
                 'content_type': content_type,
                 'created_at': insertedData[0][0].created_at
