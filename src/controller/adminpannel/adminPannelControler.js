@@ -359,26 +359,113 @@ exports.addUserCsv = async (req, res) => {
 
 exports.supportForm = async (req, res) => {
 
-    let filename = req.file.path
-    filename = filename?.substring(6)
-    console.log(filename);
+
+    try {
+        let user_id = req.user[0][0].id
+        let filename = req.file.path
+        filename = filename?.substring(6)
+        console.log(filename);
+        content = req.body.content;
+
+        const tickituid = new ShortUniqueId({ length: 10 });
+        let tickitid = tickituid.rnd();
+        console.log(tickitid);
 
 
-    content = req.body.content;
-
-    const tickituid = new ShortUniqueId({ length: 10 });
-    let tickitid = tickituid.rnd();
-    console.log(tickitid);
-
-
+        let data = {
+            "id": tickitid,
+            "user_id": user_id,
+            "content": content,
+            "url": filename
 
 
+        }
+        let sql = "insert into  get_support SET ?"
+        let [result] = await connection.query(sql, data)
+        return res.json({ result: 1 })
 
-    // let data = {
-    //     req
-    // }
+    } catch (error) {
+        console.log(error);
 
-    // console.log(req.);
+    }
 
 
+
+}
+
+
+
+exports.getsupport = async (req, res) => {
+
+    try {
+        let id = req.user[0][0].id
+        let sql = "select * from get_support where user_id = ?  order by created_at desc"
+        let [result] = await connection.query(sql, [id]);
+
+        return res.json({ data: result })
+
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+
+exports.admingetsupport = async (req, res) => {
+
+    try {
+        let id = req.user[0][0].id
+        let sql = "select * from get_support where  order by created_at desc"
+        let [result] = await connection.query(sql, [id]);
+
+        return res.json({ data: result })
+
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+
+exports.oldchats = async (req, res) => {
+
+
+
+    try {
+        let tickitid = req.body.tickitid
+
+        let sql = `
+            select * from support_messages where tickit_id = "${tickitid}" ;`
+
+
+        let [result] = await connection.query(sql);
+
+
+
+        return res.json({ data: result })
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+
+exports.savechat = async (req, res) => {
+
+
+
+    try {
+        let data = req.body.data;
+        console.log("dadta is ", data);
+
+        let sql = `
+        insert into support_messages set ?;`
+
+
+        let [result] = await connection.query(sql, data);
+
+
+
+
+        return res.json({ result: true })
+    } catch (error) {
+        console.log(error);
+    }
 }

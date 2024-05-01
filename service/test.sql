@@ -128,7 +128,7 @@ CREATE TABLE `temp_twitter`.`verification_requests` (
 update users set is_private = 0, profession = "Programmer",
 prof_desc = "I'm a passinate developer who always willing to learn, and apply those things in practice" where id = 1;
 CREATE TABLE `get_support` (
-  `id` INT PRIMARY KEY AUTO_INCREMENT,
+  `id` VARCHAR PRIMARY KEY,
   `user_id` INT NOT NULL,
   `content` VARCHAR(255),
   `url` VARCHAR(255),
@@ -138,6 +138,27 @@ CREATE TABLE `get_support` (
 );
 
 
+<<<<<<< HEAD
+  ALTER TABLE `get_support` ADD FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
+
+
+
+
+
+
+
+
+
+
+
+
+  -- new table 
+CREATE TABLE `support_messages` (
+  `id` INT PRIMARY KEY AUTO_INCREMENT,
+  `sender_id` INT NOT NULL,
+  `receiver_id` INT NOT NULL,
+  `content` text,
+=======
 -- modified on 29th aprill 
 
 -- add new table message_medias and remove table unread_messages
@@ -149,10 +170,14 @@ CREATE TABLE `direct_messages` (
   `content_type` VARCHAR(255),
   `content` text,
   `is_read` boolean,
+>>>>>>> development
   `created_at` TIMESTAMP DEFAULT (CURRENT_TIMESTAMP),
   `updated_at` TIMESTAMP on update CURRENT_TIMESTAMP,
   `deleted_at` TIMESTAMP
 );
+
+ALTER TABLE `support_messages` ADD FOREIGN KEY (`sender_id`) REFERENCES `users` (`id`);
+ALTER TABLE `support_messages` ADD FOREIGN KEY (`receiver_id`) REFERENCES `users` (`id`);
 ALTER TABLE `direct_messages` ADD FOREIGN KEY (`sender_id`) REFERENCES `users` (`id`);
 ALTER TABLE `direct_messages` ADD FOREIGN KEY (`receiver_id`) REFERENCES `users` (`id`);
 
