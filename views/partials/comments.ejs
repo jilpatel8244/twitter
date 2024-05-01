@@ -156,7 +156,7 @@
         <input type="hidden" name="tweet_id" value="<%= tweetId %>">
         <div class="bg-slate-100 flex p-4">
             <textarea name="comment" id="comments" cols="55" rows="1" placeholder="Post your Comment"
-                class="w-full p-4 bg-slate-100 outline-none"></textarea>
+                class="resize-none w-full p-4 bg-slate-100 outline-none"></textarea>
             <div class="flex items-end">
                 <div class="w-fit flex text-center rounded-full" onclick="Comment('<%= tweetId %>'); return false;">
                     <span
@@ -234,7 +234,7 @@
                             </div>
                             <div class="hidden showreply_<%= comment.id %>" id="showReply">
                                 <textarea placeholder="Add your reply" name="" id="reply" cols="30" rows="1"
-                                    class="w-full p-4 bg-slate-100 outline-none reply_<%= comment.id %>"></textarea>
+                                    class="resize-none w-full p-4 bg-slate-100 outline-none reply_<%= comment.id %>"></textarea>
                                 <div class="flex items-end">
                                     <div class="w-fit flex text-center rounded-full"
                                         onclick="Reply('<%= comment.id %>'); return false;">

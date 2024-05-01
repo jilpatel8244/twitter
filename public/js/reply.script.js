@@ -46,7 +46,7 @@ async function showReply(comment_id) {
                         <img class="inline-block h-8 w-8 rounded-full"
                         src="/uploads/${reply.profile_img_url}" alt="" />
                 </div>
-                <div class="ml-3 w-[80%]" style="">
+                <div class="ml-3" style="width:80%">
                     <p class="font-bold text-lg text-wrap">
                         ${reply.name} <span class="font-medium text-sm text-gray-400">
                                 ${reply.username} .
