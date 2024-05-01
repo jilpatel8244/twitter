@@ -17,6 +17,10 @@ const { login, loginHandler, logoutHandler } = require("../controller/auth.contr
 const { resetPassword, set_password, verify } = require("../controller/resetpassword");
 const { verify_user_byemail } = require("../controller/verify_user_byemail");
 const { getActivecode } = require("../controller/activecode.controler");
+const { getFollowData } = require("../controller/getFollowuser.controller");
+const { getFollowingData } = require("../controller/getFollowinguser.controller");
+const { getEditprofile, postUpdateProfile } = require("../controller/editprofile.controller");
+const {upload} = require("../middleware/multer")
 
 router.get("/", (req, res) => {
     res.render("pages/index");
@@ -37,6 +41,10 @@ router.post("/setPassword", set_password);
 router.get("/logout", logoutHandler);
 router.post("/isUserExist", USER_NAME_EXIST);
 router.use('/home', homeRoute);
+router.get("/follow",passport.authenticate('jwt', { session: false, failureRedirect: "/login" }),getFollowData)
+router.get("/followingUser",passport.authenticate('jwt', { session: false, failureRedirect: "/login" }),getFollowingData)
+router.get("/editprofile",passport.authenticate('jwt', { session: false, failureRedirect: "/login" }), getEditprofile);
+router.post("/editprofile/updateProfile", passport.authenticate('jwt', { session: false, failureRedirect: "/login" }), upload.fields([{name: "coverPhoto", maxCount: 1},{ name: "displayPhoto", maxCount: 1 }]), postUpdateProfile );
 
 
 module.exports = router;
