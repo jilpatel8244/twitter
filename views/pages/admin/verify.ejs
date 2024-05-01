@@ -7,14 +7,11 @@
     <title>Document</title>
     <link href="/css/verify.css" rel="stylesheet" />
     <link href="/css/output.css" rel="stylesheet" />
+    <script src="/socket.io/socket.io.js"></script>
 
     <style>
         .img-help:hover {
             width: 100%;
-        }
-
-        .prob {
-            max-width: 250px;
         }
 
         .boxmain {
@@ -26,17 +23,19 @@
         }
 
         .helpbtn {
-            width: 17%;
+            width: 25%;
             border: 1px solid black;
             background-color: #0ea5e9;
             color: white;
             margin-bottom: 2%;
             margin-left: 2%;
             text-align: center;
+            cursor: pointer;
         }
 
         .formhelp {
             max-width: 50%;
+            display: none;
         }
 
         .con {
@@ -47,7 +46,7 @@
     </style>
 </head>
 
-<body>
+<body onload="filldata()">
     <div class="relative h-screen" id="main" style="background-color: white">
         <div class="flex justify-center">
             <header class="py-4 h-auto">
@@ -60,11 +59,9 @@
                         <div style="max-width: 650px" class="margmain">
                             <div class="chat">
                                 <div class="mainhelpcon">
-                                    <div class="helpbtn">User support</div>
-                                    <div class="formhelp">
-                                        <div class="flex items-center justify-center p-12">
-                                            <!-- Author: FormBold Team -->
-                                            <!-- Learn More: https://formbold.com -->
+                                    <div class="helpbtn" id="helpbtn1">User support</div>
+                                    <div class="formhelp" id="formhelp">
+                                        <div class="flex items-center justify-center p-6">
                                             <div class="mx-auto w-full max-w-[550px]">
                                                 <div class="mb-5">
                                                     <label for="message"
@@ -109,53 +106,17 @@
                                                     <th scope="col" class="px-6 py-3">chat</th>
                                                 </tr>
                                             </thead>
-                                            <tbody>
-                                                <tr
-                                                    class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                                                    <td class="px-6 py-4 font-semibold text-gray-900 dark:text-white">
-                                                        2563155sdfg
-                                                    </td>
-                                                    <td class="p-4">
-                                                        <img src="/uploads/1713355020529-Screenshot from 2024-04-05 18-06-44.png"
-                                                            class="w-16 md:w-32 max-w-full img-help max-h-full"
-                                                            alt="Apple Watch" />
-                                                    </td>
-
-                                                    <td
-                                                        class="px-6 py-4 font-semibold text-gray-900 dark:text-white prob">
-                                                        i have issued when accesing my post sndfbgksbd
-                                                        hebskdjfb ebasdkfb
-                                                    </td>
-                                                    <td class="px-6 py-4 font-semibold text-gray-900 dark:text-white">
-                                                        <select name="problemstatus" id="problemstatus">
-                                                            <option value="volvo">in progress</option>
-                                                            <option value="saab">solved</option>
-                                                            <option value="mercedes">panding</option>
-                                                        </select>
-                                                    </td>
-                                                    <td
-                                                        class="px-6 py-4 font-semibold text-gray-900 dark:text-white prob">
-                                                        <div>
-                                                            <button id="open-chat"
-                                                                class="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition duration-300 flex items-center"
-                                                                onclick="toggleChatbox()">
-                                                                chat
-                                                            </button>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-
-                                            </tbody>
+                                            <tbody id="tbody"></tbody>
                                         </table>
                                     </div>
                                 </div>
 
                                 <!-- component -->
-                                <div id="chat-container" class="hidden fixed bottom-16 right-40 w-96">
+                                <div id="chat-container" class="hidden fixed bottom-16 left-50 w-96">
                                     <div class="bg-white shadow-md rounded-lg max-w-lg w-full">
                                         <div
                                             class="p-4 border-b bg-blue-500 text-white rounded-t-lg flex justify-between items-center">
-                                            <p class="text-lg font-semibold">Admin Bot</p>
+                                            <p id="help">help?</p>
                                             <button id="close-chat"
                                                 class="text-gray-300 hover:text-gray-400 focus:outline-none focus:text-gray-400"
                                                 onclick="toggleChatbox()">
@@ -168,24 +129,14 @@
                                         </div>
                                         <div id="chatbox" class="p-4 h-80 overflow-y-auto">
                                             <!-- Chat messages will be displayed here -->
-                                            <div class="mb-2 text-right">
-                                                <p class="bg-blue-500 text-white rounded-lg py-2 px-4 inline-block">
-                                                    hello
-                                                </p>
-                                            </div>
-                                            <div class="mb-2">
-                                                <p class="bg-gray-200 text-gray-700 rounded-lg py-2 px-4 inline-block">
-                                                    This is a response from the chatbot.
-                                                </p>
-                                            </div>
                                         </div>
                                         <div class="p-4 border-t flex">
                                             <input id="user-input" type="text" placeholder="Type a message"
                                                 class="w-full px-3 py-2 border rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
-                                            <button id="send-button"
+                                            <p id="send-button"
                                                 class="bg-blue-500 text-white px-4 py-2 rounded-r-md hover:bg-blue-600 transition duration-300">
                                                 Send
-                                            </button>
+                                            </p>
                                         </div>
                                     </div>
                                 </div>
@@ -221,32 +172,200 @@
             }
         }
 
-        let supportform = document.getElementById("supportform")
-        supportform.addEventListener("click", supportformhandel)
+        let supportform = document.getElementById("supportform");
+        supportform.addEventListener("click", supportformhandel);
 
         async function supportformhandel() {
             let messagehelp = document.getElementById("messagehelp");
             let screenshot = document.getElementById("screenshot");
-            console.log(screenshot);
-            // let email = document.getElementById("email");
-            // let dob = document.getElementById("dob");
-            // let password = document.getElementById("password");
             let formdata = new FormData();
-            formdata.append("content", messagehelp.value)
-            formdata.append("media", screenshot.files[0])
-            // formdata.append("email", email.value)
-            // formdata.append("date_of_birth", dob.value)
-            // formdata.append("password", password.value)
+            formdata.append("content", messagehelp.value);
+            formdata.append("media", screenshot.files[0]);
             console.log(formdata);
-
             let data = await fetch("/admin/supportform", {
                 method: "POST",
-                body: formdata
-            })
+                body: formdata,
+            });
+
+            data = await data.json();
+            await filldata();
+        }
+
+        async function filldata() {
+            let getsupportdata = await fetch("/admin/getsupport");
+            getsupportdata = await getsupportdata.json();
+            let dataget = getsupportdata.data;
+            let getstring = ``;
+            dataget.forEach(async (element) => {
+                getstring += `
+                <trclass="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                <td class="px-6 py-4 font-semibold text-gray-900 dark:text-white">
+                ${element.id}
+                </td>
+                <td class="p-4">
+                <img src="${element.url}"class="w-16 md:w-32 max-w-full img-help max-h-full" alt="Apple Watch" />
+                </td>
+                <td class="px-6 py-4 font-semibold text-gray-900 max-w-[150px] break-words dark:text-white prob">
+                ${element.content}
+                </td>
+                <td class="px-6 py-4 font-semibold text-gray-900 dark:text-white">
+                    ${element.status}
+                </td>
+                <td class="px-6 py-4 font-semibold text-gray-900 dark:text-white prob">
+                <div>
+                <p id="open-chat" class="${element.id} bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition duration-300 flex items-center"
+                onclick="toggleChatbox()"> chat </p> </div> </td> </tr>
+
+                `;
+            });
+
+            document.getElementById("tbody").innerHTML = getstring;
+        }
+
+        let helpbtn1 = document.getElementById("helpbtn1");
+        helpbtn1.addEventListener("click", helpbtnhendeler);
+
+        let check = true;
+        form = document.getElementById("formhelp");
+
+        function helpbtnhendeler() {
+            if (check == true) {
+                form.style.display = "block";
+                check = false;
+            } else {
+                form.style.display = "none";
+                check = true;
+            }
+        }
+
+        let sendbutton = document.getElementById("send-button");
+
+        let tbody = document.getElementById("tbody");
+
+        tbody.addEventListener("click", tbodyhandel);
+
+        async function tbodyhandel(e) {
+            if (e.target.id == "open-chat") {
+                async function chatload() {
+                    let help = document.getElementById("help");
+                    tickitid = e.target.classList[0];
+                    help.innerText = tickitid;
+                    let data = await fetch("/admin/oldchats", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({ tickitid: tickitid }),
+                    });
+
+                    data = await data.json();
+                    data = data.data;
+                    let chatbox = document.getElementById("chatbox");
+                    chatbox.innerHTML = ``;
+
+                    data.forEach((element) => {
+                        if (element.sender_id == 11) {
+                            chatbox.innerHTML += `   
+                <div class="mb-2 text-right">
+                            <p class="bg-blue-500 text-white rounded-lg py-2 px-4 inline-block">
+                    ${element.content}</p>
+                                </div>
+        `;
+                        } else {
+                            chatbox.innerHTML += `   <div class="mb-2">
+                                       <p id="pagenumber"
+                                        class="bg-gray-200 text-gray-700 rounded-lg py-2 px-4 inline-block">
+            
+                                        ${element.content}</p>
+                                     </div>
+`;
+                        }
+                    });
+                }
+                await chatload();
+            }
+        }
+
+        sendButton.addEventListener("click", sendhandel);
+        let userInput1 = document.getElementById("user-input");
+        async function sendhandel() {
+            let tickitid = document.getElementById("help").innerText;
+            let message = {
+                content: userInput1.value,
+                tickit_id: tickitid,
+                sender_id: 11,
+                receiver_id: 17,
+            };
+            const socket = io();
 
 
+
+            let data = await fetch("/admin/savechat", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ data: message }),
+            });
+
+
+            data = await data.json();
+            console.log(data);
+            if (data.result == true) {
+                socket.emit("mesaage", message);
+
+                let chatbox = document.getElementById("chatbox");
+
+                chatbox.innerHTML += `   
+                <div class="mb-2 text-right">
+                            <p class="bg-blue-500 text-white rounded-lg py-2 px-4 inline-block">
+                    ${userInput1.value}</p>
+                                </div>
+        `;
+
+
+
+
+
+            }
 
         }
+
+
+
+        let tickit = "RkhKctEEF2"
+
+        socket.on(`adminrecive-${tickit}`, (data) => {
+
+
+            let chatbox = document.getElementById("chatbox");
+
+            if (data.sender_id == 11) {
+                chatbox.innerHTML
+                    +=
+                    `
+        <div class="mb-2 text-right">
+        <p class="bg-blue-500 text-white rounded-lg py-2 px-4 inline-block">
+            ${data.content}</p>
+            </div>
+                `
+            }
+            else {
+                chatbox.innerHTML += `   <div class="mb-2">
+                    <p id="pagenumber"
+                        class="bg-gray-200 text-gray-700 rounded-lg py-2 px-4 inline-block">
+                    
+                    ${data.content}</p>
+                </div>
+        `
+            }
+
+
+
+
+        });
+
+
 
     </script>
 </body>

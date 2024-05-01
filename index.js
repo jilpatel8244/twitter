@@ -72,6 +72,17 @@ io.on("connection", async function (socket) {
   socket.on("user-connected", async (userId) => {
     connectedUser[userId] = socket.id;
   });
+  socket.on("mesaage", (msg) => {
+
+    socket.broadcast.emit(`recivemsg-${msg.tickit_id}`, msg)
+
+  });
+
+  socket.on("adminmesaage", (msg) => {
+
+    socket.broadcast.emit(`adminrecive-${msg.tickit_id}`, msg)
+
+  });
 
   // to get all unread message count follower wise
   socket.on("getUnreadMessages", async (userId) => {
@@ -125,6 +136,13 @@ io.on("connection", async function (socket) {
     }
   });
 
+
+
+  socket.on("mesaage", async (data) => {
+    console.log(data);
+
+
+  });
   // load old chats
   socket.on("existingChats", async (data) => {
     try {
