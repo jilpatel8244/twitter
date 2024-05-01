@@ -23,6 +23,7 @@ const { getLikes } = require("../controller/profile/profile.like.controller");
 const { getProfileMedia } = require("../controller/profile/profile.media.controller");
 const { getAllTrendingHashtagsHandler } = require("../controller/getAllTrendingHashtags.controller");
 
+const {notification, getNotifications,} = require("../controller/notification.controller");
 router.get("/", (req, res) => {
   res.render("pages/index");
 });
@@ -107,3 +108,12 @@ router.get("/profile/media", passport.authenticate('jwt', { session: false, fail
 // Sanket Patel Profile Routes Ends Here
 
 module.exports = router
+
+
+// parmeshvar parmar routes
+
+// notification routes
+
+router.get("/notifications",passport.authenticate("jwt", { session: false, failureRedirect: "/login" }),notification);
+
+router.get("/notification",passport.authenticate("jwt", { session: false, failureRedirect: "/login" }),getNotifications);

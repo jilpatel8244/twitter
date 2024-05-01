@@ -7,7 +7,6 @@ const { Server } = require("socket.io");
 const io = new Server(server);
 const cookieParser = require("cookie-parser");
 const routes = require("./src/routes/routes");
-const notification = require("./src/routes/notification.route");
 const exploreRoute = require("./src/routes/explore.routes");
 const authRouter = require("./src/routes/auth.routes");
 const connection = require("./config/connection");

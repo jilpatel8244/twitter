@@ -1,19 +1,22 @@
 const { log } = require("winston");
 const connection = require("../../config/connection");
 const logger = require('../../logger/logger');
-const { hkdfSync } = require("crypto");
 
 exports.getHomeForyou = async (req, res) => {
   let sql = `
   SELECT users.username,
   users.id as user_id, 
   users.name,
-  tweets.user_id,
+  u2.name as retweeter_name,
+  u2.username as retweeter_username,
   tweet_comments.content as comments,
   tweets.content,
   users.profile_img_url as profile_img_url, 
+  u2.profile_img_url as retweeter_profile_img_url, 
   tweets.id as tweet_id,
   tweet_comments.content as comments, 
+  tweets.created_at,
+  tweets.retweet_id as retweetId,
   tweets.user_id = ${req.user[0][0].id} as isAuthor,
   CASE
     WHEN tweets.updated_at IS NOT NULL THEN
@@ -31,30 +34,39 @@ exports.getHomeForyou = async (req, res) => {
         ELSE CONCAT(DATE_FORMAT(tweets.created_at, '%d'), ' ', DATE_FORMAT(tweets.created_at, '%M'))
       END
   END as time,
+  CASE
+  WHEN tweets.created_at IS NOT NULL THEN
+    CASE
+      WHEN TIMESTAMPDIFF(SECOND, tweets.created_at, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(SECOND, tweets.created_at, NOW()+1), ' seconds ago')
+      WHEN TIMESTAMPDIFF(MINUTE, tweets.created_at, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(MINUTE, tweets.created_at, NOW()), ' minutes ago')
+      WHEN TIMESTAMPDIFF(HOUR, tweets.created_at, NOW()) < 24 THEN CONCAT(TIMESTAMPDIFF(HOUR, tweets.created_at, NOW()), ' hours ago')
+      ELSE CONCAT(DATE_FORMAT(tweets.created_at, '%d'), ' ', DATE_FORMAT(tweets.created_at, '%M'))
+      END
+    END as tweetTime,
   medias.media_url as media_url,
   bookmarks.status as isBookmarked,
   tweet_likes.status as isLiked,
   (SELECT COUNT(*) FROM tweet_likes WHERE tweet_likes.tweet_id = tweets.id AND tweet_likes.status = 1) as likeCount,
   (SELECT COUNT(*) FROM retweets where retweets.tweet_id=tweets.id and retweets.deleted_at IS NULL) as repostCount,
   retweets.deleted_at as notRetweeted,
-  retweets.created_at as createdAt,
   retweets.retweet_message as retweetMsg
   FROM users
-  JOIN tweets ON users.id = tweets.user_id
+  LEFT JOIN tweets ON users.id = tweets.user_id
   LEFT JOIN medias ON tweets.id = medias.tweet_id
   LEFT JOIN tweet_comments ON tweet_comments.user_id = tweets.id 
-  LEFT JOIN bookmarks ON bookmarks.tweet_id = tweets.id AND bookmarks.user_id = ${req.user[0][0].id}
-  LEFT JOIN tweet_likes ON tweet_likes.tweet_id = tweets.id AND tweet_likes.user_id = ${req.user[0][0].id}
-  left join retweets on retweets.tweet_id=tweets.id and retweets.user_id = ${req.user[0][0].id} and retweets.deleted_at IS NULL
-  WHERE users.is_active = 1 AND tweets.is_posted = 1 AND tweets.deleted_at IS NULL 
+  LEFT JOIN bookmarks ON bookmarks.tweet_id = tweets.id AND bookmarks.user_id =${req.user[0][0].id}
+  LEFT JOIN tweet_likes ON tweet_likes.tweet_id = tweets.id AND tweet_likes.user_id =${req.user[0][0].id}
+  LEFT JOIN retweets on retweets.tweet_id=tweets.id  and retweets.deleted_at IS NULL
+  LEFT JOIN users u2 ON retweets.user_id = u2.id and retweets.tweet_id = tweets.id 
+  WHERE users.is_active = 1 AND tweets.is_posted = 1 AND tweets.deleted_at IS NULL  AND tweets.retweet_id is null  
   ORDER BY 
     CASE
       WHEN tweets.updated_at IS NOT NULL THEN tweets.updated_at
-      ELSE tweets.created_at
+      ELSE  tweets.created_at 
     END DESC;
 `;
 
-  const retweet = `SELECT users.username,users.id as userId, users.name,users.profile_img_url as profile_img_url, 
+const retweet = `SELECT users.username,users.id as userId, users.name,users.profile_img_url as profile_img_url, 
 tweets.content,tweets.id as tweet_id,
 tweet_comments.content as comments, 
 medias.media_url as media_url,
@@ -104,68 +116,8 @@ ORDER BY
   const [rows] = await connection.query(sql);
   res.status(200).json({
     success: true,
-    message: { rows, retweetData},
+    message: {rows,retweetData},
   })
-}
-
-
-exports.getRetweet = async (req, res) => {
-  const retweet = `SELECT users.username, 
-  users.id as user_id, 
-  users.name,  
-  tweets.content,
-  users.profile_img_url as profile_img_url, 
-  tweets.id as tweet_id,
-  tweet_comments.content as comments, 
-  CASE
-    WHEN tweets.updated_at IS NOT NULL THEN
-      CASE
-        WHEN TIMESTAMPDIFF(SECOND, tweets.updated_at, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(SECOND, tweets.updated_at, NOW()+1), ' seconds ago')
-        WHEN TIMESTAMPDIFF(MINUTE, tweets.updated_at, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(MINUTE, tweets.updated_at, NOW()), ' minutes ago')
-        WHEN TIMESTAMPDIFF(HOUR, tweets.updated_at, NOW()) < 24 THEN CONCAT(TIMESTAMPDIFF(HOUR, tweets.updated_at, NOW()), ' hours ago')
-        ELSE CONCAT(DATE_FORMAT(tweets.updated_at, '%d'), ' ', DATE_FORMAT(tweets.updated_at, '%M'))
-      END
-    ELSE
-      CASE
-        WHEN TIMESTAMPDIFF(SECOND, tweets.created_at, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(SECOND, tweets.created_at, NOW()+1), ' seconds ago')
-        WHEN TIMESTAMPDIFF(MINUTE, tweets.created_at, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(MINUTE, tweets.created_at, NOW()), ' minutes ago')
-        WHEN TIMESTAMPDIFF(HOUR, tweets.created_at, NOW()) < 24 THEN CONCAT(TIMESTAMPDIFF(HOUR, tweets.created_at, NOW()), ' hours ago')
-        ELSE CONCAT(DATE_FORMAT(tweets.created_at, '%d'), ' ', DATE_FORMAT(tweets.created_at, '%M'))
-      END
-  END as time,
-  medias.media_url as media_url,
-  bookmarks.status as isBookmarked,
-  tweet_likes.status as isLiked,
-  (SELECT COUNT(*) FROM tweet_likes WHERE tweet_likes.tweet_id = tweets.id) as likeCount,
-  (select count(*) From retweets where retweets.tweet_id=tweets.id and retweets.deleted_at IS NULL) as repostCount,
-  retweets.deleted_at as notRetweeted,
-  retweets.created_at as createdAt,
-  retweets.tweet_id as retweetId,
-  retweets.user_id as retweeterId,
-  retweets.retweet_message as retweetContent
-  FROM users
-  JOIN tweets ON users.id = tweets.user_id
-  LEFT JOIN medias ON tweets.id = medias.tweet_id
-  LEFT JOIN tweet_comments ON tweet_comments.user_id = tweets.id 
-  LEFT JOIN bookmarks ON bookmarks.tweet_id = tweets.id AND bookmarks.user_id = ${req.user[0][0].id}
-  LEFT JOIN tweet_likes ON tweet_likes.tweet_id = tweets.id AND tweet_likes.user_id = ${req.user[0][0].id}
-  LEFT JOIN retweets on retweets.tweet_id=tweets.id 
-  WHERE users.is_active = 1 AND tweets.is_posted = 1 AND tweets.deleted_at IS NULL and retweets.user_id IN 
-  (SELECT retweets.user_id from retweets 
- left join users on retweets.user_id = users.id 
- left join tweets on retweets.tweet_id = tweets.id
- where retweets.user_id = users.id ) and retweets.deleted_at IS NULL 
-  ORDER BY 
-    CASE
-      WHEN tweets.updated_at IS NOT NULL THEN tweets.updated_at
-      ELSE tweets.created_at
-    END DESC;`
-
-  const [retweetData] = await connection.query(retweet);
-  res.status(200).json({
-    success: true,
-    retweetData: retweetData,
-  });
 }
 
 exports.getHomeFollowing = async (req, res) => {
@@ -199,10 +151,6 @@ exports.getHomeFollowing = async (req, res) => {
   bookmarks.status as isBookmarked,
   tweet_likes.status as isLiked,
   (SELECT COUNT(*) FROM tweet_likes WHERE tweet_likes.tweet_id = tweets.id AND tweet_likes.status = 1) as likeCount
-  ,(SELECT COUNT(*) FROM retweets where retweets.tweet_id=tweets.id and retweets.deleted_at IS NULL) as repostCount,
-  retweets.deleted_at as notRetweeted,
-  retweets.created_at as createdAt,
-  retweets.retweet_message as retweetMsg
   FROM users
   JOIN tweets ON users.id = tweets.user_id
   LEFT JOIN medias ON tweets.id = medias.tweet_id
@@ -210,7 +158,6 @@ exports.getHomeFollowing = async (req, res) => {
   LEFT JOIN bookmarks ON bookmarks.tweet_id = tweets.id AND bookmarks.user_id = ${req.user[0][0].id}
   LEFT JOIN tweet_likes ON tweet_likes.tweet_id = tweets.id AND tweet_likes.user_id = ${req.user[0][0].id}
   JOIN followers ON followers.following_id = users.id AND followers.follower_id = ${req.user[0][0].id}
-  left join retweets on retweets.tweet_id=tweets.id and retweets.user_id = ${req.user[0][0].id} and retweets.deleted_at IS NULL
   WHERE users.is_active = 1 AND tweets.is_posted = 1 AND tweets.deleted_at IS NULL
   ORDER BY 
     CASE
@@ -228,33 +175,33 @@ exports.getHomeFollowing = async (req, res) => {
     message: rows
   })
 }
-exports.delete_post = async (req, res) => {
+exports.delete_post =  async (req, res) => {
   const postId = req.params.id;
   const userId = req.user[0][0].id;
 
   const [post] = await connection.query('SELECT user_id FROM tweets WHERE id = ?', [postId]);
 
-  await connection.query('DELETE FROM tweet_likes WHERE tweet_id = ?', [postId]);
+    await connection.query('DELETE FROM tweet_likes WHERE tweet_id = ?', [postId]);
 
-  await connection.query('DELETE FROM medias WHERE tweet_id = ?', [postId]);
+    await connection.query('DELETE FROM medias WHERE tweet_id = ?', [postId]);
 
-  await connection.query('DELETE FROM bookmarks WHERE tweet_id = ?', [postId]);
+    await connection.query('DELETE FROM bookmarks WHERE tweet_id = ?', [postId]);
 
-  const [comments] = await connection.query('SELECT id FROM tweet_comments WHERE tweet_id = ?', [postId]);
+    const [comments] = await connection.query('SELECT id FROM tweet_comments WHERE tweet_id = ?', [postId]);
 
-  for (let comment of comments) {
-    await connection.query('DELETE FROM reply_comments WHERE comment_id = ?', [comment.id]);
-  }
+    for(let comment of comments){
+      await connection.query('DELETE FROM reply_comments WHERE comment_id = ?', [comment.id]);
+    }
 
-  await connection.query('DELETE FROM tweet_comments WHERE tweet_id = ?', [postId]);
+    await connection.query('DELETE FROM tweet_comments WHERE tweet_id = ?', [postId]);
 
-  const [result] = await connection.query('DELETE FROM tweets WHERE id = ?', [postId]);
+    const [result] = await connection.query('DELETE FROM tweets WHERE id = ?', [postId]);
 
-  res.json({
-    success: true,
-    message: 'Post and associated media, likes, bookmarks, and comments deleted successfully',
-  });
-}
+      res.json({
+        success: true,
+        message: 'Post and associated media, likes, bookmarks, and comments deleted successfully',
+      });
+    }
 exports.get_notification = async (req, res) => {
   const [notificationCount] = await connection.query(`select count(*) as notificationCount from notifications where user_id = ? and  is_read = 0 and related_user_id != ? ;`, [req.user[0][0].id, req.user[0][0].id]);
   res.status(200).json({
@@ -291,17 +238,16 @@ exports.post_comment = async (req, res) => {
 
   let [result] = await connection.query(sql, [user_id, tweetId, comment]);
   let [comment_mention] = await connection.query(`SELECT * FROM tweet_comments WHERE tweet_id = ? order by created_at desc`, [tweetId])
-  const mentionedUsernames = extractMentionedUsernames(comment_mention[0].content);
-  const mentionedUsers = await getUsersByUsernames(mentionedUsernames);
-
   let [tweet_user_id] = await connection.query(`SELECT user_id FROM tweets WHERE id = ?`, [tweetId]);
   await connection.query(`INSERT INTO notifications (user_id, tweet_id, type, related_user_id)
     VALUES (?, ?, 'Comment', ?);`, [tweet_user_id[0].user_id, tweetId, user_id]);
+  const mentionedUsernames = extractMentionedUsernames(comment_mention[0].content);
+  const mentionedUsers = await getUsersByUsernames(mentionedUsernames);
   if (mentionedUsers.length >= 1) {
-    await connection.execute(`INSERT INTO notifications (user_id, tweet_id, type, related_user_id)
+    let [tweet_user_id] = await connection.query(`SELECT user_id FROM tweets WHERE id = ?`, [tweetId])
+    await connection.query(`INSERT INTO notifications (user_id, tweet_id, type, related_user_id)
     VALUES (?, ?, 'Mention', ?);`, [mentionedUsers[0].id, tweetId, user_id]);
   }
-
   res.json({
     success: result.affectedRows > 0,
     comment: {
@@ -367,7 +313,6 @@ WHERE tweets.id = ?;
 ;
 `;
   let [tweet] = await connection.query(tweetSql, [tweetId]);
-  // console.log(tweet);
 
   res.render('../views/pages/comments', {
     tweetId: tweetId,
@@ -392,7 +337,7 @@ exports.delete_comment = async (req, res) => {
   let [rows] = await connection.query(sql, [commentId]);
 
   if (rows.length > 0 && rows[0].user_id === userId) {
-
+   
     sql = `DELETE FROM reply_comments WHERE comment_id = ?`;
     await connection.query(sql, [commentId]);
 
@@ -401,7 +346,7 @@ exports.delete_comment = async (req, res) => {
 
     res.json({
       success: result.affectedRows > 0,
-      userId: userId,
+      userId:userId,
     });
   } else {
     res.json({
@@ -423,21 +368,22 @@ exports.edit_comment = async (req, res) => {
   });
 };
 
-// exports.post_reply = async (req, res) => {
-//   let content = req.body.content;
-//   let comment_id = req.body.comment_id;
-//   let user_id = req.user[0][0].id
-//   let sql = `
-//         INSERT INTO reply_comments (user_id, comment_id, content)
-//         VALUES (?, ?, ?)
-//     `;
+exports.post_reply = async (req, res) => {
+  let content = req.body.content;
 
-//   let [result] = await connection.query(sql, [user_id, comment_id, content]);
-//   res.json({
-//     success: result.affectedRows > 0,
-//   });
-// }
+  let comment_id = req.body.comment_id;
+  let user_id = req.user[0][0].id
+  let sql = `
+        INSERT INTO reply_comments (user_id, comment_id, content)
+        VALUES (?, ?, ?)
+    `;
 
+  let [result] = await connection.query(sql, [user_id, comment_id, content]);
+  res.json({
+    success: result.affectedRows > 0,
+  });
+}
+ 
 exports.get_reply = async (req, res) => {
 
   let comment_id = req.body.comment_id;
@@ -482,8 +428,6 @@ async function getUsersByUsernames(usernames) {
 exports.post_reply = async (req, res) => {
   let content = req.body.content;
   let comment_id = req.body.comment_id;
-  let tweetId = req.body.tweetId;
-
 
   if (content.length > 255) {
     res.json({
@@ -500,27 +444,12 @@ exports.post_reply = async (req, res) => {
     `;
 
   let [result] = await connection.query(sql, [user_id, comment_id, content]);
-  let [reply_mention] = await connection.query(`SELECT * FROM reply_comments WHERE comment_id = ? order by created_at desc`, [comment_id]);
-  const mentionedUsernames = extractMentionedUsernames(reply_mention[0].content);
-  const mentionedUsers = await getUsersByUsernames(mentionedUsernames);
-
-  let [reply_user_id] = await connection.query(`SELECT user_id FROM tweet_comments WHERE id = ?`, [comment_id]);
-  console.log("hello " + reply_user_id[0].user_id);
-  await connection.query(`INSERT INTO notifications (user_id, tweet_id, type, related_user_id)
-    VALUES (?, ?, 'Comment', ?);`, [reply_user_id[0].user_id, tweetId, user_id]);
-
-  if (mentionedUsers.length >= 1) {
-    let [comment_user_id] = await connection.query(`SELECT user_id FROM tweet_comments WHERE id = ?`, [comment_id])
-    await connection.query(`INSERT INTO notifications (user_id, tweet_id, type, related_user_id)
-    VALUES (?, ?, 'Mention', ?);`, [mentionedUsers[0].id, tweetId, user_id]);
-  }
   res.json({
     success: result.affectedRows > 0,
     comment: {
       id: result.insertId,
       comment_id: comment_id,
       content: content,
-      user_id: user_id,
     },
   });
 }
@@ -537,7 +466,7 @@ exports.delete_reply = async (req, res) => {
 
     res.json({
       success: result.affectedRows > 0,
-      userId: userId,
+      userId:userId,
     });
   } else {
     res.json({
