@@ -12,15 +12,12 @@ const notification = require("./src/routes/notification.route");
 const exploreRoute = require("./src/routes/explore.routes");
 const authRouter = require("./src/routes/auth.routes");
 const connection = require("./config/connection");
-const editprofile = require("./src/routes/editprofile.route");
 const passport = require("passport");
 require("./src/middleware/passport");
 const bookmarkRoute = require("./src/routes/bookmark.routes");
 const likeRoute = require("./src/routes/like.routes");
 const messagesRoute = require("./src/routes/messages.routes");
 const shareRoute = require('./src/routes/share.routes');
-const followData = require('./src/routes/followUser.route');
-const followingData =require('./src/routes/followinguser.route')
 const adminroute = require("./src/routes/admin.routes");
 const resetpasswordProfile = require("./src/routes/profile.resetpassword.route");
 
@@ -45,11 +42,8 @@ app.use(messagesRoute);
 app.use("/explore", exploreRoute);
 app.use(authRouter);
 app.use(notification);
-app.use("/editprofile", editprofile);
 app.use(resetpasswordProfile);
 app.use(followUnfollowHandler)
-app.use(followData);
-app.use(followingData);
 app.use(shareRoute);
 app.use('/profile', getProfileRouter);
 app.use(router);

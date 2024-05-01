@@ -4,6 +4,6 @@ const { getFollowingData } = require('../controller/getFollowinguser.controller'
 
 const router = express.Router();
 
-router.get("/following",getFollowingData)
+// router.get("/followingUser",passport.authenticate('jwt', { session: false, failureRedirect: "/login" }),getFollowingData)
 
 module.exports = router;  
