@@ -37,6 +37,6 @@ async function bookmarkHandler(tweetId) {
             }
         }
     } else {
-        console.log(response.message);
+
     }
 }

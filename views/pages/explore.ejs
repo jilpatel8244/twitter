@@ -9,12 +9,6 @@
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="/sweetalert2.all.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.28.2/sweetalert2.all.min.js"></script>
-    <style>
-        .swal2-html-container, .swal2-title{
-            color: white !important;
-        }
-    </style>
-    
     <title>X</title>
     <style>
         #bla:after {
@@ -215,7 +209,7 @@
 <script>
 
     function hello() {
-        alert("hello")
+
     }
 
     let search = document.getElementById("search")
@@ -462,7 +456,7 @@ class="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 tra
                 body: JSON.stringify(bodyargs)
             })
             data1 = await data1.json()
-            console.log("data is ", data1.username);
+
             return data1.username;
         }
 
@@ -657,7 +651,7 @@ class="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 tra
         });
 
         // ----------------------
-        
+
 
         let url = window.location.origin + '/explore/latestTweet';
 
@@ -703,7 +697,7 @@ class="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 tra
         console.log("data is for media", data);
         data.forEach(element => {
             mediacon += `<div>
-<img class="h-auto max-w-full rounded-lg" src="/uploads/${element.media_url}" alt="">
+<img class="h-auto max-w-full rounded-lg" src="./uploads/${element.media_url}" alt="">
 </div>`
         });
         mediacon += `</div>`
@@ -715,7 +709,7 @@ class="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 tra
 
 
     async function foollowhandel(id) {
-        console.log("id", id);
+
 
         const body = {
             id: id
@@ -729,14 +723,14 @@ class="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 tra
                 body: JSON.stringify(body)
             });
             const responseData = await response.json();
-            console.log("response", response)
+
 
             if (!responseData.statusdata) {
                 document.getElementById("btnfollow" + id).innerHTML = "Following"
 
             }
             if (responseData.statusdata) {
-                console.log(responseData.statusdata)
+
                 document.getElementById("btnfollow" + id).innerHTML = "Follow"
             }
 
@@ -756,10 +750,7 @@ class="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 tra
 
 
 
-    function retweetgenrate(id) {
 
-        alert("RETWEETED")
-    }
 
 </script>
 <script src="/js/like.script.js"></script>

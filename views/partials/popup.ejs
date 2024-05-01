@@ -62,11 +62,8 @@
     }
 
     window.closeModal = function (modalId) {
-        document.getElementById(modalId).style.display = 'none';
-        document.getElementsByTagName('body')[0].classList.remove('overflow-y-hidden');
-
-        document.getElementById('selectedFollowers').innerHTML = '';
-        selectedUserArr = [];
+        document.getElementById(modalId).style.display = 'none'
+        document.getElementsByTagName('body')[0].classList.remove('overflow-y-hidden')
     }
 
     // Close all modals when press ESC
@@ -82,7 +79,7 @@
     };
 
     async function sendTweetHandler() {
-        console.log(selectedUserArr);
+
         let url = window.location.origin + '/shareTweet';
 
         let data = await fetch(url, {
@@ -137,11 +134,20 @@
                 animation: false,
                 position: 'bottom',
                 showConfirmButton: false,
-                timer: 3000,
-                timerProgressBar: true,
-                didOpen: (toast) => {
-                    toast.addEventListener('mouseenter', Swal.stopTimer)
-                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                didOpen: () => {
+                    Swal.showLoading();
+                    const timer = Swal.getPopup().querySelector("b");
+                    timerInterval = setInterval(() => {
+                        timer.textContent = `${Swal.getTimerLeft()}`;
+                    }, 100);
+                },
+                willClose: () => {
+                    clearInterval(timerInterval);
+                }
+            }).then((result) => {
+                /* Read more about handling dismissals below */
+                if (result.dismiss === Swal.DismissReason.timer) {
+
                 }
             })
         }

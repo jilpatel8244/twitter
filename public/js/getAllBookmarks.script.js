@@ -8,7 +8,7 @@ async function getAllBookamrkHandler() {
     let response = await data.json();
 
     let allTweets = document.getElementById('allTweets');
-    
+
     if (response.success == true) {
         if(response.message.length){
             let tweet = getTweetComponent(response.message);
@@ -26,6 +26,6 @@ async function getAllBookamrkHandler() {
                                     </div>`;
         }
     } else {
-        console.log(response.message);
+
     }
 }

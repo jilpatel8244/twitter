@@ -138,6 +138,7 @@ CREATE TABLE `get_support` (
   `deleted_at` TIMESTAMP  DEFAULT(NULL)
 );
 
+
   ALTER TABLE `get_support` ADD FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
 
   -- new table 
@@ -145,6 +146,7 @@ CREATE TABLE `support_messages` (
   `id` INT PRIMARY KEY AUTO_INCREMENT,
   `sender_id` INT NOT NULL,
   `receiver_id` INT NOT NULL,
+  `content` text,
   `content` text
 );
 

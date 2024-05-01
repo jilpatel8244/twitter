@@ -1,6 +1,6 @@
 const express = require("express");
 const logger = require("../../logger/logger");
-const { getAdminLogin, getUsers, getTweets, manageUserActivation, ristricTweet, getverifypage, getVerifiedRequest, updateverify, getAdminPannel, adminLoginHandler, addUserCsv, adduserbyform, supportForm, getsupport, oldchats, savechat } = require("../controller/adminpannel/adminPannelControler");
+const { getAdminLogin, getUsers, getTweets, manageUserActivation, ristricTweet, getverifypage, getVerifiedRequest, updateverify, getAdminPannel, adminLoginHandler, addUserCsv, adduserbyform, supportForm, getsupport, oldchats, savechat, useridTickit, admingetsupport, adminid } = require("../controller/adminpannel/adminPannelControler");
 
 const passport = require("passport");
 const { permission } = require("../middleware/permission");
@@ -26,6 +26,9 @@ router.post("/ristrictweet", ristricTweet);
 router.post("/updateverify", updateverify);
 router.post("/adduser", adduserbyform);
 router.get("/getsupport", passport.authenticate('jwt', { session: false, failureRedirect: "/admin/adminlogin" }), getsupport)
+router.get("/adminsupport", passport.authenticate('jwt', { session: false, failureRedirect: "/admin/adminlogin" }), admingetsupport)
+router.post("/useridTickit", passport.authenticate('jwt', { session: false, failureRedirect: "/admin/adminlogin" }), useridTickit)
+router.get("/adminid", passport.authenticate('jwt', { session: false, failureRedirect: "/admin/adminlogin" }), adminid)
 router.use(passport.authenticate('jwt', { session: false, failureRedirect: "/admin/adminlogin" }), permission)
 
 router.get("/adminPannel", getAdminPannel)

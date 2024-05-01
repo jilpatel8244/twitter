@@ -1,5 +1,4 @@
-create database temp_twitter;
-use temp_twitter;
+
 
 CREATE TABLE `roles` (
   `id` INT PRIMARY KEY AUTO_INCREMENT,
@@ -15,7 +14,7 @@ CREATE TABLE `permissions` (
   `id` INT PRIMARY KEY AUTO_INCREMENT,
   `permission_name` VARCHAR(255),
   `created_at` TIMESTAMP DEFAULT (utc_timestamp()),
-  `updated_at` TIMESTAMP on update utc_timestamp(),
+  `updated_at` TIMESTAMP ,
   `deleted_at` TIMESTAMP
 );
 
@@ -46,21 +45,20 @@ CREATE TABLE `users` (
    `profession` varchar(255) DEFAULT NULL,
   `prof_desc` varchar(255) DEFAULT NULL,
   `created_at` TIMESTAMP DEFAULT (utc_timestamp()),
-  `updated_at` TIMESTAMP on update utc_timestamp(),
+  `updated_at` TIMESTAMP,
   `deleted_at` TIMESTAMP NULL DEFAULT NULL
 );
 ALTER TABLE `users` ADD FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`);
 
 -- if you don't want to drop table -> just drop column like below
-alter table users drop column country_id;
+
 
 CREATE TABLE `role_users` (
   `id` INT PRIMARY KEY AUTO_INCREMENT,
   `role_id` INT NOT NULL,
   `user_id` INT NOT NULL
 );
-ALTER TABLE `role_users` ADD FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
-ALTER TABLE `role_users` ADD FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`);
+
 
 CREATE TABLE `logs` (
   `id` INT PRIMARY KEY AUTO_INCREMENT,
@@ -78,8 +76,7 @@ CREATE TABLE `followers` (
   `current_status` tinyint default 0 
 );
 
-ALTER TABLE `followers` ADD FOREIGN KEY (`following_id`) REFERENCES `users` (`id`);
-ALTER TABLE `followers` ADD FOREIGN KEY (`follower_id`) REFERENCES `users` (`id`);
+
 
 CREATE TABLE `tweets` (
   `id` INT PRIMARY KEY AUTO_INCREMENT,
@@ -88,14 +85,13 @@ CREATE TABLE `tweets` (
   `is_drafted` tinyint default 0,
   `is_posted` tinyint default 0,
   `created_at` TIMESTAMP DEFAULT (utc_timestamp()),
-  `updated_at` TIMESTAMP on update utc_timestamp(),
+  `updated_at` TIMESTAMP,
   `deleted_at` TIMESTAMP 
 );
-ALTER TABLE temp_twitter.tweets ADD column retweet_id INT;
-ALTER TABLE temp_twitter.tweets ADD FOREIGN KEY (retweet_id) REFERENCES temp_twitter.retweets (id);
 
-ALTER TABLE `tweets` ADD FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
-ALTER TABLE `tweets` ADD FOREIGN KEY (`retweet_id`) REFERENCES `retweets` (`id`);
+
+
+
 
 CREATE TABLE `medias` (
   `id` INT PRIMARY KEY AUTO_INCREMENT,
@@ -103,10 +99,10 @@ CREATE TABLE `medias` (
   `media_url` VARCHAR(255),
   `media_type` VARCHAR(255),
   `created_at` TIMESTAMP DEFAULT (utc_timestamp()),
-  `updated_at` TIMESTAMP on update utc_timestamp(),
+  `updated_at` TIMESTAMP,
   `deleted_at` TIMESTAMP
 );
-ALTER TABLE `medias` ADD FOREIGN KEY (`tweet_id`) REFERENCES `tweets` (`id`);
+
 
 CREATE TABLE `tweet_comments` (
   `id` INT PRIMARY KEY AUTO_INCREMENT,
@@ -114,16 +110,10 @@ CREATE TABLE `tweet_comments` (
   `tweet_id` INT,
   `content` VARCHAR(255),
   `created_at` TIMESTAMP DEFAULT (utc_timestamp()),
-  `updated_at` TIMESTAMP on update utc_timestamp(),
+  `updated_at` TIMESTAMP,
   `deleted_at` TIMESTAMP
 );
 
-select * from tweet_comments;
-
-insert into tweet_comments (user_id,tweet_id,content) values(1,2,'there is nothing outside bro!!');
-
-ALTER TABLE `tweet_comments` ADD FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
-ALTER TABLE `tweet_comments` ADD FOREIGN KEY (`tweet_id`) REFERENCES `tweets` (`id`);
 
 CREATE TABLE `reply_comments` (
   `id` INT PRIMARY KEY AUTO_INCREMENT,
@@ -131,11 +121,10 @@ CREATE TABLE `reply_comments` (
   `comment_id` INT,
   `content` VARCHAR(255),
   `created_at` TIMESTAMP NOT NULL DEFAULT (utc_timestamp()),
-  `updated_at` TIMESTAMP on update utc_timestamp(),
+  `updated_at` TIMESTAMP,
   `deleted_at` TIMESTAMP
 );
-ALTER TABLE `reply_comments` ADD FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
-ALTER TABLE `reply_comments` ADD FOREIGN KEY (`comment_id`) REFERENCES `tweet_comments` (`id`);
+
 
 CREATE TABLE `tweet_likes` (
   `id` INT PRIMARY KEY AUTO_INCREMENT,
@@ -146,8 +135,6 @@ CREATE TABLE `tweet_likes` (
 );
 
 
-ALTER TABLE `tweet_likes` ADD FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
-ALTER TABLE `tweet_likes` ADD FOREIGN KEY (`tweet_id`) REFERENCES `tweets` (`id`);
 
 CREATE TABLE `comment_likes` (
   `id` INT PRIMARY KEY AUTO_INCREMENT,
@@ -156,8 +143,7 @@ CREATE TABLE `comment_likes` (
   `status` boolean,
   `created_at` TIMESTAMP NOT NULL DEFAULT (utc_timestamp())
 );
-ALTER TABLE `comment_likes` ADD FOREIGN KEY (`comment_id`) REFERENCES `tweet_comments` (`id`);
-ALTER TABLE `comment_likes` ADD FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
+
 
 CREATE TABLE `bookmarks` (
   `id` INT PRIMARY KEY AUTO_INCREMENT,
@@ -167,8 +153,6 @@ CREATE TABLE `bookmarks` (
   `created_at` TIMESTAMP NOT NULL DEFAULT (utc_timestamp())
 );
 
-ALTER TABLE `bookmarks` ADD FOREIGN KEY (`tweet_id`) REFERENCES `tweets` (`id`);
-ALTER TABLE `bookmarks` ADD FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
 
 CREATE TABLE `notifications` (
   `id` INT PRIMARY KEY AUTO_INCREMENT,
@@ -179,8 +163,7 @@ CREATE TABLE `notifications` (
   `created_at` TIMESTAMP NOT NULL DEFAULT (utc_timestamp())
 );
  
-ALTER TABLE `notifications` ADD FOREIGN KEY (`tweet_id`) REFERENCES `tweets` (`id`);
-ALTER TABLE `notifications` ADD FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
+
 
 CREATE TABLE `hashtag_lists` (
   `id` INT PRIMARY KEY AUTO_INCREMENT,
@@ -195,8 +178,7 @@ CREATE TABLE `hashtag_tweet` (
   `status` tinyint,
   `created_at` TIMESTAMP NOT NULL DEFAULT (utc_timestamp())
 );
-ALTER TABLE `hashtag_tweet` ADD FOREIGN KEY (`hashtag_id`) REFERENCES `hashtag_lists` (`id`);
-ALTER TABLE `hashtag_tweet` ADD FOREIGN KEY (`tweet_id`) REFERENCES `tweets` (`id`);
+
 
 CREATE TABLE `retweets` (
   `id` INT PRIMARY KEY AUTO_INCREMENT,
@@ -204,11 +186,9 @@ CREATE TABLE `retweets` (
   `user_id` INT NOT NULL,
   `retweet_message` VARCHAR(255),
   `created_at` TIMESTAMP DEFAULT (utc_timestamp()),
-  `updated_at` TIMESTAMP on update utc_timestamp(),
+  `updated_at` TIMESTAMP,
   `deleted_at` TIMESTAMP
 );
-ALTER TABLE `retweets` ADD FOREIGN KEY (`tweet_id`) REFERENCES `tweets` (`id`);
-ALTER TABLE `retweets` ADD FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
 
 
 CREATE TABLE `direct_messages` (
@@ -219,12 +199,11 @@ CREATE TABLE `direct_messages` (
   `content` text,
   `is_read` boolean,
   `created_at` TIMESTAMP DEFAULT (utc_timestamp()),
-  `updated_at` TIMESTAMP on update utc_timestamp(),
+  `updated_at` TIMESTAMP,
   `deleted_at` TIMESTAMP
 );
 
-ALTER TABLE `direct_messages` ADD FOREIGN KEY (`sender_id`) REFERENCES `users` (`id`);
-ALTER TABLE `direct_messages` ADD FOREIGN KEY (`receiver_id`) REFERENCES `users` (`id`);
+
 
 
 CREATE TABLE `message_medias` (
@@ -232,10 +211,10 @@ CREATE TABLE `message_medias` (
   `message_id` INT NOT NULL,
   `url` text,
   `created_at` TIMESTAMP DEFAULT (utc_timestamp()),
-  `updated_at` TIMESTAMP on update utc_timestamp(),
+  `updated_at` TIMESTAMP,
   `deleted_at` TIMESTAMP
 );
-ALTER TABLE `message_medias` ADD FOREIGN KEY (`message_id`) REFERENCES `direct_messages` (`id`);
+
 
 
 CREATE TABLE `get_support` (
@@ -248,7 +227,6 @@ CREATE TABLE `get_support` (
   `deleted_at` TIMESTAMP  DEFAULT(NULL)
 );
 
-  ALTER TABLE `get_support` ADD FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
   
 CREATE TABLE `support_messages` (
   `id` INT PRIMARY KEY AUTO_INCREMENT,
@@ -259,3 +237,33 @@ CREATE TABLE `support_messages` (
 
 ALTER TABLE `support_messages` ADD FOREIGN KEY (`sender_id`) REFERENCES `users` (`id`);
 ALTER TABLE `support_messages` ADD FOREIGN KEY (`receiver_id`) REFERENCES `users` (`id`);
+ALTER TABLE twitter.tweets ADD column retweet_id INT;
+ALTER TABLE twitter.tweets ADD FOREIGN KEY (retweet_id) REFERENCES twitter.retweets (id);
+ALTER TABLE `tweets` ADD FOREIGN KEY (`retweet_id`) REFERENCES `retweets` (`id`);
+
+ALTER TABLE `tweet_comments` ADD FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
+ALTER TABLE `tweet_comments` ADD FOREIGN KEY (`tweet_id`) REFERENCES `tweets` (`id`);
+ALTER TABLE `direct_messages` ADD FOREIGN KEY (`sender_id`) REFERENCES `users` (`id`);
+ALTER TABLE `direct_messages` ADD FOREIGN KEY (`receiver_id`) REFERENCES `users` (`id`);
+ALTER TABLE `bookmarks` ADD FOREIGN KEY (`tweet_id`) REFERENCES `tweets` (`id`);
+ALTER TABLE `bookmarks` ADD FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
+ALTER TABLE `reply_comments` ADD FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
+ALTER TABLE `reply_comments` ADD FOREIGN KEY (`comment_id`) REFERENCES `tweet_comments` (`id`);
+ALTER TABLE `role_users` ADD FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
+ALTER TABLE `role_users` ADD FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`);
+ALTER TABLE `retweets` ADD FOREIGN KEY (`tweet_id`) REFERENCES `tweets` (`id`);
+ALTER TABLE `retweets` ADD FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
+ALTER TABLE `comment_likes` ADD FOREIGN KEY (`comment_id`) REFERENCES `tweet_comments` (`id`);
+ALTER TABLE `comment_likes` ADD FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
+  ALTER TABLE `get_support` ADD FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
+ALTER TABLE `tweet_likes` ADD FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
+ALTER TABLE `tweet_likes` ADD FOREIGN KEY (`tweet_id`) REFERENCES `tweets` (`id`);
+ALTER TABLE `message_medias` ADD FOREIGN KEY (`message_id`) REFERENCES `direct_messages` (`id`);
+ALTER TABLE `hashtag_tweet` ADD FOREIGN KEY (`hashtag_id`) REFERENCES `hashtag_lists` (`id`);
+ALTER TABLE `hashtag_tweet` ADD FOREIGN KEY (`tweet_id`) REFERENCES `tweets` (`id`);
+ALTER TABLE `followers` ADD FOREIGN KEY (`following_id`) REFERENCES `users` (`id`);
+ALTER TABLE `followers` ADD FOREIGN KEY (`follower_id`) REFERENCES `users` (`id`);
+ALTER TABLE `medias` ADD FOREIGN KEY (`tweet_id`) REFERENCES `tweets` (`id`);
+ALTER TABLE `notifications` ADD FOREIGN KEY (`tweet_id`) REFERENCES `tweets` (`id`);
+ALTER TABLE `notifications` ADD FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
+ALTER TABLE `tweets` ADD FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);

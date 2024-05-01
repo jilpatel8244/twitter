@@ -10,11 +10,11 @@ async function likeHandler(tweetId) {
     });
 
     let response = await data.json();
-    
+
     if (response.success == true) {
         let likeImg = document.querySelector(`.like_${tweetId}`);
 
-        let likeCount = document.getElementById('likeCount'+tweetId);
+        let likeCount = document.getElementById('likeCount' + tweetId);
 
         if (response.likeStatus) {
             likeCount.innerHTML = parseInt(likeCount.innerHTML) + 1;
@@ -29,10 +29,10 @@ async function likeHandler(tweetId) {
         } else {
             likeCount.style.display = "none";
         }
-        console.log(likeCount);
 
-        
+
+
     } else {
-        console.log(response.message);
+
     }
 }

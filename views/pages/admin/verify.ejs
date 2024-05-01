@@ -247,9 +247,12 @@
         async function tbodyhandel(e) {
             if (e.target.id == "open-chat") {
                 async function chatload() {
+
                     let help = document.getElementById("help");
-                    tickitid = e.target.classList[0];
+                    let tickitid = e.target.classList[0];
                     help.innerText = tickitid;
+                    tickitid1 = tickitid
+
                     let data = await fetch("/admin/oldchats", {
                         method: "POST",
                         headers: {
@@ -288,14 +291,27 @@
 
         sendButton.addEventListener("click", sendhandel);
         let userInput1 = document.getElementById("user-input");
+
+
         async function sendhandel() {
             let tickitid = document.getElementById("help").innerText;
+
+
+            let headerdata = await fetch("/admin/adminid")
+
+
+            headerdata = await headerdata.json();
+
+
             let message = {
                 content: userInput1.value,
                 tickit_id: tickitid,
-                sender_id: 11,
-                receiver_id: 17,
+                sender_id: headerdata.sender_id,
+                receiver_id: headerdata.reciving_id,
             };
+
+
+
             const socket = io();
 
 
@@ -310,11 +326,12 @@
 
 
             data = await data.json();
-            console.log(data);
+
             if (data.result == true) {
                 socket.emit("mesaage", message);
 
                 let chatbox = document.getElementById("chatbox");
+
 
                 chatbox.innerHTML += `   
                 <div class="mb-2 text-right">
@@ -333,32 +350,41 @@
 
 
 
-        let tickit = "RkhKctEEF2"
 
-        socket.on(`adminrecive-${tickit}`, (data) => {
+        socket.on(`adminrecive`, (data) => {
 
 
-            let chatbox = document.getElementById("chatbox");
+            let help = document.getElementById("help")
 
-            if (data.sender_id == 11) {
-                chatbox.innerHTML
-                    +=
-                    `
-        <div class="mb-2 text-right">
-        <p class="bg-blue-500 text-white rounded-lg py-2 px-4 inline-block">
-            ${data.content}</p>
-            </div>
-                `
-            }
-            else {
-                chatbox.innerHTML += `   <div class="mb-2">
+            id = help.innerText
+
+            if (id == data.tickit_id) {
+
+
+                let chatbox = document.getElementById("chatbox");
+                chatbox.scrollTop = chatbox.scrollHeight
+
+                if (data.sender_id == 11) {
+                    chatbox.innerHTML
+                        +=
+                        `
+                            <div class="mb-2 text-right">
+                            <p class="bg-blue-500 text-white rounded-lg py-2 px-4 inline-block">
+                                ${data.content}</p>
+                            </div>
+                                `
+                }
+                else {
+                    chatbox.innerHTML += `   <div class="mb-2">
                     <p id="pagenumber"
-                        class="bg-gray-200 text-gray-700 rounded-lg py-2 px-4 inline-block">
-                    
-                    ${data.content}</p>
-                </div>
-        `
+                    class="bg-gray-200 text-gray-700 rounded-lg py-2 px-4 inline-block">
+            
+                  ${data.content}</p>
+                    </div>
+`
+                }
             }
+
 
 
 

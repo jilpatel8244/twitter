@@ -65,7 +65,7 @@ exports.loginHandler = async (req, res) => {
 			success: false,
 			message: "something went wrong",
 		});
-		
+
 	}
 };
 
@@ -80,7 +80,7 @@ exports.login = (req, res) => {
 exports.USER_NAME_EXIST = async (req, res) => {
 	let { username } = req.body;
 
-	console.log("data is " ,req.body);
+
 	if (username.trim() == "" || username.trim().length < 3) {
 		return res
 			.status(422)
@@ -100,5 +100,5 @@ exports.USER_NAME_EXIST = async (req, res) => {
 
 
 exports.logoutHandler = (req, res) => {
-    res.clearCookie('token').render('pages/login');
+	res.clearCookie('token').render('pages/login');
 }

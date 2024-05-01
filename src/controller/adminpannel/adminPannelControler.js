@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken");
 const ShortUniqueId = require('short-unique-id');
 const md5 = require("md5");
 const { log } = require("console");
-const { search } = require("../../routes/admin.routes");
+
 const csvtojson = require('csvtojson')
 const fs = require("fs")
 
@@ -20,7 +20,7 @@ exports.adduserbyform = async (req, res) => {
         let salt = saltuid.rnd();
         const activationcodeuid = new ShortUniqueId({ length: 12 });
         let activationcode = activationcodeuid.rnd();
-        console.log("salt is ", salt);
+
         let password = md5(req.body.password + salt)
         let userdata =
         {
@@ -38,7 +38,7 @@ exports.adduserbyform = async (req, res) => {
         let sql = `insert into users set ?`
         let [result] = await connection.query(sql, userdata)
         //ahiya hato
-        console.log(userdata);
+
     }
 }
 
@@ -68,7 +68,7 @@ exports.getUsers = async (req, res) => {
         res.json({ data: result1, "curpage": page, "totalpage": numberOfPages })
 
     } catch (error) {
-        console.log(error);
+
         res.json({ error: error })
     }
 
@@ -86,15 +86,15 @@ exports.manageUserActivation = async (req, res) => {
             status = 1
         }
         let userid = req.body.userId; // get from the body;
-        console.log(req.body);
+
 
         let sql = `UPDATE users SET is_active ='${status}'  WHERE id = '${userid}'`
         let [result] = await connection.query(sql)
-        console.log(result);
+
         res.json({ data: result })
 
     } catch (error) {
-        console.log(error);
+
         res.json({ error: error })
     }
 
@@ -103,7 +103,7 @@ exports.manageUserActivation = async (req, res) => {
 exports.ristricTweet = async (req, res) => {
 
     try {
-        console.log("object");
+
         let ristric = req.body.ristric; //get from the body
         if (ristric == 1) {
             ristric = 0;
@@ -112,15 +112,15 @@ exports.ristricTweet = async (req, res) => {
             ristric = 1
         }
         let tweet_id = req.body.tweetId; // get from the body;
-        console.log(req.body);
+
 
         let sql = `UPDATE tweets SET  is_ristricted ='${ristric}'  WHERE id = '${tweet_id}'`
         let [result] = await connection.query(sql)
-        console.log(result);
+
         res.json({ data: result })
 
     } catch (error) {
-        console.log(error);
+
         res.json({ error: error })
     }
 
@@ -194,11 +194,11 @@ exports.updateverify = async (req, res) => {
         let sql = `UPDATE users SET  is_varified ='${request}'  WHERE id = '${userId}'`
         let [result] = await connection.query(sql)
         let [result1] = await connection.query(sql1)
-        console.log(result);
+
         res.json({ data: result })
 
     } catch (error) {
-        console.log(error);
+
         res.json({ error: error })
     }
 
@@ -235,7 +235,7 @@ exports.getTweets = async (req, res) => {
         res.json({ data: result1, "curpage": page, "totalpage": numberOfPages })
 
     } catch (error) {
-        console.log(error);
+
         res.json({ error: error })
     }
 
@@ -326,7 +326,7 @@ exports.addUserCsv = async (req, res) => {
                     let salt = saltuid.rnd();
                     const activationcodeuid = new ShortUniqueId({ length: 12 });
                     let activationcode = activationcodeuid.rnd();
-                    console.log("salt is ", salt);
+
                     let password = md5(file[i].password + salt)
                     let userdata =
                     {
@@ -360,16 +360,17 @@ exports.addUserCsv = async (req, res) => {
 exports.supportForm = async (req, res) => {
 
 
+
     try {
         let user_id = req.user[0][0].id
         let filename = req.file.path;
         filename = filename?.substring(6)
-        console.log(filename);
+
         content = req.body.content;
 
         const tickituid = new ShortUniqueId({ length: 10 });
         let tickitid = tickituid.rnd();
-        console.log(tickitid);
+
 
 
         let data = {
@@ -385,7 +386,7 @@ exports.supportForm = async (req, res) => {
         return res.json({ result: 1 })
 
     } catch (error) {
-        console.log(error);
+
 
     }
 
@@ -399,13 +400,13 @@ exports.getsupport = async (req, res) => {
 
     try {
         let id = req.user[0][0].id
-        let sql = "select * from get_support where user_id = ?  order by created_at desc"
+        let sql = "select *  from get_support where user_id = ?  order by created_at desc"
         let [result] = await connection.query(sql, [id]);
 
         return res.json({ data: result })
 
     } catch (error) {
-        console.log(error);
+
     }
 }
 
@@ -414,16 +415,47 @@ exports.admingetsupport = async (req, res) => {
 
     try {
         let id = req.user[0][0].id
-        let sql = "select * from get_support where  order by created_at desc"
+        let sql = "select * from get_support   order by created_at desc"
         let [result] = await connection.query(sql, [id]);
 
         return res.json({ data: result })
 
     } catch (error) {
-        console.log(error);
+
     }
 }
+exports.useridTickit = async (req, res) => {
 
+    try {
+        let id = req.user[0][0].id
+        let tickitid = req.body.tickitid;
+        // let tickitid = "m8PemZyRGW";
+        let sql = `select get_support.user_id  as reciving_id from get_support where get_support.id = "${tickitid}"`
+        let [result] = await connection.query(sql);
+
+        return res.json({ sender_id: id, reciving_id: result[0].reciving_id })
+
+    } catch (error) {
+
+    }
+}
+exports.adminid = async (req, res) => {
+
+    try {
+        let id = req.user[0][0].id
+
+
+        let sql = `select users.id  as reciving_id from users where users.email = "admin@gmail.com"`
+
+
+        let [result] = await connection.query(sql);
+
+        return res.json({ sender_id: id, reciving_id: result[0].reciving_id })
+
+    } catch (error) {
+
+    }
+}
 
 exports.oldchats = async (req, res) => {
 
@@ -442,7 +474,7 @@ exports.oldchats = async (req, res) => {
 
         return res.json({ data: result })
     } catch (error) {
-        console.log(error);
+
     }
 }
 
@@ -453,7 +485,7 @@ exports.savechat = async (req, res) => {
 
     try {
         let data = req.body.data;
-        console.log("dadta is ", data);
+
 
         let sql = `
         insert into support_messages set ?;`
@@ -466,6 +498,6 @@ exports.savechat = async (req, res) => {
 
         return res.json({ result: true })
     } catch (error) {
-        console.log(error);
+
     }
 }

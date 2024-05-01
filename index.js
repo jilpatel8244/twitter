@@ -7,7 +7,6 @@ const { Server } = require("socket.io");
 const io = new Server(server);
 const cookieParser = require("cookie-parser");
 const routes = require("./src/routes/routes");
-const exploreRoute = require("./src/routes/explore.routes");
 const authRouter = require("./src/routes/auth.routes");
 const connection = require("./config/connection");
 const passport = require("passport");
@@ -16,7 +15,6 @@ const bookmarkRoute = require("./src/routes/bookmark.routes");
 const likeRoute = require("./src/routes/like.routes");
 const messagesRoute = require("./src/routes/messages.routes");
 const shareRoute = require('./src/routes/share.routes');
-const adminroute = require("./src/routes/admin.routes");
 const resetpasswordProfile = require("./src/routes/profile.resetpassword.route");
 
 const PORT = process.env.PORT || 3000;
@@ -31,13 +29,13 @@ app.use(cookieParser());
 
 app.use(express.static("public"));
 app.use(express.static("node_modules/sweetalert2/dist"));
-app.use("/admin", adminroute);
+// app.use("/admin", adminroute);
 
 app.use(routes);
 app.use(likeRoute);
 app.use(bookmarkRoute);
 app.use(messagesRoute);
-app.use("/explore", exploreRoute);
+
 app.use(authRouter);
 app.use(resetpasswordProfile);
 app.use(followUnfollowHandler)
@@ -61,13 +59,13 @@ io.on("connection", async function (socket) {
   });
   socket.on("mesaage", (msg) => {
 
-    socket.broadcast.emit(`recivemsg-${msg.tickit_id}`, msg)
+    socket.broadcast.emit(`recivemsg`, msg)
 
   });
 
   socket.on("adminmesaage", (msg) => {
 
-    socket.broadcast.emit(`adminrecive-${msg.tickit_id}`, msg)
+    socket.broadcast.emit(`adminrecive`, msg)
 
   });
 
@@ -125,11 +123,7 @@ io.on("connection", async function (socket) {
 
 
 
-  socket.on("mesaage", async (data) => {
-    console.log(data);
 
-
-  });
   // load old chats
   socket.on("existingChats", async (data) => {
     try {
@@ -145,5 +139,5 @@ io.on("connection", async function (socket) {
 });
 
 server.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+
 });

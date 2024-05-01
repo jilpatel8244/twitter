@@ -9,8 +9,11 @@
     <link href="/css/output.css" rel="stylesheet" />
     <script src="/js/user.admin.js"></script>
     <script src="/js/tweetadmin.js"></script>
+    <script src="/js/mainhandel.js"></script>
+    <script src="/js/adminFeatureHandeler.js"></script>
     <script src="/js/hastag.admin.js"></script>
     <script src="/js/verify.admin.js"></script>
+    <script src="/js/adduser.js"></script>
     <script src="/socket.io/socket.io.js"></script>
 
 </head>
@@ -19,14 +22,30 @@
 
     <div class="main-container" id="main-container">
         <%- include('../../partials/adminsidebar.ejs') %>
-            <div class="content" id="content">
+            <div class="content overflow-auto" id="content">
+            </div>
+            <div class="content overflow-auto" id="content1">
                 <div class="chat">
 
 
-                    <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-                        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                            <thead class="text-xs text-gray-700 bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                    <div class="relative overflow-x-auto overflow-y-auto shadow-md sm:rounded-lg tabal">
+                        <div
+                            class="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 bg-white dark:bg-gray-900">
 
+                        </div>
+                        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                            <thead
+                                class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                <tr>
+                                    <th scope="col" class="px-16 py-3">Ticket Id</th>
+                                    <th scope="col" class="px-6 py-3">Image</th>
+
+                                    <th scope="col" class="px-6 py-3">Problem</th>
+                                    <th scope="col" class="px-6 py-3">
+                                        problem Status
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">chat</th>
+                                </tr>
                             </thead>
                             <tbody id="tbody">
 
@@ -39,7 +58,7 @@
                         <div class="bg-white shadow-md rounded-lg max-w-lg w-full">
                             <div
                                 class="p-4 border-b bg-blue-500 text-white rounded-t-lg flex justify-between items-center">
-                                <p class="text-lg font-semibold">Admin Bot</p>
+                                <p class="text-lg font-semibold" id="help">help</p>
                                 <button id="close-chat"
                                     class="text-gray-300 hover:text-gray-400 focus:outline-none focus:text-gray-400"
                                     onclick="toggleChatbox()">
@@ -67,9 +86,8 @@
 
 
                 </div>
+
             </div>
-
-
 
 </body>
 
@@ -79,6 +97,7 @@
     let users = document.getElementById("users");
     let tweets = document.getElementById("tweets");
     let hastags = document.getElementById("hastags");
+
     let verification = document.getElementById("verification");
     let support = document.getElementById("support");
     let adduser = document.getElementById("adduser");
@@ -90,163 +109,6 @@
     support.addEventListener("click", supporthandeler)
 
 
-    async function addusercontroler() {
-
-        document.querySelectorAll(".active").forEach(el => el.classList.remove("active"));
-        adduser.classList.add("active");
-        let content = document.getElementById("content");
-
-
-        let contentadd = `
-        
-        <div class="option">
-
-<div class="heading">
-    <p id="pagenumber">Add users</p>
-    <hr>
-</div>
-<div class="fileimg" >
-    <img src="/assets/file.png" alt="" class="imgfile" id="fileimg">
-    <p>Add users using csv</p>
-
-</div>
-<div class="fileupload" id="fileupload">
-
-    <input type="file" id="filecsv" name="filecsv">
-
-    <p id="brt"
-        class="px-6 py-2 mt-4 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 btnsub transform bg-black rounded-lg hover:bg-gray-900 focus:outline-none focus:ring focus:ring-gray-300 focus:ring-opacity-50"
-        value="submit">
-        submit
-    </p>
-</div>
-<div class="fileimg" >
-    <img src="/assets/form.png" alt="" class="imgfile" id="formimg1">
-    <p>Add user using form</p>
-</div>
-<div id="formuser">
-    <input
-        class="block w-full px-4 py-2 mt-2 text-gray-800 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-black dark:focus:border-black focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-gray-300"
-        type="text" placeholder="Name" id="name" aria-label="Name" name="name" />
-
-    <input
-        class="block w-full px-4 py-2 mt-2 text-gray-800 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-black dark:focus:border-black focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-gray-300"
-        type="text" placeholder="Username" id="username" aria-addlabel="Username" name="username" />
-    <input
-        class="block w-full px-4 py-2 mt-2 text-gray-800 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-black dark:focus:border-black focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-gray-300"
-        type="text" placeholder="Email Address" id="email" aria-label="Email Address" name="email" />
-    <input
-        class="block w-full px-4 py-2 mt-2 text-gray-800 placeholder-gray-500 bg-white border rounded-lg focus:border-black dark:focus:border-black focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-white"
-        placeholder="Date Of Birth" class="textbox-n" type="text" onfocus="(this.type='date')"
-        onblur="(this.type='text')" id="dob" aria-label="date" name="dob" /> 
-    <input
-        class="block w-full px-4 py-2 mt-2 text-gray-800 placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-black dark:focus:border-black focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-gray-300"
-        type="password" id="password" name="password" placeholder="Password" aria-label="password" required />
-    <p id="confirm"
-        class="px-6 py-2 text-sm mt-4 btnsub font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-black rounded-lg hover:bg-gray-900 focus:outline-none focus:ring focus:ring-gray-300 focus:ring-opacity-50"
-        value="create">
-        create
-    </p>
-
-
-</div>
-
-</div>`
-
-        content.innerHTML = contentadd;
-
-
-        let confirm = document.getElementById("confirm")
-        confirm.addEventListener("click", formdatahandel)
-
-        async function formdatahandel() {
-            let name = document.getElementById("name");
-            let username = document.getElementById("username");
-            let email = document.getElementById("email");
-            let dob = document.getElementById("dob");
-            let password = document.getElementById("password");
-            let formdata = new FormData();
-            formdata.append("name", name.value)
-            formdata.append("username", username.value)
-            formdata.append("email", email.value)
-            formdata.append("date_of_birth", dob.value)
-            formdata.append("password", password.value)
-            console.log(formdata);
-
-            let data = await fetch("/admin/adduser", {
-                method: "POST",
-                headers: {
-                    "Content-type": "application/x-www-form-urlencoded"
-                },
-                body: new URLSearchParams(formdata)
-            })
-        }
-
-        let brt = document.getElementById("brt")
-        brt.addEventListener("click", filehandel)
-        async function filehandel() {
-            let name = document.getElementById("name");
-            let filecsv = document.getElementById("filecsv");
-
-            alert("hello ")
-            let formdata = new FormData();
-            formdata.append("name", name.value)
-            formdata.append("file", filecsv.files[0])
-
-            let data = await fetch("/admin/uploadcsv", {
-                method: "POST",
-                body: formdata
-            })
-        }
-
-    }
-
-    async function usershandeler(search = "", curpage = 1) {
-
-        // document.querySelectorAll(".active").forEach(el => el.classList.remove("active"));
-        // users.classList.add("active");
-        // let content = document.getElementById("content");
-
-
-        // let userscontent = await getuserpage(search, curpage);
-        // content.innerHTML = userscontent;
-
-        await filldata()
-
-
-
-    }
-
-    async function tweetshandeler(search = "", curpage = 1) {
-        document.querySelectorAll(".active").forEach(el => el.classList.remove("active"));
-        tweets.classList.add("active");
-
-        let tweetcontent = await gettweets(search, curpage);
-        content.innerHTML = tweetcontent;
-    }
-
-    async function hastagshandeler(search = "") {
-        document.querySelectorAll(".active").forEach(el => el.classList.remove("active"));
-        hastags.classList.add("active");
-
-        let hashcontain = await gethastag(search);
-        content.innerHTML = hashcontain;
-
-    }
-
-    async function verifyhandeler(search = "", curpage = 1) {
-        document.querySelectorAll(".active").forEach(el => el.classList.remove("active"));
-        verification.classList.add("active");
-
-        let verification1 = await verify_request(search, curpage);
-        content.innerHTML = verification1
-
-    }
-
-    function supporthandeler() {
-        document.querySelectorAll(".active").forEach(el => el.classList.remove("active"));
-        support.classList.add("active");
-    }
 
     function hastagverification() {
 
@@ -267,166 +129,12 @@
     }
 
     let main = document.getElementById("content");
+    let main1 = document.getElementById("content1");
+
 
     main.addEventListener("click", mainhandel)
+    main1.addEventListener("click", mainhandel)
 
-
-
-
-    async function mainhandel(e) {
-
-        console.log(e.target.id);
-        let tableSearchUsers = document.getElementById("table-search-users");
-        if (e.target.src == window.location.origin + "/assets/red.png") {
-            e.target.src = "/assets/green.png"
-        }
-        else if (e.target.src == window.location.origin + "/assets/green.png") {
-            e.target.src = "/assets/red.png"
-
-        }
-        let pagenumber = document.getElementById("pagenumber").innerText
-        if (e.target.classList[0] == "gtuser") {
-
-            await usershandeler(tableSearchUsers.value, Number(pagenumber) + 1)
-
-        }
-        else if (e.target.classList[0] == "ltuser") {
-            await usershandeler(tableSearchUsers.value, Number(pagenumber) - 1)
-        }
-
-
-        if (e.target.classList[0] == "gttweet") {
-
-            await tweetshandeler(tableSearchUsers.value, Number(pagenumber) + 1)
-
-        }
-        else if (e.target.classList[0] == "lttweet") {
-            await tweetshandeler(tableSearchUsers.value, Number(pagenumber) - 1)
-        }
-
-
-        if (e.target.classList[0] == "gtverify") {
-
-            await verifyhandeler(tableSearchUsers.value, Number(pagenumber) + 1)
-
-        }
-        else if (e.target.classList[0] == "ltverify") {
-            await verifyhandeler(tableSearchUsers.value, Number(pagenumber) - 1)
-        }
-
-        if (e.target.id == "fileimg") {
-            let formuser = document.getElementById("formuser")
-            let fileupload = document.getElementById("fileupload")
-            fileupload.style.display = "block"
-            formuser.style.display = "none"
-
-        } else if (e.target.id == "formimg1") {
-
-            let formuser = document.getElementById("formuser")
-            let fileupload = document.getElementById("fileupload")
-            fileupload.style.display = "none"
-            formuser.style.display = "block"
-        }
-
-
-
-        if (e.target.id == "chatbtntab") {
-
-            tickitid = e.target.classList[0];
-            let chatbtntab = document.getElementById("chatbtntab");
-            chatload()
-            async function chatload() {
-
-
-
-                let data = await fetch("/admin/oldchats", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({ 'tickitid': tickitid }),
-                });
-
-
-
-
-
-                data = await data.json();
-                data = data.data;
-                let chatbox = document.getElementById("chatbox");
-
-                chatbox.innerHTML = ``
-
-                data.forEach(element => {
-                    if (element.sender_id == 17) {
-                        chatbox.innerHTML
-                            +=
-                            `
-                <div class="mb-2 text-right">
-                <p class="bg-blue-500 text-white rounded-lg py-2 px-4 inline-block">
-                    ${element.content}</p>
-                    </div>
-                        `
-                    }
-                    else {
-                        chatbox.innerHTML += `   <div class="mb-2">
-                            <p id="pagenumber"
-                                class="bg-gray-200 text-gray-700 rounded-lg py-2 px-4 inline-block">
-                            
-                            ${element.content}</p>
-                        </div>
-                `
-                    }
-                });
-
-
-            }
-        }
-
-        if (e.target.id == "table-search-users") {
-            let tableSearchUsers = document.getElementById("table-search-users");
-
-            tableSearchUsers.addEventListener("keydown", searchhandel)
-            let debouncing;
-
-            function searchhandel(e) {
-
-                clearTimeout(debouncing)
-                debouncing = setTimeout(async () => {
-                    let search1 = tableSearchUsers.value;
-
-                    console.log(e.target.classList[0]);
-
-                    if (e.target.classList[0] == "user") {
-
-                        let pagenumber = document.getElementById("pagenumber").innerText;
-                        console.log("page number is ", pagenumber);
-                        console.log(e.target.classList[0]);
-                        alert("users")
-                        await usershandeler(search1, pagenumber)
-                    }
-                    else if (e.target.classList[0] == "hashtag") {
-                        await hastagshandeler(search1)
-                    }
-                    else if (e.target.classList[0] == "tweet") {
-                        tableSearchUsers.focus()
-                        await tweetshandeler(search1)
-                    }
-                    else if (e.target.classList[0] == "verify") {
-                        let pagenumber = document.getElementById("pagenumber").innerText;
-                        console.log("page number is ", pagenumber);
-                        await verifyhandeler(search1, pagenumber)
-                    }
-
-
-
-
-                }, 800)
-
-            }
-        }
-
-    }
 
     const chatbox = document.getElementById("chatbox");
     const chatContainer = document.getElementById("chat-container");
@@ -451,7 +159,7 @@
 
 
     async function filldata() {
-        let getsupportdata = await fetch("/admin/getsupport");
+        let getsupportdata = await fetch("/admin/adminsupport");
         getsupportdata = await getsupportdata.json();
         let dataget = getsupportdata.data;
         let getstring = ``;
@@ -485,33 +193,44 @@
 
     const socket = io();
 
-    let tickit = "RkhKctEEF2"
-
-    socket.on(`recivemsg-${tickit}`, (data) => {
+    let help = document.getElementById("help")
 
 
-        let chatbox = document.getElementById("chatbox");
 
-        if (data.sender_id == 17) {
-            chatbox.innerHTML
-                +=
-                `
-                <div class="mb-2 text-right">
-                <p class="bg-blue-500 text-white rounded-lg py-2 px-4 inline-block">
-                    ${data.content}</p>
-                    </div>
-                        `
+
+    socket.on(`recivemsg`, (data) => {
+
+        let help = document.getElementById("help")
+
+        id = help.innerText
+
+        if (id == data.tickit_id) {
+
+            let chatbox = document.getElementById("chatbox");
+
+            if (data.sender_id == 17) {
+                chatbox.innerHTML
+                    +=
+                    `
+                   <div class="mb-2 text-right">
+                   <p class="bg-blue-500 text-white rounded-lg py-2 px-4 inline-block">
+                       ${data.content}</p>
+                       </div>
+                           `
+                chatbox.scrollTop = chatbox.scrollHeight
+            }
+            else {
+                chatbox.innerHTML += `   <div class="mb-2">
+                               <p id="pagenumber"
+                                   class="bg-gray-200 text-gray-700 rounded-lg py-2 px-4 inline-block">
+                               
+                               ${data.content}</p>
+                           </div>
+                   `
+                chatbox.scrollTop = chatbox.scrollHeight
+            }
+
         }
-        else {
-            chatbox.innerHTML += `   <div class="mb-2">
-                            <p id="pagenumber"
-                                class="bg-gray-200 text-gray-700 rounded-lg py-2 px-4 inline-block">
-                            
-                            ${data.content}</p>
-                        </div>
-                `
-        }
-
 
 
 
@@ -527,19 +246,30 @@
 
 
     async function sendhandel() {
-        // let tickitid = document.getElementById("help").innerText;
+        let tickitid = document.getElementById("help").innerText;
+
+        let headerdata = await fetch("/admin/useridTickit", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ tickitid: tickitid }),
+        });
+
+
+        headerdata = await headerdata.json();
 
 
         let message = {
             content: userInput1.value,
-            tickit_id: "RkhKctEEF2",
-            sender_id: 17,
-            receiver_id: 11,
+            tickit_id: tickitid,
+            sender_id: headerdata.sender_id,
+            receiver_id: headerdata.reciving_id,
         };
+
+
+        console.log("mesasage is ", message);
         const socket = io();
-
-
-
         let data = await fetch("/admin/savechat", {
             method: "POST",
             headers: {
@@ -562,10 +292,6 @@
                     ${userInput1.value}</p>
                                 </div>
         `;
-
-
-
-
 
         }
 
