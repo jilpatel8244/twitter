@@ -22,7 +22,7 @@ const adminroute = require("./src/routes/admin.routes");
 const resetpasswordProfile = require("./src/routes/profile.resetpassword.route");
 
 const PORT = process.env.PORT || 3000;
-const router = require("./src/routes/routes.js");
+// const router = require("./src/routes/routes.js");
 const logger = require("./logger/logger");
 const followUnfollowHandler = require("./src/routes/follow.route");
 
@@ -46,7 +46,6 @@ app.use(resetpasswordProfile);
 app.use(followUnfollowHandler)
 app.use(shareRoute);
 app.use('/profile', getProfileRouter);
-app.use(router);
 
 app.get('*', (req, res) => {
   res.render('pages/404.ejs');
@@ -114,13 +113,13 @@ io.on("connection", async function (socket) {
   });
 
   socket.on("send-private-message", async (data) => {
-    const { senderId, reciverId, message, url, content_type, created_at } = data;
+    const { senderId, reciverId, content, url, content_type, created_at } = data;
 
     if (connectedUser[reciverId]) {
       io.to(connectedUser[reciverId]).emit("receive-private-message", {
         senderId,
         reciverId,
-        message,
+        content,
         url,
         content_type,
         created_at

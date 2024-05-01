@@ -10,29 +10,21 @@ async function shareLinkHandler(tweetId) {
     }
 
     // display toast
-    let timerInterval;
     Swal.fire({
-        title: "Copy to clipboard",
-        timer: 1000,
-        position: "top-end",
-        timerProgressBar: true,
+        toast: true,
+        icon: 'success',
+        title: 'Copied to clipboard',
+        background: 'rgb(14 165 233)',
+        animation: false,
+        position: 'bottom',
         showConfirmButton: false,
-        didOpen: () => {
-            Swal.showLoading();
-            const timer = Swal.getPopup().querySelector("b");
-            timerInterval = setInterval(() => {
-            timer.textContent = `${Swal.getTimerLeft()}`;
-            }, 100);
-        },
-        willClose: () => {
-            clearInterval(timerInterval);
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.addEventListener('mouseenter', Swal.stopTimer)
+          toast.addEventListener('mouseleave', Swal.resumeTimer)
         }
-        }).then((result) => {
-        /* Read more about handling dismissals below */
-        if (result.dismiss === Swal.DismissReason.timer) {
-            console.log("I was closed by the timer");
-        }
-    });
+    })
 
     // make display: none to shareToggle
     let shareOptionsDiv = document.getElementById(`shareOptions`+ tweetId);
