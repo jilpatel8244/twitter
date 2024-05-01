@@ -18,7 +18,7 @@ exports.shareTweetHandler = async (req, res) => {
                 'content': req.body.link,
                 'url': "nothing",
                 'content_type': 'sharedTweet',
-                'created_at': null
+                'created_at': '2024-05-01T04:45:10.000Z'
             }
         });
 

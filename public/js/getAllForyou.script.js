@@ -14,9 +14,9 @@ async function getHomeForyouHandler() {
     let allTweets = document.getElementById('allTweets');
     
     if (response.success == true) {
-        if(response.message.length){
+        if(response.message.rows.length){
 
-            let tweet = getTweetComponent(response.message);
+            let tweet = getTweetComponent(response.message.rows);
 
             allTweets.innerHTML = tweet;
 

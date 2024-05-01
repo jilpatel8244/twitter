@@ -378,7 +378,7 @@
 
         // receive private messages
         socket.on('receive-private-message', (data) => {
-            if (data.senderId === reciverId) {
+            if (parseInt(data.senderId) === parseInt(reciverId)) {
                 let newDiv = makeMessage(data);
 
                 console.log(newDiv);
