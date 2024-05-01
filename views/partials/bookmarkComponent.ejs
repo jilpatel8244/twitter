@@ -1,25 +1,26 @@
 <section class="w-3/5 border border-gray-200 max-w-screen-sm min-h-dvh">
     <!--Content (Center)-->
-        <aside>
-            <div class="flex">
-                <div class="flex-1 mx-2">
-                    <h2 class="px-4 py-2 text-xl font-semibold text-black">Bookmarks</h2>
+    <aside>
+        <div class="flex">
+            <div class="flex-1 mx-2">
+                <h2 class="px-4 py-2 text-xl font-semibold text-black">Bookmarks</h2>
+            </div>
+            <div class="flex-1 px-4 py-2 mx-2 relative">
+                <div class="float-right h-5 w-5 cursor-pointer" onclick="bookmarkThreeDotToggle()">
+                    <img src="/assets/three-dots.png" alt="three-dot-img">
                 </div>
-                <div class="flex-1 px-4 py-2 mx-2 relative">
-                    <div class="float-right h-5 w-5 cursor-pointer" onclick="bookmarkThreeDotToggle()">
-                        <img src="/assets/three-dots.png" alt="three-dot-img">
-                    </div>
-                    <div onclick="removeAllBookmarks()" style="display: none;" id="removeBlock" class="text-red-600 font-bold bg-white border shadow-lg rounded-xl cursor-pointer text-center p-4 absolute top-8 right-0">
-                        Clear all Bookmarks
-                    </div>
+                <div onclick="removeAllBookmarks()" style="display: none;" id="removeBlock"
+                    class="text-red-600 font-bold bg-white border shadow-lg rounded-xl cursor-pointer text-center p-4 absolute top-8 right-0">
+                    Clear all Bookmarks
                 </div>
             </div>
-            <hr class="border-gray-200">
-        </aside>
-
-        <!-- all tweets -->
-        <div id="allTweets">
         </div>
+        <hr class="border-gray-200">
+    </aside>
+
+    <!-- all tweets -->
+    <div id="allTweets">
+    </div>
 
 </section>
 
@@ -45,7 +46,7 @@
         if (response.success == true) {
             window.location.href = "/bookmark"
         } else {
-            console.log(response.message);
+
         }
     }
 </script>

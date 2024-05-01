@@ -5,7 +5,7 @@ exports.getPassword = async (req, res) => {
 
   try {
     const { email, activecode } = req.query;
-    console.log(activecode);
+
 
     let activationCodeQuery = `SELECT created_at FROM users WHERE email = ?`;
     let [activationInfo] = await connection.query(activationCodeQuery, [email]);
@@ -16,7 +16,7 @@ exports.getPassword = async (req, res) => {
       res.render('../views/pages/password', { email, activecode, hours });
     }
   } catch (error) {
-    console.log(error);
+
   }
 }
 
@@ -24,14 +24,14 @@ exports.setPassword = async (req, res) => {
 
   try {
     const { email, password } = req.body;
-    console.log(req.body);
+
 
     let emailQuery = `SELECT * FROM users WHERE email = ? `;
     let [emailData] = await connection.query(emailQuery, [email]);
     let dataId = emailData[0].id;
     let salt = emailData[0].salt;
     let hashPassword = md5(password + salt);
-    console.log("hashPassword", hashPassword);
+
     let passwordUpdateQuery = `UPDATE users SET password = ? ,is_active=1 WHERE id= ?`;
     await connection.query(passwordUpdateQuery, [hashPassword, dataId]);
     res.json({ isComplete: true });

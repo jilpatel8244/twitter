@@ -252,7 +252,7 @@
                     let tickitid = e.target.classList[0];
                     help.innerText = tickitid;
                     tickitid1 = tickitid
-                    console.log("now id is", tickitid1);
+
                     let data = await fetch("/admin/oldchats", {
                         method: "POST",
                         headers: {
@@ -310,8 +310,8 @@
                 receiver_id: headerdata.reciving_id,
             };
 
-            
-            console.log(message);
+
+
             const socket = io();
 
 
@@ -326,12 +326,12 @@
 
 
             data = await data.json();
-            console.log(data);
+
             if (data.result == true) {
                 socket.emit("mesaage", message);
 
                 let chatbox = document.getElementById("chatbox");
-                console.log(message);
+
 
                 chatbox.innerHTML += `   
                 <div class="mb-2 text-right">
@@ -352,7 +352,7 @@
 
 
         socket.on(`adminrecive`, (data) => {
-            console.log(data);
+
 
             let help = document.getElementById("help")
 

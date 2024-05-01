@@ -9,7 +9,7 @@ if (url.match("http://localhost:3000/profile") == null) {
   modifiedUrl = url.slice(37);
 } else {
   modifiedUrl = url.slice(29);
-  console.log("Here is the modified Url",+modifiedUrl);
+  console.log("Here is the modified Url", +modifiedUrl);
 }
 
 
@@ -25,7 +25,7 @@ async function fetchPosts() {
   allTweets.innerHTML = "";
 
   if (response.message.length) {
-    console.log(response.message);
+
 
     let tweet = getTweetComponent(response.message);
 
@@ -58,7 +58,7 @@ async function fetchReplies() {
   allTweets.innerHTML = "";
 
   if (response.message.length) {
-    console.log(response.message);
+
 
     let tweet = getTweetComponent(response.message);
 
@@ -91,7 +91,7 @@ async function fetchLikes() {
   allTweets.innerHTML = "";
 
   if (response.message.length) {
-    console.log(response.message);
+
 
     let tweet = getTweetComponent(response.message);
 
@@ -114,15 +114,15 @@ async function fetchLikes() {
 }
 
 async function fetchMedia() {
-  let data = await fetch('/profile/media'+modifiedUrl, { method: "GET" });
+  let data = await fetch('/profile/media' + modifiedUrl, { method: "GET" });
   let response = await data.json();
-  console.log("response data of Media",response);
+
 
   let allTweets = document.getElementById("allTweets");
   allTweets.innerHTML = "";
-  console.log("response ni length",response.media.length);
+
   if (response.media.length) {
-    console.log("Hello bete!");
+
     allTweets.innerHTML = mediaFunction(response.media);
   } else {
     allTweets.innerHTML = `<div class="w-3/5" style="margin: 50px auto;">
@@ -138,7 +138,7 @@ async function fetchMedia() {
   like.removeAttribute("style");
   replies.removeAttribute("style");
   posts.removeAttribute("style");
-  profileMedia.setAttribute("style", "border-bottom: 3px solid skyblue");  
+  profileMedia.setAttribute("style", "border-bottom: 3px solid skyblue");
 };
 
 

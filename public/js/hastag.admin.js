@@ -16,7 +16,7 @@ async function gethastag(search1) {
 
 
     let data = await getdata();
-    console.log(data);
+
 
     let user = `
     <div class="flex gap-8" >

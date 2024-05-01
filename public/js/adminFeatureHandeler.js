@@ -24,7 +24,7 @@ async function tweetshandeler(search = "", curpage = 1) {
 }
 
 async function hastagshandeler(search = "") {
-    alert("hello")
+
 }
 
 async function verifyhandeler(search = "", curpage = 1) {

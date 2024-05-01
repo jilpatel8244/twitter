@@ -80,7 +80,7 @@ async function addusercontroler() {
         formdata.append("email", email.value)
         formdata.append("date_of_birth", dob.value)
         formdata.append("password", password.value)
-        console.log(formdata);
+
 
         let data = await fetch("/admin/adduser", {
             method: "POST",
@@ -97,7 +97,7 @@ async function addusercontroler() {
         let name = document.getElementById("name");
         let filecsv = document.getElementById("filecsv");
 
-        alert("hello ")
+
         let formdata = new FormData();
         formdata.append("name", name.value)
         formdata.append("file", filecsv.files[0])

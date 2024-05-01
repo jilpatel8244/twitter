@@ -1,6 +1,6 @@
 async function mainhandel(e) {
 
-    console.log(e.target);
+
     let tableSearchUsers = document.getElementById("table-search-users");
     if (e.target.src == window.location.origin + "/assets/red.png") {
         e.target.src = "/assets/green.png"
@@ -64,7 +64,7 @@ async function mainhandel(e) {
         roomid = tickitid;
 
 
-        console.log(roomid);
+
 
 
 
@@ -132,14 +132,12 @@ async function mainhandel(e) {
             debouncing = setTimeout(async () => {
                 let search1 = tableSearchUsers.value;
 
-                console.log(e.target.classList[0]);
+
 
                 if (e.target.classList[0] == "user") {
 
                     let pagenumber = document.getElementById("pagenumber").innerText;
-                    console.log("page number is ", pagenumber);
-                    console.log(e.target.classList[0]);
-                    alert("users")
+
                     await usershandeler(search1, pagenumber)
                 }
                 else if (e.target.classList[0] == "hashtag") {

@@ -172,7 +172,7 @@
         let senderId = '<%= user.id %>';
 
         socket.on('connect', () => {
-            console.log('connected to server ' + socket.id);
+
 
             socket.emit('user-connected', senderId);
             socket.emit('getUnreadMessages', senderId);
@@ -209,8 +209,8 @@
     <script src="/js/notificationCount.script.js"></script>
 
     <style>
-.bold {
-    font-weight: bold;
-    background-color: aqua;
-}
-</style>
+        .bold {
+            font-weight: bold;
+            background-color: aqua;
+        }
+    </style>

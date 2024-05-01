@@ -10,7 +10,6 @@ const getProfileRouter = require("./src/routes/profile.routes");
 const homeRouter = require("./src/routes/home.routes");
 const routes = require("./src/routes/routes");
 const notification = require("./src/routes/notification.route");
-const exploreRoute = require("./src/routes/explore.routes");
 const authRouter = require("./src/routes/auth.routes");
 const connection = require("./config/connection");
 const editprofile = require("./src/routes/editprofile.route");
@@ -22,7 +21,7 @@ const messagesRoute = require("./src/routes/messages.routes");
 const shareRoute = require('./src/routes/share.routes');
 const followData = require('./src/routes/followUser.route');
 const followingData = require('./src/routes/followinguser.route')
-const adminroute = require("./src/routes/admin.routes");
+
 const resetpasswordProfile = require("./src/routes/profile.resetpassword.route");
 
 const PORT = process.env.PORT || 3000;
@@ -37,14 +36,14 @@ app.use(cookieParser());
 
 app.use(express.static("public"));
 app.use(express.static("node_modules/sweetalert2/dist"));
-app.use("/admin", adminroute);
+// app.use("/admin", adminroute);
 
 // app.use(homeRouter);
 app.use(routes);
 app.use(likeRoute);
 app.use(bookmarkRoute);
 app.use(messagesRoute);
-app.use("/explore", exploreRoute);
+
 app.use(authRouter);
 app.use(notification);
 app.use("/editprofile", editprofile);
@@ -79,7 +78,7 @@ io.on("connection", async function (socket) {
   });
 
   socket.on("adminmesaage", (msg) => {
-    console.log(msg);
+
     socket.broadcast.emit(`adminrecive`, msg)
 
   });
@@ -138,11 +137,7 @@ io.on("connection", async function (socket) {
 
 
 
-  socket.on("mesaage", async (data) => {
-    console.log(data);
 
-
-  });
   // load old chats
   socket.on("existingChats", async (data) => {
     try {
@@ -158,5 +153,5 @@ io.on("connection", async function (socket) {
 });
 
 server.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+
 });

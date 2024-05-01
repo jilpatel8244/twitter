@@ -15,12 +15,12 @@ exports.getFollower = async (req, res) => {
         `, [id, userId]);
 
     if (result[0] && result[0].current_status) isFollowing = true;
- 
+
     let followerId = null;
-    
+
 
     if (req.user) {
-      
+
       const currentUserId = req.user.id;
       followerId = currentUserId;
       const followStatusQuery = `SELECT COUNT(*) AS isFollowing FROM followers WHERE follower_id = ? AND following_id = ?`;
@@ -28,7 +28,7 @@ exports.getFollower = async (req, res) => {
         currentUserId,
         id,
       ]);
-      console.log("follow status", followStatusRows[0])
+
       // isFollowing = followStatusRows[0].isFollowing > 0;
       res.render("../views/pages/explore", {
         id: req.query.id,

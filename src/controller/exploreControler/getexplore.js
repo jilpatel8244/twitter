@@ -95,7 +95,7 @@ exports.getHastag = async (req, res) => {
 exports.getUsername = async (req, res) => {
   let search = req.body.searchbox;
   loggedInUserId = req.user[0][0].id;
-  console.log("loggedInUserId",loggedInUserId);
+  console.log("loggedInUserId", loggedInUserId);
   if (!search) {
     search = "";
   }
@@ -109,7 +109,7 @@ exports.getUsername = async (req, res) => {
         IFNULL((SELECT f.current_status FROM followers f WHERE f.follower_id = ${loggedInUserId} AND f.following_id = u.id), 0) AS current_status
         FROM users u WHERE u.username LIKE '%${search}%' AND u.is_active = 1 limit 3;`;
       let [result] = await connection.query(sql);
-      console.log("resultdatacccccccccccccccccccccccccccccccccsssssssssssssssssss",result);
+
       res.json({ username: result });
     } else {
       let sql = `         
@@ -118,8 +118,8 @@ exports.getUsername = async (req, res) => {
       FROM users u WHERE u.username LIKE '%${search}%' AND u.is_active = 1;`;
       let [result] = await connection.query(sql);
 
-      console.log("resultdataaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",result);
-    
+
+
       res.json({ username: result });
     }
   } catch (error) {
@@ -205,7 +205,7 @@ exports.getLatestTweet = async (req, res) => {
           `;
       let [result] = await connection.query(sql);
 
-      console.log("result is " , result);
+      console.log("result is ", result);
       return res.json({ resultTweet: result });
     } catch (error) {
       return res.json({ error: error });

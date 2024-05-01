@@ -1,5 +1,5 @@
 function mediaFunction(data) {
-  
+
   let userMedia = `<ul class=' list-none grid grid-cols-2 my-5'>`;
 
   data.forEach(element => {
@@ -9,6 +9,6 @@ function mediaFunction(data) {
   });
   userMedia += `</ul>`;
 
-  console.log("This is the media component: ",userMedia);
+
   return userMedia;
 }

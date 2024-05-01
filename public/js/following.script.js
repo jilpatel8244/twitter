@@ -1,6 +1,6 @@
 
 const foryou = async () => {
-    console.log("bla");
+
     document.querySelector('#foryou').style.display = "block";
     document.querySelector('#following').style.display = "none";
 }
