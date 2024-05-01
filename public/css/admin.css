@@ -50,6 +50,16 @@ body{
     padding: 5%;
     color: black;
 }
+
+
+.contentp
+{
+    border: 1px solid black;
+    width: 80%;
+    padding: 5%;
+    color: black;
+}
+
 .features
 {
     margin-top: 20%;

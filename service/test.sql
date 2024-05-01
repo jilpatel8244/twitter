@@ -138,7 +138,6 @@ CREATE TABLE `get_support` (
 );
 
 
-<<<<<<< HEAD
   ALTER TABLE `get_support` ADD FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
 
 
@@ -158,7 +157,6 @@ CREATE TABLE `support_messages` (
   `sender_id` INT NOT NULL,
   `receiver_id` INT NOT NULL,
   `content` text,
-=======
 -- modified on 29th aprill 
 
 -- add new table message_medias and remove table unread_messages
@@ -170,7 +168,6 @@ CREATE TABLE `direct_messages` (
   `content_type` VARCHAR(255),
   `content` text,
   `is_read` boolean,
->>>>>>> development
   `created_at` TIMESTAMP DEFAULT (CURRENT_TIMESTAMP),
   `updated_at` TIMESTAMP on update CURRENT_TIMESTAMP,
   `deleted_at` TIMESTAMP

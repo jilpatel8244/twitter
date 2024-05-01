@@ -359,6 +359,7 @@ exports.addUserCsv = async (req, res) => {
 
 exports.supportForm = async (req, res) => {
 
+    console.log(req.file);
 
     try {
         let user_id = req.user[0][0].id
@@ -399,7 +400,7 @@ exports.getsupport = async (req, res) => {
 
     try {
         let id = req.user[0][0].id
-        let sql = "select * from get_support where user_id = ?  order by created_at desc"
+        let sql = "select *  from get_support where user_id = ?  order by created_at desc"
         let [result] = await connection.query(sql, [id]);
 
         return res.json({ data: result })
@@ -414,7 +415,7 @@ exports.admingetsupport = async (req, res) => {
 
     try {
         let id = req.user[0][0].id
-        let sql = "select * from get_support where  order by created_at desc"
+        let sql = "select * from get_support   order by created_at desc"
         let [result] = await connection.query(sql, [id]);
 
         return res.json({ data: result })
@@ -423,7 +424,38 @@ exports.admingetsupport = async (req, res) => {
         console.log(error);
     }
 }
+exports.useridTickit = async (req, res) => {
 
+    try {
+        let id = req.user[0][0].id
+        let tickitid = req.body.tickitid;
+        // let tickitid = "m8PemZyRGW";
+        let sql = `select get_support.user_id  as reciving_id from get_support where get_support.id = "${tickitid}"`
+        let [result] = await connection.query(sql);
+
+        return res.json({ sender_id: id, reciving_id: result[0].reciving_id })
+
+    } catch (error) {
+        console.log(error);
+    }
+}
+exports.adminid = async (req, res) => {
+
+    try {
+        let id = req.user[0][0].id
+
+
+        let sql = `select users.id  as reciving_id from users where users.email = "admin@gmail.com"`
+
+
+        let [result] = await connection.query(sql);
+
+        return res.json({ sender_id: id, reciving_id: result[0].reciving_id })
+
+    } catch (error) {
+        console.log(error);
+    }
+}
 
 exports.oldchats = async (req, res) => {
 

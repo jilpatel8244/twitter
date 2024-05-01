@@ -21,7 +21,7 @@ const likeRoute = require("./src/routes/like.routes");
 const messagesRoute = require("./src/routes/messages.routes");
 const shareRoute = require('./src/routes/share.routes');
 const followData = require('./src/routes/followUser.route');
-const followingData =require('./src/routes/followinguser.route')
+const followingData = require('./src/routes/followinguser.route')
 const adminroute = require("./src/routes/admin.routes");
 const resetpasswordProfile = require("./src/routes/profile.resetpassword.route");
 
@@ -74,13 +74,13 @@ io.on("connection", async function (socket) {
   });
   socket.on("mesaage", (msg) => {
 
-    socket.broadcast.emit(`recivemsg-${msg.tickit_id}`, msg)
+    socket.broadcast.emit(`recivemsg`, msg)
 
   });
 
   socket.on("adminmesaage", (msg) => {
-
-    socket.broadcast.emit(`adminrecive-${msg.tickit_id}`, msg)
+    console.log(msg);
+    socket.broadcast.emit(`adminrecive`, msg)
 
   });
 
