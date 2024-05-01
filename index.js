@@ -109,13 +109,13 @@ io.on("connection", async function (socket) {
   });
 
   socket.on("send-private-message", async (data) => {
-    const { senderId, reciverId, message, url, content_type, created_at } = data;
+    const { senderId, reciverId, content, url, content_type, created_at } = data;
 
     if (connectedUser[reciverId]) {
       io.to(connectedUser[reciverId]).emit("receive-private-message", {
         senderId,
         reciverId,
-        message,
+        content,
         url,
         content_type,
         created_at

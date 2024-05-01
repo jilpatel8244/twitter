@@ -11,11 +11,19 @@ exports.shareTweetHandler = async (req, res) => {
 
         res.status(200).json({
             success: true,
-            message: "tweet send successfully"
+            message: "",
+            message: {
+                'senderId': req.user[0][0].id,
+                'reciverId': req.body.users,
+                'content': req.body.link,
+                'url': "nothing",
+                'content_type': 'sharedTweet',
+                'created_at': null
+            }
         });
 
     } catch (error) {
-        logger.error(error);
+        console.log(error);
         return res.status(500).json({
             success: false,
             message: error.message

@@ -99,6 +99,16 @@
             // send notification
             selectedUserArr.forEach((element, index) => {
                 socket.emit('getUnreadMessages', selectedUserArr[index]);
+                // message: {
+                // 'senderId': req.user[0][0].id,
+                // 'reciverId': element,
+                // 'content': req.body.link,
+                // 'url': "nothing",
+                // 'content_type': 'sharedTweet',
+                // 'created_at': insertedData[0][0].created_at
+
+                // }
+                socket.emit('send-private-message', response.message);
             })
 
             // remove all selected header
