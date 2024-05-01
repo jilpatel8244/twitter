@@ -242,3 +242,6 @@ CREATE TABLE `support_messages` (
 ALTER TABLE `support_messages` ADD FOREIGN KEY (`sender_id`) REFERENCES `users` (`id`);
 ALTER TABLE `support_messages` ADD FOREIGN KEY (`receiver_id`) REFERENCES `users` (`id`);
 
+-- execute this query in database
+alter table temp_twitter.tweets add column retweet_id INT;
+ALTER TABLE temp_twitter.tweets ADD FOREIGN KEY (retweet_id) REFERENCES temp_twitter.retweets (id);

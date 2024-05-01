@@ -6,26 +6,21 @@ const { Server } = require("socket.io");
 
 const io = new Server(server);
 const cookieParser = require("cookie-parser");
-const getProfileRouter = require("./src/routes/profile.routes");
-const homeRouter = require("./src/routes/home.routes");
 const routes = require("./src/routes/routes");
 const exploreRoute = require("./src/routes/explore.routes");
 const authRouter = require("./src/routes/auth.routes");
 const connection = require("./config/connection");
-const editprofile = require("./src/routes/editprofile.route");
 const passport = require("passport");
 require("./src/middleware/passport");
 const bookmarkRoute = require("./src/routes/bookmark.routes");
 const likeRoute = require("./src/routes/like.routes");
 const messagesRoute = require("./src/routes/messages.routes");
 const shareRoute = require('./src/routes/share.routes');
-const followData = require('./src/routes/followUser.route');
-const followingData =require('./src/routes/followinguser.route')
 const adminroute = require("./src/routes/admin.routes");
 const resetpasswordProfile = require("./src/routes/profile.resetpassword.route");
 
 const PORT = process.env.PORT || 3000;
-const router = require("./src/routes/routes.js");
+// const router = require("./src/routes/routes.js");
 const logger = require("./logger/logger");
 const followUnfollowHandler = require("./src/routes/follow.route");
 
@@ -38,21 +33,16 @@ app.use(express.static("public"));
 app.use(express.static("node_modules/sweetalert2/dist"));
 app.use("/admin", adminroute);
 
-// app.use(homeRouter);
 app.use(routes);
 app.use(likeRoute);
 app.use(bookmarkRoute);
 app.use(messagesRoute);
 app.use("/explore", exploreRoute);
 app.use(authRouter);
-app.use("/editprofile", editprofile);
+app.use(notification);
 app.use(resetpasswordProfile);
 app.use(followUnfollowHandler)
-app.use(followData);
-app.use(followingData);
 app.use(shareRoute);
-app.use('/profile', getProfileRouter);
-app.use(router);
 
 app.get('*', (req, res) => {
   res.render('pages/404.ejs');
@@ -120,13 +110,13 @@ io.on("connection", async function (socket) {
   });
 
   socket.on("send-private-message", async (data) => {
-    const { senderId, reciverId, message, url, content_type, created_at } = data;
+    const { senderId, reciverId, content, url, content_type, created_at } = data;
 
     if (connectedUser[reciverId]) {
       io.to(connectedUser[reciverId]).emit("receive-private-message", {
         senderId,
         reciverId,
-        message,
+        content,
         url,
         content_type,
         created_at

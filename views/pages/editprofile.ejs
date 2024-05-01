@@ -132,6 +132,16 @@
 <body>
   <!-- <div class="max-w-[600px] bg-white shadow-[0_0_10px_rgba(0,0,0,0.1)] mx-auto my-5 p-5 rounded-lg;"> -->
     <div class="container">
+        <span onclick="history.back()"
+            class=" text-2xl font-medium rounded-full text-blue-400 hover:bg-whitesmoke-800 hover:text-blue-300 float-right">
+            <svg class="m-2 h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                <g>
+                    <path
+                        d="M20 11H7.414l4.293-4.293c.39-.39.39-1.023 0-1.414s-1.023-.39-1.414 0l-6 6c-.39.39-.39 1.023 0 1.414l6 6c.195.195.45.293.707.293s.512-.098.707-.293c.39-.39.39-1.023 0-1.414L7.414 13H20c.553 0 1-.447 1-1s-.447-1-1-1z">
+                    </path>
+                </g>
+            </svg>
+        </span>
       <h1>Edit Profile</h1>
       <form action="/editprofile/updateProfile" method="POST" enctype=multipart/form-data>
      
@@ -139,23 +149,23 @@
     
         <div class="profile-section">
           <div class="cover-photo">
-            <label for="coverPhoto">Cover Photo</label>
+           
           
             
             <img src="./uploads/<%= profileData.cover_img_url %>" alt="Cover Photo Preview" id="coverPhotoPreview"/>
             <input type="file" id="coverPhoto" name="coverPhoto" accept="image/*"
               onchange="previewImage('coverPhoto', 'coverPhotoPreview')" style="display: none" multiple />
             <button type="button" onclick="document.getElementById('coverPhoto').click()">
-              change
+              Change Cover Image
             </button>
           </div>
           <div class="display-photo">
-            <label for="displayPhoto">Display Photo</label>
+            
             <input type="file" id="displayPhoto" name="displayPhoto" accept="image/*"
               onchange="previewImage('displayPhoto', 'displayPhotoPreview')" style="display: none" />
             <img src="./uploads/<%= profileData.profile_img_url %>" alt="Display Photo Preview" id="displayPhotoPreview"/>
             <button type="button" onclick="document.getElementById('displayPhoto').click()">
-              change
+              Change Profile Image
             </button>
           </div>
         </div>

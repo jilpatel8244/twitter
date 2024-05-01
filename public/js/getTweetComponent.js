@@ -2,7 +2,10 @@ function getTweetComponent(data) {
     let tweet = `<ul class="list-none">`;
 
     data.forEach(tweets => {
-        let processedContent = tweets.content.replace(/(@|#)\w+/g, '<span class="blue-text">$&</span>');
+        let content = tweets.content.replace(/(@|#)\w+/g, function(match) {
+            return '<a href="/explore/profile?id=' + tweets.user_id + '" class="text-blue-500">' + match + '</a>';
+            });
+            
         tweet += `
                     <li>
                         <article class="hover:bg-gray-100 transition duration-350 ease-in-out">
@@ -34,7 +37,7 @@ function getTweetComponent(data) {
 
                                 <div class="pl-16">
                                     <a href="/get_comments/${tweets.tweet_id}">
-                                    <pre class="mr-3 text-base width-auto font-normal text-balance overflow-hidden" style="white-space: no-wrap;  text-overflow: ellipsis; word-wrap: break-word; overflow-wrap: break-word; font-family: sans-serif;">${processedContent}</pre>
+                                    <pre class="mr-3 text-base width-auto font-normal text-balance overflow-hidden" style="white-space: no-wrap;  text-overflow: ellipsis; word-wrap: break-word; overflow-wrap: break-word; font-family: sans-serif;">${content}</pre>
                                     `
         if (tweets.media_url) {
             tweet += `<div class="md:flex-shrink pr-6 pt-3">
@@ -122,7 +125,7 @@ function getTweetComponent(data) {
                                             <!-- like span tag -->
                                             <div class="flex items-center text-center py-2 m-2">
                                                 <span
-                                                    class="group flex items-center px-1 py-2 text-base leading-6 font-medium rounded-full  hover:text-red-300">`
+                                                    class="cursor-pointer group flex items-center px-1 py-2 text-base leading-6 font-medium rounded-full  hover:text-red-300">`
         if (tweets.isLiked) {
             tweet += `<svg class="text-center h-7 w-6 fill-red-600 text-red-600 like_${tweets.tweet_id}"
                                                                 fill="none" stroke-linecap="round" stroke-linejoin="round"
@@ -159,7 +162,7 @@ function getTweetComponent(data) {
                                             <!-- share span tag -->
                                             <div class="flex py-2 m-2 relative">
                                                 <span
-                                                    class="group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full  hover:text-blue-300"
+                                                    class="cursor-pointer group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full  hover:text-blue-300"
                                                     onclick="shareToggle(${tweets.tweet_id})"
                                                     >
                                                     <svg class="text-center h-7 w-6" fill="none" stroke-linecap="round"
@@ -186,7 +189,7 @@ function getTweetComponent(data) {
                                             <!-- bookmark span tag -->
                                             <div class="flex text-center py-2 m-2 ">
                                                 <span
-                                                    class="group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full  hover:text-blue-300">`
+                                                    class="cursor-pointer group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full  hover:text-blue-300">`
         if (tweets.isBookmarked) {
             tweet += `<svg class="text-center h-7 w-6 fill-blue-300 text-blue-800 bookmark_${tweets.tweet_id}"
                                                                     fill="none" stroke-linecap="round" stroke-linejoin="round"
@@ -234,6 +237,7 @@ function getTweetComponent(data) {
     tweet += `</ul>`;
 
             return tweet;
+
 }
 
 function shareToggle(tweet_id) {

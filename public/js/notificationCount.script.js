@@ -25,7 +25,7 @@ count1.addEventListener("click", async () => {
   let response = await data.json();
 });
 
-var notificationContainer = document.getElementById("NotificationCount");
+let notificationContainer = document.getElementById("NotificationCount");
 function diplayNotifications(notifications) {
   let notificationData = notifications.notificationCount;
   if (notificationData.length === 0) {
