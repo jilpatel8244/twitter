@@ -7,6 +7,10 @@ CREATE TABLE `roles` (
   `created_at` TIMESTAMP DEFAULT (utc_timestamp())
 );
 
+insert into roles (id,role_name) values('1','user');
+insert into roles (id,role_name) values('2','verified_user');
+insert into roles (id,role_name) values('3','admin');
+
 CREATE TABLE `permissions` (
   `id` INT PRIMARY KEY AUTO_INCREMENT,
   `permission_name` VARCHAR(255),
@@ -33,11 +37,10 @@ CREATE TABLE `users` (
   `profile_img_url` VARCHAR(255),
   `cover_img_url` VARCHAR(255),
   `bio` VARCHAR(255),
-  `city_id` INT,
   `activation_code` VARCHAR(100),
   `salt` VARCHAR(45),
   `is_active` tinyint default 0,
-  `role_id` INT,
+  `role_id` INT default 1,
   `is_private` tinyint default 1,
   `is_varified` tinyint default 0,
    `profession` varchar(255) DEFAULT NULL,
