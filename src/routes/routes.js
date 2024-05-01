@@ -16,6 +16,11 @@ const { likeUnlikeHandler } = require("../controller/likeUnlikeHandler");
 const { getAllBookmarks } = require("../controller/getAllBookmarks.controller");
 const { bookmarkUnbookmarkHandler } = require("../controller/bookmarkUnbookmarkHandler.controller");
 const { removeAllBookmarkHandler } = require("../controller/removeAllBookmarksHandler.controller");
+const { getProfile } = require("../controller/profile/profile.controller");
+const { getPosts } = require("../controller/profile/profile.post.controller");
+const { getReplies } = require("../controller/profile/profile.reply.controller");
+const { getLikes } = require("../controller/profile/profile.like.controller");
+const { getProfileMedia } = require("../controller/profile/profile.media.controller");
 const { getAllTrendingHashtagsHandler } = require("../controller/getAllTrendingHashtags.controller");
 
 router.get("/", (req, res) => {
@@ -88,7 +93,17 @@ router.post('/tweetPost/tweetUpdate',passport.authenticate('jwt',{session:false,
 router.get('/tweetPost/displayImage',passport.authenticate('jwt',{session:false,failureRedirect: "/login" }),displayImage)
 router.post('/tweetPost/draftDelete',passport.authenticate('jwt',{session:false,failureRedirect: "/login" }),deleteDraft);
 router.get('/tweetPost/profileImage',passport.authenticate('jwt',{session:false,failureRedirect: "/login" }),getProfileImage);
-
 router.post('/checkRetweet',passport.authenticate('jwt',{session:false,failureRedirect: "/login" }),checkRetweet);
+
+
+// Sanket Patel Profile Routes Starts Here
+
+router.get("/profile", passport.authenticate('jwt', { session: false, failureRedirect: "/login" }), getProfile);
+router.get("/profile/post", passport.authenticate('jwt', { session: false, failureRedirect: "/login" }), getPosts);
+router.get("/profile/reply", passport.authenticate('jwt', { session: false, failureRedirect: "/login" }), getReplies);
+router.get("/profile/like", passport.authenticate('jwt', { session: false, failureRedirect: "/login" }), getLikes);
+router.get("/profile/media", passport.authenticate('jwt', { session: false, failureRedirect: "/login" }), getProfileMedia);
+
+// Sanket Patel Profile Routes Ends Here
 
 module.exports = router

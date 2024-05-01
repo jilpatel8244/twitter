@@ -2,7 +2,6 @@ const express = require("express");
 const logger = require("../../logger/logger");
 const { getExplorePage, getTopTweetAndHastag, getHastag, getMedia, getLatestTweet, getUsername, getUsernameOrHastagOnchage } = require("../controller/exploreControler/getexplore");
 const passport = require("passport");
-const { getExploreProfile } = require("../controller/profile");
 const { getReplies } = require("../controller/profile/profile.reply.controller");
 const { getPosts } = require("../controller/profile/profile.post.controller");
 const { getFollower } = require("../controller/follow.controller");

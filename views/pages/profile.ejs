@@ -75,7 +75,7 @@
                                 <div>
                                     <div class="flex justify-start">
                                         <div class="px-4 py-2 mx-2">
-                                            <a href="/home"
+                                            <p onclick="history.back()"
                                                 class=" text-2xl font-medium rounded-full text-blue-400 hover:bg-whitesmoke-800 hover:text-blue-300 float-right">
                                                 <svg class="m-2 h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
                                                     <g>
@@ -84,7 +84,7 @@
                                                         </path>
                                                     </g>
                                                 </svg>
-                                            </a>
+                                            </p>
                                         </div>
                                         <div class="mx-2">
                                             <h2 class="mb-0 text-xl font-bold text-black">
@@ -104,7 +104,7 @@
                                 <!-- User card-->
                                 <div class="w-full bg-fit bg-no-repeat bg-center" style="height: 250px; background-image:
                   linear-gradient(to bottom, rgba(245, 246, 252, 0.52), rgba(206, 202, 202, 0.73)),
-                  url('./uploads/<%=userProfileData[0].cover_img_url%>');">
+                  url('/uploads/<%=userProfileData[0].cover_img_url%>');">
 
                                 </div>
                                 <div class="w-full p-4">
@@ -115,7 +115,7 @@
                                                 <div style="height:9rem; width:9rem;" class="md rounded-full  avatar">
                                                     <img style="height:9rem; width:9rem;"
                                                         class="md rounded-full border-4 border-gray-900"
-                                                        src="./uploads/<%=userProfileData[0].profile_img_url%>" alt="">
+                                                        src="/uploads/<%=userProfileData[0].profile_img_url%>" alt="">
                                                     <div class="absolute"></div>
                                                 </div>
                                             </div>
@@ -228,7 +228,7 @@
 
                                         <input type="button" value="Replies" onclick="fetchReplies()" id="replies"
                                             class="w-1/4 text-gray-600 py-4 px-6 block hover:text-blue-500 focus:outline-none">
-                                        
+
                                         <input type="button" value="Media" onclick="fetchMedia()" id="itsMedia"
                                             class="w-1/4 text-gray-600 py-4 px-6 block hover:text-blue-500 focus:outline-none">
 
@@ -257,9 +257,8 @@
     <script src="/js/share.script.js"></script>
     <script src="/js/bookmark.script.js"></script>
     <script src="/js/like.script.js"></script>
-    <script src="/js/getMedia.js"></script>
     <script src="/js/profileFetch.script.js"></script>
-
+    <script src="/js/retweet.js"></script>
 </body>
 
 </html>

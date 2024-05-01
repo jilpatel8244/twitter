@@ -116,14 +116,12 @@ async function fetchLikes() {
 async function fetchMedia() {
   let data = await fetch('/profile/media'+modifiedUrl, { method: "GET" });
   let response = await data.json();
-  console.log("response data of Media",response);
 
   let allTweets = document.getElementById("allTweets");
   allTweets.innerHTML = "";
-  console.log("response ni length",response.media.length);
+
   if (response.media.length) {
-    console.log("Hello bete!");
-    allTweets.innerHTML = mediaFunction(response.media);
+    allTweets.innerHTML = getTweetComponent(response.media);
   } else {
     allTweets.innerHTML = `<div class="w-3/5" style="margin: 50px auto;">
                                         <div class="mb-3">
@@ -134,7 +132,6 @@ async function fetchMedia() {
                                         </div>
                                     </div>`;
   }
-
   like.removeAttribute("style");
   replies.removeAttribute("style");
   posts.removeAttribute("style");

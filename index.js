@@ -6,7 +6,6 @@ const { Server } = require("socket.io");
 
 const io = new Server(server);
 const cookieParser = require("cookie-parser");
-const getProfileRouter = require("./src/routes/profile.routes");
 const routes = require("./src/routes/routes");
 const notification = require("./src/routes/notification.route");
 const exploreRoute = require("./src/routes/explore.routes");
@@ -45,7 +44,6 @@ app.use(notification);
 app.use(resetpasswordProfile);
 app.use(followUnfollowHandler)
 app.use(shareRoute);
-app.use('/profile', getProfileRouter);
 
 app.get('*', (req, res) => {
   res.render('pages/404.ejs');
