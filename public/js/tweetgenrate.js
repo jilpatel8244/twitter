@@ -32,7 +32,7 @@ async function gettweet(route, bodyargs = {}) {
         let time = "hello";
 
         let date1 = new Date(tweets.time);
-        var currentdate = new Date();
+        let currentdate = new Date();
 
         date1 = currentdate - date1;
         console.log(date1 / 1000 / 60 / 60);

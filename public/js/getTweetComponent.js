@@ -2,7 +2,10 @@ function getTweetComponent(data) {
     let tweet = `<ul class="list-none">`;
 
     data.forEach(tweets => {
-        let processedContent = tweets.content.replace(/(@|#)\w+/g, '<span class="blue-text">$&</span>');
+        let content = tweets.content.replace(/(@|#)\w+/g, function(match) {
+            return '<a href="/explore/profile?id=' + tweets.user_id + '" class="text-blue-500">' + match + '</a>';
+            });
+            
         tweet += `
                     <li>
                         <article class="hover:bg-gray-100 transition duration-350 ease-in-out">
@@ -34,7 +37,7 @@ function getTweetComponent(data) {
 
                                 <div class="pl-16">
                                     <a href="/get_comments/${tweets.tweet_id}">
-                                    <pre class="mr-3 text-base width-auto font-normal text-balance overflow-hidden" style="white-space: no-wrap;  text-overflow: ellipsis; word-wrap: break-word; overflow-wrap: break-word; font-family: sans-serif;">${processedContent}</pre>
+                                    <pre class="mr-3 text-base width-auto font-normal text-balance overflow-hidden" style="white-space: no-wrap;  text-overflow: ellipsis; word-wrap: break-word; overflow-wrap: break-word; font-family: sans-serif;">${content}</pre>
                                     `
         if (tweets.media_url) {
             tweet += `<div class="md:flex-shrink pr-6 pt-3">
@@ -234,6 +237,7 @@ function getTweetComponent(data) {
     tweet += `</ul>`;
 
             return tweet;
+
 }
 
 function shareToggle(tweet_id) {
