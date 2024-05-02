@@ -27,10 +27,16 @@ module.exports.insertTweet = async (req, res) => {
         if (hashTags) {
           try {
             hashTags.forEach(async (hashTag) => {
-              let sql = "insert into hashtag_lists(hashtag_name) values (?)";
-              let [lastHashTag] = await conn.query(sql, hashTag);
-              let sql1 = "insert into hashtag_tweet(hashtag_id,tweet_id,status) values(?,?,?)";
-              await conn.query(sql1, [lastHashTag.insertId, lastInsertedId, 1]);
+              let checkHashTag= "select id,hashtag_name from hashtag_lists where hashtag_name = ? ";
+              let [availableHashtag]= await conn.query(checkHashTag,[hashTag]);
+              var lastHashTagId;
+              if(availableHashtag.length == 0){
+                let sql = "insert into hashtag_lists(hashtag_name) values (?)";
+                let [lastHashTag] = await conn.query(sql, hashTag);
+                lastHashTagId=lastHashTag.insertId;
+              }
+              let sql1 = "insert into hashtag_tweet(hashtag_id,tweet_id) values(?,?)";
+              await conn.query(sql1, [ lastHashTagId || availableHashtag[0].id  , lastInsertedId]);
             })
           }
           catch (error) {
@@ -70,16 +76,16 @@ module.exports.insertTweet = async (req, res) => {
     }
   }
 }
-const insertNotification = async (data) => {
-  try {
-    let sql = 'insert into notifications (user_id,tweet_id,type,related_user_id) values (?,?,?,?);';
-    await conn.query(sql, data);
-    return { 'msg': 'Add notification' };
+  const insertNotification = async (data) => {
+    try {
+      let sql = 'insert into notifications (user_id,tweet_id,type,related_user_id) values (?,?,?,?);';
+      await conn.query(sql, data);
+      return { 'msg': 'Add notification' };
+    }
+    catch (err) {
+      return { "error": err }
+    }
   }
-  catch (err) {
-    return { "error": err }
-  }
-}
 
 const insertContent = async (data, res) => {
   try {
@@ -135,9 +141,16 @@ exports.tweetUpdate = async (req, res) => {
         if (hashTags) {
           try {
             hashTags.forEach(async (hashTag) => {
-              let [lastHashTag] = await conn.query(sql, hashTag);
-              let sql1 = "insert into hashtag_tweet(hashtag_id,tweet_id,status) values(?,?,?)";
-              await conn.query(sql1, [lastHashTag.insertId, tweetId, 1]);
+                let checkHashTag= "select id,hashtag_name from hashtag_lists where hashtag_name = ? ";
+                let [availableHashtag]= await conn.query(checkHashTag,[hashTag]);
+                var lastHashTagId;
+                if(availableHashtag.length == 0){
+                  let sql = "insert into hashtag_lists(hashtag_name) values (?)";
+                  let [lastHashTag] = await conn.query(sql, hashTag);
+                  lastHashTagId=lastHashTag.insertId;
+                }
+                let sql1 = "insert into hashtag_tweet(hashtag_id,tweet_id) values(?,?)";
+                await conn.query(sql1, [ lastHashTagId || availableHashtag[0].id  , tweetId]);
             })
           }
           catch (error) {

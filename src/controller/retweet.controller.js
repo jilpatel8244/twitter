@@ -13,7 +13,8 @@ module.exports.retweet = async (req, res) => {
       try {
         let repostQuery = "insert into retweets(tweet_id,user_id) values (?,?)";
         await conn.query(repostQuery, [tweetId,userId]);
-        res.status(200).json({'msg':"reposted"})
+        let notification = await insertNotification([result[0].user_id, tweetId, 'Retweet', userId]);
+        return res.status(200).json({'msg':"reposted"})
       } catch (error) {
         console.log(error);
         return res.status(500).json({ 'error': "Something went wrong" + error })
@@ -33,7 +34,7 @@ module.exports.retweet = async (req, res) => {
         try {
           let repostQuery = "insert into retweets(tweet_id,user_id,retweet_message) values (?,?,?)";
           let [quoteInserted]= await conn.query(repostQuery, [tweetId,userId,retweetMsg || null]);
-          
+          await insertNotification([result[0].user_id, tweetId, 'Retweet', userId]);
           return res.status(200).json({'msg':"Quoted repost",'retweetId':quoteInserted.insertId})
         } catch (error) {
           console.log(error);
@@ -46,6 +47,16 @@ module.exports.retweet = async (req, res) => {
   }
 }
 
+const insertNotification = async (data) => {
+  try {
+    let sql = 'insert into notifications (user_id,tweet_id,type,related_user_id) values (?,?,?,?);';
+    await conn.query(sql, data);
+    return { 'msg': 'Add notification' };
+  }
+  catch (err) {
+    return { "error": err }
+  }
+}
 module.exports.retweetData = async(req,res)=>{
   let {tweetId}= req.body;
   let userId=req.user[0][0].id;
