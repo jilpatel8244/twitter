@@ -12,7 +12,6 @@ exports.followUnfollowHandler = async (req, res) => {
             WHERE following_id = ? AND follower_id = ?
         `, [id, followerId]);
         let currentStatus;
-        console.log("result here:", result[0])
         let statusdata = 1 || result[0].current_status;
 
         if (!result.length) {
@@ -26,14 +25,13 @@ exports.followUnfollowHandler = async (req, res) => {
           
         } else {
             statusdata = result[0].current_status;
-            console.log("how are you all here")
+
             currentStatus = result[0].current_status === 1 ? 0 : 1;
             await connection.query(`
     UPDATE followers
     SET current_status = ?
     WHERE following_id = ? AND follower_id = ?
 `, [currentStatus, id, followerId]);
-            console.log('Follower changed their status.');
         }
 
 

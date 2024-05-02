@@ -30,7 +30,7 @@ exports.set_password = async (req, res) => {
 
   inputPassword = md5(inputPassword);
 
-  console.log(inputEmail, inputPassword, result.salt);
+  
   async function update_email(inputEmail, inputPassword) {
     let sql = ` UPDATE users SET password ='${inputPassword}'  WHERE email = '${inputEmail}'`;
 

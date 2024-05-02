@@ -9,9 +9,8 @@ exports.getFollowingData = async (req, res) => {
     const following = `select u.id, u.username as usernameoffollowing,u.name as user_name ,u.profile_img_url as image from followers f join users u on f.follower_id=
     u.id where f.following_id =? and f.current_status='1';`;
     const [followingData] = await connection.query(following,[id]);
-    console.log("following here",followingData) 
-    // res.json({followingData})
-    console.log("followingData.length",followingData.length)
+
+ 
         res.render("../views/pages/followingUser", {
           id: req.query.id,
           id,

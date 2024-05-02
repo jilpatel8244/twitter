@@ -8,7 +8,7 @@
   </head>
 
   <body>
-    <div class="mt-48">
+    <div class="mt-12">
       <div
         class="flex mx-auto max-w-md mt-10 rounded-lg flex-col justify-center px-6 py-12 lg:px-8"
       >
@@ -165,7 +165,7 @@
         });
 
         login_response = await login_response.json();
-        console.log(login_response);
+        // console.log(login_response);
         if (login_response.success === true) {
           url = window.location.replace(window.location.origin + "/home");
           // Redirect to home page upon successful login
