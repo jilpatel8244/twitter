@@ -392,32 +392,40 @@ class="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 tra
         data1.forEach(element => {
 
             tweet += `   <div class="flex flex-shrink-0 ">
-                        <div class="flex-1">
-                            <div class="flex items-center w-48">
-                                <div>
-                                    <img class="inline-block h-10 w-auto rounded-full ml-4 mt-2"
-                                        src="https://pbs.twimg.com/profile_images/1121328878142853120/e-rpjoJi_bigger.png"
-                                        alt="">
-                                </div>
-                                <div class="ml-3 mt-3">
-                                    <p class="text-base leading-6 font-medium ">
-                                        <a href="/explore/profile?id=${element.id}">${element.name}</a>
-                                    </p>
-                                    <p
-                                        class="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 transition ease-in-out duration-150">
-                                        @ <a href="/explore/profile?id=${element.id}">${element.username} </a>
-                                    </p>
-                                </div>
-                            </div>
+                <div class="flex-1">
+                    <div class="flex items-center w-48">
+                        
+                        <div>
+                            <a href="/explore/profile?id=${element.id}">`
 
+
+
+            if (element.profile_img_url) {
+                tweet += `<img  class="inline-block h-10 w-auto rounded-full ml-4 mt-2" src="/uploads/${element.profile_img_url}" alt="" />`
+            } else {
+                tweet += `<img class="inline-block h-10 w-auto rounded-full ml-4 mt-2" src="/assets/profile.png" alt="" />`
+            }
+            tweet += `</a>
                         </div>
-                        <div class="flex-1 px-4 py-2 m-2" id="followbtn">
+                        <div class="ml-3 mt-3">
+                            <p class="text-base leading-6 font-medium ">
+                                ${element.name}
+                            </p>
+                            <p
+                                class="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 transition ease-in-out duration-150">
+                                @ ${element.username}
+                            </p>
+                        </div>
+                    </div>
+                    </a>
+                </div>
+                <div class="flex-1 px-4 py-2 m-2" id="followbtn">
                     <p class="font-semibold text-white bg-black py-2 px-4 rounded-full follow" id='btnfollow${element.id}'  onclick="foollowhandel(${element.id})">
                         ${element.current_status === 0 ? 'Follow' : 'Following'}
                             </p>
                     
                 </div>
-                    </div>
+            </div>
 `
 
         });
@@ -471,22 +479,30 @@ class="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 tra
             tweet += `   <div class="flex flex-shrink-0 ">
                 <div class="flex-1">
                     <div class="flex items-center w-48">
+                        
                         <div>
-                            <img class="inline-block h-10 w-auto rounded-full ml-4 mt-2"
-                                src="https://pbs.twimg.com/profile_images/1121328878142853120/e-rpjoJi_bigger.png"
-                                alt="">
+                            <a href="/explore/profile?id=${element.id}">`
+
+
+
+            if (element.profile_img_url) {
+                tweet += `<img  class="inline-block h-10 w-auto rounded-full ml-4 mt-2" src="/uploads/${element.profile_img_url}" alt="" />`
+            } else {
+                tweet += `<img class="inline-block h-10 w-auto rounded-full ml-4 mt-2" src="/assets/profile.png" alt="" />`
+            }
+            tweet += `</a>
                         </div>
                         <div class="ml-3 mt-3">
                             <p class="text-base leading-6 font-medium ">
-                                <a href="/explore/profile?id=${element.id}">${element.name}</a>
+                                ${element.name}
                             </p>
                             <p
                                 class="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 transition ease-in-out duration-150">
-                                @ <a href="/explore/profile?id=${element.id}">${element.username}</a>
+                                @ ${element.username}
                             </p>
                         </div>
                     </div>
-
+                    </a>
                 </div>
                 <div class="flex-1 px-4 py-2 m-2" id="followbtn">
                     <p class="font-semibold text-white bg-black py-2 px-4 rounded-full follow" id='btnfollow${element.id}'  onclick="foollowhandel(${element.id})">
@@ -496,7 +512,6 @@ class="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 tra
                 </div>
             </div>
 `
-
         });
 
 
@@ -552,11 +567,18 @@ class="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 tra
             tweet += `   <div class="flex flex-shrink-0 ">
                 <div class="flex-1">
                     <div class="flex items-center w-48">
-                        <div>
-                            <img class="inline-block h-10 w-auto rounded-full ml-4 mt-2"
-                                src="https://pbs.twimg.com/profile_images/1121328878142853120/e-rpjoJi_bigger.png"
-                                alt="">
-                        </div>
+                        <div>`
+
+
+            if (element.profile_img_url) {
+                tweet += `<img  class="inline-block h-10 w-auto rounded-full ml-4 mt-2" src="/uploads/${element.profile_img_url}" alt="" />`
+            } else {
+                tweet += `<img class="inline-block h-10 w-auto rounded-full ml-4 mt-2" src="/assets/profile.png" alt="" />`
+            }
+
+
+
+            tweet += `</div>
                         <div class="ml-3 mt-3">
                             <p class="text-base leading-6 font-medium ">
                                 ${element.name}
@@ -621,11 +643,16 @@ class="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 tra
                     <div class="flex items-center w-48">
                         
                         <div>
-                            <a href="/explore/profile?id=${element.id}">
-                            <img class="inline-block h-10 w-auto rounded-full ml-4 mt-2"
-                                src="https://pbs.twimg.com/profile_images/1121328878142853120/e-rpjoJi_bigger.png"
-                                alt="">
-                                </a>
+                            <a href="/explore/profile?id=${element.id}">`
+
+
+
+            if (element.profile_img_url) {
+                tweet += `<img  class="inline-block h-10 w-auto rounded-full ml-4 mt-2" src="/uploads/${element.profile_img_url}" alt="" />`
+            } else {
+                tweet += `<img class="inline-block h-10 w-auto rounded-full ml-4 mt-2" src="/assets/profile.png" alt="" />`
+            }
+            tweet += `</a>
                         </div>
                         <div class="ml-3 mt-3">
                             <p class="text-base leading-6 font-medium ">
@@ -697,7 +724,7 @@ class="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 tra
         // console.log("data is for media", data);
         data.forEach(element => {
             mediacon += `<div>
-<img class="h-auto max-w-full rounded-lg" src="./uploads/${element.media_url}" alt="">
+<img class="h-auto max-w-full rounded-lg" src="/uploads/${element.media_url}" alt="">
 </div>`
         });
         mediacon += `</div>`
