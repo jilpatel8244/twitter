@@ -44,10 +44,11 @@ ON retweets.id = tweets.retweet_id AND retweets.deleted_at IS NULL
 LEFT JOIN
     (SELECT t2.content AS original_tweet_content,
             t2.deleted_at as notRetweeted,
+            t2.id AS original_tweet_id,
+            u2.id as original_user_id,
             u2.username AS original_poster_username,
 			      u2.name AS original_poster_name,
 			      u2.profile_img_url as original_poster_profile_img_url, 
-            t2.id AS original_tweet_id,
             medias.media_url as original_media_url, 
 	CASE
     WHEN t2.created_at IS NOT NULL THEN
