@@ -476,8 +476,8 @@ fetchNotificatons = async () => {
           `
   
         <div class="notification ml-2 flex flex-col mt-2">
-          <span><strong>${mentionNotification.related_user_name} </strong>
-            @${mentionNotification.related_username} ~ ${mentionNotification.time}</span>
+          <span><strong>${mentionNotification.mentioner_user_name} </strong>
+            @${mentionNotification.mentioner_username} ~ ${mentionNotification.time}</span>
         </div>
       </div>
       <pre class="ml-2 mt-2 font-normal text-balance overflow-hidden font-sans">${mentionNotification.tweet_content}</pre>

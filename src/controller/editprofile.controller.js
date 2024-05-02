@@ -13,7 +13,10 @@ exports.getEditprofile = async (req, res) => {
   try {
     const show_detail = 'SELECT * FROM users WHERE id = ?';
     let [show_detail_data] = await connection.query(show_detail, [userId])
-    res.render('pages/editprofile', { profileData: show_detail_data[0] });
+    const birthdate = new Date(show_detail_data[0].date_of_birth);
+    birthdate.setUTCHours(birthdate.getUTCHours() + 24);
+
+    res.render('pages/editprofile', { profileData: { ...show_detail_data[0], date_of_birth: birthdate } });
   } catch (error) {
     res.json({ error: error })
 
@@ -54,7 +57,6 @@ exports.postUpdateProfile = async (req, res) => {
       }
       else
       {
-          console.log("hello world");
         const updateDetail = 'UPDATE users SET name = ?, bio = ?, date_of_birth = ?WHERE id = ?';
         await connection.query(updateDetail, [name, bio, dob,  userId]);
       }

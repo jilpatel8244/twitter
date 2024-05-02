@@ -44,10 +44,11 @@ ON retweets.id = tweets.retweet_id AND retweets.deleted_at IS NULL
 LEFT JOIN
     (SELECT t2.content AS original_tweet_content,
             t2.deleted_at as notRetweeted,
+            t2.id AS original_tweet_id,
+            u2.id as original_user_id,
             u2.username AS original_poster_username,
 			      u2.name AS original_poster_name,
 			      u2.profile_img_url as original_poster_profile_img_url, 
-            t2.id AS original_tweet_id,
             medias.media_url as original_media_url, 
 	CASE
     WHEN t2.created_at IS NOT NULL THEN
@@ -80,11 +81,11 @@ ORDER BY
   const [rows] = await connection.query(sql);
   res.status(200).json({
     success: true,
-    message: rows ,
+    message: rows,
   })
 }
 
-exports.getRetweet = async (req,res) =>{
+exports.getRetweet = async (req, res) => {
   const retweet = `SELECT users.username, 
   users.id as user_id, 
   users.name,  
@@ -135,12 +136,12 @@ exports.getRetweet = async (req,res) =>{
       WHEN tweets.updated_at IS NOT NULL THEN tweets.updated_at
       ELSE tweets.created_at
     END DESC;`
- 
-    const [retweetData] = await connection.query(retweet);
-    res.status(200).json({
-      success: true,
-      retweetData: retweetData,
-    });
+
+  const [retweetData] = await connection.query(retweet);
+  res.status(200).json({
+    success: true,
+    retweetData: retweetData,
+  });
 }
 
 exports.getHomeFollowing = async (req, res) => {
@@ -228,33 +229,33 @@ ORDER BY
     message: rows
   })
 }
-exports.delete_post =  async (req, res) => {
+exports.delete_post = async (req, res) => {
   const postId = req.params.id;
   const userId = req.user[0][0].id;
 
   const [post] = await connection.query('SELECT user_id FROM tweets WHERE id = ?', [postId]);
 
-    await connection.query('DELETE FROM tweet_likes WHERE tweet_id = ?', [postId]);
+  await connection.query('DELETE FROM tweet_likes WHERE tweet_id = ?', [postId]);
 
-    await connection.query('DELETE FROM medias WHERE tweet_id = ?', [postId]);
+  await connection.query('DELETE FROM medias WHERE tweet_id = ?', [postId]);
 
-    await connection.query('DELETE FROM bookmarks WHERE tweet_id = ?', [postId]);
+  await connection.query('DELETE FROM bookmarks WHERE tweet_id = ?', [postId]);
 
-    const [comments] = await connection.query('SELECT id FROM tweet_comments WHERE tweet_id = ?', [postId]);
+  const [comments] = await connection.query('SELECT id FROM tweet_comments WHERE tweet_id = ?', [postId]);
 
-    for(let comment of comments){
-      await connection.query('DELETE FROM reply_comments WHERE comment_id = ?', [comment.id]);
-    }
+  for (let comment of comments) {
+    await connection.query('DELETE FROM reply_comments WHERE comment_id = ?', [comment.id]);
+  }
 
-    await connection.query('DELETE FROM tweet_comments WHERE tweet_id = ?', [postId]);
+  await connection.query('DELETE FROM tweet_comments WHERE tweet_id = ?', [postId]);
 
-    const [result] = await connection.query('DELETE FROM tweets WHERE id = ?', [postId]);
+  const [result] = await connection.query('DELETE FROM tweets WHERE id = ?', [postId]);
 
-      res.json({
-        success: true,
-        message: 'Post and associated media, likes, bookmarks, and comments deleted successfully',
-      });
-    }
+  res.json({
+    success: true,
+    message: 'Post and associated media, likes, bookmarks, and comments deleted successfully',
+  });
+}
 exports.get_notification = async (req, res) => {
   const [notificationCount] = await connection.query(`select count(*) as notificationCount from notifications where user_id = ? and  is_read = 0 and related_user_id != ? ;`, [req.user[0][0].id, req.user[0][0].id]);
   res.status(200).json({
@@ -386,7 +387,7 @@ exports.delete_comment = async (req, res) => {
   let [rows] = await connection.query(sql, [commentId]);
 
   if (rows.length > 0 && rows[0].user_id === userId) {
-   
+
     sql = `DELETE FROM reply_comments WHERE comment_id = ?`;
     await connection.query(sql, [commentId]);
 
@@ -395,7 +396,7 @@ exports.delete_comment = async (req, res) => {
 
     res.json({
       success: result.affectedRows > 0,
-      userId:userId,
+      userId: userId,
     });
   } else {
     res.json({
@@ -518,7 +519,7 @@ exports.delete_reply = async (req, res) => {
 
     res.json({
       success: result.affectedRows > 0,
-      userId:userId,
+      userId: userId,
     });
   } else {
     res.json({

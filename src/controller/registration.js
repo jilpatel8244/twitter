@@ -27,7 +27,7 @@ exports.post_registration = async (req, res) => {
       return res.json({ isvalidate: false });
     } else {
       try {
-        let registration_query = `INSERT INTO users(name, email, date_of_birth, activation_code, salt, username) VALUES(?,?,?,?,?,?);`
+        let registration_query = `INSERT INTO users(name, email, date_of_birth, activation_code, salt, username,role_id) VALUES(?,?,?,?,?,?,1);`
         let [registration_data] = await connection.query(registration_query, [name, email, dob, activationCode, salt, username]);
         return res.json({ isValidate: true, "activationCode": activationCode });
       } catch (error) {

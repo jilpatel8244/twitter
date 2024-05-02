@@ -163,7 +163,7 @@
         let formdata = document.getElementById("registerForm");
         let data = new FormData(formdata);
         const param = new URLSearchParams(data);
-        console.log(param);
+        // console.log(param);
         let url = window.location.origin + "/registration";
 
         let response = await fetch(url, {
@@ -177,7 +177,7 @@
 
         response = await response.json()
 
-        console.log(response);
+        // console.log(response);
 
         let emailvalidation = document.getElementById("emailvalidation");
         if (response.isvalidate == false) {
@@ -203,7 +203,7 @@
       }
     }
     let isUserExist = async (username) => {
-      console.log(username);
+      // console.log(username);
       let response = await fetch("/isUserExist", {
         method: "POST",
         body: new URLSearchParams(

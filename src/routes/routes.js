@@ -4,7 +4,7 @@ const passport = require("passport");
 const { uploadcsv, upload } = require("../middleware/multer");
 const { tweetCreate, insertTweet, showDrafts, tweetUpdate, displayImage, deleteDraft, getProfileImage, checkRetweet } = require('../controller/tweet.controller');
 
-const { getExplorePage, getTopTweetAndHastag, getHastag, getMedia, getLatestTweet, getUsername, getUsernameOrHastagOnchage } = require("../controller/exploreControler/getexplore");
+const { getExplorePage, getTopTweetAndHastag, getHastag, getMedia, getLatestTweet, getUsername, getUsernameOrHastagOnchage, getverifyuser } = require("../controller/exploreControler/getexplore");
 const { get_registration, post_registration, USER_NAME_EXIST } = require("../controller/registration");
 const { getPassword, setPassword } = require("../controller/password");
 const { login, loginHandler, logoutHandler } = require("../controller/auth.controller");
@@ -53,6 +53,7 @@ const { removeAllBookmarkHandler } = require("../controller/removeAllBookmarksHa
 const { getAllTrendingHashtagsHandler } = require("../controller/getAllTrendingHashtags.controller");
 
 const { notification, getNotifications, } = require("../controller/notification.controller");
+const { getAllSuggestionsAboutWhoToFollowHandler } = require("../controller/getAllSuggestionsAboutWhoToFollowHandler.controller");
 /////////////////////
 
 
@@ -138,6 +139,9 @@ router.post('/bookmark', passport.authenticate('jwt', { session: false, failureR
 router.post('/removeAllBookmarks', passport.authenticate('jwt', { session: false, failureRedirect: "/login" }), removeAllBookmarkHandler);
 
 router.get('/aside/getAllTrendingHashtags', passport.authenticate('jwt', { session: false, failureRedirect: "/login" }), getAllTrendingHashtagsHandler);
+
+router.post('/aside/getAllSuggestionsAboutWhoToFollow', passport.authenticate('jwt', { session: false, failureRedirect: "/login" }), getAllSuggestionsAboutWhoToFollowHandler);
+
 // end of jil patel routes
 
 
@@ -237,3 +241,15 @@ router.post(
 
 
 router.post("/follow", passport.authenticate("jwt", { session: false, failureRedirect: "/login" }), followUnfollowHandler)
+
+
+
+
+
+
+
+
+
+//new route by mihir  date 2 may 
+
+router.get("/verify/get" , passport.authenticate("jwt" , { session : false , failureRedirect : "/login"}), getverifyuser)

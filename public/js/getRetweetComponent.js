@@ -12,7 +12,9 @@ function getRetweetComponent(data) {
                               <div class="flex flex-shrink-0 p-4 pb-0 flex-col">
                                   <a href="/explore/profile?id=${tweets.user_id}" class="flex-shrink-0 group block">
                                       <div class="flex items-center">
-                                          <div>`;
+                                      <div>
+                                    <a href="/explore/profile?id=${tweets.user_id}" class="flex-shrink-0 group block">                                      
+                                         `;
 
       if (tweets.profile_img_url) {
         tweet += `<img class="inline-block h-10 w-10 rounded-full" src="/uploads/${tweets.profile_img_url}" alt="" />`;
@@ -46,9 +48,10 @@ function getRetweetComponent(data) {
       }
       tweet += `
               </div>
+            
         </div>
     <div class="pl-16 border border-gray-500 rounded-lg p-4" style = 'margin: 22px'>
-        <a href="/explore/profile?id=${tweets.user_id}">
+    <a href="/explore/profile?id=${tweets.original_user_id}" class="flex-shrink-0 group block">
         <div class="ml-3 flex">
         <p class="text-base leading-6 font-medium text-black">`;
     if (tweets.original_poster_profile_img_url) {
@@ -71,7 +74,7 @@ function getRetweetComponent(data) {
                                 
 
                                 <div class="pl-16 mt-4">
-                                    <a href="/get_comments/${tweets.tweet_id}">
+                                    <a href="/get_comments/${tweets.original_tweet_id}">
                                     <pre class="mr-3 text-base width-auto font-normal text-balance overflow-hidden" style="word-wrap: break-word; overflow-wrap: break-word; font-family: sans-serif;">${tweets.original_tweet_content}</pre>
                                     </div>
                                     `;
