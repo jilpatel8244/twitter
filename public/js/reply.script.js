@@ -13,6 +13,7 @@ function Reply(comment_id) {
                 comment_id: comment_id,
                 content: commentText.value,
                 tweetId: tweetId,
+
             }),
         })
             .then(response => response.json())
@@ -33,7 +34,7 @@ async function showReply(comment_id) {
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ comment_id: comment_id }),
+        body: JSON.stringify({ comment_id: comment_id, }),
     });
     data = await data.json();
     console.log(data.replies);
@@ -42,10 +43,13 @@ async function showReply(comment_id) {
         let reply_list = ` 
             <div class="w-[100%]">
                 <div class="relative flex items-start my-1 hover:bg-gray-100 transition duration-350 ease-in-out" style="width:94%">
-                <div class="shrink-0">
-                        <img class="inline-block h-8 w-8 rounded-full"
-                        src="/uploads/${reply.profile_img_url}" alt="" />
-                </div>
+                <div class="shrink-0">`
+        if (reply.profile_img_url) {
+            reply_list += `<img class="inline-block h-10 w-10 rounded-full" src="/uploads/${reply.profile_img_url}" alt="" />`;
+        } else {
+            reply_list += `<img class="inline-block h-10 w-10 rounded-full" src="/assets/profile.png" alt="" />`;
+        }
+        reply_list += ` </div>
                 <div class="ml-3" style="width:80%">
                     <p class="font-bold text-lg text-wrap">
                         ${reply.name} <span class="font-medium text-sm text-gray-400">
@@ -56,12 +60,12 @@ async function showReply(comment_id) {
                                 ${reply.time}
                             </span>
                             <span class="ml-10 absolute top-0 right-0" onclick="showButton('${reply.id}')">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                         stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z" />
                     </svg>
-                </span>
+                    </span>
                     </p>
                     <div>
                     <pre class="textarea_${reply.id} block mr-3 text-base width-auto font-normal text-balance overflow-hidden font-sans"
