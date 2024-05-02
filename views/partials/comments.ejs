@@ -181,14 +181,12 @@
 
                                 <div class=" flex items-start relative w-[100%]">
                                     <div class="shrink-0">
-                                        <% if(comment.profile_img_url) { %>
-                                            <img class="inline-block h-8 w-8 rounded-full"
-                                                src="/uploads/<%= comment.profile_img_url %>" alt="" />
-                                            <% } else { %>
-
+                                            <% if(comment.profile_img_url) { %>
                                                 <img class="inline-block h-10 w-10 rounded-full"
-                                                    src="/assets/profile.png" alt="" />
-                                                <% } %>
+                                                    src="/uploads/<%= comment.profile_img_url %>" alt="" />
+                                                <% } else { %>
+                                                    <img class="inline-block h-10 w-10 rounded-full" src="/assets/profile.png" alt="" />
+                                                    <% } %>
                                     </div>
                                     <div class="ml-3 w-[90%]">
                                         <p class="font-bold text-lg text-wrap">
@@ -202,9 +200,12 @@
                                         </p>
                                         <input type="hidden" id="tweet_id" value="<%= comment.tweet_id %>">
                                         <div class="w-[99%]">
+                                            <% let content=comment.content.replace(/(@|#)\w+/g, function(match) {
+                                                return '<a href="/explore/profile?id=' + tweet.user_id + '" class="text-blue-500">' + match
+                                                + '</a>' ; }); %>
                                             <pre class="textarea_<%= comment.id %> my-2 text-base font-normal text-wrap"
                                                 style="word-wrap: break-word; overflow-wrap: break-word; white-space: normal;">
-                                                <%= comment.content %>
+                                                <%- content %>
                                             </pre>
                                             <div><button onclick="showReply('<%= comment.id %>')"
                                                     class="text-blue-700 font-bold">replies</button></div>
