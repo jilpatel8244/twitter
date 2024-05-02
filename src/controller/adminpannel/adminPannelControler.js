@@ -10,10 +10,11 @@ const csvtojson = require('csvtojson')
 const fs = require("fs")
 
 exports.adduserbyform = async (req, res) => {
-
+    console.log(req.body);
     let email = req.body.email;
     let emailsql = `select count(*) as is_available from users where email = "${email}"`
     let [emailvalidate] = await connection.query(emailsql)
+    console.log(emailvalidate);
     if (emailvalidate[0].is_available == 0) {
 
         const saltuid = new ShortUniqueId({ length: 4 });
@@ -37,9 +38,11 @@ exports.adduserbyform = async (req, res) => {
 
         let sql = `insert into users set ?`
         let [result] = await connection.query(sql, userdata)
-        //ahiya hato
+
+        return res.json({ success: result.affectedRows })
 
     }
+    return res.json({ success: 0 })
 }
 
 exports.getAdminLogin = async (req, res) => {

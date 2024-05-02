@@ -321,3 +321,39 @@ CREATE TABLE `notifications` (
 
 -- koene kae bhool lage to kejo
 -- thank you for co-operation and sorry for delay
+
+--add into permission table
+INSERT INTO `temp_twitter`.`permissions` (`id`, `permission_name`) VALUES ('1', '/admin/adminPannel');
+INSERT INTO `temp_twitter`.`permissions` (`id`, `permission_name`) VALUES ('2', '/home');
+INSERT INTO `temp_twitter`.`permissions` (`id`, `permission_name`) VALUES ('3', '/messages');
+INSERT INTO `temp_twitter`.`permissions` (`id`, `permission_name`) VALUES ('4', '/bookmark');
+INSERT INTO `temp_twitter`.`permissions` (`id`, `permission_name`) VALUES ('6', '/explore');
+INSERT INTO `temp_twitter`.`permissions` (`id`, `permission_name`) VALUES ('7', '/profile');
+INSERT INTO `temp_twitter`.`permissions` (`id`, `permission_name`) VALUES ('8', '/admin/verify');
+INSERT INTO `temp_twitter`.`permissions` (`id`, `permission_name`) VALUES ('9', '/notifications');
+
+
+
+
+
+
+--add into role_permisssion table
+INSERT INTO `temp_twitter`.`role_permissions` (`role_id`, `permission_id`) VALUES ('1', '2');
+INSERT INTO `temp_twitter`.`role_permissions` (`role_id`, `permission_id`) VALUES ('1', '3');
+INSERT INTO `temp_twitter`.`role_permissions` (`role_id`, `permission_id`) VALUES ('1', '4');
+INSERT INTO `temp_twitter`.`role_permissions` (`role_id`, `permission_id`) VALUES ('1', '6');
+INSERT INTO `temp_twitter`.`role_permissions` (`role_id`, `permission_id`) VALUES ('1', '7');
+INSERT INTO `temp_twitter`.`role_permissions` (`role_id`, `permission_id`) VALUES ('2', '8');
+INSERT INTO `temp_twitter`.`role_permissions` (`role_id`, `permission_id`) VALUES ('2', '2');
+INSERT INTO `temp_twitter`.`role_permissions` (`role_id`, `permission_id`) VALUES ('2', '3');
+INSERT INTO `temp_twitter`.`role_permissions` (`role_id`, `permission_id`) VALUES ('2', '4');
+INSERT INTO `temp_twitter`.`role_permissions` (`role_id`, `permission_id`) VALUES ('2', '6');
+INSERT INTO `temp_twitter`.`role_permissions` (`role_id`, `permission_id`) VALUES ('2', '7');
+INSERT INTO `temp_twitter`.`role_permissions` (`role_id`, `permission_id`) VALUES ( '1', '9');
+INSERT INTO `temp_twitter`.`role_permissions` (`role_id`, `permission_id`) VALUES ( '2', '9');
+
+
+--roles table 
+INSERT INTO `temp_twitter`.`roles` (`id`, `role_name`) VALUES ('1', 'user');
+INSERT INTO `temp_twitter`.`roles` (`id`, `role_name`) VALUES ('2', 'verifiedUser');
+INSERT INTO `temp_twitter`.`roles` (`id`, `role_name`) VALUES ('3', 'admin');

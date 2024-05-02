@@ -2,7 +2,7 @@ const connection = require("../../config/connection");
 let md5 = require("md5");
 const logger = require("../../logger/logger");
 
-exports.resetpassword = async (req, res) => {
+exports.resetpasswordget = async (req, res) => {
   res.render("pages/resetpasswordProfile");
 };
 
