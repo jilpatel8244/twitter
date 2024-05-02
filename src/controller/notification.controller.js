@@ -90,7 +90,7 @@ async function getVerifiedNotifications(userId) {
 
 async function getMentionNotifications(userId) {
   const [mentionNotifications] = await connection.query(
-    ` SELECT f.current_status, n.*, u.username AS username, u2.profile_img_url,  u2.name AS related_user_name, u2.username AS related_username, t.*, t.content AS tweet_content, 
+    ` SELECT f.current_status, n.*, u.username AS username, u2.profile_img_url,  u2.name AS mentioner_user_name, u2.username AS mentioner_username, t.*, t.content AS tweet_content, 
     CASE
         WHEN TIMESTAMPDIFF(SECOND, n.created_at, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(SECOND, n.created_at, NOW()), ' seconds ago')
         WHEN TIMESTAMPDIFF(MINUTE, n.created_at, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(MINUTE, n.created_at, NOW()), ' minutes ago')
@@ -103,7 +103,6 @@ async function getMentionNotifications(userId) {
     LEFT JOIN followers f ON u.id = f.follower_id AND u2.id = f.following_id 
     LEFT JOIN tweets t ON n.tweet_id = t.id
     WHERE n.user_id = ? AND u.username IN  (u.username) AND n.type = "Mention" 
-    AND f.is_blocked = 0
     ORDER BY n.created_at DESC;`,
     [userId]
   );
