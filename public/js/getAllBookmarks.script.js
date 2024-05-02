@@ -10,7 +10,7 @@ async function getAllBookamrkHandler() {
     let allTweets = document.getElementById('allTweets');
 
     if (response.success == true) {
-        if(response.message.length){
+        if (response.message.length) {
             let tweet = getTweetComponent(response.message);
 
             allTweets.innerHTML = tweet;

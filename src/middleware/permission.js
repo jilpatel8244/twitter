@@ -17,9 +17,11 @@ exports.permission = async (req, res, next) => {
     }
     else {
 
-        // if (req.user[0][0].role_id == 1) {
-        //     return res.render("pages/verify")
-        // }
+        if (req.user[0][0].role_id == 1 && url == "/admin/verify") {
+            return res.render("pages/verify")
+        }else{
+           res.redirect('/login')
+        }
 
     }
 
