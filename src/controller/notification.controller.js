@@ -26,7 +26,6 @@ exports.getNotifications = async (req, res) => {
       [logger_id]
     );
     let countNotification = notificationCount[0].count;
-    console.log(mentionNotification);
     res.status(200).json({
       success: true,
       logNotification,
@@ -62,7 +61,7 @@ async function getAllNotifications(userId) {
     ORDER BY n.created_at DESC;`,
     [userId, userId]
   );
-  // console.log(notifications);
+
   return notifications;
 }
 

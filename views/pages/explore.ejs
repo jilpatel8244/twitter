@@ -238,7 +238,7 @@
             async function getdata(search) {
                 let url = window.location.origin + "/explore/searchboxdata"
                 let bodyargs = { searchbox: search }
-                console.log(bodyargs);
+                // console.log(bodyargs);
                 let data = await fetch(url, {
                     method: 'post',
                     headers: { 'Content-Type': 'application/json' },
@@ -373,7 +373,7 @@ class="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 tra
                 body: JSON.stringify(bodyargs)
             })
             data1 = await data1.json()
-            console.log("data is ", data1.username);
+            // console.log("data is ", data1.username);
             return data1.username;
         }
 
@@ -599,7 +599,7 @@ class="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 tra
                 body: JSON.stringify(bodyargs)
             })
             data1 = await data1.json()
-            console.log("data is ", data1.username);
+            // console.log("data is ", data1.username);
             return data1.username;
         }
 
@@ -685,7 +685,7 @@ class="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 tra
 
             data = await data.json()
 
-            console.log("media data is the ", data);
+            // console.log("media data is the ", data);
             return data.media;
 
         }
@@ -694,7 +694,7 @@ class="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 tra
         let data = await getdata(search);
         let mediacon = `<div class="grid grid-cols-2 md:grid-cols-3 gap-4">`
 
-        console.log("data is for media", data);
+        // console.log("data is for media", data);
         data.forEach(element => {
             mediacon += `<div>
 <img class="h-auto max-w-full rounded-lg" src="./uploads/${element.media_url}" alt="">
