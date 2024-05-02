@@ -7,20 +7,15 @@ const { Server } = require("socket.io");
 const io = new Server(server);
 const cookieParser = require("cookie-parser");
 const routes = require("./src/routes/routes");
-const authRouter = require("./src/routes/auth.routes");
+
 const connection = require("./config/connection");
 const passport = require("passport");
 require("./src/middleware/passport");
-const bookmarkRoute = require("./src/routes/bookmark.routes");
-const likeRoute = require("./src/routes/like.routes");
-const messagesRoute = require("./src/routes/messages.routes");
-const shareRoute = require('./src/routes/share.routes');
-const resetpasswordProfile = require("./src/routes/profile.resetpassword.route");
 
 const PORT = process.env.PORT || 3000;
 // const router = require("./src/routes/routes.js");
 const logger = require("./logger/logger");
-const followUnfollowHandler = require("./src/routes/follow.route");
+
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -32,14 +27,8 @@ app.use(express.static("node_modules/sweetalert2/dist"));
 // app.use("/admin", adminroute);
 
 app.use(routes);
-app.use(likeRoute);
-app.use(bookmarkRoute);
-app.use(messagesRoute);
 
-app.use(authRouter);
-app.use(resetpasswordProfile);
-app.use(followUnfollowHandler)
-app.use(shareRoute);
+
 
 app.get('*', (req, res) => {
   res.render('pages/404.ejs');

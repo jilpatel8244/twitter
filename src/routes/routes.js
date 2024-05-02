@@ -5,6 +5,16 @@ const { uploadcsv, upload } = require("../middleware/multer");
 const { tweetCreate, insertTweet, showDrafts, tweetUpdate, displayImage, deleteDraft, getProfileImage, checkRetweet } = require('../controller/tweet.controller');
 
 const { getExplorePage, getTopTweetAndHastag, getHastag, getMedia, getLatestTweet, getUsername, getUsernameOrHastagOnchage } = require("../controller/exploreControler/getexplore");
+const { get_registration, post_registration, USER_NAME_EXIST } = require("../controller/registration");
+const { getPassword, setPassword } = require("../controller/password");
+const { login, loginHandler, logoutHandler } = require("../controller/auth.controller");
+const { resetPassword, set_password, verify } = require("../controller/resetpassword");
+const { verify_user_byemail } = require("../controller/verify_user_byemail");
+const { getActivecode } = require("../controller/activecode.controler");
+const { getFollowData } = require("../controller/getFollowuser.controller");
+const { getFollowingData } = require("../controller/getFollowinguser.controller");
+const { getEditprofile, postUpdateProfile } = require("../controller/editprofile.controller");
+const { followUnfollowHandler } = require("../controller/getFollow.controller");
 
 const { getReplies } = require("../controller/profile/profile.reply.controller");
 const { getPosts } = require("../controller/profile/profile.post.controller");
@@ -13,14 +23,13 @@ const { getLikes } = require("../controller/profile/profile.like.controller");
 const { getProfile } = require("../controller/profile/profile.controller");
 const { getProfileMedia } = require("../controller/profile/profile.media.controller");
 
+const {
+  reset_password, resetpasswordget,
+
+} = require("../controller/profile.resetpassword.controller");
 
 
 const { permission } = require("../middleware/permission");
-
-
-
-
-
 const logger = require("../../logger/logger");
 const { getAdminLogin, getUsers, getTweets, manageUserActivation, ristricTweet, getverifypage, getVerifiedRequest, updateverify, getAdminPannel, adminLoginHandler, addUserCsv, adduserbyform, supportForm, getsupport, oldchats, savechat, useridTickit, admingetsupport, adminid } = require("../controller/adminpannel/adminPannelControler");
 
@@ -43,13 +52,41 @@ const { removeAllBookmarkHandler } = require("../controller/removeAllBookmarksHa
 
 const { getAllTrendingHashtagsHandler } = require("../controller/getAllTrendingHashtags.controller");
 
-const {notification, getNotifications,} = require("../controller/notification.controller");
+const { notification, getNotifications, } = require("../controller/notification.controller");
+/////////////////////
+
+
+
+///////////////////////
+/////added router 
+
+router.get("/registration", get_registration);
+router.post("/registration", post_registration);
+router.get("/createPassword", getPassword);
+router.post("/createPassword", setPassword);
+router.get("/login", login);
+router.post("/login", loginHandler);
+router.get("/forgotpassword", verify);
+router.post("/verify_email", verify_user_byemail)
+router.post("/activeCode", getActivecode)
+router.get("/resetPassword", resetPassword)
+router.post("/setPassword", set_password);
+router.get("/logout", logoutHandler);
+router.post("/isUserExist", USER_NAME_EXIST);
+router.get("/follow", passport.authenticate('jwt', { session: false, failureRedirect: "/login" }), getFollowData)
+router.get("/followingUser", passport.authenticate('jwt', { session: false, failureRedirect: "/login" }), getFollowingData)
+router.get("/editprofile", passport.authenticate('jwt', { session: false, failureRedirect: "/login" }), getEditprofile);
+router.post("/editprofile/updateProfile", passport.authenticate('jwt', { session: false, failureRedirect: "/login" }), upload.fields([{ name: "coverPhoto", maxCount: 1 }, { name: "displayPhoto", maxCount: 1 }]), postUpdateProfile);
+
+
+
+/////
 router.get("/", (req, res) => {
   res.render("pages/index");
 });
 
 
-router.get("/home", passport.authenticate('jwt', { session: false, failureRedirect: "/login" }), (req, res) => {
+router.get("/home", passport.authenticate('jwt', { session: false, failureRedirect: "/login" }), permission, (req, res) => {
   res.render('pages/home', { user: req.user[0][0] });
 });
 router.get("/getHomeForyou", passport.authenticate('jwt', { session: false, failureRedirect: "/login" }), getHomeForyou);
@@ -85,14 +122,14 @@ router.get("/getAllFollowersList", passport.authenticate('jwt', { session: false
 router.post("/shareTweet", passport.authenticate('jwt', { session: false, failureRedirect: "/login" }), shareTweetHandler);
 
 // message routes
-router.get("/messages", passport.authenticate('jwt', { session: false, failureRedirect: "/login" }), getMessagesPage);
+router.get("/messages", passport.authenticate('jwt', { session: false, failureRedirect: "/login" }), permission, getMessagesPage);
 router.post("/messages/storeMessage", passport.authenticate('jwt', { session: false, failureRedirect: "/login" }), upload.single('imgFile'), storeMessageHandler);
 
 // like routes
 router.post('/like', passport.authenticate('jwt', { session: false, failureRedirect: "/login" }), likeUnlikeHandler);
 
 // bookmark routes
-router.get('/bookmark', passport.authenticate('jwt', { session: false, failureRedirect: "/login" }), (req, res) => {
+router.get('/bookmark', passport.authenticate('jwt', { session: false, failureRedirect: "/login" }), permission, (req, res) => {
   res.render('pages/bookmark.ejs', { user: req.user[0][0] });
 })
 router.get('/getAllBookmarks', passport.authenticate('jwt', { session: false, failureRedirect: "/login" }), getAllBookmarks);
@@ -119,28 +156,18 @@ router.post('/checkRetweet', passport.authenticate('jwt', { session: false, fail
 
 
 
-
-
-
-
-
-
-
-
-
-
 //mihir routers  for admin pannel
 
 
 router.post("/admin/uploadcsv", uploadcsv.single("file"), addUserCsv)
-router.post("/admin/supportform", upload.single("media"), passport.authenticate('jwt', { session: false, failureRedirect: "/admin/admin/adminlogin" }), supportForm)
+router.post("/admin/supportform", upload.single("media"), passport.authenticate('jwt', { session: false, failureRedirect: "/admin/adminlogin" }), supportForm)
 router.get("/admin/adminlogin", getAdminLogin)
 router.post("/admin/oldchats", oldchats)
 router.post("/admin/savechat", savechat)
 router.post("/admin/adminlogin", adminLoginHandler)
 router.post("/admin/getusers", getUsers)
 router.post("/admin/getVerifyRequest", getVerifiedRequest);
-router.get("/admin/verify", passport.authenticate('jwt', { session: false, failureRedirect: "/login" }), getverifypage);
+router.get("/admin/verify", passport.authenticate('jwt', { session: false, failureRedirect: "/login" }), permission, getverifypage);
 router.post("/admin/gettweet", getTweets);
 router.post("/admin/updateStatusUser", manageUserActivation);
 router.post("/admin/ristrictweet", ristricTweet);
@@ -150,23 +177,12 @@ router.get("/admin/getsupport", passport.authenticate('jwt', { session: false, f
 router.get("/admin/adminsupport", passport.authenticate('jwt', { session: false, failureRedirect: "/admin/adminlogin" }), admingetsupport)
 router.post("/admin/useridTickit", passport.authenticate('jwt', { session: false, failureRedirect: "/admin/adminlogin" }), useridTickit)
 router.get("/admin/adminid", passport.authenticate('jwt', { session: false, failureRedirect: "/admin/adminlogin" }), adminid)
-router.get("/admin/adminPannel", passport.authenticate('jwt', { session: false, failureRedirect: "/admin/adminlogin" }), getAdminPannel)
-
-
-
-
-
-
-
+router.get("/admin/adminPannel", passport.authenticate('jwt', { session: false, failureRedirect: "/admin/adminlogin" }), permission, getAdminPannel)
 
 
 
 //mihir routes for explore module 
-
-
-
-
-router.get("/explore", passport.authenticate('jwt', { session: false, failureRedirect: "/login" }), getExplorePage)
+router.get("/explore", passport.authenticate('jwt', { session: false, failureRedirect: "/login" }), permission, getExplorePage)
 router.post("/explore/topTweet", passport.authenticate('jwt', { session: false, failureRedirect: "/login" }), getTopTweetAndHastag)
 router.post("/explore/latestTweet", passport.authenticate('jwt', { session: false, failureRedirect: "/login" }), getLatestTweet)
 router.post("/explore/username", passport.authenticate('jwt', { session: false, failureRedirect: "/login" }), getUsername)
@@ -183,7 +199,7 @@ router.get('/explore/profile/media', getProfileMedia);
 
 // Sanket Patel Profile Routes Starts Here
 
-router.get("/profile", passport.authenticate('jwt', { session: false, failureRedirect: "/login" }), getProfile);
+router.get("/profile", passport.authenticate('jwt', { session: false, failureRedirect: "/login" }), permission, getProfile);
 router.get("/profile/post", passport.authenticate('jwt', { session: false, failureRedirect: "/login" }), getPosts);
 router.get("/profile/reply", passport.authenticate('jwt', { session: false, failureRedirect: "/login" }), getReplies);
 router.get("/profile/like", passport.authenticate('jwt', { session: false, failureRedirect: "/login" }), getLikes);
@@ -198,6 +214,26 @@ module.exports = router
 
 // notification routes
 
-router.get("/notifications",passport.authenticate("jwt", { session: false, failureRedirect: "/login" }),notification);
+router.get("/notifications", passport.authenticate("jwt", { session: false, failureRedirect: "/login" }), notification);
 
-router.get("/notification",passport.authenticate("jwt", { session: false, failureRedirect: "/login" }),getNotifications);
+router.get("/notification", passport.authenticate("jwt", { session: false, failureRedirect: "/login" }), getNotifications);
+
+
+
+
+
+////
+router.get(
+  "/profilepasswordreset",
+  passport.authenticate("jwt", { session: false, failureRedirect: "/login" }),
+  resetpasswordget
+);
+
+router.post(
+  "/profilepasswordreset",
+  passport.authenticate("jwt", { session: false, failureRedirect: "/login" }),
+  reset_password
+);
+
+
+router.post("/follow", passport.authenticate("jwt", { session: false, failureRedirect: "/login" }), followUnfollowHandler)
