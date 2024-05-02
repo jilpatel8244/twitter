@@ -107,7 +107,7 @@
                         content: response.message.content,
                         url: response.message.url,
                         content_type: response.message.content_type,
-                        created_at: response.message.created_at
+                        created_at: new Date()
                     });
             })
 
@@ -129,25 +129,16 @@
             Swal.fire({
                 toast: true,
                 icon: 'success',
-                title: 'Direct Message sent',
+                title: 'Copied to clipboard',
                 background: 'rgb(14 165 233)',
                 animation: false,
                 position: 'bottom',
                 showConfirmButton: false,
-                didOpen: () => {
-                    Swal.showLoading();
-                    const timer = Swal.getPopup().querySelector("b");
-                    timerInterval = setInterval(() => {
-                        timer.textContent = `${Swal.getTimerLeft()}`;
-                    }, 100);
-                },
-                willClose: () => {
-                    clearInterval(timerInterval);
-                }
-            }).then((result) => {
-                /* Read more about handling dismissals below */
-                if (result.dismiss === Swal.DismissReason.timer) {
-
+                timer: 3000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                    toast.addEventListener('mouseleave', Swal.resumeTimer)
                 }
             })
         }

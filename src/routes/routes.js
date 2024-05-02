@@ -53,6 +53,7 @@ const { removeAllBookmarkHandler } = require("../controller/removeAllBookmarksHa
 const { getAllTrendingHashtagsHandler } = require("../controller/getAllTrendingHashtags.controller");
 
 const { notification, getNotifications, } = require("../controller/notification.controller");
+const { getAllSuggestionsAboutWhoToFollowHandler } = require("../controller/getAllSuggestionsAboutWhoToFollowHandler.controller");
 /////////////////////
 
 
@@ -138,6 +139,9 @@ router.post('/bookmark', passport.authenticate('jwt', { session: false, failureR
 router.post('/removeAllBookmarks', passport.authenticate('jwt', { session: false, failureRedirect: "/login" }), removeAllBookmarkHandler);
 
 router.get('/aside/getAllTrendingHashtags', passport.authenticate('jwt', { session: false, failureRedirect: "/login" }), getAllTrendingHashtagsHandler);
+
+router.post('/aside/getAllSuggestionsAboutWhoToFollow', passport.authenticate('jwt', { session: false, failureRedirect: "/login" }), getAllSuggestionsAboutWhoToFollowHandler);
+
 // end of jil patel routes
 
 
