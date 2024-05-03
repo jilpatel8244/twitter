@@ -35,14 +35,16 @@ exports.followUnfollowHandler = async (req, res) => {
             await connection.query(`
     UPDATE followers
     SET current_status = ?
-    WHERE following_id = ? AND follower_id = ?
-`, [currentStatus, id, followerId]);
-await connection.query(
-    `INSERT INTO notifications (user_id, type, related_user_id)
-    VALUES (?, 'Follow', ?);`,
-    [id, followerId]
-);
-        }
+    WHERE following_id = ? AND follower_id = ?`, [currentStatus, id, followerId]);
+        if(result[0].current_status === 0){
+        await connection.query(
+            `INSERT INTO notifications (user_id, type, related_user_id)
+            VALUES (?, 'Follow', ?);`,
+            [id, followerId]
+        );
+                  
+    }
+      }
 
 
         return res.status(200).json({
