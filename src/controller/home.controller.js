@@ -17,34 +17,22 @@ exports.getHomeForyou = async (req, res) => {
   medias.media_url as media_url, 
   bookmarks.status as isBookmarked,
   tweet_likes.status as isLiked,
+  tweets.is_ristricted,
   (SELECT COUNT(*) FROM tweet_likes WHERE tweet_likes.tweet_id = tweets.id AND tweet_likes.status = 1) as likeCount,
   (SELECT COUNT(*) FROM retweets where retweets.tweet_id=tweets.id and retweets.deleted_at IS NULL) as repostCount,
   k2.*,
-  CASE
-    WHEN tweets.updated_at IS NOT NULL THEN
-      CASE
-        WHEN TIMESTAMPDIFF(SECOND, tweets.updated_at, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(SECOND, tweets.updated_at, NOW()+1), ' seconds ago')
-        WHEN TIMESTAMPDIFF(MINUTE, tweets.updated_at, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(MINUTE, tweets.updated_at, NOW()), ' minutes ago')
-        WHEN TIMESTAMPDIFF(HOUR, tweets.updated_at, NOW()) < 24 THEN CONCAT(TIMESTAMPDIFF(HOUR, tweets.updated_at, NOW()), ' hours ago')
-        ELSE CONCAT(DATE_FORMAT(tweets.updated_at, '%d'), ' ', DATE_FORMAT(tweets.updated_at, '%M'))
-      END
-    ELSE
-      CASE
-        WHEN TIMESTAMPDIFF(SECOND, tweets.created_at, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(SECOND, tweets.created_at, NOW()+1), ' seconds ago')
-        WHEN TIMESTAMPDIFF(MINUTE, tweets.created_at, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(MINUTE, tweets.created_at, NOW()), ' minutes ago')
-        WHEN TIMESTAMPDIFF(HOUR, tweets.created_at, NOW()) < 24 THEN CONCAT(TIMESTAMPDIFF(HOUR, tweets.created_at, NOW()), ' hours ago')
-        ELSE CONCAT(DATE_FORMAT(tweets.created_at, '%d'), ' ', DATE_FORMAT(tweets.created_at, '%M'))
-      END
-  END as time
-FROM users
-LEFT JOIN tweets 
-ON users.id = tweets.user_id
-LEFT JOIN retweets 
-ON retweets.id = tweets.retweet_id AND retweets.deleted_at IS NULL
-LEFT JOIN
+  tweets.created_at as tweet_time,
+  tweets.updated_at as tweet_update_time
+  FROM users
+  LEFT JOIN tweets 
+  ON users.id = tweets.user_id
+  LEFT JOIN retweets 
+  ON retweets.id = tweets.retweet_id AND retweets.deleted_at IS NULL
+  LEFT JOIN
     (SELECT t2.content AS original_tweet_content,
             t2.deleted_at as notRetweeted,
             t2.id AS original_tweet_id,
+            t2.is_ristricted as restrcitedTweet,
             u2.id as original_user_id,
             u2.username AS original_poster_username,
 			      u2.name AS original_poster_name,
@@ -62,16 +50,17 @@ LEFT JOIN
     FROM users AS u2
     LEFT JOIN tweets AS t2 ON t2.user_id = u2.id
     LEFT JOIN medias ON t2.id = medias.tweet_id) 
-AS k2 ON k2.original_tweet_id = retweets.tweet_id
-LEFT JOIN tweet_comments ON tweet_comments.user_id = tweets.id 
- LEFT JOIN medias ON tweets.id = medias.tweet_id
- LEFT JOIN bookmarks ON bookmarks.tweet_id = tweets.id AND bookmarks.user_id = ${req.user[0][0].id}
- LEFT JOIN tweet_likes ON tweet_likes.tweet_id = tweets.id AND tweet_likes.user_id = ${req.user[0][0].id}
-WHERE
+    AS k2 ON k2.original_tweet_id = retweets.tweet_id
+    LEFT JOIN tweet_comments ON tweet_comments.user_id = tweets.id 
+    LEFT JOIN medias ON tweets.id = medias.tweet_id
+    LEFT JOIN bookmarks ON bookmarks.tweet_id = tweets.id AND bookmarks.user_id = ${req.user[0][0].id}
+    LEFT JOIN tweet_likes ON tweet_likes.tweet_id = tweets.id AND tweet_likes.user_id = ${req.user[0][0].id}
+  WHERE
     users.is_active = 1
         AND tweets.is_posted = 1
         AND tweets.deleted_at IS NULL
-ORDER BY 
+        AND tweets.is_ristricted = 0
+  ORDER BY 
     CASE
       WHEN tweets.updated_at IS NOT NULL THEN tweets.updated_at
       ELSE  tweets.created_at 
@@ -84,26 +73,15 @@ ORDER BY
     message: rows,
   })
 }
- 
-exports.getHomeFollowing = async (req, res) => {
-  let followingSql = `
-  SELECT 
-  users.username,
-  users.id AS user_id,
-  users.name,
+
+exports.getRetweet = async (req, res) => {
+  const retweet = `SELECT users.username, 
+  users.id as user_id, 
+  users.name,  
+  tweets.content,
   users.profile_img_url as profile_img_url, 
   tweets.id as tweet_id,
-  tweets.content as tweetContent,
-  tweets.created_at,
-  tweets.retweet_id as retweetId,
-  tweets.user_id = ${req.user[0][0].id} as isAuthor,
   tweet_comments.content as comments, 
-  medias.media_url as media_url, 
-  bookmarks.status as isBookmarked,
-  tweet_likes.status as isLiked,
-  (SELECT COUNT(*) FROM tweet_likes WHERE tweet_likes.tweet_id = tweets.id AND tweet_likes.status = 1) as likeCount,
-  (SELECT COUNT(*) FROM retweets where retweets.tweet_id=tweets.id and retweets.deleted_at IS NULL) as repostCount,
-  k2.*,
   CASE
     WHEN tweets.updated_at IS NOT NULL THEN
       CASE
@@ -119,7 +97,64 @@ exports.getHomeFollowing = async (req, res) => {
         WHEN TIMESTAMPDIFF(HOUR, tweets.created_at, NOW()) < 24 THEN CONCAT(TIMESTAMPDIFF(HOUR, tweets.created_at, NOW()), ' hours ago')
         ELSE CONCAT(DATE_FORMAT(tweets.created_at, '%d'), ' ', DATE_FORMAT(tweets.created_at, '%M'))
       END
-  END as time
+  END as time,
+  medias.media_url as media_url,
+  bookmarks.status as isBookmarked,
+  tweet_likes.status as isLiked,
+  (SELECT COUNT(*) FROM tweet_likes WHERE tweet_likes.tweet_id = tweets.id) as likeCount,
+  (select count(*) From retweets where retweets.tweet_id=tweets.id and retweets.deleted_at IS NULL) as repostCount,
+  retweets.deleted_at as notRetweeted,
+  retweets.created_at as createdAt,
+  retweets.tweet_id as retweetId,
+  retweets.user_id as retweeterId,
+  retweets.retweet_message as retweetContent
+  FROM users
+  JOIN tweets ON users.id = tweets.user_id
+  LEFT JOIN medias ON tweets.id = medias.tweet_id
+  LEFT JOIN tweet_comments ON tweet_comments.user_id = tweets.id 
+  LEFT JOIN bookmarks ON bookmarks.tweet_id = tweets.id AND bookmarks.user_id = ${req.user[0][0].id}
+  LEFT JOIN tweet_likes ON tweet_likes.tweet_id = tweets.id AND tweet_likes.user_id = ${req.user[0][0].id}
+  LEFT JOIN retweets on retweets.tweet_id=tweets.id 
+  WHERE users.is_active = 1 AND tweets.is_posted = 1 AND tweets.deleted_at IS NULL and retweets.user_id IN 
+  (SELECT retweets.user_id from retweets 
+ left join users on retweets.user_id = users.id 
+ left join tweets on retweets.tweet_id = tweets.id
+ where retweets.user_id = users.id ) and retweets.deleted_at IS NULL 
+  ORDER BY 
+    CASE
+      WHEN tweets.updated_at IS NOT NULL THEN tweets.updated_at
+      ELSE tweets.created_at
+    END DESC;`
+
+  const [retweetData] = await connection.query(retweet);
+  res.status(200).json({
+    success: true,
+    retweetData: retweetData,
+  });
+}
+
+exports.getHomeFollowing = async (req, res) => {
+  let followingSql = `
+  SELECT 
+  users.username,
+  users.id AS user_id,
+  users.name,
+  users.profile_img_url as profile_img_url, 
+  tweets.id as tweet_id,
+  tweets.content as tweetContent,
+  tweets.created_at,
+  tweets.is_ristricted,
+  tweets.retweet_id as retweetId,
+  tweets.user_id = ${req.user[0][0].id} as isAuthor,
+  tweet_comments.content as comments, 
+  medias.media_url as media_url, 
+  bookmarks.status as isBookmarked,
+  tweet_likes.status as isLiked,
+  (SELECT COUNT(*) FROM tweet_likes WHERE tweet_likes.tweet_id = tweets.id AND tweet_likes.status = 1) as likeCount,
+  (SELECT COUNT(*) FROM retweets where retweets.tweet_id=tweets.id and retweets.deleted_at IS NULL) as repostCount,
+  k2.*,
+  tweets.created_at as tweet_time,
+  tweets.updated_at as tweet_update_time
 FROM users
 LEFT JOIN tweets 
 ON users.id = tweets.user_id
@@ -130,8 +165,10 @@ LEFT JOIN
             t2.deleted_at as notRetweeted,
             u2.username AS original_poster_username,
 			      u2.name AS original_poster_name,
+            t2.is_ristricted as restrcitedTweet,
 			      u2.profile_img_url as original_poster_profile_img_url, 
             t2.id AS original_tweet_id,
+            u2.id as original_user_id,
             medias.media_url as original_media_url, 
 	CASE
     WHEN t2.created_at IS NOT NULL THEN
@@ -156,6 +193,7 @@ WHERE
         AND tweets.is_posted = 1
         AND tweets.deleted_at IS NULL
         AND followers.current_status = 1
+        AND tweets.is_ristricted = 0
 ORDER BY 
     CASE
       WHEN tweets.updated_at IS NOT NULL THEN tweets.updated_at

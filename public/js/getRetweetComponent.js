@@ -2,10 +2,37 @@ function getRetweetComponent(data) {
   let tweet = `<ul class="list-none">`;
 
   data.forEach((tweets) => {
+    console.log(tweets);
+    let date1 = new Date(tweets.tweet_time);
+    let currentdate = new Date();
+    date1 = currentdate - date1;
+    if (date1 / 1000 / 60 / 60 / 24 >= 1) {
+      time = ``;
+      time += `${Math.floor(date1 / 1000 / 60 / 60 / 24)}`;
+      time += "Days ago";
+    } else if (date1 / 1000 / 60 / 60 >= 1) {
+      time = ``;
+      time += `${Math.floor(date1 / 1000 / 60 / 60)}`;
+      time += " Hours ago";
+    } else if (date1 / 1000 / 60 <= 60) {
+      time = ``;
+      time += `${Math.floor(date1 / 1000 / 60)}`;
+      time += " Minutes ago";
+    } else if (date1 / 1000 <= 60) {
+      time = "";
+      time += `${Math.floor(date1 / 1000)}`;
+      time += " Seconds ago";
+    }
     if (tweets.retweetId) {
-        let content = tweets.tweetContent.replace(/(@|#)\w+/g, function(match) {
-            return '<a href="/explore/profile?id=' + tweets.user_id + '" class="text-blue-500">' + match + '</a>';
-            });
+      let content = tweets.tweetContnet.replace(/(@|#)\w+/g, function (match) {
+        return (
+          '<a href="/explore/profile?id=' +
+          tweets.user_id +
+          '" class="text-blue-500">' +
+          match +
+          "</a>"
+        );
+      });
       tweet += `<li>
                       <article class="hover:bg-gray-100 transition duration-350 ease-in-out">
                           <div id="${tweets.tweet_id}">
@@ -27,14 +54,14 @@ function getRetweetComponent(data) {
                        ${tweets.name}
                            <span
                              class="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 transition ease-in-out duration-150">
-                             @ ${tweets.username} . ${tweets.time}
+                             @ ${tweets.username} . ${time}
                            </span>
                     </p>
                 </div>
                 </div>
                 </a>
                 <div class="ml-4 mb-2"> `;
-      if (tweets.tweetContent) {
+      if (tweets.tweetContnet) {
         tweet += ` <a href="/get_comments/${tweets.tweet_id}">
                  <pre class="mr-3 ml-3 text-base width-auto font-normal text-balance overflow-hidden" style="word-wrap: break-word; overflow-wrap: break-word; font-family: sans-serif;">${content}</pre> `;
       }
@@ -46,21 +73,21 @@ function getRetweetComponent(data) {
                                                       </a>
                                                   </div>`;
       }
-      tweet += `
+      if (!tweets.restrcitedTweet && tweets.original_user_id) {
+        tweet += `
               </div>
-            
         </div>
     <div class="pl-16 border border-gray-500 rounded-lg p-4" style = 'margin: 22px'>
     <a href="/explore/profile?id=${tweets.original_user_id}" class="flex-shrink-0 group block">
         <div class="ml-3 flex">
         <p class="text-base leading-6 font-medium text-black">`;
-    if (tweets.original_poster_profile_img_url) {
-      tweet += `<img class="inline-block h-10 w-10 rounded-full" src="/uploads/${tweets.original_poster_profile_img_url}" alt="" />`;
-    } else {
-      tweet += `<img class="inline-block h-10 w-10 rounded-full" src="/assets/profile.png" alt="" />`;
-    }
+        if (tweets.original_poster_profile_img_url) {
+          tweet += `<img class="inline-block h-10 w-10 rounded-full" src="/uploads/${tweets.original_poster_profile_img_url}" alt="" />`;
+        } else {
+          tweet += `<img class="inline-block h-10 w-10 rounded-full" src="/assets/profile.png" alt="" />`;
+        }
 
-    tweet += `                              <div class="ml-3 mt-2">
+        tweet += `                              <div class="ml-3 mt-2">
                                                 <p class="text-base leading-6 font-medium text-black">
                                                     ${tweets.original_poster_name}
                                                         <span
@@ -79,40 +106,52 @@ function getRetweetComponent(data) {
                                     </div>
                                     `;
 
-    if (tweets.original_media_url) {
-      tweet += `<div class="md:flex-shrink pr-6 pt-3">
+        if (tweets.original_media_url) {
+          tweet += `<div class="md:flex-shrink pr-6 pt-3">
                                                     <div class="bg-cover bg-no-repeat bg-center rounded-lg size-fit">
                                                         <img class="" src="/uploads/${tweets.original_media_url}" alt="missing">
                                                     </div>
                                                     </a>
                                                 </div>`;
-    }
-}else{    
-    let content = tweets.tweetContent.replace(/(@|#)\w+/g, function(match) {
-        return '<a href="/explore/profile?id=' + tweets.user_id + '" class="text-blue-500">' + match + '</a>';
-        });
-    tweet += `
+        }
+      } else if ( tweets.restrcitedTweet === 1 ) {
+        tweet += `
+        <div class="pl-16 border border-gray-500 rounded-lg p-4" style = 'margin: 22px'>
+            <pre class="mr-3 text-base width-auto font-normal text-balance overflow-hidden" style="word-wrap: break-word; overflow-wrap: break-word; font-family: sans-serif;">This tweet is not awailable</pre>
+        </div>`;
+      }
+    } else {
+      let content = tweets.tweetContnet.replace(/(@|#)\w+/g, function (match) {
+        return (
+          '<a href="/explore/profile?id=' +
+          tweets.user_id +
+          '" class="text-blue-500">' +
+          match +
+          "</a>"
+        );
+      });
+      tweet += `
     <li>
         <article class="hover:bg-gray-100 transition duration-350 ease-in-out">
             <div id="${tweets.tweet_id}">
                 <div class="flex flex-shrink-0 p-4 pb-0">
                     <a href="/explore/profile?id=${tweets.user_id}" class="flex-shrink-0 group block">
                         <div class="flex items-center">
-                            <div>`
+                            <div>`;
 
-if (tweets.profile_img_url) {
-tweet += `<img class="inline-block h-10 w-10 rounded-full" src="/uploads/${tweets.profile_img_url}" alt="" />`
-} else {
-tweet += `<img class="inline-block h-10 w-10 rounded-full" src="/assets/profile.png" alt="" />`
-}
+      if (tweets.profile_img_url) {
+        tweet += `<img class="inline-block h-10 w-10 rounded-full" src="/uploads/${tweets.profile_img_url}" alt="" />`;
+      } else {
+        tweet += `<img class="inline-block h-10 w-10 rounded-full" src="/assets/profile.png" alt="" />`;
+      }
 
-tweet += `</div>
+      tweet += `</div>
                             <div class="ml-3">
                                 <p class="text-base leading-6 font-medium text-black">
                                     ${tweets.name}
                                         <span
                                             class="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 transition ease-in-out duration-150">
-                                            @ ${tweets.username} . ${tweets.time}
+                                            @ ${tweets.username} . ${time}
                                         </span>
                                 </p>
                             </div>
@@ -123,17 +162,16 @@ tweet += `</div>
                 <div class="pl-16">
                     <a href="/get_comments/${tweets.tweet_id}">
                     <pre class="mr-3 text-base width-auto font-normal text-balance overflow-hidden" style="white-space: no-wrap;  text-overflow: ellipsis; word-wrap: break-word; overflow-wrap: break-word; font-family: sans-serif;">${content}</pre>
-                    `
-if (tweets.media_url) {
-tweet += `<div class="md:flex-shrink pr-6 pt-3">
+                    `;
+      if (tweets.media_url) {
+        tweet += `<div class="md:flex-shrink pr-6 pt-3">
                                     <div class="bg-cover bg-no-repeat bg-center rounded-lg size-fit">
                                         <img class="" src="/uploads/${tweets.media_url}" alt="missing">
                                     </div>
                                     </a>
-                                </div>`
-}
-
-}
+                                </div>`;
+      }
+    }
     tweet += `
     </div>
                 <div class="flex">

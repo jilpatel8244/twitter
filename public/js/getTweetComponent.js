@@ -2,10 +2,41 @@ function getTweetComponent(data) {
     let tweet = `<ul class="list-none">`;
 
     data.forEach(tweets => {
-        let content = tweets.content.replace(/(@|#)\w+/g, function(match) {
+        let content = tweets.content.replace(/(@|#)\w+/g, function (match) {
             return '<a href="/explore/profile?id=' + tweets.user_id + '" class="text-blue-500">' + match + '</a>';
-            });
-            
+        });
+
+
+        let time = "hello";
+        let date1 = new Date(tweets.time);
+        console.log(time);
+        let currentdate = new Date();
+
+        date1 = currentdate - date1;
+
+
+        if ((date1 / 1000 / 60 / 60 / 24) >= 1) {
+            time = ``;
+            time += `${Math.floor(date1 / 1000 / 60 / 60 / 24)}`
+            time += 'Days ago'
+        }
+        else if ((date1 / 1000 / 60 / 60) >= 1) {
+            time = ``;
+            time += `${Math.floor(date1 / 1000 / 60 / 60)}`
+            time += ' Hours ago'
+        }
+        else if ((date1 / 1000 / 60) <= 60) {
+            time = ``;
+            time += `${Math.floor(date1 / 1000 / 60)}`
+            time += ' Minutes ago'
+        }
+        else if ((date1 / 1000) <= 60) {
+            time = '';
+            time += `${Math.floor(date1 / 1000)}`
+            time += ' Seconds ago'
+        }
+
+
         tweet += `
                     <li>
                         <article class="hover:bg-gray-100 transition duration-350 ease-in-out">
@@ -27,7 +58,7 @@ function getTweetComponent(data) {
                                                     ${tweets.name}
                                                         <span
                                                             class="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 transition ease-in-out duration-150">
-                                                            @ ${tweets.username} . ${tweets.time}
+                                                            @ ${tweets.username} . ${time}
                                                         </span>
                                                 </p>
                                             </div>
@@ -77,9 +108,9 @@ function getTweetComponent(data) {
 
                                             <!-- retweet span tag -->
                                             <div  class="flex text-center py-2 m-2 cursor-pointer">`
-                                            let time= tweets.time;
-                                            if(tweets.notRetweeted == null && tweets.createdAt != null && tweets.retweetMsg == null){
-                                            tweet+=    ` <span
+
+        if (tweets.notRetweeted == null && tweets.createdAt != null && tweets.retweetMsg == null) {
+            tweet += ` <span
                                                 
                                                 onclick="retweet(${tweets.tweet_id},this,'undo','${time}')"
                                                 class="group flex items-center text-blue-600 px-2 py-2 text-base leading-6 font-medium rounded-full" style="color: #26a4cd;">
@@ -89,15 +120,15 @@ function getTweetComponent(data) {
                                                     <path d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"></path>
                                                 </svg>
                                                 <span id="${tweets.tweet_id}tweet" class="group flex items-center text-blue-600 px-2 py-2 text-base leading-6 font-medium rounded-full">
-                                                ${tweets.repostCount ? tweets.repostCount : "" }
+                                                ${tweets.repostCount ? tweets.repostCount : ""}
                                             </span>
                                             </span>
                                             
                                                 </div><div id="retweetBox" class="overflow-y-auto overflow-x-hidden  z-30  md:inset-0  h-full  max-h-full" style="z-index: 25;"></div>`
 
-                                            }
-                                            else{
-                                                tweet+=    `<span
+        }
+        else {
+            tweet += `<span
                                                     
                                                     onclick="retweet(${tweets.tweet_id},this,'retweet','${time}')"
                                                     class="group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full  hover:text-blue-600">
@@ -107,17 +138,17 @@ function getTweetComponent(data) {
                                                         <path d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"></path>
                                                     </svg>
                                                     <span id="${tweets.tweet_id}tweet" class="group flex items-center text-gray-500 px-2 py-2 text-base leading-6 font-medium rounded-full">
-                                                    ${tweets.repostCount ? tweets.repostCount : "" }
+                                                    ${tweets.repostCount ? tweets.repostCount : ""}
                                                 </span>
                                                 </span>
                                             
 
                                             </div><div id="retweetBox" class="overflow-y-auto overflow-x-hidden  z-30  md:inset-0  h-full  max-h-full" style="z-index: 25;"></div>`
-                                            }
-                                            
+        }
 
 
-                                            tweet +=`<div id="removeRepostBox"  style="display: none;z-index: 15; position: absolute; top:0;left:0;width:99vw; height:300vh">
+
+        tweet += `<div id="removeRepostBox"  style="display: none;z-index: 15; position: absolute; top:0;left:0;width:99vw; height:300vh">
 
                                             </div>
 
@@ -146,16 +177,16 @@ function getTweetComponent(data) {
                                                             </svg>`
         }
         tweet += `</span>`
-                                                if (parseInt(tweets.likeCount)) {
-                                                    tweet += `<span class="px-1 py-2" id="likeCount${tweets.tweet_id}">
+        if (parseInt(tweets.likeCount)) {
+            tweet += `<span class="px-1 py-2" id="likeCount${tweets.tweet_id}">
                                                         ${tweets.likeCount}
                                                     </span>`
-                                                } else {
-                                                    tweet += `<span class="px-1 py-2" id="likeCount${tweets.tweet_id}" style="display: none">
+        } else {
+            tweet += `<span class="px-1 py-2" id="likeCount${tweets.tweet_id}" style="display: none">
                                                         0
                                                     </span>`
-                                                }
-                                        tweet +=  `
+        }
+        tweet += `
                                             </div>
 
 
@@ -236,12 +267,12 @@ function getTweetComponent(data) {
 
     tweet += `</ul>`;
 
-            return tweet;
+    return tweet;
 
 }
 
 function shareToggle(tweet_id) {
-    let shareOptionsDiv = document.getElementById(`shareOptions`+ tweet_id);
+    let shareOptionsDiv = document.getElementById(`shareOptions` + tweet_id);
     if (shareOptionsDiv.style.display == "none") {
         shareOptionsDiv.style.display = "block";
     } else {
@@ -250,13 +281,13 @@ function shareToggle(tweet_id) {
 }
 
 
-function showButtons(tweet_id){
-    let showBtn = document.querySelector(`.show_${ tweet_id }`)
+function showButtons(tweet_id) {
+    let showBtn = document.querySelector(`.show_${tweet_id}`)
     console.log(showBtn);
-    if (showBtn.style.display == 'block'){
-     showBtn.style.display = 'none'
-    }else{
-     showBtn.style.display = 'block'
+    if (showBtn.style.display == 'block') {
+        showBtn.style.display = 'none'
+    } else {
+        showBtn.style.display = 'block'
     }
- }
- 
+}
+

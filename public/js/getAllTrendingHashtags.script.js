@@ -2,7 +2,11 @@ async function getAllTrendinghashtags () {
     let url = window.location.origin + `/aside/getAllTrendingHashtags`;
 
     let data = await fetch(url, {
-        method: "GET"
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ 'showMore': 0 }),
     });
 
     let response = await data.json();

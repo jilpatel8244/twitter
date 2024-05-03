@@ -12,7 +12,7 @@ module.exports.insertTweet = async (req, res) => {
   if (req.fileValidationError != undefined) {
     return res.status(422).json({ 'error': req.fileValidationError });
   }
-  let { content,retweetId } = req.body;
+  let { content, retweetId } = req.body;
   let { status } = req.query;
   let userId = req.user[0][0].id;
   if (req.files == [] && content.trim() == "") {
@@ -21,22 +21,22 @@ module.exports.insertTweet = async (req, res) => {
   else {
     try {
       if (status == 'tweet') {
-        let data = [userId, content || "", '0', '1',retweetId != 'undefined' ? retweetId : null];
+        let data = [userId, content || "", '0', '1', retweetId != 'undefined' ? retweetId : null];
         let lastInsertedId = await insertContent(data, res);
         let hashTags = extractHashtag(content);
         if (hashTags) {
           try {
             hashTags.forEach(async (hashTag) => {
-              let checkHashTag= "select id,hashtag_name from hashtag_lists where hashtag_name = ? ";
-              let [availableHashtag]= await conn.query(checkHashTag,[hashTag]);
+              let checkHashTag = "select id,hashtag_name from hashtag_lists where hashtag_name = ? ";
+              let [availableHashtag] = await conn.query(checkHashTag, [hashTag]);
               var lastHashTagId;
-              if(availableHashtag.length == 0){
+              if (availableHashtag.length == 0) {
                 let sql = "insert into hashtag_lists(hashtag_name) values (?)";
                 let [lastHashTag] = await conn.query(sql, hashTag);
-                lastHashTagId=lastHashTag.insertId;
+                lastHashTagId = lastHashTag.insertId;
               }
               let sql1 = "insert into hashtag_tweet(hashtag_id,tweet_id) values(?,?)";
-              await conn.query(sql1, [ lastHashTagId || availableHashtag[0].id  , lastInsertedId]);
+              await conn.query(sql1, [lastHashTagId || availableHashtag[0].id, lastInsertedId]);
             })
           }
           catch (error) {
@@ -61,7 +61,7 @@ module.exports.insertTweet = async (req, res) => {
         return res.status(200).json({ 'msg': 'Inserted' })
       }
       if (status == 'draft') {
-        let data = [userId, content || "", '1', '0',retweetId != 'undefined' ? retweetId : null];
+        let data = [userId, content || "", '1', '0', retweetId != 'undefined' ? retweetId : null];
         let lastInsertedId = await insertContent(data)
         if (req.files[0] != null) {
           let { filename, mimetype } = req.files[0];
@@ -76,16 +76,16 @@ module.exports.insertTweet = async (req, res) => {
     }
   }
 }
-  const insertNotification = async (data) => {
-    try {
-      let sql = 'insert into notifications (user_id,tweet_id,type,related_user_id) values (?,?,?,?);';
-      await conn.query(sql, data);
-      return { 'msg': 'Add notification' };
-    }
-    catch (err) {
-      return { "error": err }
-    }
+const insertNotification = async (data) => {
+  try {
+    let sql = 'insert into notifications (user_id,tweet_id,type,related_user_id) values (?,?,?,?);';
+    await conn.query(sql, data);
+    return { 'msg': 'Add notification' };
   }
+  catch (err) {
+    return { "error": err }
+  }
+}
 
 const insertContent = async (data, res) => {
   try {
@@ -123,6 +123,8 @@ exports.showDrafts = async (req, res) => {
 }
 
 exports.tweetUpdate = async (req, res) => {
+
+  console.log(req.file);
   if (req.fileValidationError != undefined) {
     return res.status(422).json({ 'error': req.fileValidationError });
   }
@@ -141,16 +143,16 @@ exports.tweetUpdate = async (req, res) => {
         if (hashTags) {
           try {
             hashTags.forEach(async (hashTag) => {
-                let checkHashTag= "select id,hashtag_name from hashtag_lists where hashtag_name = ? ";
-                let [availableHashtag]= await conn.query(checkHashTag,[hashTag]);
-                var lastHashTagId;
-                if(availableHashtag.length == 0){
-                  let sql = "insert into hashtag_lists(hashtag_name) values (?)";
-                  let [lastHashTag] = await conn.query(sql, hashTag);
-                  lastHashTagId=lastHashTag.insertId;
-                }
-                let sql1 = "insert into hashtag_tweet(hashtag_id,tweet_id) values(?,?)";
-                await conn.query(sql1, [ lastHashTagId || availableHashtag[0].id  , tweetId]);
+              let checkHashTag = "select id,hashtag_name from hashtag_lists where hashtag_name = ? ";
+              let [availableHashtag] = await conn.query(checkHashTag, [hashTag]);
+              var lastHashTagId;
+              if (availableHashtag.length == 0) {
+                let sql = "insert into hashtag_lists(hashtag_name) values (?)";
+                let [lastHashTag] = await conn.query(sql, hashTag);
+                lastHashTagId = lastHashTag.insertId;
+              }
+              let sql1 = "insert into hashtag_tweet(hashtag_id,tweet_id) values(?,?)";
+              await conn.query(sql1, [lastHashTagId || availableHashtag[0].id, tweetId]);
             })
           }
           catch (error) {
@@ -224,9 +226,9 @@ exports.displayImage = async (req, res) => {
     let result = await conn.query(sql, id);
     let contentSql = "select * from tweets where id=?";
     let [draftContent] = await conn.query(contentSql, id);
-    let getUserQuery="select * from users where id=?";
-    let [user]= await conn.query(getUserQuery,draftContent[0].user_id);
-    return res.status(200).json({ 'image': result[0][0], 'draftContent': draftContent[0].content ,user:user[0]})
+    let getUserQuery = "select * from users where id=?";
+    let [user] = await conn.query(getUserQuery, draftContent[0].user_id);
+    return res.status(200).json({ 'image': result[0][0], 'draftContent': draftContent[0].content, user: user[0] })
   }
   catch (err) {
     return res.status(422).json({ 'error': "Image-" + err })
@@ -294,16 +296,16 @@ exports.getProfileImage = async (req, res) => {
   }
 }
 
-exports.checkRetweet = async (req,res)=>{
-  let {tweetId}= req.body;
-  if(!tweetId){
+exports.checkRetweet = async (req, res) => {
+  let { tweetId } = req.body;
+  if (!tweetId) {
     return res.status(422).json({ 'error': 'check quote error-' + error });
   }
-  try{
-    let sql= "select count(*) as alreadyRetweeted from retweets where user_id = ? and tweet_id = ? and deleted_at is null";
-    let [output] = await conn.query(sql,[req.user[0][0].id,tweetId]);
-    return res.status(200).json({'msg':"Data fetched!",alreadyRepost:output[0].alreadyRetweeted});
-  }catch(error){
+  try {
+    let sql = "select count(*) as alreadyRetweeted from retweets where user_id = ? and tweet_id = ? and deleted_at is null";
+    let [output] = await conn.query(sql, [req.user[0][0].id, tweetId]);
+    return res.status(200).json({ 'msg': "Data fetched!", alreadyRepost: output[0].alreadyRetweeted });
+  } catch (error) {
     return res.status(500).json({ 'error': 'fetch data error' + error });
   }
 }

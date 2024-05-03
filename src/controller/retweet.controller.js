@@ -7,7 +7,7 @@ module.exports.retweet = async (req, res) => {
     return res.status(422).json({ 'error': 'Please send tweetId!' });
   }
   try {
-    let sql = `select * from medias join tweets on tweets.id = medias.tweet_id where tweets.deleted_at IS NULL and tweets.is_ristricted=0 and tweets.id= ?`;
+    let sql = `select * from tweets where tweets.deleted_at IS NULL and tweets.is_ristricted=0 and tweets.id= ?`;
     let [result] = await conn.query(sql, [tweetId]);
     if (action == "repost") {
       try {

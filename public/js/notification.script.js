@@ -62,7 +62,7 @@ fetchNotificatons = async () => {
     } else {
       simpleData.forEach((notification) => {
         let notificationHTML = "";
-        notificationHTML = `<div class="mt-2 flex items-center justify-center flex-col">
+        notificationHTML += `<div class="mt-2 flex items-center justify-center flex-col">
           <span class="mt-2 font-medium text-2xl">Nothing to see here — yet</span>
           <span class="mt-2 font-medium text-sm">
             When some notification arrive, you’ll find it here.
@@ -71,18 +71,26 @@ fetchNotificatons = async () => {
         notificationHTML = "";
         switch (notification.type) {
           case "Mention":
-            notificationHTML = `
+            notificationHTML += `
         <div
             class="block w-full px-4 py-2 border-b border-gray-200 cursor-pointer hover:bg-gray-100 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
           >
           <a href="/get_comments/${notification.tweet_id}"> 
             <div class="flex">
             <img
-            class="w-10 h-10 ml-2 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500 profile"          
-               src="/uploads/${notification.profile_img_url}"                    
-            alt="user img"
+            class="w-10 h-10 ml-2 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500"
+            src="/assets/mention.png"
+            alt="Bordered avatar"
           />
-              <div class="notification ml-2 flex flex-col mt-2">
+            `
+            if (notification.profile_img_url) {
+              notificationHTML += `<img class="inline-block h-10 w-10 rounded-full ml-2" src="/uploads/${notification.profile_img_url}" alt="" />`;
+            } else {
+              notificationHTML += `<img class="inline-block h-10 w-10 rounded-full ml-2" src="/assets/profile.png" alt="" />`;
+            }
+            notificationHTML +=
+              `
+            <div class="notification ml-2 flex flex-col mt-2">
                 <span><strong>${notification.related_user_name} </strong>
                   Mentioned you ~ ${notification.time}</span>
               </div>
@@ -92,11 +100,11 @@ fetchNotificatons = async () => {
         </div>`;
             break;
           case "Follow":
-            notificationHTML = `
+            notificationHTML += `
   <div
     class="  w-full px-4 py-2 border-b border-gray-200 cursor-pointer hover:bg-gray-100 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
   >
-    <a href="/profile/?id=${notification.user_id}"> 
+    <a href="/explore/profile?id=${notification.related_user_id}" class="flex-shrink-0 group block">
       <div class="flex">
       <img
         class="w-10 h-10 ml-2 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500 "
@@ -116,7 +124,7 @@ fetchNotificatons = async () => {
   </div>`;
             break;
           case "Comment":
-            notificationHTML = `
+            notificationHTML += `
         
   <div
     class="block w-full px-4 py-2 border-b border-gray-200 cursor-pointer hover:bg-gray-100 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
@@ -127,13 +135,14 @@ fetchNotificatons = async () => {
     class="w-10 h-10 ml-2 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500"
     src="/assets/message.png"
     alt="Bordered avatar"
-  />
-    <img
-    class="w-10 h-10 ml-2 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500"  
-       src="/uploads/${notification.profile_img_url}"                  
-    alt="user img"
-  />
-      <div class="notification ml-2 flex flex-col mt-2">
+  />`
+            if (notification.profile_img_url) {
+              notificationHTML += `<img class="inline-block h-10 w-10 rounded-full ml-2" src="/uploads/${notification.profile_img_url}" alt="" />`;
+            } else {
+              notificationHTML += `<img class="inline-block h-10 w-10 rounded-full ml-2" src="/assets/profile.png" alt="" />`;
+            }
+            notificationHTML +=
+              `<div class="notification ml-2 flex flex-col mt-2">
         <span>${notification.related_username} commented on your post ~ ${notification.time}</span>
       </div>
     </div>
@@ -143,7 +152,7 @@ fetchNotificatons = async () => {
     `;
             break;
           case "Like":
-            notificationHTML = `
+            notificationHTML += `
   <div
     class="block w-full px-4 py-2 border-b border-gray-200 cursor-pointer hover:bg-gray-100 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
   >
@@ -154,11 +163,14 @@ fetchNotificatons = async () => {
     src="/assets/heart_like.png"
     alt="Bordered avatar"
   />
-    <img
-    class="w-10 h-10 ml-2 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500"  
-       src="/uploads/${notification.profile_img_url}"                
-    alt="user img"
-  />
+  `
+            if (notification.profile_img_url) {
+              notificationHTML += `<img class="inline-block h-10 w-10 rounded-full ml-2" src="/uploads/${notification.profile_img_url}" alt="" />`;
+            } else {
+              notificationHTML += `<img class="inline-block h-10 w-10 rounded-full ml-2" src="/assets/profile.png" alt="" />`;
+            }
+            notificationHTML +=
+              `
       <div class="ml-2 flex flex-col mt-2">
         <span>${notification.related_username} liked your post ~ ${notification.time}</span>
       </div>
@@ -168,7 +180,7 @@ fetchNotificatons = async () => {
   </div>`;
             break;
           case "Retweet":
-            notificationHTML = ` <div
+            notificationHTML += ` <div
     class="block w-full px-4 py-2 border-b border-gray-200 cursor-pointer hover:bg-gray-100 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
   >
   <a href="/get_comments/${notification.tweet_id}"> 
@@ -177,13 +189,14 @@ fetchNotificatons = async () => {
     class="w-10 h-10 ml-2 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500"
     src="/assets/retweet.jpg"
     alt="Bordered avatar"
-  />
-    <img
-    class="w-10 h-10 ml-2 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500" 
-       src="/uploads/${notification.profile_img_url}"                
-    alt="user img"
-  />
-      <div class="notification ml-2 flex flex-col mt-2">
+  />`
+            if (notification.profile_img_url) {
+              notificationHTML += `<img class="inline-block h-10 w-10 rounded-full ml-2" src="/uploads/${notification.profile_img_url}" alt="" />`;
+            } else {
+              notificationHTML += `<img class="inline-block h-10 w-10 rounded-full ml-2" src="/assets/profile.png" alt="" />`;
+            }
+            notificationHTML +=
+              ` <div class="notification ml-2 flex flex-col mt-2">
         <span>${notification.related_username} retweet your post ~ ${notification.time}</span>
       </div>
     </div>
@@ -203,7 +216,7 @@ fetchNotificatons = async () => {
       let loginHTML = "";
       switch (lognotification.type) {
         case "Password_reset":
-          loginHTML = `
+          loginHTML += `
   <div
     class="  w-full px-4 py-2 border-b border-gray-200 cursor-pointer hover:bg-gray-100 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
   >
@@ -221,7 +234,7 @@ fetchNotificatons = async () => {
   </div>`;
           break;
         case "Login":
-          loginHTML = `  
+          loginHTML += `  
   <div
     class=" w-full px-4 py-2 border-b border-gray-200 cursor-pointer hover:bg-gray-100 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
   >
@@ -248,7 +261,7 @@ fetchNotificatons = async () => {
 
     if (verifiedData.length < 1) {
       let noVerifiedHTML = "";
-      noVerifiedHTML = ` <div class="mt-2 flex items-center justify-center flex-col">
+      noVerifiedHTML += ` <div class="mt-2 flex items-center justify-center flex-col">
       <img
         class="p-1 rounded-full"
         src="/assets/verifiedpage.png"
@@ -267,7 +280,7 @@ fetchNotificatons = async () => {
         let verifiedHTML = "";
         switch (verifiednotification.type) {
           case "Tweet":
-            verifiedHTML = `<div
+            verifiedHTML += `<div
             class="block w-full px-4 py-2 border-b border-gray-200 cursor-pointer hover:bg-gray-100 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
           >
           <a href="/get_comments/${verifiednotification.tweet_id}">
@@ -276,13 +289,14 @@ fetchNotificatons = async () => {
                 class="w-15 h-10 p-1 rounded-full"
                 src="/assets/message.png"
                 alt="like icon"
-              />
-              <img
-              class="w-10 h-10 ml-2 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500"
-                 src="/uploads/${verifiednotification.profile_img_url}"                  
-              alt="user img"
-            />
-              <div class="notification ml-2 flex flex-col mt-2">
+              />`
+            if (verifiednotification.profile_img_url) {
+              verifiedHTML += `<img class="inline-block h-10 w-10 rounded-full ml-2" src="/uploads/${verifiednotification.profile_img_url}" alt="" />`;
+            } else {
+              verifiedHTML += `<img class="inline-block h-10 w-10 rounded-full ml-2" src="/assets/profile.png" alt="" />`;
+            }
+            verifiedHTML +=
+              `<div class="notification ml-2 flex flex-col mt-2">
                 <span><strong>${verifiednotification.username} </strong> post a tweet ~ ${verifiednotification.time}</span>
               </div>
             </div>
@@ -291,22 +305,25 @@ fetchNotificatons = async () => {
           </div>`;
             break;
           case "Follow":
-            verifiedHTML = `
+            verifiedHTML += `
               <div
                 class="  w-full px-4 py-2 border-b border-gray-200 cursor-pointer hover:bg-gray-100 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
               >
-                <a href="/profile/?id=${verifiednotification.user_id}">
+                <a href="/explore/profile?id=${verifiednotification.related_user_id}" class="flex-shrink-0 group block">
                   <div class="flex">
                   <img
                   class="w-10 h-10 ml-2 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500"
                   src="/assets/userProfile.png"
                   alt="Bordered avatar"
                 />
-                <img
-                class="w-10 h-10 ml-2 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500"  
-                   src="/uploads/${verifiednotification.profile_img_url}"                 
-                alt="user img"
-              />
+                `
+            if (verifiednotification.profile_img_url) {
+              verifiedHTML += `<img class="inline-block h-10 w-10 rounded-full ml-2" src="/uploads/${verifiednotification.profile_img_url}" alt="" />`;
+            } else {
+              verifiedHTML += `<img class="inline-block h-10 w-10 rounded-full ml-2" src="/assets/profile.png" alt="" />`;
+            }
+            verifiedHTML +=
+              `
                   <div class="notification mt-2 flex flex-col ml-2">
                     <span><strong>${verifiednotification.related_user_name} </strong> followed  <strong> ${verifiednotification.username}</strong>~ ${verifiednotification.time}</span>
                   </div>
@@ -315,7 +332,7 @@ fetchNotificatons = async () => {
               </div>`;
             break;
           case "Comment":
-            verifiedHTML = `
+            verifiedHTML += `
 
               <div
                 class="block w-full px-4 py-2 border-b border-gray-200 cursor-pointer hover:bg-gray-100 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
@@ -327,11 +344,14 @@ fetchNotificatons = async () => {
                 src="/assets/message.png"
                 alt="Bordered avatar"
               />            
-                <img
-                class="w-10 h-10 ml-2 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500" 
-                   src="/uploads/${verifiednotification.profile_img_url}"                
-                alt="user img"
-              />
+              `
+            if (verifiednotification.profile_img_url) {
+              verifiedHTMLverifiedHTMLverifiedHTML += `<img class="inline-block h-10 w-10 rounded-full ml-2" src="/uploads/${verifiednotification.profile_img_url}" alt="" />`;
+            } else {
+              verifiedHTMLverifiedHTMLverifiedHTML += `<img class="inline-block h-10 w-10 rounded-full ml-2" src="/assets/profile.png" alt="" />`;
+            }
+            verifiedHTMLverifiedHTMLverifiedHTML +=
+              `
                   <div class="notification ml-2 flex flex-col mt-2">
                     <span><strong>${verifiednotification.related_user_name} </strong> commented on <strong> ${verifiednotification.username}'s</strong> post ~ ${verifiednotification.time}</span>
                   </div>
@@ -342,7 +362,7 @@ fetchNotificatons = async () => {
                 `;
             break;
           case "Like":
-            verifiedHTML = `
+            verifiedHTML += `
               <div
                 class="block w-full px-4 py-2 border-b border-gray-200 cursor-pointer hover:bg-gray-100 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
               >
@@ -353,11 +373,14 @@ fetchNotificatons = async () => {
                     src="/assets/heart_like.png"
                     alt="like icon"
                   />
-                  <img
-                  class="w-10 h-10 ml-2 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500" 
-                     src="/uploads/${verifiednotification.profile_img_url}"                 
-                  alt="user img"
-                />
+                  `
+            if (verifiednotification.profile_img_url) {
+              verifiedHTMLverifiedHTML += `<img class="inline-block h-10 w-10 rounded-full ml-2" src="/uploads/${verifiednotification.profile_img_url}" alt="" />`;
+            } else {
+              verifiedHTMLverifiedHTML += `<img class="inline-block h-10 w-10 rounded-full ml-2" src="/assets/profile.png" alt="" />`;
+            }
+            verifiedHTMLverifiedHTML +=
+              `
                   <div class="ml-2 flex flex-col mt-2">
                     <span><strong>${verifiednotification.related_user_name} </strong> liked  <strong> ${verifiednotification.username}'s</strong> post ~ ${verifiednotification.time}</span>
                   </div>
@@ -367,7 +390,7 @@ fetchNotificatons = async () => {
               </div>`;
             break;
           case "Retweet":
-            verifiedHTML = ` <div
+            verifiedHTML += ` <div
                 class="block w-full px-4 py-2 border-b border-gray-200 cursor-pointer hover:bg-gray-100 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
               >
               <a href="/get_comments/${verifiednotification.tweet_id}">
@@ -377,11 +400,14 @@ fetchNotificatons = async () => {
                     src="/assets/retweet.jpg"
                     alt="retweet icon"
                   />
-                  <img
-                  class="w-10 h-10 ml-2 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500"
-                     src="/uploads/${verifiednotification.profile_img_url}"             
-                  alt="user img"
-                />
+                  `
+            if (verifiednotification.profile_img_url) {
+              verifiedHTML += `<img class="inline-block h-10 w-10 rounded-full ml-2" src="/uploads/${verifiednotification.profile_img_url}" alt="" />`;
+            } else {
+              verifiedHTML += `<img class="inline-block h-10 w-10 rounded-full ml-2" src="/assets/profile.png" alt="" />`;
+            }
+            verifiedHTML +=
+              `
                   <div class="notification ml-2 flex flex-col mt-2">
                     <span><strong>${verifiednotification.related_user_name} </strong> retweet  <strong> ${verifiednotification.username}'s</strong> post  ~ ${verifiednotification.time}</span>
                   </div>
@@ -392,16 +418,24 @@ fetchNotificatons = async () => {
          `;
             break;
           case "Mention":
-            verifiedHTML = `<div
+            verifiedHTML += `<div
                 class="block w-full px-4 py-2 border-b border-gray-200 cursor-pointer hover:bg-gray-100 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
               >
               <a href="/get_comments/${verifiednotification.tweet_id}">
                 <div class="flex">
                 <img
-                class="w-10 h-10 ml-2 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500"
-                   src="/uploads/${verifiednotification.profile_img_url}"                 
-                alt="user img"
-              />
+            class="w-10 h-10 ml-2 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500"
+            src="/assets/mention.png"
+            alt="Bordered avatar"
+          />
+                `
+            if (verifiednotification.profile_img_url) {
+              verifiedHTML += `<img class="inline-block h-10 w-10 rounded-full ml-2" src="/uploads/${verifiednotification.profile_img_url}" alt="" />`;
+            } else {
+              verifiedHTML += `<img class="inline-block h-10 w-10 rounded-full ml-2" src="/assets/profile.png" alt="" />`;
+            }
+            verifiedHTML +=
+              `
                   <div class="notification ml-2 flex flex-col">
                     <span><strong>${verifiednotification.related_user_name} </strong>
                       @${verifiednotification.related_username} ~ ${verifiednotification.time}</span>
@@ -424,7 +458,7 @@ fetchNotificatons = async () => {
     let mentionData = notifications.mentionNotification;
     if (mentionData.length < 1) {
       let noMentionHTML = "";
-      noMentionHTML = `<div class="mt-2 flex items-center justify-center flex-col">
+      noMentionHTML += `<div class="mt-2 flex items-center justify-center flex-col">
       <span class="mt-2 font-medium text-2xl">Nothing to see here — yet</span>
       <span class="mt-2 font-medium text-sm">
         When someone mentions you, you’ll find it here.
@@ -435,21 +469,24 @@ fetchNotificatons = async () => {
       mentionContainer.innerHTML = "";
       mentionData.forEach((mentionNotification) => {
         let mentionHTML = "";
-        mentionHTML = `<div
+        mentionHTML += `<div
       class="block w-full px-4 py-2 border-b border-gray-200 cursor-pointer hover:bg-gray-100 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
     >
     <a href="/get_comments/${mentionNotification.tweet_id}"> 
       <div class="flex">
         
-      <img
-      class="w-10 h-10 ml-2 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500"
-         src="/uploads/${mentionNotification.profile_img_url}"                
-      alt="user img"
-    />
+      `
+        if (mentionNotification.profile_img_url) {
+          mentionHTML += `<img class="inline-block h-10 w-10 rounded-full" src="/uploads/${mentionNotification.profile_img_url}" alt="" />`;
+        } else {
+          mentionHTML += `<img class="inline-block h-10 w-10 rounded-full" src="/assets/profile.png" alt="" />`;
+        }
+        mentionHTML +=
+          `
   
         <div class="notification ml-2 flex flex-col mt-2">
-          <span><strong>${mentionNotification.related_user_name} </strong>
-            @${mentionNotification.related_username} ~ ${mentionNotification.time}</span>
+          <span><strong>${mentionNotification.mentioner_user_name} </strong>
+            @${mentionNotification.mentioner_username} ~ ${mentionNotification.time}</span>
         </div>
       </div>
       <pre class="ml-2 mt-2 font-normal text-balance overflow-hidden font-sans">${mentionNotification.tweet_content}</pre>
@@ -460,6 +497,6 @@ fetchNotificatons = async () => {
     }
   }
 };
- 
+
 // window.addEventListener("load", fetchNotificatons);
 window.addEventListener("DOMContentLoaded", fetchNotificatons);

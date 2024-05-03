@@ -151,11 +151,10 @@
     }
 
 
+
+    
     async function register() {
-
-
-
-      let validate = registervalidate();
+      let validate = await registervalidate();
 
       if (validate == false) {
         return false;
@@ -163,7 +162,7 @@
         let formdata = document.getElementById("registerForm");
         let data = new FormData(formdata);
         const param = new URLSearchParams(data);
-        console.log(param);
+
         let url = window.location.origin + "/registration";
 
         let response = await fetch(url, {
@@ -177,7 +176,6 @@
 
         response = await response.json()
 
-        console.log(response);
 
         let emailvalidation = document.getElementById("emailvalidation");
         if (response.isvalidate == false) {
@@ -197,13 +195,10 @@
           let activationlink = window.location.origin + `/createPassword?email=${email}&activecode=${code}`
           linka.innerText = activationlink
           linka.href = activationlink
-
-
         }
       }
     }
     let isUserExist = async (username) => {
-      console.log(username);
       let response = await fetch("/isUserExist", {
         method: "POST",
         body: new URLSearchParams(

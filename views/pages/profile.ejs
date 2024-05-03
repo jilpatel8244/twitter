@@ -206,12 +206,13 @@
                                                         <div class="text-center pr-3"><span
                                                                 class="font-bold text-black">
                                                                 <%=followerDetailData[0].follower %>
-                                                            </span><span class="text-gray-600">  <a href="/follow?id=<%=userProfileData[0].id%>">Followers</a></span></div>
+                                                            </span><span class="text-gray-600">  <a href="/followingUser?id=<%=userProfileData[0].id%>">Followers</a></span></div>
+                                                            
                                                                 <div class="text-center px-3"><span
                                                                     class="font-bold text-black">
                                                                     <%=followingDetailData[0].following %>
                                                                     
-                                                            </span><span class="text-gray-600">  <a href="/followingUser?id=<%=userProfileData[0].id%>">Following</a></span></div>
+                                                        </span><span class="text-gray-600">  <a href="/follow?id=<%=userProfileData[0].id%>">Following</a></span></div>
                                                     </div>
                                                     <%}%>
                                         </div>
@@ -253,7 +254,7 @@
     </div>
     </div>
 
-    <script src="/js/getRetweetComponent.js"></script>
+    <script src="/js/getTweetComponent.js"></script>
     <script src="/js/share.script.js"></script>
     <script src="/js/bookmark.script.js"></script>
     <script src="/js/like.script.js"></script>

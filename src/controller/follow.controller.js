@@ -2,7 +2,6 @@ const connection = require('../../config/connection');
 
 exports.getFollower = async (req, res) => {
   try {
-    console.log("jhfvhvhvhvhvhh");
     let isFollowing;
     isFollowing = false;
     let id = req.query.id;
