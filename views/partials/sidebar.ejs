@@ -155,7 +155,11 @@
                                 <p id="getverified" class="<%= user.id %>" onclick="verifiedhandel('<%= user.id %>')">
                                     Get
                                     Verified</p>
-                                <% } %>
+                                <% }else if ( user.is_varified==2 ){ %>
+                                    <p id="getverified" class="<%= user.id %>">
+                                        verification request send</p>
+
+                                    <% } %>
 
 
                         </div>
@@ -218,6 +222,8 @@
 
 
 
+            let data = await fetch("admin/verificationRequest1");
+            location.reload()
 
 
 
