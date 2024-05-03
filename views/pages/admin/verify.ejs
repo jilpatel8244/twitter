@@ -265,12 +265,13 @@
                     });
 
                     data = await data.json();
+                    let id = data.id
                     data = data.data;
                     let chatbox = document.getElementById("chatbox");
                     chatbox.innerHTML = ``;
 
                     data.forEach((element) => {
-                        if (element.sender_id == 11) {
+                        if (element.sender_id == id) {
                             chatbox.innerHTML += `   
                 <div class="mb-2 text-right">
                             <p class="bg-blue-500 text-white rounded-lg py-2 px-4 inline-block">
