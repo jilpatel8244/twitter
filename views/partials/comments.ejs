@@ -1,17 +1,19 @@
 <section class="w-3/5 border border-gray-50" style="max-width:600px;">
     <div class="">
         <div>
-            <a href="/home">
-                <div class="flex m-4">
-                    <div class="w-6 mr-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                            <path
-                                d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288 416 288c17.7 0 32-14.3 32-32s-14.3-32-32-32l-306.7 0L214.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z" />
-                        </svg>
+                <div class="flex m-4" onclick="history.back()">
+                    <div class="flex items-start">
+                        <p onclick="history.back()" class="text-blue-400 hover:text-blue-300">
+                            <svg class="m-2 h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                                <g>
+                                    <path d="M20 11H7.414l4.293-4.293c.39-.39.39-1.023 0-1.414s-1.023-.39-1.414 0l-6 6c-.39.39-.39 1.023 0 1.414l6 6c.195.195.45.293.707.293s.512-.098.707-.293c.39-.39.39-1.023 0-1.414L7.414 13H20c.553 0 1-.447 1-1s-.447-1-1-1z">
+                                    </path>
+                                </g>
+                            </svg>
+                        </p>
                     </div>
                     <h2 class="font-bold text-xl">Posts</h2>
                 </div>
-            </a>
         </div>
         <article class="hover:bg-gray-100 transition duration-350 ease-in-out">
             <div class="flex flex-shrink-0 p-4 pb-0">
@@ -180,6 +182,7 @@
                                 class="flex relative flex-shrink-0 p-4 pb-0 border hover:bg-gray-100 transition duration-350 ease-in-out">
 
                                 <div class=" flex items-start relative w-[100%]">
+                                    <a href="/explore/profile?id=<%= comment.user_id %>">
                                     <div class="shrink-0">
                                             <% if(comment.profile_img_url) { %>
                                                 <img class="inline-block h-10 w-10 rounded-full"
@@ -198,6 +201,7 @@
                                                     <%= comment.time %>
                                                 </span>
                                         </p>
+                                    </a>
                                         <input type="hidden" id="tweet_id" value="<%= comment.tweet_id %>">
                                         <div class="w-[99%]">
                                             <% let content=comment.content.replace(/(@|#)\w+/g, function(match) {

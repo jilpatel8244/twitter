@@ -100,7 +100,6 @@ router.post('/home/posts/:id', passport.authenticate('jwt', { session: false, fa
 router.get("/get_notification", passport.authenticate('jwt', { session: false, failureRedirect: "/login" }), get_notification)
 router.post("/post_notification", passport.authenticate('jwt', { session: false, failureRedirect: "/login" }), post_notification)
 
-// router.post("/home", getHome);
 router.get('/get_comments/:id', passport.authenticate('jwt', { session: false, failureRedirect: "/login" }), get_comment);
 router.post('/post_comments', passport.authenticate('jwt', { session: false, failureRedirect: "/login" }), post_comment);
 router.post('/delete_comment/:id', passport.authenticate('jwt', { session: false, failureRedirect: "/login" }), delete_comment);
@@ -109,7 +108,6 @@ router.post('/post_reply', passport.authenticate('jwt', { session: false, failur
 router.post('/get_reply', passport.authenticate('jwt', { session: false, failureRedirect: "/login" }), get_reply);
 router.post('/delete_reply/:id', passport.authenticate('jwt', { session: false, failureRedirect: "/login" }), delete_reply);
 router.post('/edit_reply/:id', passport.authenticate('jwt', { session: false, failureRedirect: "/login" }), edit_reply);
-
 router.post("/retweet", passport.authenticate('jwt', { session: false, failureRedirect: "/login" }), retweet)
 
 router.post("/retweetData", passport.authenticate('jwt', { session: false, failureRedirect: "/login" }), retweetData)
