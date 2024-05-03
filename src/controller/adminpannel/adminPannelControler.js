@@ -403,7 +403,7 @@ exports.getsupport = async (req, res) => {
 
     try {
         let id = req.user[0][0].id
-        let sql = "select *  from get_support where user_id = ?  order by created_at desc"
+        let sql = "select get_support.*,users.username from get_support left join users on users.id =get_support.user_id   where user_id = ?  order by created_at desc;"
         let [result] = await connection.query(sql, [id]);
 
         return res.json({ data: result })
@@ -418,7 +418,8 @@ exports.admingetsupport = async (req, res) => {
 
     try {
         let id = req.user[0][0].id
-        let sql = "select * from get_support   order by created_at desc"
+        let sql = `select get_support.* ,users.username from get_support
+        left join users on users.id =get_support.user_id    order by created_at desc`
         let [result] = await connection.query(sql, [id]);
 
         return res.json({ data: result })
