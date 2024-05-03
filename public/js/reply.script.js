@@ -43,6 +43,7 @@ async function showReply(comment_id) {
         let reply_list = ` 
             <div class="w-[100%]">
                 <div class="relative flex items-start my-1 hover:bg-gray-100 transition duration-350 ease-in-out" style="width:94%">
+                <a href="/explore/profile?id=${reply.user_id }">
                 <div class="shrink-0">`
         if (reply.profile_img_url) {
             reply_list += `<img class="inline-block h-10 w-10 rounded-full" src="/uploads/${reply.profile_img_url}" alt="" />`;
@@ -58,34 +59,36 @@ async function showReply(comment_id) {
                             <span
                                 class="mr-10 text-sm leading-5 font-medium text-gray-400 transition ease-in-out duration-150">
                                 ${reply.time}
-                            </span>
-                            <span class="ml-10 absolute top-0 right-0" onclick="showButton('${reply.id}')">
+                            </span></a>`;
+        if (reply.user_id === data.userId) {
+            reply_list += `<span class="ml-10 absolute top-0 right-0" onclick="showButton('${reply.id}')">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                         stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z" />
                     </svg>
-                    </span>
-                    </p>
+                    </span>`;
+        }
+        reply_list += `</p>
                     <div>
                     <pre class="textarea_${reply.id} block mr-3 text-base width-auto font-normal text-balance overflow-hidden font-sans"
                     style="word-wrap: break-word; overflow-wrap: break-word;">${reply.content}</pre>
                     </div>
-                </div>
-                   
-                    <div
+                </div>`;
+        if (reply.user_id === data.userId) {
+            reply_list += `<div
                         class="show_${reply.id} bg-white shadow-xl rounded-xl cursor-pointer hidden absolute top-2 right-10">
                         <div onclick="deleteReply('${reply.id}','${reply.comment_id}')"
                             class="text-red-700 font-bold hover:bg-slate-100 py-2 px-4">Delete</div><hr class="border border-gray-100">
-                    </div>
-        
-            </div>
-`;
+                    </div>`;
+        }
+        reply_list += `</div>`;
         repliesHtml += reply_list;
     });
     replySection.innerHTML = repliesHtml;
     replySection.style.display = 'flex';
 }
+
 
 function deleteReply(replyId, comment_id) {
     console.log(replyId);
