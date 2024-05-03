@@ -8,7 +8,7 @@ exports.getLikes = async (req, res) => {
       id = req.user[0][0].id;
     }
 
-    let likesDataQuery = `select tweets.id as tweet_id, tweets.content as tweetContent, tweets.created_at as time, users.name, 
+    let likesDataQuery = `select tweets.id as tweet_id, tweets.content as tweetContent, tweets.created_at as tweet_time, users.name, 
     users.username, users.profile_img_url, bookmarks.status as isBookmarked, medias.media_url, retweets.deleted_at as notRetweeted, retweets.created_at as createdAt, retweets.retweet_message as retweetMsg from tweet_likes 
     left join tweets on tweet_likes.tweet_id = tweets.id left join users on tweets.user_id = users.id left join bookmarks on tweet_likes.tweet_id = bookmarks.tweet_id and tweet_likes.user_id = bookmarks.user_id left join medias on tweet_likes.tweet_id = medias.tweet_id left join retweets on retweets.tweet_id=tweets.id and retweets.user_id = ? and retweets.deleted_at IS NULL where tweet_likes.user_id = ? and tweet_likes.status = '1';`
     let [likesData] = await connection.query(likesDataQuery, [id, id]);

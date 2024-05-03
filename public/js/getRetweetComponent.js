@@ -24,7 +24,7 @@ function getRetweetComponent(data) {
       time += " Seconds ago";
     }
     if (tweets.retweetId) {
-      let content = tweets.tweetContnet.replace(/(@|#)\w+/g, function (match) {
+      let content = tweets.tweetContent.replace(/(@|#)\w+/g, function (match) {
         return (
           '<a href="/explore/profile?id=' +
           tweets.user_id +
@@ -61,7 +61,7 @@ function getRetweetComponent(data) {
                 </div>
                 </a>
                 <div class="ml-4 mb-2"> `;
-      if (tweets.tweetContnet) {
+      if (tweets.tweetContent) {
         tweet += ` <a href="/get_comments/${tweets.tweet_id}">
                  <pre class="mr-3 ml-3 text-base width-auto font-normal text-balance overflow-hidden" style="word-wrap: break-word; overflow-wrap: break-word; font-family: sans-serif;">${content}</pre> `;
       }
@@ -121,7 +121,7 @@ function getRetweetComponent(data) {
         </div>`;
       }
     } else {
-      let content = tweets.tweetContnet.replace(/(@|#)\w+/g, function (match) {
+      let content = tweets.tweetContent.replace(/(@|#)\w+/g, function (match) {
         return (
           '<a href="/explore/profile?id=' +
           tweets.user_id +
