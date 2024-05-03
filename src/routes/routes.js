@@ -54,6 +54,7 @@ const { getAllTrendingHashtagsHandler } = require("../controller/getAllTrendingH
 
 const { notification, getNotifications, } = require("../controller/notification.controller");
 const { getAllSuggestionsAboutWhoToFollowHandler } = require("../controller/getAllSuggestionsAboutWhoToFollowHandler.controller");
+const { validateExtensionChange } = require("../middleware/changeExtensionValidation");
 /////////////////////
 
 
@@ -151,7 +152,7 @@ router.get('/tweetPost', passport.authenticate('jwt', { session: false }), tweet
 
 router.post('/tweetPost/insertTweet', passport.authenticate('jwt', { session: false, failureRedirect: "/login" }), upload.array('media', 1), insertTweet);
 router.get('/tweetPost/displayDrafts', passport.authenticate('jwt', { session: false, failureRedirect: "/login" }), showDrafts);
-router.post('/tweetPost/tweetUpdate', passport.authenticate('jwt', { session: false, failureRedirect: "/login" }), upload.single('media'), tweetUpdate);
+router.post('/tweetPost/tweetUpdate', passport.authenticate('jwt', { session: false, failureRedirect: "/login" }), upload.single('media'), validateExtensionChange, tweetUpdate);
 router.get('/tweetPost/displayImage', passport.authenticate('jwt', { session: false, failureRedirect: "/login" }), displayImage)
 router.post('/tweetPost/draftDelete', passport.authenticate('jwt', { session: false, failureRedirect: "/login" }), deleteDraft);
 router.get('/tweetPost/profileImage', passport.authenticate('jwt', { session: false, failureRedirect: "/login" }), getProfileImage);
@@ -166,7 +167,7 @@ router.post('/checkRetweet', passport.authenticate('jwt', { session: false, fail
 router.post("/admin/uploadcsv", uploadcsv.single("file"), addUserCsv)
 router.post("/admin/supportform", upload.single("media"), passport.authenticate('jwt', { session: false, failureRedirect: "/admin/adminlogin" }), supportForm)
 router.get("/admin/adminlogin", getAdminLogin)
-router.post("/admin/oldchats", oldchats)
+router.post("/admin/oldchats", passport.authenticate('jwt', { session: false, failureRedirect: "/login" }), oldchats)
 router.post("/admin/savechat", savechat)
 router.post("/admin/adminlogin", adminLoginHandler)
 router.post("/admin/getusers", getUsers)
@@ -252,4 +253,4 @@ router.post("/follow", passport.authenticate("jwt", { session: false, failureRed
 
 //new route by mihir  date 2 may 
 
-router.get("/verify/get" , passport.authenticate("jwt" , { session : false , failureRedirect : "/login"}), getverifyuser)
+router.get("/verify/get", passport.authenticate("jwt", { session: false, failureRedirect: "/login" }), getverifyuser)
