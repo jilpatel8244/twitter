@@ -161,7 +161,18 @@ const tweetInsert = async (status) => {
       })
       let { error, msg } = await response.json();
       if (error) {
-        return console.log('Error:' + error);
+        // return console.log('Error:' + error);
+        await Swal.fire({
+          position: "bottom",
+          title: error,
+          showConfirmButton: false,
+          color: "red",
+          toast: 'true',
+          background: '#60a5fa',
+          timer: 1000
+        });
+        window.location.href = '/home'
+        return;
       }
       else {
         // console.log(msg);
@@ -431,7 +442,18 @@ const tweetUpdate = async (action) => {
     })
     let { msg, error } = await response.json();
     if (error) {
-      return console.log(error);
+       console.log(error);
+      await Swal.fire({
+        position: "bottom",
+        title: error,
+        showConfirmButton: false,
+        color: "red",
+        toast: 'true',
+        background: '#60a5fa',
+        timer: 1000
+      });
+      window.location.href = '/home'
+      return;
     }
     if (msg == 'Updated') {
       await Swal.fire({
