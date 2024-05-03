@@ -124,7 +124,6 @@ exports.showDrafts = async (req, res) => {
 
 exports.tweetUpdate = async (req, res) => {
 
-  console.log(req.file);
   if (req.fileValidationError != undefined) {
     return res.status(422).json({ 'error': req.fileValidationError });
   }

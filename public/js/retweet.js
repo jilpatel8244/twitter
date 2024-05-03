@@ -83,7 +83,6 @@ const retweet = async (tweetId, icon, status, time) => {
         return ;
       }
       else {
-        // console.log(msg);
         Swal.fire({
           position: "bottom",
           title: "You reposted.",
@@ -168,7 +167,6 @@ const retweet = async (tweetId, icon, status, time) => {
       }
       else {
         let retweetCount = document.getElementById(tweetId + 'tweet');
-        // console.log(msg);
         Swal.fire({
           position: "bottom",
           title: "You undo repost.",

@@ -9,7 +9,6 @@ function getTweetComponent(data) {
 
         let time = "hello";
         let date1 = new Date(tweets.time);
-        console.log(time);
         let currentdate = new Date();
 
         date1 = currentdate - date1;
@@ -283,7 +282,6 @@ function shareToggle(tweet_id) {
 
 function showButtons(tweet_id) {
     let showBtn = document.querySelector(`.show_${tweet_id}`)
-    console.log(showBtn);
     if (showBtn.style.display == 'block') {
         showBtn.style.display = 'none'
     } else {

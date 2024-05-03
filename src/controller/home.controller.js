@@ -465,7 +465,6 @@ exports.post_reply = async (req, res) => {
   const mentionedUsers = await getUsersByUsernames(mentionedUsernames);
 
   let [reply_user_id] = await connection.query(`SELECT user_id FROM tweet_comments WHERE id = ?`, [comment_id]);
-  console.log("hello " + reply_user_id[0].user_id);
   await connection.query(`INSERT INTO notifications (user_id, tweet_id, type, related_user_id)
     VALUES (?, ?, 'Comment', ?);`, [reply_user_id[0].user_id, tweetId, user_id]);
 

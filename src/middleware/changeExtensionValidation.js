@@ -10,8 +10,6 @@ exports.validateExtensionChange = async (req, res, next) => {
     const validate = fs.readFileSync(req.file?.path)
 
 
-    console.log("type filer is ", req.file);
-    console.log("type is ", typeof req.file.path);
     if (!validate.slice(0, 4).equals(number[req.file.path.split(".").pop()])) {
 
         return res.json({ error: "somthing went wrong" })

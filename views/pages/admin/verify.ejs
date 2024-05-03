@@ -184,7 +184,6 @@
             let formdata = new FormData();
             formdata.append("content", messagehelp.value);
             formdata.append("media", screenshot.files[0]);
-            console.log(formdata);
             let data = await fetch("/admin/supportform", {
                 method: "POST",
                 body: formdata,
