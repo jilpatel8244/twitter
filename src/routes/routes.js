@@ -136,9 +136,15 @@ router.post('/bookmark', passport.authenticate('jwt', { session: false, failureR
 
 router.post('/removeAllBookmarks', passport.authenticate('jwt', { session: false, failureRedirect: "/login" }), removeAllBookmarkHandler);
 
-router.get('/aside/getAllTrendingHashtags', passport.authenticate('jwt', { session: false, failureRedirect: "/login" }), getAllTrendingHashtagsHandler);
+router.get('/allHashtags', passport.authenticate('jwt', { session: false, failureRedirect: "/login" }), (req, res) => {
+  res.render('pages/hashtagTrendingList.ejs', { user: req.user[0][0] });
+})
+router.post('/aside/getAllTrendingHashtags', passport.authenticate('jwt', { session: false, failureRedirect: "/login" }), getAllTrendingHashtagsHandler);
 
 router.post('/aside/getAllSuggestionsAboutWhoToFollow', passport.authenticate('jwt', { session: false, failureRedirect: "/login" }), getAllSuggestionsAboutWhoToFollowHandler);
+router.get('/whoToFollow', passport.authenticate('jwt', { session: false, failureRedirect: "/login" }), (req, res) => {
+  res.render('pages/whoToFollow', { user: req.user[0][0] });
+})
 
 // end of jil patel routes
 

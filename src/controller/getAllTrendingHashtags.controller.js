@@ -3,7 +3,12 @@ const logger = require("../../logger/logger")
 
 exports.getAllTrendingHashtagsHandler = async (req, res) => {
     try {
-        let sql = `select count(hashtag_id) as count, hashtag_name from hashtag_tweet join hashtag_lists on hashtag_lists.id = hashtag_tweet.hashtag_id group by hashtag_id order by count desc limit 10`;
+        let sql;
+        if (!req.body.showMore) {
+            sql = `select count(hashtag_id) as count, hashtag_name from hashtag_tweet join hashtag_lists on hashtag_lists.id = hashtag_tweet.hashtag_id group by hashtag_id order by count desc limit 10`;
+        } else {
+            sql = `select count(hashtag_id) as count, hashtag_name from hashtag_tweet join hashtag_lists on hashtag_lists.id = hashtag_tweet.hashtag_id group by hashtag_id order by count desc`;
+        }
 
         let [data] = await connection.query(sql);
 
