@@ -3,13 +3,18 @@ function getRetweetComponent(data) {
 
   data.forEach((tweets) => {
     if (tweets.retweetId) {
+        let content = tweets.tweetContent.replace(/(@|#)\w+/g, function(match) {
+            return '<a href="/explore/profile?id=' + tweets.user_id + '" class="text-blue-500">' + match + '</a>';
+            });
       tweet += `<li>
                       <article class="hover:bg-gray-100 transition duration-350 ease-in-out">
                           <div id="${tweets.tweet_id}">
                               <div class="flex flex-shrink-0 p-4 pb-0 flex-col">
-                                  <a href="/get_comments/${tweets.tweet_id}" class="flex-shrink-0 group block">
+                                  <a href="/explore/profile?id=${tweets.user_id}" class="flex-shrink-0 group block">
                                       <div class="flex items-center">
-                                          <div>`;
+                                      <div>
+                                    <a href="/explore/profile?id=${tweets.user_id}" class="flex-shrink-0 group block">                                      
+                                         `;
 
       if (tweets.profile_img_url) {
         tweet += `<img class="inline-block h-10 w-10 rounded-full" src="/uploads/${tweets.profile_img_url}" alt="" />`;
@@ -27,9 +32,11 @@ function getRetweetComponent(data) {
                     </p>
                 </div>
                 </div>
+                </a>
                 <div class="ml-4 mb-2"> `;
-      if (tweets.tweetContnet) {
-        tweet += `  <pre class="mr-3 ml-3 text-base width-auto font-normal text-balance overflow-hidden" style="word-wrap: break-word; overflow-wrap: break-word; font-family: sans-serif;">${tweets.tweetContnet}</pre> `;
+      if (tweets.tweetContent) {
+        tweet += ` <a href="/get_comments/${tweets.tweet_id}">
+                 <pre class="mr-3 ml-3 text-base width-auto font-normal text-balance overflow-hidden" style="word-wrap: break-word; overflow-wrap: break-word; font-family: sans-serif;">${content}</pre> `;
       }
       if (tweets.media_url) {
         tweet += `<div class="md:flex-shrink pr-6 pt-3">
@@ -41,10 +48,10 @@ function getRetweetComponent(data) {
       }
       tweet += `
               </div>
-             </a>
+            
         </div>
     <div class="pl-16 border border-gray-500 rounded-lg p-4" style = 'margin: 22px'>
-        <a href="">
+    <a href="/explore/profile?id=${tweets.original_user_id}" class="flex-shrink-0 group block">
         <div class="ml-3 flex">
         <p class="text-base leading-6 font-medium text-black">`;
     if (tweets.original_poster_profile_img_url) {
@@ -67,7 +74,7 @@ function getRetweetComponent(data) {
                                 
 
                                 <div class="pl-16 mt-4">
-                                    <a href="/get_comments/${tweets.tweet_id}">
+                                    <a href="/get_comments/${tweets.original_tweet_id}">
                                     <pre class="mr-3 text-base width-auto font-normal text-balance overflow-hidden" style="word-wrap: break-word; overflow-wrap: break-word; font-family: sans-serif;">${tweets.original_tweet_content}</pre>
                                     </div>
                                     `;
@@ -81,6 +88,9 @@ function getRetweetComponent(data) {
                                                 </div>`;
     }
 }else{    
+    let content = tweets.tweetContent.replace(/(@|#)\w+/g, function(match) {
+        return '<a href="/explore/profile?id=' + tweets.user_id + '" class="text-blue-500">' + match + '</a>';
+        });
     tweet += `
     <li>
         <article class="hover:bg-gray-100 transition duration-350 ease-in-out">
@@ -112,7 +122,7 @@ tweet += `</div>
 
                 <div class="pl-16">
                     <a href="/get_comments/${tweets.tweet_id}">
-                    <pre class="mr-3 text-base width-auto font-normal text-balance overflow-hidden" style="white-space: no-wrap;  text-overflow: ellipsis; word-wrap: break-word; overflow-wrap: break-word; font-family: sans-serif;">${tweets.tweetContnet}</pre>
+                    <pre class="mr-3 text-base width-auto font-normal text-balance overflow-hidden" style="white-space: no-wrap;  text-overflow: ellipsis; word-wrap: break-word; overflow-wrap: break-word; font-family: sans-serif;">${content}</pre>
                     `
 if (tweets.media_url) {
 tweet += `<div class="md:flex-shrink pr-6 pt-3">
@@ -244,31 +254,6 @@ tweet += `<div class="md:flex-shrink pr-6 pt-3">
                                           </div>
 
 
-                                          <!-- share span tag -->
-                                          <div class="flex py-2 m-2 relative">
-                                              <span
-                                                  class="group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full  hover:text-blue-300"
-                                                  onclick="shareToggle(${tweets.tweet_id})"
-                                                  >
-                                                  <svg class="text-center h-7 w-6" fill="none" stroke-linecap="round"
-                                                      stroke-linejoin="round" stroke-width="2" stroke="currentColor"
-                                                      viewBox="0 0 24 24">
-                                                      <path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12">
-                                                      </path>
-                                                  </svg>
-                                              </span>
-
-                                              <div id="shareOptions${tweets.tweet_id}" style="width: 220px; display: none; top: 45px; left: -100px;" class="absolute p-4 border shadow-lg rounded-xl cursor-pointer bg-white">
-                                                  <div onclick="shareLinkHandler(${tweets.tweet_id})">
-                                                      <p class="text-left">Copy link</p>
-                                                  </div>
-                                                  <div onclick="openModal('modelConfirm', '${tweets.tweet_id}')">
-                                                      <p class="text-left">Send via Direct Message</p>
-                                                  </div>
-                                              </div>
-                                          </div>
-
-
                                           <!-- bookmark span tag -->
                                           <div class="flex text-center py-2 m-2 ">
                                               <span
@@ -311,6 +296,29 @@ tweet += `<div class="md:flex-shrink pr-6 pt-3">
                                           </div>
 
 
+                                          <!-- share span tag -->
+                                          <div class="flex py-2 m-2 relative">
+                                              <span
+                                                  class="group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full  hover:text-blue-300"
+                                                  onclick="shareToggle(${tweets.tweet_id})"
+                                                  >
+                                                  <svg class="text-center h-7 w-6" fill="none" stroke-linecap="round"
+                                                      stroke-linejoin="round" stroke-width="2" stroke="currentColor"
+                                                      viewBox="0 0 24 24">
+                                                      <path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12">
+                                                      </path>
+                                                  </svg>
+                                              </span>
+
+                                              <div id="shareOptions${tweets.tweet_id}" style="width: 220px; display: none; top: 45px; left: -100px;" class="absolute p-4 border shadow-lg rounded-xl cursor-pointer bg-white">
+                                                  <div onclick="shareLinkHandler(${tweets.tweet_id})">
+                                                      <p class="text-left">Copy link</p>
+                                                  </div>
+                                                  <div onclick="openModal('modelConfirm', '${tweets.tweet_id}')">
+                                                      <p class="text-left">Send via Direct Message</p>
+                                                  </div>
+                                              </div>
+                                          </div>
                                       </div>
                                   </div>
                               </div>

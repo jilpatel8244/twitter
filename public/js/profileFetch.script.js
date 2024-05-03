@@ -27,7 +27,7 @@ async function fetchPosts() {
   if (response.message.length) {
 
 
-    let tweet = getTweetComponent(response.message);
+    let tweet = getRetweetComponent(response.message);
 
     allTweets.innerHTML = tweet;
 
@@ -60,7 +60,7 @@ async function fetchReplies() {
   if (response.message.length) {
 
 
-    let tweet = getTweetComponent(response.message);
+    let tweet = getRetweetComponent(response.message);
 
     allTweets.innerHTML = tweet;
 
@@ -93,7 +93,7 @@ async function fetchLikes() {
   if (response.message.length) {
 
 
-    let tweet = getTweetComponent(response.message);
+    let tweet = getRetweetComponent(response.message);
 
     allTweets.innerHTML = tweet;
 
@@ -122,7 +122,7 @@ async function fetchMedia() {
   allTweets.innerHTML = "";
 
   if (response.media.length) {
-    allTweets.innerHTML = getTweetComponent(response.media);
+    allTweets.innerHTML = getRetweetComponent(response.media);
   } else {
     allTweets.innerHTML = `<div class="w-3/5" style="margin: 50px auto;">
                                         <div class="mb-3">
