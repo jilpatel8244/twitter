@@ -50,12 +50,12 @@
               <span class="text-red-500" id="dobvalidation"></span class="text-red-500">
    
                 <div class="flex justify-center mt-4">
-                  <p  class="mt-2 flex w-full justify-center cursor-pointer rounded-full bg-black px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-gray-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600"
+                  <p tabindex="0"  class="mt-2 flex w-full justify-center cursor-pointer rounded-full bg-black px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-gray-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600"
                     onclick="register()" id="submit">
                     Sign up
+                    
+                  </p>
                 </div>
-                
-                </p>
                
                 <div id="link">
 
@@ -75,7 +75,11 @@
     </div>
   </section>
   <script>
-
+    document.getElementById('submit').onkeypress = (e) =>{
+      if(e.which == 13){
+        document.getElementById('submit').dispatchEvent(new Event('click'));
+      }
+    }
     let link = document.getElementById("link");
 
     link.style.display = "none"
