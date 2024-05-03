@@ -488,7 +488,8 @@ exports.savechat = async (req, res) => {
     try {
 
 
-
+        let data = req.body.data;
+        
         let sql = `insert into support_messages set ?;`
         let [result] = await connection.query(sql, data);
         return res.json({ result: true })
