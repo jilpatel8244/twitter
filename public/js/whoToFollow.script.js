@@ -40,11 +40,11 @@ async function getAllTrendinghashtags () {
 
                     </div>
                     <div class="flex-1 px-4 py-2 m-2">
-                        <a href="" class=" float-right">
+                        <div class="float-right" onclick="followUnfollowHandler(${element.id})">
                             <input type="button" class="font-semibold text-white bg-black py-2 px-4 rounded-full"
-                               value="Follow"
+                               value="Follow" id="followUnfollowBtn${element.id}"
                             />
-                        </a>
+                        </div>
 
                     </div>
                 </div>
@@ -71,6 +71,35 @@ async function getAllTrendinghashtags () {
     }
 }
 getAllTrendinghashtags();
+
+
+async function followUnfollowHandler(id) {
+    let url = window.location.origin + `/follow`;
+
+    let data = await fetch(url, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ id: id }),
+    });
+
+    let response = await data.json();
+
+    if(response.success) {
+        console.log(response.message);
+        if (response.message) {
+            // make follow to following
+            document.getElementById(`followUnfollowBtn${id}`).value = "Unfollow"
+        } else {
+            // make following to follow
+            document.getElementById(`followUnfollowBtn${id}`).value = "Follow";
+        }
+    } else {
+        // display toast
+        console.log(response.message);
+    }
+}
 
 
 
