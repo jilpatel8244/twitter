@@ -2,9 +2,9 @@ const connection = require("../../config/connection");
 
 exports.followUnfollowHandler = async (req, res) => {
     try {
-        const id = req.body.id;
+        const followerId = req.body.id;
 
-        const followerId = req.user[0][0].id;
+        const id = req.user[0][0].id;
         // const followerId =13;
         let [result] = await connection.query(`
             SELECT current_status
@@ -39,8 +39,7 @@ exports.followUnfollowHandler = async (req, res) => {
 
         return res.status(200).json({
             success: true,
-            message: "Followed successfully", statusdata
-
+            message: currentStatus
         });
     } catch (error) {
         console.error(error);
