@@ -10,7 +10,6 @@ exports.getExplorePage = async (req, res) => {
 
 exports.getverifyuser = async (req, res) => {
 
-  console.log(req.user[0][0]);
 
 };
 // api for the get all usename and hatag based in search box on change event
@@ -64,7 +63,6 @@ bookmarks.status as isBookmarked,users.profile_img_url as profile_img_url,
 
 
     let [result1] = await connection.query(TopTweet, [req.user[0][0].id]);
-    console.log("object", result1);
 
     return res.json({ resultTweet: result1 });
   } catch (error) {
@@ -92,7 +90,6 @@ exports.getHastag = async (req, res) => {
 exports.getUsername = async (req, res) => {
   let search = req.body.searchbox;
   loggedInUserId = req.user[0][0].id;
-  console.log("loggedInUserId", loggedInUserId);
   if (!search) {
     search = "";
   }
@@ -191,7 +188,6 @@ JOIN tweets ON users.id = tweets.user_id LEFT JOIN medias ON tweets.id = medias.
 
 
       let [result] = await connection.query(sql, [req.user[0][0].id, req.user[0][0].id]);
-      console.log("result is ", result);
       return res.json({ resultTweet: result });
     } catch (error) {
       return res.json({ error: error });

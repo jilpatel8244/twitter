@@ -1,6 +1,5 @@
 function Reply(comment_id) {
     let tweetId = document.querySelector('#tweet_id').value;
-    console.log(tweetId);
     let commentText = document.querySelector(`.reply_${comment_id}`);
     if (commentText.value !== '') {
 
@@ -37,7 +36,6 @@ async function showReply(comment_id) {
         body: JSON.stringify({ comment_id: comment_id, }),
     });
     data = await data.json();
-    console.log(data.replies);
     let repliesHtml = '';
     data.replies.forEach(reply => {
         let reply_list = ` 
@@ -88,7 +86,6 @@ async function showReply(comment_id) {
 }
 
 function deleteReply(replyId, comment_id) {
-    console.log(replyId);
     fetch('/delete_reply/:id', {
         method: 'POST',
         headers: {

@@ -10,11 +10,9 @@ const csvtojson = require('csvtojson')
 const fs = require("fs")
 
 exports.adduserbyform = async (req, res) => {
-    console.log(req.body);
     let email = req.body.email;
     let emailsql = `select count(*) as is_available from users where email = "${email}"`
     let [emailvalidate] = await connection.query(emailsql)
-    console.log(emailvalidate);
     if (emailvalidate[0].is_available == 0) {
 
         const saltuid = new ShortUniqueId({ length: 4 });

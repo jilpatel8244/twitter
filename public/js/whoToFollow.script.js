@@ -87,7 +87,6 @@ async function followUnfollowHandler(id) {
     let response = await data.json();
 
     if(response.success) {
-        console.log(response.message);
         if (response.message) {
             // make follow to following
             document.getElementById(`followUnfollowBtn${id}`).value = "Unfollow"

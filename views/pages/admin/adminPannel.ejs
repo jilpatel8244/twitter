@@ -268,7 +268,6 @@
         };
 
 
-        console.log("mesasage is ", message);
         const socket = io();
         let data = await fetch("/admin/savechat", {
             method: "POST",
@@ -280,7 +279,6 @@
 
 
         data = await data.json();
-        console.log(data);
         if (data.result == true) {
             socket.emit("adminmesaage", message);
 

@@ -84,7 +84,6 @@ async function addusercontroler() {
         formdata.append("email", email.value)
         formdata.append("date_of_birth", dob.value)
         formdata.append("password", password.value)
-        console.log(formdata);
 
         let data = await fetch("/admin/adduser", {
             method: "POST",
@@ -95,7 +94,6 @@ async function addusercontroler() {
         })
         data = await data.json();
 
-        console.log(data.success);
 
         if (data.success == 1) {
             let msg1 = document.getElementById("msg1");

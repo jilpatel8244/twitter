@@ -39,7 +39,6 @@ fetchNotificatons = async () => {
       throw new Error("Failed to fetch notifications");
     }
     const notifications = await response.json();
-    console.log(notifications);
     diplayNotifications(notifications);
   } catch (error) {
     console.error("Error while fetching notifications", error);
