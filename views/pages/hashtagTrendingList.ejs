@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>X - bookmarks</title>
+    <link href="/css/output.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.28.2/sweetalert2.all.min.js"></script>
+    <style>
+        .swal2-html-container,
+        .swal2-title {
+            color: white !important;
+        }
+    </style>
+</head>
+
+<body onload="getAllTrendingHashtagList()">
+    <div class="p-relative h-screen" style="background-color: white">
+        <div class="flex justify-center">
+            <header class="py-4 h-auto">
+                <!-- Side Navbar (left side) -->
+                <%- include('../partials/sidebar.ejs') %>
+            </header>
+            <main role="main">
+                <div class="flex" style="width: 990px;">
+                    <section class="w-3/5 border border-gray-200 max-w-screen-sm min-h-dvh">
+                        <!--Content (Center)-->
+                        <aside>
+                            <div class="flex">
+                                <div class="flex-1 mx-2">
+                                    <h2 class="px-4 py-2 text-xl font-semibold text-black">Top trending</h2>
+                                </div>
+                            </div>
+                            <hr class="border-gray-200">
+                        </aside>
+
+                        <!-- allSuggestedUsers -->
+                        <div id="allHashtagList">
+
+                        </div>
+
+                    </section>
+
+                    <%- include('../partials/aside.ejs') %>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <style>
+        .overflow-y-auto::-webkit-scrollbar,
+        .overflow-y-scroll::-webkit-scrollbar,
+        .overflow-x-auto::-webkit-scrollbar,
+        .overflow-x::-webkit-scrollbar,
+        .overflow-x-scroll::-webkit-scrollbar,
+        .overflow-y::-webkit-scrollbar,
+        body::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Hide scrollbar for IE, Edge and Firefox */
+        .overflow-y-auto,
+        .overflow-y-scroll,
+        .overflow-x-auto,
+        .overflow-x,
+        .overflow-x-scroll,
+        .overflow-y,
+        body {
+            -ms-overflow-style: none;
+            /* IE and Edge */
+            scrollbar-width: none;
+            /* Firefox */
+        }
+
+        .bg-dim-700 {
+            --bg-opacity: 1;
+            background-color: white;
+        }
+
+        html,
+        body {
+            margin: 0;
+            background-color: white;
+        }
+
+        svg.paint-icon {
+            fill: currentcolor;
+        }
+    </style>
+
+    <script>
+        async function getAllTrendingHashtagList() {
+            let url = window.location.origin + `/aside/getAllTrendingHashtags`;
+
+            let data = await fetch(url, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ 'showMore': 1 }),
+            });
+
+            let response = await data.json();
+
+            if (response.success === true) {
+                let trendingHashtagComponent = document.createElement('div');
+
+                if (response.message.length) {
+                    response.message.forEach((element, index) => {
+                        let newDiv = document.createElement('div');
+
+                        newDiv.innerHTML = `
+                <div class="flex">
+                    <div class="flex-1">
+                        <p class="px-4 ml-2 mt-3 w-48 text-xs text-gray-400">${index + 1} . Trending</p>
+                        <h2 class="px-4 ml-2 w-48 font-bold ">#${element.hashtag_name}</h2>
+                        <p class="px-4 ml-2 mb-3 w-48 text-xs text-gray-400">${element.count} Tweets</p>
+                    </div>
+                </div>
+                <hr class="border-gray-100">`
+
+                        trendingHashtagComponent.appendChild(newDiv);
+                    });
+                } else {
+                    let newDiv = document.createElement('div');
+
+                    newDiv.innerHTML = `
+                    <div class="flex-1">
+                        <p class="px-4 ml-2 mt-3 w-48 text-xs text-gray-400">no trends right now</p>
+                    </div>`;
+
+                    trendingHashtagComponent.appendChild(newDiv);
+                }
+
+                document.getElementById('allHashtagList').appendChild(trendingHashtagComponent);
+
+                document.getElementById('trendingSection').style.display = "none";
+
+            } else {
+                // display toast
+                console.log(response.message);
+            }
+        }
+    </script>
+</body>
+
+</html>

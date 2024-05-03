@@ -47,8 +47,7 @@ await connection.query(
 
         return res.status(200).json({
             success: true,
-            message: "Followed successfully", statusdata
-
+            message: currentStatus
         });
     } catch (error) {
         console.error(error);

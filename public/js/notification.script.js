@@ -39,7 +39,6 @@ fetchNotificatons = async () => {
       throw new Error("Failed to fetch notifications");
     }
     const notifications = await response.json();
-    console.log(notifications);
     diplayNotifications(notifications);
   } catch (error) {
     console.error("Error while fetching notifications", error);
@@ -78,11 +77,16 @@ fetchNotificatons = async () => {
           >
           <a href="/get_comments/${notification.tweet_id}"> 
             <div class="flex">
+            <img
+            class="w-10 h-10 ml-2 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500"
+            src="/assets/mention.png"
+            alt="Bordered avatar"
+          />
             `
             if (notification.profile_img_url) {
-              notificationHTML += `<img class="inline-block h-10 w-10 rounded-full" src="/uploads/${notification.profile_img_url}" alt="" />`;
+              notificationHTML += `<img class="inline-block h-10 w-10 rounded-full ml-2" src="/uploads/${notification.profile_img_url}" alt="" />`;
             } else {
-              notificationHTML += `<img class="inline-block h-10 w-10 rounded-full" src="/assets/profile.png" alt="" />`;
+              notificationHTML += `<img class="inline-block h-10 w-10 rounded-full ml-2" src="/assets/profile.png" alt="" />`;
             }
             notificationHTML +=
               `
@@ -100,7 +104,7 @@ fetchNotificatons = async () => {
   <div
     class="  w-full px-4 py-2 border-b border-gray-200 cursor-pointer hover:bg-gray-100 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
   >
-    <a href="/profile/?id=${notification.user_id}"> 
+    <a href="/explore/profile?id=${notification.related_user_id}" class="flex-shrink-0 group block">
       <div class="flex">
       <img
         class="w-10 h-10 ml-2 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500 "
@@ -133,9 +137,9 @@ fetchNotificatons = async () => {
     alt="Bordered avatar"
   />`
             if (notification.profile_img_url) {
-              notificationHTML += `<img class="inline-block h-10 w-10 rounded-full" src="/uploads/${notification.profile_img_url}" alt="" />`;
+              notificationHTML += `<img class="inline-block h-10 w-10 rounded-full ml-2" src="/uploads/${notification.profile_img_url}" alt="" />`;
             } else {
-              notificationHTML += `<img class="inline-block h-10 w-10 rounded-full" src="/assets/profile.png" alt="" />`;
+              notificationHTML += `<img class="inline-block h-10 w-10 rounded-full ml-2" src="/assets/profile.png" alt="" />`;
             }
             notificationHTML +=
               `<div class="notification ml-2 flex flex-col mt-2">
@@ -161,9 +165,9 @@ fetchNotificatons = async () => {
   />
   `
             if (notification.profile_img_url) {
-              notificationHTML += `<img class="inline-block h-10 w-10 rounded-full" src="/uploads/${notification.profile_img_url}" alt="" />`;
+              notificationHTML += `<img class="inline-block h-10 w-10 rounded-full ml-2" src="/uploads/${notification.profile_img_url}" alt="" />`;
             } else {
-              notificationHTML += `<img class="inline-block h-10 w-10 rounded-full" src="/assets/profile.png" alt="" />`;
+              notificationHTML += `<img class="inline-block h-10 w-10 rounded-full ml-2" src="/assets/profile.png" alt="" />`;
             }
             notificationHTML +=
               `
@@ -187,9 +191,9 @@ fetchNotificatons = async () => {
     alt="Bordered avatar"
   />`
             if (notification.profile_img_url) {
-              notificationHTML += `<img class="inline-block h-10 w-10 rounded-full" src="/uploads/${notification.profile_img_url}" alt="" />`;
+              notificationHTML += `<img class="inline-block h-10 w-10 rounded-full ml-2" src="/uploads/${notification.profile_img_url}" alt="" />`;
             } else {
-              notificationHTML += `<img class="inline-block h-10 w-10 rounded-full" src="/assets/profile.png" alt="" />`;
+              notificationHTML += `<img class="inline-block h-10 w-10 rounded-full ml-2" src="/assets/profile.png" alt="" />`;
             }
             notificationHTML +=
               ` <div class="notification ml-2 flex flex-col mt-2">
@@ -287,9 +291,9 @@ fetchNotificatons = async () => {
                 alt="like icon"
               />`
             if (verifiednotification.profile_img_url) {
-              verifiedHTML += `<img class="inline-block h-10 w-10 rounded-full" src="/uploads/${verifiednotification.profile_img_url}" alt="" />`;
+              verifiedHTML += `<img class="inline-block h-10 w-10 rounded-full ml-2" src="/uploads/${verifiednotification.profile_img_url}" alt="" />`;
             } else {
-              verifiedHTML += `<img class="inline-block h-10 w-10 rounded-full" src="/assets/profile.png" alt="" />`;
+              verifiedHTML += `<img class="inline-block h-10 w-10 rounded-full ml-2" src="/assets/profile.png" alt="" />`;
             }
             verifiedHTML +=
               `<div class="notification ml-2 flex flex-col mt-2">
@@ -305,7 +309,7 @@ fetchNotificatons = async () => {
               <div
                 class="  w-full px-4 py-2 border-b border-gray-200 cursor-pointer hover:bg-gray-100 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
               >
-                <a href="/profile/?id=${verifiednotification.user_id}">
+                <a href="/explore/profile?id=${verifiednotification.related_user_id}" class="flex-shrink-0 group block">
                   <div class="flex">
                   <img
                   class="w-10 h-10 ml-2 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500"
@@ -314,9 +318,9 @@ fetchNotificatons = async () => {
                 />
                 `
             if (verifiednotification.profile_img_url) {
-              verifiedHTML += `<img class="inline-block h-10 w-10 rounded-full" src="/uploads/${verifiednotification.profile_img_url}" alt="" />`;
+              verifiedHTML += `<img class="inline-block h-10 w-10 rounded-full ml-2" src="/uploads/${verifiednotification.profile_img_url}" alt="" />`;
             } else {
-              verifiedHTML += `<img class="inline-block h-10 w-10 rounded-full" src="/assets/profile.png" alt="" />`;
+              verifiedHTML += `<img class="inline-block h-10 w-10 rounded-full ml-2" src="/assets/profile.png" alt="" />`;
             }
             verifiedHTML +=
               `
@@ -342,9 +346,9 @@ fetchNotificatons = async () => {
               />            
               `
             if (verifiednotification.profile_img_url) {
-              verifiedHTMLverifiedHTMLverifiedHTML += `<img class="inline-block h-10 w-10 rounded-full" src="/uploads/${verifiednotification.profile_img_url}" alt="" />`;
+              verifiedHTMLverifiedHTMLverifiedHTML += `<img class="inline-block h-10 w-10 rounded-full ml-2" src="/uploads/${verifiednotification.profile_img_url}" alt="" />`;
             } else {
-              verifiedHTMLverifiedHTMLverifiedHTML += `<img class="inline-block h-10 w-10 rounded-full" src="/assets/profile.png" alt="" />`;
+              verifiedHTMLverifiedHTMLverifiedHTML += `<img class="inline-block h-10 w-10 rounded-full ml-2" src="/assets/profile.png" alt="" />`;
             }
             verifiedHTMLverifiedHTMLverifiedHTML +=
               `
@@ -371,9 +375,9 @@ fetchNotificatons = async () => {
                   />
                   `
             if (verifiednotification.profile_img_url) {
-              verifiedHTMLverifiedHTML += `<img class="inline-block h-10 w-10 rounded-full" src="/uploads/${verifiednotification.profile_img_url}" alt="" />`;
+              verifiedHTMLverifiedHTML += `<img class="inline-block h-10 w-10 rounded-full ml-2" src="/uploads/${verifiednotification.profile_img_url}" alt="" />`;
             } else {
-              verifiedHTMLverifiedHTML += `<img class="inline-block h-10 w-10 rounded-full" src="/assets/profile.png" alt="" />`;
+              verifiedHTMLverifiedHTML += `<img class="inline-block h-10 w-10 rounded-full ml-2" src="/assets/profile.png" alt="" />`;
             }
             verifiedHTMLverifiedHTML +=
               `
@@ -398,9 +402,9 @@ fetchNotificatons = async () => {
                   />
                   `
             if (verifiednotification.profile_img_url) {
-              verifiedHTML += `<img class="inline-block h-10 w-10 rounded-full" src="/uploads/${verifiednotification.profile_img_url}" alt="" />`;
+              verifiedHTML += `<img class="inline-block h-10 w-10 rounded-full ml-2" src="/uploads/${verifiednotification.profile_img_url}" alt="" />`;
             } else {
-              verifiedHTML += `<img class="inline-block h-10 w-10 rounded-full" src="/assets/profile.png" alt="" />`;
+              verifiedHTML += `<img class="inline-block h-10 w-10 rounded-full ml-2" src="/assets/profile.png" alt="" />`;
             }
             verifiedHTML +=
               `
@@ -419,11 +423,16 @@ fetchNotificatons = async () => {
               >
               <a href="/get_comments/${verifiednotification.tweet_id}">
                 <div class="flex">
+                <img
+            class="w-10 h-10 ml-2 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500"
+            src="/assets/mention.png"
+            alt="Bordered avatar"
+          />
                 `
             if (verifiednotification.profile_img_url) {
-              verifiedHTML += `<img class="inline-block h-10 w-10 rounded-full" src="/uploads/${verifiednotification.profile_img_url}" alt="" />`;
+              verifiedHTML += `<img class="inline-block h-10 w-10 rounded-full ml-2" src="/uploads/${verifiednotification.profile_img_url}" alt="" />`;
             } else {
-              verifiedHTML += `<img class="inline-block h-10 w-10 rounded-full" src="/assets/profile.png" alt="" />`;
+              verifiedHTML += `<img class="inline-block h-10 w-10 rounded-full ml-2" src="/assets/profile.png" alt="" />`;
             }
             verifiedHTML +=
               `

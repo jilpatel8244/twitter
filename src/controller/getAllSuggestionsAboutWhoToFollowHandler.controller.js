@@ -8,40 +8,42 @@ exports.getAllSuggestionsAboutWhoToFollowHandler = async (req, res) => {
 
         if (!parseInt(req.body.showMore)) {
             sql = `
+            select id, name, username, profile_img_url from users where id in (
                 (select distinct tweets.user_id from tweets
                 join tweet_likes on tweets.id = tweet_likes.tweet_id and tweet_likes.user_id = ${req.user[0][0].id} and tweet_likes.status = 1
-                where tweets.user_id not in (${req.user[0][0].id}) and tweets.user_id not in (select follower_id from followers where following_id = ${req.user[0][0].id}))
+                where tweets.user_id not in (${req.user[0][0].id}) and tweets.user_id not in (select follower_id from followers where following_id = ${req.user[0][0].id} and current_status = 1))
                 union
                 (select distinct tweets.user_id from tweets
                 join tweet_comments on tweets.id = tweet_comments.tweet_id and tweet_comments.user_id = ${req.user[0][0].id} and tweet_comments.deleted_at is null 
-                where tweets.user_id not in (${req.user[0][0].id}) and tweets.user_id not in (select follower_id from followers where following_id = ${req.user[0][0].id}))
+                where tweets.user_id not in (${req.user[0][0].id}) and tweets.user_id not in (select follower_id from followers where following_id = ${req.user[0][0].id} and current_status = 1))
                 union
                 (select distinct tweets.user_id from tweets
                 join bookmarks on tweets.id = bookmarks.tweet_id and bookmarks.user_id = ${req.user[0][0].id} and bookmarks.status = 1
-                where tweets.user_id not in (${req.user[0][0].id}) and tweets.user_id not in (select follower_id from followers where following_id = ${req.user[0][0].id}))
+                where tweets.user_id not in (${req.user[0][0].id}) and tweets.user_id not in (select follower_id from followers where following_id = ${req.user[0][0].id} and current_status = 1))
                 union
                 (select distinct follower_id from followers 
-                where following_id in (select follower_id from followers where following_id = ${req.user[0][0].id}) and follower_id not in (${req.user[0][0].id}) and follower_id not in (select follower_id from followers where following_id = ${req.user[0][0].id})) limit 3;
+                where following_id in (select follower_id from followers where following_id = ${req.user[0][0].id} and current_status = 1) and follower_id not in (${req.user[0][0].id}) and follower_id not in (select follower_id from followers where following_id = ${req.user[0][0].id} and current_status = 1))) limit 3;
             `;
 
             data = await connection.query(sql);
             
         } else {
             sql = `
+            select id, name, username, profile_img_url from users where id in (
                 (select distinct tweets.user_id from tweets
                 join tweet_likes on tweets.id = tweet_likes.tweet_id and tweet_likes.user_id = ${req.user[0][0].id} and tweet_likes.status = 1
-                where tweets.user_id not in (${req.user[0][0].id}) and tweets.user_id not in (select follower_id from followers where following_id = ${req.user[0][0].id}))
+                where tweets.user_id not in (${req.user[0][0].id}) and tweets.user_id not in (select follower_id from followers where following_id = ${req.user[0][0].id} and current_status = 1))
                 union
                 (select distinct tweets.user_id from tweets
                 join tweet_comments on tweets.id = tweet_comments.tweet_id and tweet_comments.user_id = ${req.user[0][0].id} and tweet_comments.deleted_at is null 
-                where tweets.user_id not in (${req.user[0][0].id}) and tweets.user_id not in (select follower_id from followers where following_id = ${req.user[0][0].id}))
+                where tweets.user_id not in (${req.user[0][0].id}) and tweets.user_id not in (select follower_id from followers where following_id = ${req.user[0][0].id} and current_status = 1))
                 union
                 (select distinct tweets.user_id from tweets
                 join bookmarks on tweets.id = bookmarks.tweet_id and bookmarks.user_id = ${req.user[0][0].id} and bookmarks.status = 1
-                where tweets.user_id not in (${req.user[0][0].id}) and tweets.user_id not in (select follower_id from followers where following_id = ${req.user[0][0].id}))
+                where tweets.user_id not in (${req.user[0][0].id}) and tweets.user_id not in (select follower_id from followers where following_id = ${req.user[0][0].id} and current_status = 1))
                 union
                 (select distinct follower_id from followers 
-                where following_id in (select follower_id from followers where following_id = ${req.user[0][0].id}) and follower_id not in (${req.user[0][0].id}) and follower_id not in (select follower_id from followers where following_id = ${req.user[0][0].id}));
+                where following_id in (select follower_id from followers where following_id = ${req.user[0][0].id} and current_status = 1) and follower_id not in (${req.user[0][0].id}) and follower_id not in (select follower_id from followers where following_id = ${req.user[0][0].id} and current_status = 1)));
             `;
 
             data = await connection.query(sql);
@@ -50,7 +52,7 @@ exports.getAllSuggestionsAboutWhoToFollowHandler = async (req, res) => {
 
         res.status(200).json({
             success: true,
-            message: data
+            message: data[0]
         })
     } catch (error) {
         logger.error(error);
