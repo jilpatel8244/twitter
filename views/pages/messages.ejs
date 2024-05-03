@@ -345,7 +345,7 @@
             });
 
             let response = await data.json();
-            console.log(response);
+            // console.log(response);
 
             if (response.success) {
 
@@ -381,7 +381,7 @@
             if (parseInt(data.senderId) === parseInt(reciverId)) {
                 let newDiv = makeMessage(data);
 
-                console.log(newDiv);
+                // console.log(newDiv);
 
                 newDiv.classList.add('reciver-chat', 'flex', 'flex-col', 'items-start');
 

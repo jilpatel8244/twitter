@@ -466,7 +466,7 @@ exports.oldchats = async (req, res) => {
 
     try {
         let tickitid = req.body.tickitid
-
+        let id = req.user[0][0].id
         let sql = `
             select * from support_messages where tickit_id = "${tickitid}" ;`
 
@@ -475,7 +475,7 @@ exports.oldchats = async (req, res) => {
 
 
 
-        return res.json({ data: result })
+        return res.json({ data: result, id })
     } catch (error) {
 
     }

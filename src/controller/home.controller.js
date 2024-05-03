@@ -44,10 +44,11 @@ ON retweets.id = tweets.retweet_id AND retweets.deleted_at IS NULL
 LEFT JOIN
     (SELECT t2.content AS original_tweet_content,
             t2.deleted_at as notRetweeted,
+            t2.id AS original_tweet_id,
+            u2.id as original_user_id,
             u2.username AS original_poster_username,
 			      u2.name AS original_poster_name,
 			      u2.profile_img_url as original_poster_profile_img_url, 
-            t2.id AS original_tweet_id,
             medias.media_url as original_media_url, 
 	CASE
     WHEN t2.created_at IS NOT NULL THEN
@@ -80,11 +81,11 @@ ORDER BY
   const [rows] = await connection.query(sql);
   res.status(200).json({
     success: true,
-    message: rows ,
+    message: rows,
   })
 }
 
-exports.getRetweet = async (req,res) =>{
+exports.getRetweet = async (req, res) => {
   const retweet = `SELECT users.username, 
   users.id as user_id, 
   users.name,  
@@ -135,12 +136,12 @@ exports.getRetweet = async (req,res) =>{
       WHEN tweets.updated_at IS NOT NULL THEN tweets.updated_at
       ELSE tweets.created_at
     END DESC;`
- 
-    const [retweetData] = await connection.query(retweet);
-    res.status(200).json({
-      success: true,
-      retweetData: retweetData,
-    });
+
+  const [retweetData] = await connection.query(retweet);
+  res.status(200).json({
+    success: true,
+    retweetData: retweetData,
+  });
 }
 
 exports.getHomeFollowing = async (req, res) => {
@@ -213,6 +214,7 @@ WHERE
     users.is_active = 1
         AND tweets.is_posted = 1
         AND tweets.deleted_at IS NULL
+        AND followers.current_status = 1
 ORDER BY 
     CASE
       WHEN tweets.updated_at IS NOT NULL THEN tweets.updated_at
@@ -227,33 +229,33 @@ ORDER BY
     message: rows
   })
 }
-exports.delete_post =  async (req, res) => {
+exports.delete_post = async (req, res) => {
   const postId = req.params.id;
   const userId = req.user[0][0].id;
 
   const [post] = await connection.query('SELECT user_id FROM tweets WHERE id = ?', [postId]);
 
-    await connection.query('DELETE FROM tweet_likes WHERE tweet_id = ?', [postId]);
+  await connection.query('DELETE FROM tweet_likes WHERE tweet_id = ?', [postId]);
 
-    await connection.query('DELETE FROM medias WHERE tweet_id = ?', [postId]);
+  await connection.query('DELETE FROM medias WHERE tweet_id = ?', [postId]);
 
-    await connection.query('DELETE FROM bookmarks WHERE tweet_id = ?', [postId]);
+  await connection.query('DELETE FROM bookmarks WHERE tweet_id = ?', [postId]);
 
-    const [comments] = await connection.query('SELECT id FROM tweet_comments WHERE tweet_id = ?', [postId]);
+  const [comments] = await connection.query('SELECT id FROM tweet_comments WHERE tweet_id = ?', [postId]);
 
-    for(let comment of comments){
-      await connection.query('DELETE FROM reply_comments WHERE comment_id = ?', [comment.id]);
-    }
+  for (let comment of comments) {
+    await connection.query('DELETE FROM reply_comments WHERE comment_id = ?', [comment.id]);
+  }
 
-    await connection.query('DELETE FROM tweet_comments WHERE tweet_id = ?', [postId]);
+  await connection.query('DELETE FROM tweet_comments WHERE tweet_id = ?', [postId]);
 
-    const [result] = await connection.query('DELETE FROM tweets WHERE id = ?', [postId]);
+  const [result] = await connection.query('DELETE FROM tweets WHERE id = ?', [postId]);
 
-      res.json({
-        success: true,
-        message: 'Post and associated media, likes, bookmarks, and comments deleted successfully',
-      });
-    }
+  res.json({
+    success: true,
+    message: 'Post and associated media, likes, bookmarks, and comments deleted successfully',
+  });
+}
 exports.get_notification = async (req, res) => {
   const [notificationCount] = await connection.query(`select count(*) as notificationCount from notifications where user_id = ? and  is_read = 0 and related_user_id != ? ;`, [req.user[0][0].id, req.user[0][0].id]);
   res.status(200).json({
@@ -292,11 +294,15 @@ exports.post_comment = async (req, res) => {
   let [comment_mention] = await connection.query(`SELECT * FROM tweet_comments WHERE tweet_id = ? order by created_at desc`, [tweetId])
   const mentionedUsernames = extractMentionedUsernames(comment_mention[0].content);
   const mentionedUsers = await getUsersByUsernames(mentionedUsernames);
+
+  let [tweet_user_id] = await connection.query(`SELECT user_id FROM tweets WHERE id = ?`, [tweetId]);
+  await connection.query(`INSERT INTO notifications (user_id, tweet_id, type, related_user_id)
+    VALUES (?, ?, 'Comment', ?);`, [tweet_user_id[0].user_id, tweetId, user_id]);
   if (mentionedUsers.length >= 1) {
-    let [tweet_user_id] = await connection.query(`SELECT user_id FROM tweets WHERE id = ?`, [tweetId])
-    await connection.query(`INSERT INTO notifications (user_id, tweet_id, type, related_user_id)
+    await connection.execute(`INSERT INTO notifications (user_id, tweet_id, type, related_user_id)
     VALUES (?, ?, 'Mention', ?);`, [mentionedUsers[0].id, tweetId, user_id]);
   }
+
   res.json({
     success: result.affectedRows > 0,
     comment: {
@@ -305,6 +311,7 @@ exports.post_comment = async (req, res) => {
     },
   });
 }
+
 
 exports.get_comment = async (req, res) => {
   let tweetId = req.params.id;
@@ -369,13 +376,7 @@ WHERE tweets.id = ?;
     user_id: req.user[0][0].id,
     message: '',
     tweet: tweet[0],
-    comments: result.map(comment => {
-      if (comment && comment.profile_img_url) {
-        return comment;
-      } else {
-        return { ...comment, profile_img_url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTOFx557XPIXXmnhk7joe2Pq2uQhb1iCJ688RgQZzH5ZA&s' };
-      }
-    })
+    comments: result,
   });
 }
 exports.delete_comment = async (req, res) => {
@@ -386,7 +387,7 @@ exports.delete_comment = async (req, res) => {
   let [rows] = await connection.query(sql, [commentId]);
 
   if (rows.length > 0 && rows[0].user_id === userId) {
-   
+
     sql = `DELETE FROM reply_comments WHERE comment_id = ?`;
     await connection.query(sql, [commentId]);
 
@@ -395,7 +396,7 @@ exports.delete_comment = async (req, res) => {
 
     res.json({
       success: result.affectedRows > 0,
-      userId:userId,
+      userId: userId,
     });
   } else {
     res.json({
@@ -416,27 +417,11 @@ exports.edit_comment = async (req, res) => {
     success: result.affectedRows > 0,
   });
 };
-
-exports.post_reply = async (req, res) => {
-  let content = req.body.content;
-
-  let comment_id = req.body.comment_id;
-  let user_id = req.user[0][0].id
-  let sql = `
-        INSERT INTO reply_comments (user_id, comment_id, content)
-        VALUES (?, ?, ?)
-    `;
-
-  let [result] = await connection.query(sql, [user_id, comment_id, content]);
-  res.json({
-    success: result.affectedRows > 0,
-  });
-}
  
 exports.get_reply = async (req, res) => {
-
+  let userId = req.user[0][0].id;
   let comment_id = req.body.comment_id;
-  let sql = `SELECT rc.*, u.username, u.name, u.profile_img_url, t.id as tweet_id,
+  let sql = `SELECT rc.*, u.username,u.id as user_id, u.name, u.profile_img_url, t.id as tweet_id,
   CASE
   WHEN TIMESTAMPDIFF(SECOND, rc.created_at, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(SECOND, rc.created_at, NOW()+1), ' seconds ago')
   WHEN TIMESTAMPDIFF(MINUTE, rc.created_at, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(MINUTE, rc.created_at, NOW()), ' minutes ago')
@@ -450,7 +435,7 @@ ORDER BY rc.created_at DESC  ;
   `;
 
   let [replies] = await connection.query(sql, [comment_id]);
-  res.json({ replies: replies });
+  res.json({ replies: replies ,userId });
 
 }
 function extractMentionedUsernames(tweetContent) {
@@ -474,9 +459,12 @@ async function getUsersByUsernames(usernames) {
 }
 
 
+
 exports.post_reply = async (req, res) => {
   let content = req.body.content;
   let comment_id = req.body.comment_id;
+  let tweetId = req.body.tweetId;
+
 
   if (content.length > 255) {
     res.json({
@@ -493,15 +481,31 @@ exports.post_reply = async (req, res) => {
     `;
 
   let [result] = await connection.query(sql, [user_id, comment_id, content]);
+  let [reply_mention] = await connection.query(`SELECT * FROM reply_comments WHERE comment_id = ? order by created_at desc`, [comment_id]);
+  const mentionedUsernames = extractMentionedUsernames(reply_mention[0].content);
+  const mentionedUsers = await getUsersByUsernames(mentionedUsernames);
+
+  let [reply_user_id] = await connection.query(`SELECT user_id FROM tweet_comments WHERE id = ?`, [comment_id]);
+  console.log("hello " + reply_user_id[0].user_id);
+  await connection.query(`INSERT INTO notifications (user_id, tweet_id, type, related_user_id)
+    VALUES (?, ?, 'Comment', ?);`, [reply_user_id[0].user_id, tweetId, user_id]);
+
+  if (mentionedUsers.length >= 1) {
+    let [comment_user_id] = await connection.query(`SELECT user_id FROM tweet_comments WHERE id = ?`, [comment_id])
+    await connection.query(`INSERT INTO notifications (user_id, tweet_id, type, related_user_id)
+    VALUES (?, ?, 'Mention', ?);`, [mentionedUsers[0].id, tweetId, user_id]);
+  }
   res.json({
     success: result.affectedRows > 0,
     comment: {
       id: result.insertId,
       comment_id: comment_id,
       content: content,
+      user_id: user_id,
     },
   });
 }
+
 exports.delete_reply = async (req, res) => {
   let { replyId } = req.body;
   let userId = req.user[0][0].id;
@@ -515,7 +519,7 @@ exports.delete_reply = async (req, res) => {
 
     res.json({
       success: result.affectedRows > 0,
-      userId:userId,
+      userId: userId,
     });
   } else {
     res.json({
