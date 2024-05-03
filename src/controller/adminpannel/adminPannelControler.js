@@ -487,20 +487,39 @@ exports.savechat = async (req, res) => {
 
 
     try {
-        let data = req.body.data;
 
 
-        let sql = `
-        insert into support_messages set ?;`
 
-
+        let sql = `insert into support_messages set ?;`
         let [result] = await connection.query(sql, data);
-
-
-
-
         return res.json({ result: true })
     } catch (error) {
-
+        return res.json({ result: false })
     }
 }
+
+
+
+exports.verificationRequest = async (req, res) => {
+
+    try {
+        let id = req.user[0][0].id
+        // console.log(req);
+        let data = {
+            user_id: id,
+            request: 1
+
+        }
+        console.log(data);
+        let sql = `insert into  verification_requests SET ?`
+        let sql1 = `UPDATE users SET is_varified = '2' WHERE id = ?`
+        let [result] = await connection.query(sql, data);
+        let [result1] = await connection.query(sql1, id);
+        console.log(result);
+        return res.send({ result: result })
+    } catch (error) {
+        console.log(error);
+    }
+
+
+}   
